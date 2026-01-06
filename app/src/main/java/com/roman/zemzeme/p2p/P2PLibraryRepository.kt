@@ -1,22 +1,15 @@
 package com.roman.zemzeme.p2p
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.LinkProperties
-import android.net.Network
-import android.net.NetworkCapabilities
 import android.util.Log
-import com.roman.zemzeme.util.AppConstants
 import golib.Golib
 import golib.MobileConnectionHandler
 import golib.MobileMessageHandler
 import golib.MobileTopicMessageHandler
 import golib.MobileTopicPeerHandler
-import golib.MobilePeerAddressHandler
 import golib.P2PNode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,18 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicLong
 
 /**
  * P2P message data class for incoming messages
@@ -70,48 +52,9 @@ enum class P2PNodeStatus {
 }
 
 /**
- * Structured P2P debug log entry from Go logger.
- */
-data class P2PDebugLogEntry(
-    val timestamp: Long,
-    val level: String,
-    val component: String,
-    val event: String,
-    val message: String,
-    val contextJson: String
-)
-
-/**
- * Parsed bandwidth summary from Go bandwidth stats JSON.
- */
-data class P2PBandwidthSummary(
-    val sessionInBytes: Long = 0L,
-    val sessionOutBytes: Long = 0L,
-    val sessionTotalBytes: Long = 0L,
-    val dailyInBytes: Long = 0L,
-    val dailyOutBytes: Long = 0L,
-    val dailyTotalBytes: Long = 0L,
-    val currentRateInBytesPerSec: Double = 0.0,
-    val currentRateOutBytesPerSec: Double = 0.0,
-    val projectedHourlyTotalBytes: Long = 0L,
-    val rawJson: String = "{}"
-)
-
-/**
- * V3: Detailed connection info for a connected peer.
- */
-data class PeerConnectionInfo(
-    val remoteAddr: String = "",
-    val ip: String = "",
-    val port: String = "",
-    val transport: String = "",
-    val direction: String = ""
-)
-
-/**
  * Repository for P2P operations using the Go libp2p library (golib.aar).
  * 
- * This serves as the bridge between Zemzeme Android and the Go-based libp2p implementation.
+ * This serves as the bridge between BitChat Android and the Go-based libp2p implementation.
  * It manages:
  * - Node lifecycle (start/stop)
  * - Direct peer messaging
@@ -128,34 +71,15 @@ class P2PLibraryRepository(
         private const val PREFS_NAME = "p2p_prefs"
         private const val KEY_PRIVATE_KEY = "p2p_private_key"
         private const val KEY_PEER_ID = "p2p_peer_id"
-        private const val KEY_DAILY_BANDWIDTH_DATE = "daily_bandwidth_date"
-        private const val KEY_DAILY_BANDWIDTH_IN = "daily_bandwidth_in"
-        private const val KEY_DAILY_BANDWIDTH_OUT = "daily_bandwidth_out"
-        private const val KEY_PEER_CACHE = "peer_cache_json"
-        private const val KEY_PEER_CACHE_SAVED_AT = "peer_cache_saved_at"
-        private const val PEER_CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000L
-        private const val LOG_FILE_NAME = "p2p_debug.log"
-        private const val PEER_CACHE_FIRST_SAVE_DELAY_MS = 2 * 60 * 1000L
-        private const val PEER_CACHE_SAVE_INTERVAL_MS = 5 * 60 * 1000L
-        private const val STATUS_REFRESH_INTERVAL_MS = 5_000L
     }
     
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var node: P2PNode? = null
     
-    // Mutex for atomic node state transitions (prevents race conditions during startup)
-    private val nodeLock = Mutex()
-    
     // Preferences for key storage
     private val prefs by lazy {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
-
-    private val connectivityManager by lazy {
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    }
-
-    private var networkCallback: ConnectivityManager.NetworkCallback? = null
     
     // State flows
     private val _nodeStatus = MutableStateFlow(P2PNodeStatus.STOPPED)
@@ -169,15 +93,6 @@ class P2PLibraryRepository(
     
     private val _dhtStatus = MutableStateFlow("")
     val dhtStatus: StateFlow<String> = _dhtStatus.asStateFlow()
-
-    private val _bandwidthStats = MutableStateFlow("{}")
-    val bandwidthStats: StateFlow<String> = _bandwidthStats.asStateFlow()
-
-    private val _totalConnectedPeers = MutableStateFlow(0)
-    val totalConnectedPeers: StateFlow<Int> = _totalConnectedPeers.asStateFlow()
-
-    private val _nodeStartedAt = MutableStateFlow<Long?>(null)
-    val nodeStartedAt: StateFlow<Long?> = _nodeStartedAt.asStateFlow()
     
     private val _connectedPeers = MutableStateFlow<List<P2PPeer>>(emptyList())
     val connectedPeers: StateFlow<List<P2PPeer>> = _connectedPeers.asStateFlow()
@@ -186,201 +101,149 @@ class P2PLibraryRepository(
     val incomingMessages: SharedFlow<P2PMessage> = _incomingMessages.asSharedFlow()
     
     // Track subscribed topics
-    private val subscribedTopics = ConcurrentHashMap.newKeySet<String>()
-
-    // Guard connected peers list updates from callback thread races.
-    private val connectedPeersLock = Any()
+    private val subscribedTopics = mutableSetOf<String>()
     
-    // DHT + bandwidth status refresh job
-    private var dhtRefreshJob: Job? = null
-
-    // Periodic peer cache persistence job
-    private var peerCacheSaveJob: Job? = null
-
-    // Health monitoring state for auto-recovery
-    private val consecutiveZeroPeerChecks = AtomicInteger(0)
-    private val lastRecoveryAttemptMs = AtomicLong(0L)
-    private var healthCheckJob: Job? = null
-    private val recoveryLock = Mutex()
-
-    // V3: Focus peer tracking (prevents idle pruning of active chat peer)
-    private val _focusPeerID = MutableStateFlow<String?>(null)
-    val focusPeerID: StateFlow<String?> = _focusPeerID.asStateFlow()
-
-    // V3: Friend push observer job
-    private var friendPushJob: Job? = null
+    // DHT status refresh job
+    private var dhtRefreshJob: kotlinx.coroutines.Job? = null
     
     // ============== Lifecycle ==============
     
     /**
      * Start the P2P node with the stored (or newly generated) identity.
-     * Uses Mutex to ensure atomic state transitions (prevents race conditions).
      * 
-     * @param privateKeyBase64 Optional external private key (e.g., derived from Zemzeme identity)
+     * @param privateKeyBase64 Optional external private key (e.g., derived from BitChat identity)
      */
-    @Suppress("UNUSED_PARAMETER")
     suspend fun startNode(privateKeyBase64: String? = null): Result<Unit> = withContext(Dispatchers.IO) {
-        nodeLock.withLock {
-            if (_nodeStatus.value == P2PNodeStatus.RUNNING) {
-                Log.d(TAG, "P2P node already running, skipping start")
-                return@withLock Result.success(Unit)
-            }
-
-            _nodeStatus.value = P2PNodeStatus.STARTING
-            Log.i(TAG, "Starting P2P node...")
-
-            var newNode: P2PNode? = null
-
+        if (_nodeStatus.value == P2PNodeStatus.RUNNING) {
+            Log.d(TAG, "P2P node already running, skipping start")
+            return@withContext Result.success(Unit)
+        }
+        
+        _nodeStatus.value = P2PNodeStatus.STARTING
+        Log.i(TAG, "🚀 Starting P2P node...")
+        
+        try {
+            // Verify golib is available
+            Log.d(TAG, "Checking golib availability...")
             try {
-                Log.d(TAG, "Checking golib availability...")
-                try {
-                    val golibClass = Class.forName("golib.Golib")
-                    Log.d(TAG, "golib.Golib class found: ${golibClass.name}")
-                } catch (e: ClassNotFoundException) {
-                    throw IllegalStateException("golib library not found", e)
-                }
-
-                initGoLogging()
-
-                // V3: Log golib version
-                try {
-                    val version = Golib.getVersion()
-                    Log.i(TAG, "golib version: $version")
-                } catch (_: Exception) { }
-
-                configureAndroidDNSForNetwork()
-
-                // NOTE: We intentionally ignore privateKeyBase64 because Zemzeme's
-                // identity manager key format doesn't match libp2p marshaled private keys.
-                val privateKey = getStoredPrivateKey() ?: generateAndStoreNewKey()
-                Log.d(TAG, "Private key obtained (length: ${privateKey.length})")
-
-                Log.d(TAG, "Creating P2P node with tuned config...")
-                newNode = createNodeWithTunedConfig(privateKey)
-                Log.d(TAG, "P2P node created successfully")
-
-                importPeerCacheIfFresh(newNode)
-
-                newNode.setMessageHandler(object : MobileMessageHandler {
-                    override fun onMessage(peerID: String?, message: String?) {
-                        if (peerID != null && message != null) {
-                            scope.launch {
-                                _incomingMessages.emit(
-                                    P2PMessage(
-                                        senderPeerID = peerID,
-                                        content = message,
-                                        isTopicMessage = false
-                                    )
-                                )
-                            }
-                            Log.d(TAG, "Message from $peerID: ${message.take(50)}...")
-                        }
-                    }
-                })
-
-                newNode.setConnectionHandler(object : MobileConnectionHandler {
-                    override fun onConnected(peerID: String?) {
-                        peerID?.let { id ->
-                            updatePeerState(id, true)
-                            Log.d(TAG, "Peer connected: $id")
-                        }
-                    }
-
-                    override fun onDisconnected(peerID: String?) {
-                        peerID?.let { id ->
-                            updatePeerState(id, false)
-                            Log.d(TAG, "Peer disconnected: $id")
-                        }
-                    }
-                })
-
-                Log.d(TAG, "Starting P2P node network...")
-                newNode.start()
-                Log.d(TAG, "P2P node network started")
-
-                restoreDailyBandwidthCache(newNode)
-
-                node = newNode
-                _nodeStartedAt.value = System.currentTimeMillis()
-
-                // topicManager is initialized after start()
-                newNode.setTopicMessageHandler(object : MobileTopicMessageHandler {
-                    override fun onTopicMessage(topicName: String?, senderID: String?, message: String?, timestamp: Long) {
-                        if (topicName != null && senderID != null && message != null) {
-                            scope.launch {
-                                _incomingMessages.emit(
-                                    P2PMessage(
-                                        senderPeerID = senderID,
-                                        content = message,
-                                        isTopicMessage = true,
-                                        topicName = topicName,
-                                        timestamp = timestamp
-                                    )
-                                )
-                            }
-                            Log.d(TAG, "Topic message [$topicName] from $senderID: ${message.take(50)}...")
-                        }
-                    }
-                })
-
-                newNode.setTopicPeerHandler(object : MobileTopicPeerHandler {
-                    override fun onTopicPeerUpdate(topicName: String?, peerID: String?, action: String?) {
-                        Log.d(TAG, "Topic peer update [$topicName]: $peerID $action")
-                    }
-                })
-
-                // V3: Set peer address handler for tracking remote peer address changes
-                newNode.setPeerAddressHandler(object : MobilePeerAddressHandler {
-                    override fun onPeerAddressUpdated(peerID: String?, addrs: String?) {
-                        if (peerID != null && addrs != null) {
-                            Log.d(TAG, "Peer address updated: $peerID -> ${addrs.take(80)}")
-                        }
-                    }
-                })
-
-                _peerID.value = newNode.peerID
-                _multiaddrs.value = newNode.multiaddrs
-                _nodeStatus.value = P2PNodeStatus.RUNNING
-                prefs.edit().putString(KEY_PEER_ID, newNode.peerID).apply()
-
-                updateMeteredModeForNetwork()
-                registerNetworkCallback()
-                refreshNodeStatusSnapshot(newNode)
-                startDhtStatusRefresh()
-                startPeriodicPeerCacheSave()
-
-                Log.i(TAG, "P2P node started successfully")
-                Log.i(TAG, "   Peer ID: ${newNode.peerID}")
-                Log.i(TAG, "   Multiaddrs: ${newNode.multiaddrs}")
-
-                Result.success(Unit)
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to start P2P node: ${e.message}", e)
-                Log.e(TAG, "   Exception type: ${e.javaClass.simpleName}")
-                e.cause?.let { cause ->
-                    Log.e(TAG, "   Cause: ${cause.message}")
-                }
-
-                unregisterNetworkCallbackSafely()
-                dhtRefreshJob?.cancel()
-                dhtRefreshJob = null
-                healthCheckJob?.cancel()
-                healthCheckJob = null
-                stopPeriodicPeerCacheSave()
-                runCatching { newNode?.stop() }
-                if (node === newNode) {
-                    node = null
-                }
-
-                _nodeStartedAt.value = null
-                _bandwidthStats.value = "{}"
-                synchronized(connectedPeersLock) {
-                    _connectedPeers.value = emptyList()
-                    _totalConnectedPeers.value = 0
-                }
+                val golibClass = Class.forName("golib.Golib")
+                Log.d(TAG, "✓ golib.Golib class found: ${golibClass.name}")
+            } catch (e: ClassNotFoundException) {
+                Log.e(TAG, "❌ golib.Golib class NOT FOUND - golib.aar may not be properly linked", e)
                 _nodeStatus.value = P2PNodeStatus.ERROR
-                Result.failure(e)
+                return@withContext Result.failure(Exception("golib library not found"))
             }
+            
+            // Get or generate private key
+            // NOTE: We ignore the external privateKeyBase64 parameter because BitChat's 
+            // identity manager generates raw Ed25519 keys, but golib expects protobuf-marshaled 
+            // libp2p keys (via crypto.MarshalPrivateKey). We use our own key management instead.
+            val privateKey = getStoredPrivateKey() ?: generateAndStoreNewKey()
+            
+            Log.d(TAG, "Private key obtained (length: ${privateKey.length})")
+            
+            // Create node with port 0 (random available port)
+            Log.d(TAG, "Creating P2P node with Golib.newP2PNode()...")
+            val newNode = Golib.newP2PNode(privateKey, 0)
+            Log.d(TAG, "✓ P2P node created successfully")
+            
+            // Set up message handler
+            newNode.setMessageHandler(object : MobileMessageHandler {
+                override fun onMessage(peerID: String?, message: String?) {
+                    if (peerID != null && message != null) {
+                        scope.launch {
+                            _incomingMessages.emit(P2PMessage(
+                                senderPeerID = peerID,
+                                content = message,
+                                isTopicMessage = false
+                            ))
+                        }
+                        Log.d(TAG, "Message from $peerID: ${message.take(50)}...")
+                    }
+                }
+            })
+            
+            // Set up connection handler
+            newNode.setConnectionHandler(object : MobileConnectionHandler {
+                override fun onConnected(peerID: String?) {
+                    peerID?.let { id ->
+                        updatePeerState(id, true)
+                        Log.d(TAG, "Peer connected: $id")
+                    }
+                }
+                
+                override fun onDisconnected(peerID: String?) {
+                    peerID?.let { id ->
+                        updatePeerState(id, false)
+                        Log.d(TAG, "Peer disconnected: $id")
+                    }
+                }
+            })
+            
+            // Set up topic message handler
+            newNode.setTopicMessageHandler(object : MobileTopicMessageHandler {
+                override fun onTopicMessage(topicName: String?, senderID: String?, message: String?, timestamp: Long) {
+                    if (topicName != null && senderID != null && message != null) {
+                        scope.launch {
+                            _incomingMessages.emit(P2PMessage(
+                                senderPeerID = senderID,
+                                content = message,
+                                isTopicMessage = true,
+                                topicName = topicName,
+                                timestamp = timestamp
+                            ))
+                        }
+                        Log.d(TAG, "Topic message [$topicName] from $senderID: ${message.take(50)}...")
+                    }
+                }
+            })
+            
+            // Set up topic peer handler
+            newNode.setTopicPeerHandler(object : MobileTopicPeerHandler {
+                override fun onTopicPeerUpdate(topicName: String?, peerID: String?, action: String?) {
+                    Log.d(TAG, "Topic peer update [$topicName]: $peerID $action")
+                }
+            })
+            
+            // Start the node
+            Log.d(TAG, "Starting P2P node network...")
+            newNode.start()
+            Log.d(TAG, "✓ P2P node network started")
+            node = newNode
+            
+            // Update state
+            _peerID.value = newNode.peerID
+            _multiaddrs.value = newNode.multiaddrs
+            _nodeStatus.value = P2PNodeStatus.RUNNING
+            
+            // Store peer ID for reference
+            prefs.edit().putString(KEY_PEER_ID, newNode.peerID).apply()
+            
+            // Get initial DHT status
+            try {
+                val initialDhtStatus = newNode.dhtStatus ?: "DHT initializing..."
+                _dhtStatus.value = initialDhtStatus
+                Log.i(TAG, "   Initial DHT Status: $initialDhtStatus")
+            } catch (e: Exception) {
+                Log.w(TAG, "   Could not get initial DHT status: ${e.message}")
+            }
+            
+            // Start periodic DHT status refresh
+            startDhtStatusRefresh()
+            
+            Log.i(TAG, "✅ P2P node started successfully")
+            Log.i(TAG, "   Peer ID: ${newNode.peerID}")
+            Log.i(TAG, "   Multiaddrs: ${newNode.multiaddrs}")
+            
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Failed to start P2P node: ${e.message}", e)
+            Log.e(TAG, "   Exception type: ${e.javaClass.simpleName}")
+            e.cause?.let { cause ->
+                Log.e(TAG, "   Cause: ${cause.message}")
+            }
+            _nodeStatus.value = P2PNodeStatus.ERROR
+            Result.failure(e)
         }
     }
     
@@ -388,222 +251,55 @@ class P2PLibraryRepository(
      * Stop the P2P node gracefully.
      */
     suspend fun stopNode(): Result<Unit> = withContext(Dispatchers.IO) {
-        nodeLock.withLock {
-            try {
-                dhtRefreshJob?.cancel()
-                dhtRefreshJob = null
-                stopPeriodicPeerCacheSave()
-
-                healthCheckJob?.cancel()
-                healthCheckJob = null
-                consecutiveZeroPeerChecks.set(0)
-
-                // V3: Stop friend push observer and clear focus state
-                friendPushJob?.cancel()
-                friendPushJob = null
-                _focusPeerID.value = null
-
-                unregisterNetworkCallbackSafely()
-                persistDailyBandwidthCache()
-                savePeerCacheSnapshot()
-
-                node?.stop()
-                node = null
-
-                _nodeStatus.value = P2PNodeStatus.STOPPED
-                synchronized(connectedPeersLock) {
-                    _connectedPeers.value = emptyList()
-                    _totalConnectedPeers.value = 0
-                }
-                _nodeStartedAt.value = null
-                _bandwidthStats.value = "{}"
-                subscribedTopics.clear()
-                _dhtStatus.value = ""
-
-                Log.d(TAG, "P2P node stopped")
-                Result.success(Unit)
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to stop P2P node", e)
-                Result.failure(e)
-            }
+        try {
+            // Cancel DHT refresh job
+            dhtRefreshJob?.cancel()
+            dhtRefreshJob = null
+            
+            node?.stop()
+            node = null
+            
+            _nodeStatus.value = P2PNodeStatus.STOPPED
+            _connectedPeers.value = emptyList()
+            subscribedTopics.clear()
+            _dhtStatus.value = ""
+            
+            Log.d(TAG, "P2P node stopped")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to stop P2P node", e)
+            Result.failure(e)
         }
     }
     
     /**
-     * Start periodic status refresh to keep diagnostics updated.
+     * Start periodic DHT status refresh to keep UI updated.
+     * Runs every 10 seconds while the node is running.
      */
     private fun startDhtStatusRefresh() {
         dhtRefreshJob?.cancel()
         dhtRefreshJob = scope.launch {
             while (true) {
-                delay(STATUS_REFRESH_INTERVAL_MS)
-
+                delay(10_000L) // 10 seconds
+                
                 if (_nodeStatus.value != P2PNodeStatus.RUNNING) {
-                    Log.d(TAG, "Status refresh: Node not running, stopping refresh")
+                    Log.d(TAG, "DHT refresh: Node not running, stopping refresh")
                     break
                 }
-
+                
                 try {
-                    refreshNodeStatusSnapshot()
-                } catch (e: Exception) {
-                    Log.w(TAG, "Status refresh failed: ${e.message}")
-                }
-            }
-        }
-        Log.d(TAG, "Started periodic P2P status refresh (${STATUS_REFRESH_INTERVAL_MS}ms interval)")
-
-        // Start health monitoring for auto-recovery
-        startHealthMonitoring()
-    }
-
-    /**
-     * Start health monitoring that detects when DHT routing table drops to 0 peers
-     * and automatically triggers re-bootstrap to recover connectivity.
-     *
-     * This addresses Issue 2 from bugs.txt: "P2P Connection Loss - Zero Peers, Cannot Recover"
-     */
-    private fun startHealthMonitoring() {
-        healthCheckJob?.cancel()
-        consecutiveZeroPeerChecks.set(0)
-
-        healthCheckJob = scope.launch {
-            // Initial delay to let the node stabilize after startup
-            delay(AppConstants.P2P.HEALTH_CHECK_INTERVAL_MS)
-
-            while (true) {
-                delay(AppConstants.P2P.HEALTH_CHECK_INTERVAL_MS)
-
-                if (_nodeStatus.value != P2PNodeStatus.RUNNING) {
-                    Log.d(TAG, "Health check: Node not running, stopping monitoring")
-                    break
-                }
-
-                try {
-                    checkHealthAndRecover()
-                } catch (e: Exception) {
-                    Log.w(TAG, "Health check failed: ${e.message}")
-                }
-            }
-        }
-        Log.d(TAG, "Started P2P health monitoring (${AppConstants.P2P.HEALTH_CHECK_INTERVAL_MS}ms interval)")
-    }
-
-    /**
-     * Check P2P node health and trigger recovery if needed.
-     * Parses DHT status to detect 0 peers in routing table.
-     */
-    private suspend fun checkHealthAndRecover() {
-        val currentNode = node ?: return
-        val status = currentNode.dhtStatus ?: return
-
-        // Parse DHT status to extract routing table peer count
-        // Expected format contains "routing table: N peers" or similar
-        val routingTablePeers = parseRoutingTablePeers(status)
-        val connectedPeers = _connectedPeers.value.size
-
-        Log.d(TAG, "Health check: routing_table=$routingTablePeers, connected=$connectedPeers")
-
-        // Check if we have zero peers in both routing table AND connected peers
-        if (routingTablePeers == 0 && connectedPeers == 0) {
-            val zeroCheckCount = consecutiveZeroPeerChecks.incrementAndGet()
-            Log.w(TAG, "Zero peers detected (check $zeroCheckCount/${AppConstants.P2P.ZERO_PEERS_THRESHOLD_COUNT})")
-
-            if (zeroCheckCount >= AppConstants.P2P.ZERO_PEERS_THRESHOLD_COUNT) {
-                attemptRecovery()
-            }
-        } else {
-            // Reset counter if we have peers
-            if (consecutiveZeroPeerChecks.get() > 0) {
-                Log.d(TAG, "Peers recovered, resetting zero-peer counter")
-                consecutiveZeroPeerChecks.set(0)
-            }
-        }
-    }
-
-    /**
-     * Parse DHT status string to extract routing table peer count.
-     * Returns 0 if parsing fails or peers not found.
-     */
-    private fun parseRoutingTablePeers(status: String): Int {
-        // Try to match V3 format first ("Peers:84, AminoDHT:42, AppDHT:12..."),
-        // then V2 patterns ("routing table: 84 peers", "RT: 84")
-        val patterns = listOf(
-            Regex("""Peers:(\d+)"""),                                             // V3 format
-            Regex("""routing\s*table[:\s]+(\d+)""", RegexOption.IGNORE_CASE),
-            Regex("""RT[:\s]+(\d+)"""),
-            Regex("""(\d+)\s*peers?\s*in\s*routing""", RegexOption.IGNORE_CASE),
-            Regex("""DHT[:\s]+(\d+)""", RegexOption.IGNORE_CASE)
-        )
-
-        for (pattern in patterns) {
-            val match = pattern.find(status)
-            if (match != null) {
-                return match.groupValues[1].toIntOrNull() ?: 0
-            }
-        }
-
-        // If no pattern matches, assume healthy (avoid false positives)
-        return -1  // -1 means "unknown", won't trigger recovery
-    }
-
-    /**
-     * Attempt to recover P2P connectivity by re-bootstrapping.
-     * Respects cooldown to avoid excessive recovery attempts.
-     */
-    private suspend fun attemptRecovery() {
-        recoveryLock.withLock {
-            val now = System.currentTimeMillis()
-            val timeSinceLastRecovery = now - lastRecoveryAttemptMs.get()
-
-            if (timeSinceLastRecovery < AppConstants.P2P.RECOVERY_COOLDOWN_MS) {
-                Log.d(TAG, "Recovery cooldown active, skipping (${timeSinceLastRecovery}ms since last attempt)")
-                return
-            }
-
-            Log.w(TAG, "Attempting P2P auto-recovery (re-bootstrap)")
-            lastRecoveryAttemptMs.set(now)
-            consecutiveZeroPeerChecks.set(0)
-
-            try {
-                val currentNode = node
-                if (currentNode != null) {
-                    // Try DHT refresh first (lighter operation)
-                    Log.d(TAG, "Step 1: Refreshing DHT...")
-                    currentNode.refreshDHT()
-                    delay(2000) // Give it time to work
-
-                    // Check if that helped
-                    val statusAfterRefresh = currentNode.dhtStatus ?: ""
-                    val peersAfterRefresh = parseRoutingTablePeers(statusAfterRefresh)
-
-                    if (peersAfterRefresh > 0) {
-                        Log.i(TAG, "DHT refresh recovered connectivity: $peersAfterRefresh peers")
-                        _dhtStatus.value = statusAfterRefresh
-                        return
+                    val currentNode = node
+                    if (currentNode != null) {
+                        val status = currentNode.dhtStatus ?: "DHT status unavailable"
+                        _dhtStatus.value = status
+                        Log.d(TAG, "DHT Status refresh: $status")
                     }
-
-                    // DHT refresh didn't help, try announcing
-                    Log.d(TAG, "Step 2: Announcing to DHT...")
-                    currentNode.announce()
-                    delay(2000)
-
-                    // Final check
-                    val statusAfterAnnounce = currentNode.dhtStatus ?: ""
-                    val peersAfterAnnounce = parseRoutingTablePeers(statusAfterAnnounce)
-
-                    if (peersAfterAnnounce > 0) {
-                        Log.i(TAG, "DHT announce recovered connectivity: $peersAfterAnnounce peers")
-                        _dhtStatus.value = statusAfterAnnounce
-                    } else {
-                        Log.w(TAG, "Auto-recovery did not restore peers. Manual restart may be needed.")
-                        // Note: We don't restart the node automatically to avoid disrupting any
-                        // partial connectivity. User can force-stop the app if needed.
-                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "DHT status refresh failed: ${e.message}")
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Auto-recovery failed: ${e.message}", e)
             }
         }
+        Log.d(TAG, "Started periodic DHT status refresh (10s interval)")
     }
     
     // ============== Peer Operations ==============
@@ -763,40 +459,7 @@ class P2PLibraryRepository(
      */
     fun getTopicPeers(topicName: String): List<String> {
         val peersStr = node?.getTopicPeers(topicName) ?: return emptyList()
-        return peersStr
-            .lineSequence()
-            .map { it.trim() }
-            .filter { it.isNotBlank() }
-            .distinct()
-            .sorted()
-            .toList()
-    }
-    
-    /**
-     * Trigger DHT discovery for a topic.
-     * This tells the Go library to actively search for peers subscribed to this topic.
-     * Call this when subscribing to a new topic to bootstrap peer discovery.
-     */
-    fun refreshTopicPeers(topicName: String) {
-        try {
-            node?.refreshTopicPeers(topicName)
-            Log.d(TAG, "Triggered topic peer refresh for: $topicName")
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to refresh topic peers for $topicName: ${e.message}")
-        }
-    }
-    
-    /**
-     * Get topic statistics (mesh peer count, provider count, etc).
-     * Returns JSON string from Go library.
-     */
-    fun getTopicStats(topicName: String): String {
-        return try {
-            node?.getTopicStats(topicName) ?: "{}"
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to get topic stats for $topicName: ${e.message}")
-            "{}"
-        }
+        return peersStr.split("\n").filter { it.isNotBlank() }
     }
     
     /**
@@ -850,521 +513,7 @@ class P2PLibraryRepository(
     fun getMyPublicAddress(): String {
         return node?.getMyPublicAddress() ?: "Not available"
     }
-
-    /**
-     * Force a one-shot refresh of DHT, bandwidth and connected peers diagnostics.
-     */
-    suspend fun refreshDiagnostics(): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            val currentNode = node ?: return@withContext Result.failure(Exception("Node not started"))
-            refreshNodeStatusSnapshot(currentNode)
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to refresh diagnostics", e)
-            Result.failure(e)
-        }
-    }
-
-    /**
-     * Get raw bandwidth stats JSON from Go library.
-     */
-    fun getBandwidthStatsJson(): String {
-        return try {
-            val liveJson = node?.bandwidthStats
-            if (liveJson.isNullOrBlank()) {
-                _bandwidthStats.value
-            } else {
-                liveJson
-            }
-        } catch (e: Exception) {
-            _bandwidthStats.value
-        }
-    }
-
-    /**
-     * Parse a bandwidth summary from stats JSON with safe fallbacks.
-     */
-    fun getBandwidthSummary(statsJson: String = getBandwidthStatsJson()): P2PBandwidthSummary {
-        val safeJson = if (statsJson.isBlank()) "{}" else statsJson
-        return try {
-            val json = JSONObject(safeJson)
-            P2PBandwidthSummary(
-                sessionInBytes = json.optLong("session_in", 0L),
-                sessionOutBytes = json.optLong("session_out", 0L),
-                sessionTotalBytes = json.optLong("session_total", 0L),
-                dailyInBytes = json.optLong("daily_in", 0L),
-                dailyOutBytes = json.optLong("daily_out", 0L),
-                dailyTotalBytes = json.optLong("daily_total", 0L),
-                currentRateInBytesPerSec = json.optDouble("current_rate_in", 0.0),
-                currentRateOutBytesPerSec = json.optDouble("current_rate_out", 0.0),
-                projectedHourlyTotalBytes = json.optLong("projected_hourly_total", 0L),
-                rawJson = safeJson
-            )
-        } catch (e: Exception) {
-            P2PBandwidthSummary(rawJson = safeJson)
-        }
-    }
-
-    /**
-     * Human-readable bytes formatter backed by Go helper.
-     */
-    fun formatBytes(bytes: Long): String {
-        return try {
-            Golib.formatBytes(bytes)
-        } catch (_: Exception) {
-            "$bytes B"
-        }
-    }
-
-    /**
-     * Human-readable bytes/sec formatter backed by Go helper.
-     */
-    fun formatRate(bytesPerSecond: Double): String {
-        return try {
-            Golib.formatRate(bytesPerSecond)
-        } catch (_: Exception) {
-            "${bytesPerSecond.toLong()} B/s"
-        }
-    }
-
-    /**
-     * Fetch Go debug logs. Optional component filter (e.g. "dht", "node", "stream").
-     */
-    suspend fun getDebugLogs(component: String? = null): Result<List<P2PDebugLogEntry>> = withContext(Dispatchers.IO) {
-        try {
-            Result.success(readDebugLogs(component))
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to fetch debug logs", e)
-            Result.failure(e)
-        }
-    }
-
-    /**
-     * Clear Go debug logs from memory and file.
-     */
-    suspend fun clearDebugLogs(): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            Golib.clearDebugLogs()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to clear debug logs", e)
-            Result.failure(e)
-        }
-    }
-
-    /**
-     * Export current logs as plain text to cache directory for sharing.
-     */
-    suspend fun exportDebugLogs(component: String? = null): Result<File> = withContext(Dispatchers.IO) {
-        try {
-            val entries = readDebugLogs(component)
-            val stamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-            val exportFile = File(context.cacheDir, "p2p_logs_$stamp.txt")
-            val contents = buildString {
-                appendLine("Zemzeme P2P Debug Logs")
-                appendLine("Exported: ${Date()}")
-                appendLine("Filter: ${component ?: "all"}")
-                appendLine("Entries: ${entries.size}")
-                appendLine()
-
-                entries.forEach { entry ->
-                    val ts = SimpleDateFormat("HH:mm:ss.SSS", Locale.US).format(Date(entry.timestamp))
-                    appendLine("[$ts] ${entry.level}/${entry.component} ${entry.event}")
-                    appendLine(entry.message)
-                    if (entry.contextJson.isNotBlank() && entry.contextJson != "{}") {
-                        appendLine("ctx=${entry.contextJson}")
-                    }
-                    appendLine()
-                }
-            }
-            exportFile.writeText(contents)
-            Result.success(exportFile)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to export debug logs", e)
-            Result.failure(e)
-        }
-    }
-
-    // ============== Health Monitoring ==============
-
-    /**
-     * Check if the P2P node is healthy (has peers in routing table).
-     * Returns true if healthy, false if no peers detected.
-     */
-    fun isHealthy(): Boolean {
-        if (_nodeStatus.value != P2PNodeStatus.RUNNING) return false
-        val status = node?.dhtStatus ?: return false
-        val routingPeers = parseRoutingTablePeers(status)
-        val connectedPeers = _connectedPeers.value.size
-        return routingPeers > 0 || connectedPeers > 0 || routingPeers == -1
-    }
-
-    /**
-     * Get current health status for UI display.
-     */
-    fun getHealthStatus(): HealthStatus {
-        val status = node?.dhtStatus ?: "Node not started"
-        val routingPeers = parseRoutingTablePeers(status)
-        val connectedPeers = _connectedPeers.value.size
-
-        return HealthStatus(
-            isHealthy = routingPeers > 0 || connectedPeers > 0 || routingPeers == -1,
-            routingTablePeers = if (routingPeers >= 0) routingPeers else null,
-            connectedPeers = connectedPeers,
-            consecutiveZeroChecks = consecutiveZeroPeerChecks.get(),
-            lastRecoveryAttemptMs = lastRecoveryAttemptMs.get()
-        )
-    }
-
-    data class HealthStatus(
-        val isHealthy: Boolean,
-        val routingTablePeers: Int?,
-        val connectedPeers: Int,
-        val consecutiveZeroChecks: Int,
-        val lastRecoveryAttemptMs: Long
-    )
-
-    /**
-     * Manually trigger P2P recovery.
-     * Can be called from UI when user suspects connectivity issues.
-     */
-    suspend fun forceRecovery(): Result<Unit> = withContext(Dispatchers.IO) {
-        if (_nodeStatus.value != P2PNodeStatus.RUNNING) {
-            return@withContext Result.failure(Exception("Node not running"))
-        }
-
-        try {
-            Log.i(TAG, "Manual P2P recovery triggered by user")
-            // Reset cooldown to allow immediate recovery
-            lastRecoveryAttemptMs.set(0L)
-            attemptRecovery()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Log.e(TAG, "Manual recovery failed: ${e.message}", e)
-            Result.failure(e)
-        }
-    }
-
-    private fun initGoLogging() {
-        try {
-            val logFilePath = File(context.filesDir, LOG_FILE_NAME).absolutePath
-            Golib.initLogging(logFilePath)
-            Log.d(TAG, "Initialized Go logging at: $logFilePath")
-        } catch (e: Exception) {
-            // Logging init is non-blocking for node startup.
-            Log.w(TAG, "Failed to initialize Go logging: ${e.message}")
-        }
-    }
-
-    private fun createNodeWithTunedConfig(privateKey: String): P2PNode {
-        return try {
-            // V3: Use profile-based creation. TopicTrackingInterval is now managed
-            // by the LifecycleManager internally. debugNetwork=false for production.
-            Log.d(TAG, "Creating node with V3 profile-based config (mobile_client)")
-            Golib.createP2PNodeWithProfileAndMode(privateKey, 0, "mobile_client", false)
-        } catch (e: Exception) {
-            Log.w(TAG, "Profile-based node creation failed, falling back: ${e.message}")
-            Golib.newP2PNode(privateKey, 0)
-        }
-    }
-
-    private fun currentDateString(): String {
-        return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
-    }
-
-    private fun getAndroidDnsServers(network: Network? = null): String {
-        return try {
-            val active = network ?: connectivityManager.activeNetwork
-            val linkProps = active?.let { connectivityManager.getLinkProperties(it) }
-            linkProps?.dnsServers
-                ?.mapNotNull { it.hostAddress }
-                ?.filter { it.isNotBlank() }
-                ?.joinToString(",")
-                .orEmpty()
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to get Android DNS servers: ${e.message}")
-            ""
-        }
-    }
-
-    private fun configureAndroidDNSForNetwork(network: Network? = null) {
-        try {
-            val dnsServers = getAndroidDnsServers(network)
-            if (dnsServers.isNotBlank()) {
-                Golib.configureAndroidDNS(dnsServers)
-                Log.d(TAG, "Configured Go DNS servers: $dnsServers")
-            } else {
-                Log.w(TAG, "No Android DNS servers available, keeping existing Go DNS config")
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to configure Go DNS: ${e.message}")
-        }
-    }
-
-    private fun isCellularNetwork(network: Network? = null): Boolean {
-        val active = network ?: connectivityManager.activeNetwork
-        val capabilities = active?.let { connectivityManager.getNetworkCapabilities(it) }
-        return capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true
-    }
-
-    private fun updateMeteredModeForNetwork(network: Network? = null) {
-        try {
-            val currentNode = node ?: return
-            val metered = isCellularNetwork(network)
-            currentNode.setMeteredMode(metered)
-            Log.d(TAG, "Updated metered mode: $metered")
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to update metered mode: ${e.message}")
-        }
-    }
-
-    private fun registerNetworkCallback() {
-        unregisterNetworkCallbackSafely()
-
-        val callback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                scope.launch {
-                    configureAndroidDNSForNetwork(network)
-                    updateMeteredModeForNetwork(network)
-                }
-            }
-
-            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-                scope.launch {
-                    updateMeteredModeForNetwork(network)
-                }
-            }
-
-            override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
-                scope.launch {
-                    configureAndroidDNSForNetwork(network)
-                }
-            }
-
-            override fun onLost(network: Network) {
-                scope.launch {
-                    configureAndroidDNSForNetwork()
-                    updateMeteredModeForNetwork()
-                }
-            }
-        }
-
-        try {
-            connectivityManager.registerDefaultNetworkCallback(callback)
-            networkCallback = callback
-            Log.d(TAG, "Registered connectivity callback for DNS/metered updates")
-        } catch (e: Exception) {
-            networkCallback = null
-            Log.w(TAG, "Failed to register connectivity callback: ${e.message}")
-        }
-    }
-
-    private fun unregisterNetworkCallbackSafely() {
-        val callback = networkCallback ?: return
-        try {
-            connectivityManager.unregisterNetworkCallback(callback)
-            Log.d(TAG, "Unregistered connectivity callback")
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to unregister connectivity callback: ${e.message}")
-        } finally {
-            networkCallback = null
-        }
-    }
-
-    private fun refreshNodeStatusSnapshot(currentNode: P2PNode? = node) {
-        val activeNode = currentNode ?: return
-
-        val dht = try {
-            activeNode.dhtStatus ?: "DHT status unavailable"
-        } catch (_: Exception) {
-            "DHT status unavailable"
-        }
-        _dhtStatus.value = dht
-
-        val statsJson = try {
-            activeNode.bandwidthStats
-        } catch (_: Exception) {
-            "{}"
-        }
-        _bandwidthStats.value = if (statsJson.isBlank()) "{}" else statsJson
-
-        val peersRaw = try {
-            activeNode.connectedPeers
-        } catch (_: Exception) {
-            ""
-        }
-        val countedByNode = parseConnectedPeersCount(peersRaw)
-        val countedByCallbacks = _connectedPeers.value.size
-        _totalConnectedPeers.value = maxOf(countedByNode, countedByCallbacks)
-    }
-
-    private fun parseConnectedPeersCount(rawPeers: String): Int {
-        return rawPeers
-            .lineSequence()
-            .map { it.trim() }
-            .count { it.isNotEmpty() }
-    }
-
-    private fun restoreDailyBandwidthCache(p2pNode: P2PNode) {
-        try {
-            val today = currentDateString()
-            val storedDate = prefs.getString(KEY_DAILY_BANDWIDTH_DATE, null)
-
-            if (storedDate == today) {
-                val inBytes = prefs.getLong(KEY_DAILY_BANDWIDTH_IN, 0L)
-                val outBytes = prefs.getLong(KEY_DAILY_BANDWIDTH_OUT, 0L)
-                if (inBytes > 0L || outBytes > 0L) {
-                    p2pNode.restoreDailyBandwidth(today, inBytes, outBytes)
-                    Log.d(TAG, "Restored daily bandwidth cache: day=$today in=$inBytes out=$outBytes")
-                }
-            } else if (!storedDate.isNullOrBlank()) {
-                prefs.edit()
-                    .remove(KEY_DAILY_BANDWIDTH_DATE)
-                    .remove(KEY_DAILY_BANDWIDTH_IN)
-                    .remove(KEY_DAILY_BANDWIDTH_OUT)
-                    .apply()
-                Log.d(TAG, "Cleared stale daily bandwidth cache for date: $storedDate")
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to restore daily bandwidth cache: ${e.message}")
-        }
-    }
-
-    private fun persistDailyBandwidthCache() {
-        val currentNode = node ?: return
-        try {
-            val cacheJson = currentNode.dailyBandwidthCache
-            if (cacheJson.isBlank()) {
-                return
-            }
-
-            val json = JSONObject(cacheJson)
-            val day = json.optString("day", "")
-            val inBytes = json.optLong("in", 0L)
-            val outBytes = json.optLong("out", 0L)
-            if (day.isNotBlank()) {
-                prefs.edit()
-                    .putString(KEY_DAILY_BANDWIDTH_DATE, day)
-                    .putLong(KEY_DAILY_BANDWIDTH_IN, inBytes)
-                    .putLong(KEY_DAILY_BANDWIDTH_OUT, outBytes)
-                    .apply()
-                Log.d(TAG, "Persisted daily bandwidth cache: day=$day in=$inBytes out=$outBytes")
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to persist daily bandwidth cache: ${e.message}")
-        }
-    }
-
-    private fun importPeerCacheIfFresh(p2pNode: P2PNode) {
-        try {
-            val cacheJson = prefs.getString(KEY_PEER_CACHE, null)
-            val savedAt = prefs.getLong(KEY_PEER_CACHE_SAVED_AT, 0L)
-            if (cacheJson.isNullOrBlank() || savedAt <= 0L) {
-                return
-            }
-
-            val ageMs = System.currentTimeMillis() - savedAt
-            if (ageMs > PEER_CACHE_MAX_AGE_MS) {
-                prefs.edit()
-                    .remove(KEY_PEER_CACHE)
-                    .remove(KEY_PEER_CACHE_SAVED_AT)
-                    .apply()
-                Log.d(TAG, "Skipping stale peer cache (age=${ageMs}ms)")
-                return
-            }
-
-            val result = p2pNode.importPeerCache(cacheJson)
-            Log.d(TAG, "Imported peer cache result: $result")
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to import peer cache: ${e.message}")
-        }
-    }
-
-    private fun savePeerCacheSnapshot() {
-        val currentNode = node ?: return
-        try {
-            val cacheJson = currentNode.exportPeerCache()
-            if (cacheJson.isBlank()) {
-                return
-            }
-            prefs.edit()
-                .putString(KEY_PEER_CACHE, cacheJson)
-                .putLong(KEY_PEER_CACHE_SAVED_AT, System.currentTimeMillis())
-                .apply()
-            Log.d(TAG, "Saved peer cache snapshot")
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to save peer cache snapshot: ${e.message}")
-        }
-    }
-
-    private fun startPeriodicPeerCacheSave() {
-        stopPeriodicPeerCacheSave()
-        peerCacheSaveJob = scope.launch {
-            delay(PEER_CACHE_FIRST_SAVE_DELAY_MS)
-            while (_nodeStatus.value == P2PNodeStatus.RUNNING) {
-                savePeerCacheSnapshot()
-                delay(PEER_CACHE_SAVE_INTERVAL_MS)
-            }
-        }
-        Log.d(TAG, "Started periodic peer cache save job")
-    }
-
-    private fun stopPeriodicPeerCacheSave() {
-        peerCacheSaveJob?.cancel()
-        peerCacheSaveJob = null
-    }
-
-    private fun readDebugLogs(component: String? = null): List<P2PDebugLogEntry> {
-        val componentFilter = normalizeComponentFilter(component)
-        val logsJson = if (componentFilter == null) {
-            Golib.getDebugLogs()
-        } else {
-            Golib.getDebugLogsFiltered(componentFilter)
-        }
-        return parseDebugLogsJson(logsJson)
-    }
-
-    private fun normalizeComponentFilter(component: String?): String? {
-        val normalized = component?.trim()?.lowercase(Locale.US).orEmpty()
-        return when {
-            normalized.isBlank() -> null
-            normalized == "all" -> null
-            else -> normalized
-        }
-    }
-
-    private fun parseDebugLogsJson(logsJson: String): List<P2PDebugLogEntry> {
-        if (logsJson.isBlank()) return emptyList()
-
-        return try {
-            val array = JSONArray(logsJson)
-            buildList(array.length()) {
-                for (i in 0 until array.length()) {
-                    val obj = array.optJSONObject(i) ?: continue
-                    val context = obj.opt("ctx")
-                    val contextJson = when (context) {
-                        is JSONObject -> context.toString()
-                        null, JSONObject.NULL -> "{}"
-                        else -> context.toString()
-                    }
-                    add(
-                        P2PDebugLogEntry(
-                            timestamp = obj.optLong("ts", 0L),
-                            level = obj.optString("level", "INFO"),
-                            component = obj.optString("component", "unknown"),
-                            event = obj.optString("event", ""),
-                            message = obj.optString("msg", ""),
-                            contextJson = contextJson
-                        )
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to parse debug logs JSON: ${e.message}")
-            emptyList()
-        }
-    }
-
+    
     // ============== Key Management ==============
     
     private fun getStoredPrivateKey(): String? {
@@ -1379,7 +528,7 @@ class P2PLibraryRepository(
     }
     
     /**
-     * Set a specific private key (e.g., derived from Zemzeme identity).
+     * Set a specific private key (e.g., derived from BitChat identity).
      * Must be called before startNode() to take effect.
      */
     fun setPrivateKey(privateKeyBase64: String) {
@@ -1401,191 +550,24 @@ class P2PLibraryRepository(
         Log.d(TAG, "Cleared P2P keys")
     }
     
-    // ============== V3: Focus & Priority APIs ==============
-
-    /**
-     * Signal that the user has a chat screen open for this peer.
-     * The focus peer's connection will not be pruned by idle timeout.
-     * Call clearFocusPeer() when the chat screen is closed.
-     */
-    fun setFocusPeer(peerID: String) {
-        _focusPeerID.value = peerID
-        node?.setFocusPeer(peerID)
-        Log.d(TAG, "Focus peer set: $peerID")
-    }
-
-    /**
-     * Signal that the friend chat screen has been closed.
-     */
-    fun clearFocusPeer() {
-        val prev = _focusPeerID.value
-        _focusPeerID.value = null
-        node?.clearFocusPeer()
-        if (prev != null) Log.d(TAG, "Focus peer cleared (was: $prev)")
-    }
-
-    /**
-     * Signal that the user has a topic chat screen open.
-     * The focus topic gets a boosted mesh peer target.
-     * Call clearFocusTopic() when the topic screen is closed.
-     */
-    fun setFocusTopic(topicID: String) {
-        node?.setFocusTopic(topicID)
-        Log.d(TAG, "Focus topic set: $topicID")
-    }
-
-    /**
-     * Signal that the topic chat screen has been closed.
-     */
-    fun clearFocusTopic() {
-        node?.clearFocusTopic()
-        Log.d(TAG, "Focus topic cleared")
-    }
-
-    /**
-     * Connect to a peer if not already connected, then send a message.
-     * This is the preferred way to send messages — handles connect-then-send transparently.
-     */
-    suspend fun connectAndSendMessage(peerID: String, message: String): Result<Unit> =
-        withContext(Dispatchers.IO) {
-            try {
-                val n = node ?: return@withContext Result.failure(Exception("Node not started"))
-                n.connectAndSendMessage(peerID, message)
-                Result.success(Unit)
-            } catch (e: Exception) {
-                Log.e(TAG, "connectAndSendMessage failed for $peerID", e)
-                Result.failure(e)
-            }
-        }
-
-    /**
-     * Push friend peer IDs to Go for prioritized reconnection.
-     * friendsJson: JSON array of objects with "peer_id", "last_activity" (unix seconds),
-     * and "tag" (opaque label, e.g. "friend:alice").
-     */
-    fun setFriendPeers(friendsJson: String) {
-        try {
-            node?.setFriendPeers(friendsJson)
-            Log.d(TAG, "Friend peers pushed to Go")
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to push friend peers: ${e.message}")
-        }
-    }
-
-    /**
-     * Push active topic IDs to Go for intelligent mesh slot allocation.
-     * topicsJson: JSON array of objects with "topic_id" and "last_activity" (unix seconds).
-     */
-    fun setActiveTopics(topicsJson: String) {
-        try {
-            node?.setActiveTopics(topicsJson)
-            Log.d(TAG, "Active topics pushed to Go")
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to push active topics: ${e.message}")
-        }
-    }
-
-    // ============== V3: Connection Info ==============
-
-    /**
-     * Get detailed connection info for a connected peer.
-     * Returns null if not connected or on error.
-     */
-    fun getConnectionInfo(peerID: String): PeerConnectionInfo? {
-        val json = node?.getPeerConnectionInfo(peerID)?.takeIf { it.isNotBlank() } ?: return null
-        return try {
-            val obj = JSONObject(json)
-            PeerConnectionInfo(
-                remoteAddr = obj.optString("remote_addr", ""),
-                ip = obj.optString("ip", ""),
-                port = obj.optString("port", ""),
-                transport = obj.optString("transport", ""),
-                direction = obj.optString("direction", "")
-            )
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to parse connection info for $peerID: ${e.message}")
-            null
-        }
-    }
-
-    /**
-     * Get all multiaddresses this node is reachable at, categorized by type.
-     * Each entry is prefixed with "PUBLIC:", "PRIVATE:", or "LOCAL:".
-     */
-    fun getAllMultiaddrs(): List<String> {
-        val raw = node?.getAllMultiaddrs() ?: return emptyList()
-        if (raw.isBlank()) return emptyList()
-        return raw.split("\n").filter { it.isNotBlank() }
-    }
-
-    // ============== V3: Lifecycle & Config ==============
-
-    /**
-     * Get the current lifecycle phase as JSON.
-     * Includes: phase, uptime, health status, whether friends/topics exist.
-     */
-    fun getLifecycleStatus(): String = node?.getLifecycleStatus() ?: "{}"
-
-    /**
-     * Whether the Amino DHT is hibernating.
-     */
-    fun isAminoHibernating(): Boolean = node?.isAminoHibernating() ?: false
-
-    /**
-     * Get the running node's current config as JSON.
-     */
-    fun getCurrentConfigJson(): String? = node?.getCurrentConfig()
-
-    /**
-     * Get the default config for a specific profile as JSON.
-     */
-    fun getDefaultConfigJson(profile: String = "mobile_client"): String? {
-        return try {
-            Golib.getDefaultConfigForProfile(profile)
-        } catch (_: Exception) {
-            null
-        }
-    }
-
-    /**
-     * Apply a custom config JSON to the running node.
-     * Hot-reloadable fields take effect on the next enforcement cycle.
-     */
-    fun applyConfigJson(configJson: String): Boolean {
-        return try {
-            node?.setCustomConfig(configJson)
-            true
-        } catch (_: Exception) {
-            false
-        }
-    }
-
     // ============== Internal ==============
     
     private fun updatePeerState(peerID: String, connected: Boolean) {
-        synchronized(connectedPeersLock) {
-            val status = _nodeStatus.value
-            if (status == P2PNodeStatus.STOPPED || status == P2PNodeStatus.ERROR) {
-                return
-            }
-
-            val current = _connectedPeers.value.toMutableList()
-            val index = current.indexOfFirst { it.peerID == peerID }
-
-            if (connected) {
-                if (index >= 0) {
-                    current[index] = P2PPeer(peerID, true, System.currentTimeMillis())
-                } else {
-                    current.add(P2PPeer(peerID, true, System.currentTimeMillis()))
-                }
+        val current = _connectedPeers.value.toMutableList()
+        val index = current.indexOfFirst { it.peerID == peerID }
+        
+        if (connected) {
+            if (index >= 0) {
+                current[index] = P2PPeer(peerID, true, System.currentTimeMillis())
             } else {
-                if (index >= 0) {
-                    current.removeAt(index)
-                }
+                current.add(P2PPeer(peerID, true, System.currentTimeMillis()))
             }
-
-            _connectedPeers.value = current
-            _totalConnectedPeers.value = current.size
+        } else {
+            if (index >= 0) {
+                current.removeAt(index)
+            }
         }
+        
+        _connectedPeers.value = current
     }
 }
