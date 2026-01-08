@@ -180,7 +180,14 @@ class P2PLibraryRepository(
                 }
             })
             
-            // Set up topic message handler
+            // Start the node FIRST - topicManager is created during Start()
+            Log.d(TAG, "Starting P2P node network...")
+            newNode.start()
+            Log.d(TAG, "✓ P2P node network started")
+            node = newNode
+            
+            // CRITICAL: Set up topic handlers AFTER start() because topicManager
+            // doesn't exist until Start() is called!
             newNode.setTopicMessageHandler(object : MobileTopicMessageHandler {
                 override fun onTopicMessage(topicName: String?, senderID: String?, message: String?, timestamp: Long) {
                     if (topicName != null && senderID != null && message != null) {
@@ -204,12 +211,6 @@ class P2PLibraryRepository(
                     Log.d(TAG, "Topic peer update [$topicName]: $peerID $action")
                 }
             })
-            
-            // Start the node
-            Log.d(TAG, "Starting P2P node network...")
-            newNode.start()
-            Log.d(TAG, "✓ P2P node network started")
-            node = newNode
             
             // Update state
             _peerID.value = newNode.peerID
@@ -460,6 +461,33 @@ class P2PLibraryRepository(
     fun getTopicPeers(topicName: String): List<String> {
         val peersStr = node?.getTopicPeers(topicName) ?: return emptyList()
         return peersStr.split("\n").filter { it.isNotBlank() }
+    }
+    
+    /**
+     * Trigger DHT discovery for a topic.
+     * This tells the Go library to actively search for peers subscribed to this topic.
+     * Call this when subscribing to a new topic to bootstrap peer discovery.
+     */
+    fun refreshTopicPeers(topicName: String) {
+        try {
+            node?.refreshTopicPeers(topicName)
+            Log.d(TAG, "Triggered topic peer refresh for: $topicName")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to refresh topic peers for $topicName: ${e.message}")
+        }
+    }
+    
+    /**
+     * Get topic statistics (mesh peer count, provider count, etc).
+     * Returns JSON string from Go library.
+     */
+    fun getTopicStats(topicName: String): String {
+        return try {
+            node?.getTopicStats(topicName) ?: "{}"
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to get topic stats for $topicName: ${e.message}")
+            "{}"
+        }
     }
     
     /**
