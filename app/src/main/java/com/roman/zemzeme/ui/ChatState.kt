@@ -330,6 +330,35 @@ class ChatState(
         _geohashPeople.value = people
     }
     
+    /**
+     * Merge P2P peers into the geohashPeople list.
+     * Call this when P2P topic peers are discovered.
+     */
+    fun mergeP2PPeers(p2pPeerIds: List<String>) {
+        val current = _geohashPeople.value.toMutableList()
+        
+        // Add P2P peers that aren't already in the list
+        p2pPeerIds.forEach { peerId ->
+            if (current.none { it.id == peerId }) {
+                current.add(GeoPerson(
+                    id = peerId,
+                    displayName = peerId.take(8) + "...",
+                    lastSeen = java.util.Date(),
+                    transport = TransportType.P2P
+                ))
+            }
+        }
+        _geohashPeople.value = current
+    }
+    
+    /**
+     * Remove P2P peers from the list (when leaving channel).
+     */
+    fun removeP2PPeers() {
+        val current = _geohashPeople.value.filter { it.transport != TransportType.P2P }
+        _geohashPeople.value = current
+    }
+    
     fun setTeleportedGeo(teleported: Set<String>) {
         _teleportedGeo.value = teleported
     }

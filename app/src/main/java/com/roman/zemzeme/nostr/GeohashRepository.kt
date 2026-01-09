@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.roman.zemzeme.ui.ChatState
 import com.roman.zemzeme.ui.GeoPerson
+import com.roman.zemzeme.ui.TransportType
 import java.util.Date
 
 /**
@@ -126,6 +127,10 @@ class GeohashRepository(
         // exclude blocked users from people list
         val people = participants.filterKeys { !dataManager.isGeohashUserBlocked(it) }
             .map { (pubkeyHex, lastSeen) ->
+            // Detect transport type: P2P participants have "p2p:" prefix
+            val isP2P = pubkeyHex.startsWith("p2p:")
+            val transport = if (isP2P) TransportType.P2P else TransportType.NOSTR
+            
             // Use our actual nickname for self; otherwise use cached nickname or anon
             val base = try {
                 val myHex = currentGeohash?.let { NostrIdentityBridge.deriveIdentity(it, application).publicKeyHex }
@@ -138,7 +143,8 @@ class GeohashRepository(
             GeoPerson(
                 id = pubkeyHex.lowercase(),
                 displayName = base, // UI can add #hash if necessary
-                lastSeen = lastSeen
+                lastSeen = lastSeen,
+                transport = transport
             )
         }.sortedByDescending { it.lastSeen }
         // Use postValue for thread safety - this can be called from background threads

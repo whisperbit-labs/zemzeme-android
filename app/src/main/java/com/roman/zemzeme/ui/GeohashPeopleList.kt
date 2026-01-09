@@ -3,6 +3,7 @@ package com.roman.zemzeme.ui
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Explore
@@ -29,12 +30,22 @@ import com.roman.zemzeme.R
  */
 
 /**
+ * Transport type for participants - indicates how they are connected
+ */
+enum class TransportType {
+    NOSTR,      // Connected via Nostr relay
+    P2P,        // Connected via libp2p P2P
+    BLE_MESH    // Connected via BLE Mesh
+}
+
+/**
  * GeoPerson data class - matches iOS GeoPerson structure exactly
  */
 data class GeoPerson(
     val id: String,           // pubkey hex (lowercased) - matches iOS
     val displayName: String,  // nickname with #suffix - matches iOS  
-    val lastSeen: Date        // activity timestamp - matches iOS
+    val lastSeen: Date,        // activity timestamp - matches iOS
+    val transport: TransportType = TransportType.NOSTR  // Transport type
 )
 
 @Composable
@@ -262,6 +273,45 @@ private fun GeohashPersonItem(
                     ),
                     color = baseColor
                 )
+            }
+            
+            // Transport badge - shows how this person is connected
+            when (person.transport) {
+                TransportType.P2P -> {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = Color(0xFF00C851).copy(alpha = 0.2f)
+                    ) {
+                        Text(
+                            text = "P2P",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 9.sp
+                            ),
+                            color = Color(0xFF00C851),
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                        )
+                    }
+                }
+                TransportType.NOSTR -> {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = Color(0xFF9C27B0).copy(alpha = 0.2f)
+                    ) {
+                        Text(
+                            text = "NOS",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 9.sp
+                            ),
+                            color = Color(0xFF9C27B0),
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                        )
+                    }
+                }
+                TransportType.BLE_MESH -> {
+                    // No badge for mesh (it's the default/local)
+                }
             }
         }
         

@@ -150,6 +150,33 @@ fun NicknameEditor(
     }
 }
 
+/**
+ * P2P connection status indicator dot.
+ * Shows: Orange = connecting, Green = connected, Gray = no peers
+ */
+@Composable
+fun P2PConnectionDot(
+    connectionState: com.bitchat.android.p2p.TopicConnectionState,
+    modifier: Modifier = Modifier
+) {
+    val dotColor = when (connectionState) {
+        com.bitchat.android.p2p.TopicConnectionState.CONNECTING -> Color(0xFFFF9500) // Orange
+        com.bitchat.android.p2p.TopicConnectionState.CONNECTED -> Color(0xFF00C851) // Green
+        com.bitchat.android.p2p.TopicConnectionState.NO_PEERS -> Color.Gray
+        com.bitchat.android.p2p.TopicConnectionState.ERROR -> Color.Red
+    }
+    
+    Canvas(
+        modifier = modifier.size(8.dp)
+    ) {
+        drawCircle(
+            color = dotColor,
+            radius = size.minDimension / 2,
+            center = Offset(size.width / 2, size.height / 2)
+        )
+    }
+}
+
 @Composable
 fun PeerCounter(
     connectedPeers: List<String>,
@@ -163,20 +190,37 @@ fun PeerCounter(
 ) {
     val colorScheme = MaterialTheme.colorScheme
     
-    // Compute channel-aware people count and color (matches iOS logic exactly)
-    val (peopleCount, countColor) = when (selectedLocationChannel) {
+    // Compute channel-aware people count, display text, and color
+    val (displayText, countColor) = when (selectedLocationChannel) {
         is com.bitchat.android.geohash.ChannelID.Location -> {
-            // Geohash channel: show geohash participants
-            val count = geohashPeople.size
-            val green = Color(0xFF00C851) // Standard green
-            Pair(count, if (count > 0) green else Color.Gray)
+            // Geohash channel: show geohash participants with P2P/Nostr split
+            val nostrCount = geohashPeople.count { it.transport == TransportType.NOSTR }
+            val p2pCount = geohashPeople.count { it.transport == TransportType.P2P }
+            val totalCount = geohashPeople.size
+            
+            // Show format: "3" (total only) or "2|1" (nostr|p2p) if both active
+            val text = if (p2pCount > 0 && nostrCount > 0) {
+                "$nostrCount|$p2pCount"  // Purple|Green split
+            } else {
+                "$totalCount"
+            }
+            
+            val green = Color(0xFF00C851)
+            val purple = Color(0xFF9C27B0)
+            // Color: green if P2P, purple if only Nostr, gray if none
+            val color = when {
+                p2pCount > 0 -> green
+                nostrCount > 0 -> purple
+                else -> Color.Gray
+            }
+            Pair(text, color)
         }
         is com.bitchat.android.geohash.ChannelID.Mesh,
         null -> {
             // Mesh channel: show Bluetooth-connected peers (excluding self)
             val count = connectedPeers.size
             val meshBlue = Color(0xFF007AFF) // iOS-style blue for mesh
-            Pair(count, if (isConnected && count > 0) meshBlue else Color.Gray)
+            Pair("$count", if (isConnected && count > 0) meshBlue else Color.Gray)
         }
     }
     
@@ -196,7 +240,7 @@ fun PeerCounter(
         Spacer(modifier = Modifier.width(4.dp))
 
         Text(
-            text = "$peopleCount",
+            text = displayText,
             style = MaterialTheme.typography.bodyMedium,
             color = countColor,
             fontSize = 16.sp,
@@ -467,6 +511,9 @@ private fun LocationChannelsButton(
     val selectedChannel by viewModel.selectedLocationChannel.collectAsStateWithLifecycle()
     val teleported by viewModel.isTeleported.collectAsStateWithLifecycle()
     
+    // Get P2P topic states for geohash channels
+    val p2pTopicStates by viewModel.p2pTopicStates.collectAsStateWithLifecycle()
+    
     val (badgeText, badgeColor) = when (selectedChannel) {
         is com.bitchat.android.geohash.ChannelID.Mesh -> {
             "#mesh" to Color(0xFF007AFF) // iOS blue for mesh
@@ -476,6 +523,15 @@ private fun LocationChannelsButton(
             "#$geohash" to Color(0xFF00C851) // Green for location
         }
         null -> "#mesh" to Color(0xFF007AFF) // Default to mesh
+    }
+    
+    // Get P2P connection state for current geohash channel
+    val p2pConnectionState = when (val channel = selectedChannel) {
+        is com.bitchat.android.geohash.ChannelID.Location -> {
+            val topicName = "geo:${channel.channel.geohash}"
+            p2pTopicStates[topicName]?.connectionState
+        }
+        else -> null
     }
     
     Button(
@@ -495,6 +551,15 @@ private fun LocationChannelsButton(
                 color = badgeColor,
                 maxLines = 1
             )
+            
+            // P2P connection status indicator (for geohash channels only)
+            if (p2pConnectionState != null) {
+                Spacer(modifier = Modifier.width(4.dp))
+                P2PConnectionDot(
+                    connectionState = p2pConnectionState,
+                    modifier = Modifier.size(6.dp)
+                )
+            }
             
             // Teleportation indicator (like iOS)
             if (teleported) {

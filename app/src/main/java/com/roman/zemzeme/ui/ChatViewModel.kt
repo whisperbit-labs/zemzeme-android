@@ -184,6 +184,9 @@ class ChatViewModel(
     val geohashPeople: StateFlow<List<GeoPerson>> = state.geohashPeople
     val teleportedGeo: StateFlow<Set<String>> = state.teleportedGeo
     val geohashParticipantCounts: StateFlow<Map<String, Int>> = state.geohashParticipantCounts
+    
+    // P2P topic states for connection status UI (delegated from geohashViewModel)
+    val p2pTopicStates: StateFlow<Map<String, com.bitchat.android.p2p.TopicState>> get() = geohashViewModel.p2pTopicStates
 
     init {
         // Note: Mesh service delegate is now set by MainActivity

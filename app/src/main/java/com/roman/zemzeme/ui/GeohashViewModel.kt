@@ -14,6 +14,11 @@ import com.roman.zemzeme.nostr.NostrSubscriptionManager
 import com.roman.zemzeme.nostr.PoWPreferenceManager
 import com.roman.zemzeme.nostr.GeohashAliasRegistry
 import com.roman.zemzeme.nostr.GeohashConversationRegistry
+import com.roman.zemzeme.p2p.P2PConfig
+import com.roman.zemzeme.p2p.P2PNodeStatus
+import com.roman.zemzeme.p2p.P2PTopicsRepository
+import com.roman.zemzeme.p2p.P2PTransport
+import com.roman.zemzeme.p2p.TopicMessage
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
@@ -55,6 +60,11 @@ class GeohashViewModel(
         dataManager = dataManager
     )
 
+    // P2P integration
+    private val p2pConfig = P2PConfig(application)
+    private val p2pTransport = P2PTransport.getInstance(application)
+    private val p2pTopicsRepository = P2PTopicsRepository(application, p2pTransport.p2pRepository)
+
     private var currentGeohashSubId: String? = null
     private var currentDmSubId: String? = null
     private var geoTimer: Job? = null
@@ -64,6 +74,9 @@ class GeohashViewModel(
     val geohashPeople: StateFlow<List<GeoPerson>> = state.geohashPeople
     val geohashParticipantCounts: StateFlow<Map<String, Int>> = state.geohashParticipantCounts
     val selectedLocationChannel: StateFlow<com.bitchat.android.geohash.ChannelID?> = state.selectedLocationChannel
+    
+    // P2P topic states for connection status UI
+    val p2pTopicStates: StateFlow<Map<String, com.bitchat.android.p2p.TopicState>> = p2pTopicsRepository.topicStates
 
     fun initialize() {
         subscriptionManager.connect()
@@ -93,6 +106,57 @@ class GeohashViewModel(
             
             // Start global presence heartbeat loop
             startGlobalPresenceHeartbeat()
+            
+            // Collect incoming P2P topic messages for geohash channels
+            viewModelScope.launch {
+                p2pTopicsRepository.incomingMessages.collect { msg ->
+                    if (msg.topicName.startsWith("geo:")) {
+                        val geohash = msg.topicName.removePrefix("geo:")
+                        handleIncomingP2PGeohashMessage(msg, geohash)
+                    }
+                }
+            }
+            
+            // Watch for P2P node to become RUNNING and subscribe to current channel
+            // This fixes the startup race condition where channel is restored before P2P is ready
+            viewModelScope.launch {
+                p2pTransport.p2pRepository.nodeStatus.collect { status ->
+                    if (status == P2PNodeStatus.RUNNING) {
+                        val currentChannel = state.selectedLocationChannel.value
+                        if (currentChannel is com.bitchat.android.geohash.ChannelID.Location && p2pConfig.p2pEnabled) {
+                            val topicName = "geo:${currentChannel.channel.geohash}"
+                            try {
+                                // Check if already subscribed to avoid duplicates
+                                if (!p2pTopicsRepository.isSubscribed(topicName)) {
+                                    Log.d(TAG, "🌐 P2P node ready - subscribing to current channel: $topicName")
+                                    p2pTopicsRepository.subscribeTopic(topicName)
+                                    p2pTopicsRepository.discoverTopicPeers(topicName)
+                                    p2pTopicsRepository.startContinuousRefresh(topicName)
+                                }
+                            } catch (e: Exception) {
+                                Log.w(TAG, "Failed late P2P subscription: ${e.message}")
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Watch for P2P peer discovery and merge peers into the people list proactively
+            viewModelScope.launch {
+                p2pTopicsRepository.topicPeers.collect { peersMap ->
+                    val currentChannel = state.selectedLocationChannel.value
+                    if (currentChannel is com.bitchat.android.geohash.ChannelID.Location) {
+                        val topicName = "geo:${currentChannel.channel.geohash}"
+                        val peers = peersMap[topicName] ?: emptyList()
+                        if (peers.isNotEmpty()) {
+                            // Merge P2P peers into geohashPeople with "p2p:" prefix
+                            val p2pPeerIds = peers.map { "p2p:$it" }
+                            state.mergeP2PPeers(p2pPeerIds)
+                            Log.d(TAG, "🔄 Updated people list with ${peers.size} P2P peers")
+                        }
+                    }
+                }
+            }
             
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize location channel state: ${e.message}")
@@ -192,14 +256,48 @@ class GeohashViewModel(
                 if (startedMining) {
                     com.bitchat.android.ui.PoWMiningTracker.startMiningMessage(tempId)
                 }
-                try {
-                    val identity = NostrIdentityBridge.deriveIdentity(forGeohash = channel.geohash, context = getApplication())
-                    val teleported = state.isTeleported.value
-                    val event = NostrProtocol.createEphemeralGeohashEvent(content, channel.geohash, identity, nickname, teleported)
-                    val relayManager = NostrRelayManager.getInstance(getApplication())
-                    relayManager.sendEventToGeohash(event, channel.geohash, includeDefaults = false, nRelays = 5)
-                } finally {
-                    // Ensure we stop the per-message mining animation regardless of success/failure
+                
+                var sentViaP2P = false
+                
+                // Try P2P first if enabled and running
+                if (p2pConfig.p2pEnabled && 
+                    p2pTransport.p2pRepository.nodeStatus.value == P2PNodeStatus.RUNNING) {
+                    try {
+                        val topicName = "geo:${channel.geohash}"
+                        // Create a wire message with metadata
+                        val wireMessage = buildP2PGeohashMessage(content, channel.geohash, nickname)
+                        p2pTopicsRepository.publishToTopic(topicName, wireMessage, nickname)
+                        Log.d(TAG, "🌐 Published geohash message via P2P topic: $topicName")
+                        sentViaP2P = true
+                    } catch (e: Exception) {
+                        Log.w(TAG, "P2P topic publish failed, falling back to Nostr: ${e.message}")
+                    }
+                }
+                
+                // Send via Nostr (as primary or fallback)
+                if (p2pConfig.nostrEnabled) {
+                    try {
+                        val identity = NostrIdentityBridge.deriveIdentity(forGeohash = channel.geohash, context = getApplication())
+                        val teleported = state.isTeleported.value
+                        val event = NostrProtocol.createEphemeralGeohashEvent(content, channel.geohash, identity, nickname, teleported)
+                        val relayManager = NostrRelayManager.getInstance(getApplication())
+                        relayManager.sendEventToGeohash(event, channel.geohash, includeDefaults = false, nRelays = 5)
+                        if (!sentViaP2P) {
+                            Log.d(TAG, "📡 Sent geohash message via Nostr only")
+                        }
+                    } finally {
+                        // Ensure we stop the per-message mining animation regardless of success/failure
+                        if (startedMining) {
+                            com.bitchat.android.ui.PoWMiningTracker.stopMiningMessage(tempId)
+                        }
+                    }
+                } else if (!sentViaP2P) {
+                    Log.w(TAG, "No transport available for geohash message (P2P: ${p2pConfig.p2pEnabled}, Nostr: ${p2pConfig.nostrEnabled})")
+                    if (startedMining) {
+                        com.bitchat.android.ui.PoWMiningTracker.stopMiningMessage(tempId)
+                    }
+                } else {
+                    // Sent via P2P only, stop mining tracker
                     if (startedMining) {
                         com.bitchat.android.ui.PoWMiningTracker.stopMiningMessage(tempId)
                     }
@@ -286,11 +384,55 @@ class GeohashViewModel(
         val seed = "nostr:${pubkeyHex.lowercase()}"
         return colorForPeerSeed(seed, isDark).copy()
     }
+    
+    /**
+     * Trigger manual P2P peer discovery refresh.
+     * Call this from UI refresh button to find and connect to more peers.
+     */
+    fun refreshP2PPeers() {
+        val channel = state.selectedLocationChannel.value
+        if (channel is com.bitchat.android.geohash.ChannelID.Location &&
+            p2pConfig.p2pEnabled &&
+            p2pTransport.p2pRepository.nodeStatus.value == P2PNodeStatus.RUNNING) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val topicName = "geo:${channel.channel.geohash}"
+                Log.d(TAG, "🔄 Manual P2P refresh triggered for: $topicName")
+                p2pTopicsRepository.discoverTopicPeers(topicName)
+            }
+        } else {
+            Log.d(TAG, "🔄 Manual P2P refresh skipped - P2P not enabled or no location channel")
+        }
+    }
+    
+    /**
+     * Get the current P2P topic state for the selected geohash channel.
+     */
+    fun getP2PTopicState(): com.bitchat.android.p2p.TopicState? {
+        val channel = state.selectedLocationChannel.value
+        if (channel is com.bitchat.android.geohash.ChannelID.Location) {
+            return p2pTopicsRepository.getTopicState("geo:${channel.channel.geohash}")
+        }
+        return null
+    }
+    
+    /**
+     * Get the connected P2P peers for the current channel.
+     */
+    fun getP2PTopicPeers(): List<String> {
+        val channel = state.selectedLocationChannel.value
+        if (channel is com.bitchat.android.geohash.ChannelID.Location) {
+            return p2pTopicsRepository.getPeersForTopic("geo:${channel.channel.geohash}")
+        }
+        return emptyList()
+    }
 
     private fun switchLocationChannel(channel: com.bitchat.android.geohash.ChannelID?) {
         geoTimer?.cancel(); geoTimer = null
         currentGeohashSubId?.let { subscriptionManager.unsubscribe(it); currentGeohashSubId = null }
         currentDmSubId?.let { subscriptionManager.unsubscribe(it); currentDmSubId = null }
+        
+        // Stop any active P2P continuous refresh when switching channels
+        p2pTopicsRepository.stopContinuousRefresh()
 
         when (channel) {
             is com.bitchat.android.geohash.ChannelID.Mesh -> {
@@ -319,23 +461,49 @@ class GeohashViewModel(
                 viewModelScope.launch {
                     val geohash = channel.channel.geohash
                     val subId = "geohash-$geohash"; currentGeohashSubId = subId
-                    subscriptionManager.subscribeGeohash(
-                        geohash = geohash,
-                        sinceMs = System.currentTimeMillis() - 3600000L,
-                        limit = 200,
-                        id = subId,
-                        handler = { event -> geohashMessageHandler.onEvent(event, geohash) }
-                    )
-                    val dmIdentity = NostrIdentityBridge.deriveIdentity(geohash, getApplication())
-                    val dmSubId = "geo-dm-$geohash"; currentDmSubId = dmSubId
-                    subscriptionManager.subscribeGiftWraps(
-                        pubkey = dmIdentity.publicKeyHex,
-                        sinceMs = System.currentTimeMillis() - 172800000L,
-                        id = dmSubId,
-                        handler = { event -> dmHandler.onGiftWrap(event, geohash, dmIdentity) }
-                    )
-                    // Also register alias in global registry for routing convenience
-                    GeohashAliasRegistry.put("nostr_${dmIdentity.publicKeyHex.take(16)}", dmIdentity.publicKeyHex)
+                    
+                    // Subscribe via Nostr (if enabled)
+                    if (p2pConfig.nostrEnabled) {
+                        subscriptionManager.subscribeGeohash(
+                            geohash = geohash,
+                            sinceMs = System.currentTimeMillis() - 3600000L,
+                            limit = 200,
+                            id = subId,
+                            handler = { event -> geohashMessageHandler.onEvent(event, geohash) }
+                        )
+                        val dmIdentity = NostrIdentityBridge.deriveIdentity(geohash, getApplication())
+                        val dmSubId = "geo-dm-$geohash"; currentDmSubId = dmSubId
+                        subscriptionManager.subscribeGiftWraps(
+                            pubkey = dmIdentity.publicKeyHex,
+                            sinceMs = System.currentTimeMillis() - 172800000L,
+                            id = dmSubId,
+                            handler = { event -> dmHandler.onGiftWrap(event, geohash, dmIdentity) }
+                        )
+                        // Also register alias in global registry for routing convenience
+                        GeohashAliasRegistry.put("nostr_${dmIdentity.publicKeyHex.take(16)}", dmIdentity.publicKeyHex)
+                    }
+                    
+                    // Subscribe via P2P topic (if enabled and running)
+                    if (p2pConfig.p2pEnabled && 
+                        p2pTransport.p2pRepository.nodeStatus.value == P2PNodeStatus.RUNNING) {
+                        try {
+                            val topicName = "geo:$geohash"
+                            p2pTopicsRepository.subscribeTopic(topicName)
+                            Log.d(TAG, "🌐 Subscribed to P2P topic: $topicName")
+                            
+                            // CRITICAL: Trigger DHT discovery to find and connect to peers
+                            // This is what makes the reference app work when pressing refresh!
+                            p2pTopicsRepository.discoverTopicPeers(topicName)
+                            Log.d(TAG, "🔍 Started P2P peer discovery for: $topicName")
+                            
+                            // CRITICAL: Start continuous 5-second refresh loop
+                            // This matches the reference app's behavior for reliable peer discovery
+                            p2pTopicsRepository.startContinuousRefresh(topicName)
+                            Log.d(TAG, "🔄 Started continuous P2P refresh for: $topicName")
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Failed to subscribe/discover P2P topic: ${e.message}")
+                        }
+                    }
                 }
             }
             null -> {
@@ -352,6 +520,70 @@ class GeohashViewModel(
                 delay(30000)
                 repo.refreshGeohashPeople()
             }
+        }
+    }
+    
+    // ============== P2P Helper Functions ==============
+    
+    /**
+     * Build a P2P wire message for geohash topic publishing.
+     * Format: JSON with content, geohash, sender nickname, timestamp.
+     */
+    private fun buildP2PGeohashMessage(content: String, geohash: String, nickname: String?): String {
+        val timestamp = System.currentTimeMillis()
+        val peerID = p2pTransport.getMyPeerID() ?: "unknown"
+        val teleported = state.isTeleported.value
+        // Simple JSON format compatible with P2P topic messages
+        return """{"type":"geohash","content":"${content.replace("\"", "\\\"")}","geohash":"$geohash","sender":"${nickname ?: peerID}","peerID":"$peerID","teleported":$teleported,"timestamp":$timestamp}"""
+    }
+    
+    /**
+     * Handle incoming P2P geohash topic message.
+     * Parse the wire format and display in the channel.
+     */
+    private fun handleIncomingP2PGeohashMessage(msg: TopicMessage, geohash: String) {
+        try {
+            // Parse the JSON message
+            val json = org.json.JSONObject(msg.content)
+            val content = json.optString("content", "")
+            val sender = json.optString("sender", msg.senderID)
+            val peerID = json.optString("peerID", msg.senderID)
+            val teleported = json.optBoolean("teleported", false)
+            val timestamp = json.optLong("timestamp", System.currentTimeMillis())
+            
+            // Check if this is our own message (don't display duplicates)
+            val myPeerID = p2pTransport.getMyPeerID()
+            if (peerID == myPeerID) {
+                Log.v(TAG, "Ignoring own P2P message from $peerID")
+                return
+            }
+            
+            Log.d(TAG, "🌐 Received P2P geohash message from $sender in geo:$geohash")
+            
+            val bitchatMessage = com.bitchat.android.model.BitchatMessage(
+                id = "p2p_${msg.senderID}_$timestamp",
+                sender = sender,
+                content = content,
+                timestamp = Date(timestamp),
+                isRelay = false,
+                senderPeerID = "p2p:$peerID",
+                channel = "#$geohash",
+                powDifficulty = null
+            )
+            
+            messageManager.addChannelMessage("geo:$geohash", bitchatMessage)
+            
+            // Track this person in the geohash people list
+            // Use P2P peer ID as a synthetic participant ID (prefixed to avoid collision with Nostr pubkeys)
+            val participantId = "p2p:$peerID"
+            repo.updateParticipant(geohash, participantId, Date(timestamp))
+            repo.cacheNickname(participantId, sender)
+            if (teleported) {
+                repo.markTeleported(participantId)
+            }
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to parse P2P geohash message: ${e.message}")
         }
     }
 }
