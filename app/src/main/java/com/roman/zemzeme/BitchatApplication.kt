@@ -47,6 +47,11 @@ class BitchatApplication : Application() {
             com.bitchat.android.nostr.GeohashConversationRegistry.initialize(this)
         } catch (_: Exception) { }
 
+        // Initialize P2P Alias Registry for P2P peer display name persistence
+        try {
+            com.bitchat.android.p2p.P2PAliasRegistry.initialize(this)
+        } catch (_: Exception) { }
+
         // Initialize mesh service preferences
         try { com.bitchat.android.service.MeshServicePreferences.init(this) } catch (_: Exception) { }
 

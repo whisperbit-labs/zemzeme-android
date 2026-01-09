@@ -74,6 +74,8 @@ class GeohashRepository(
 
     fun getCachedNickname(pubkeyHex: String): String? = geoNicknames[pubkeyHex.lowercase()]
 
+    fun getAllNicknames(): Map<String, String> = geoNicknames.toMap()
+
     fun markTeleported(pubkeyHex: String) {
         val set = state.getTeleportedGeoValue().toMutableSet()
         val key = pubkeyHex.lowercase()
@@ -131,17 +133,32 @@ class GeohashRepository(
             val isP2P = pubkeyHex.startsWith("p2p:")
             val transport = if (isP2P) TransportType.P2P else TransportType.NOSTR
             
-            // Use our actual nickname for self; otherwise use cached nickname or anon
+            // Use our actual nickname for self; otherwise use cached nickname
+            // For P2P peers without a cached nickname, generate a friendly "anon" name
             val base = try {
                 val myHex = currentGeohash?.let { NostrIdentityBridge.deriveIdentity(it, application).publicKeyHex }
                 if (myHex != null && myHex.equals(pubkeyHex, true)) {
                     state.getNicknameValue() ?: "anon"
                 } else {
-                    getCachedNickname(pubkeyHex) ?: "anon"
+                    val cached = getCachedNickname(pubkeyHex)
+                    if (cached != null) {
+                        cached
+                    } else if (isP2P) {
+                        // Generate friendly anon name from P2P peer ID suffix
+                        val peerIdPart = pubkeyHex.removePrefix("p2p:")
+                        "anon${peerIdPart.takeLast(4)}"
+                    } else {
+                        "anon"
+                    }
                 }
-            } catch (_: Exception) { getCachedNickname(pubkeyHex) ?: "anon" }
+            } catch (_: Exception) { 
+                val cached = getCachedNickname(pubkeyHex)
+                if (cached != null) cached 
+                else if (isP2P) "anon${pubkeyHex.takeLast(4)}" 
+                else "anon" 
+            }
             GeoPerson(
-                id = pubkeyHex.lowercase(),
+                id = if (isP2P) pubkeyHex else pubkeyHex.lowercase(),
                 displayName = base, // UI can add #hash if necessary
                 lastSeen = lastSeen,
                 transport = transport
