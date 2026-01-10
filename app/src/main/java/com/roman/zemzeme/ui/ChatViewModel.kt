@@ -359,7 +359,7 @@ class ChatViewModel(
                     )
                     // Force broadcast even if cooldown (username change is important)
                     p2pTopicsRepository.broadcastPresence(topicName, newNickname, force = true)
-                    Log.d(TAG, "📡 Broadcast P2P presence after username change: $newNickname")
+                    Log.d(TAG, "Broadcast P2P presence after username change: $newNickname")
                 } catch (e: Exception) {
                     Log.w(TAG, "Failed to broadcast P2P presence on nickname change: ${e.message}")
                 }
@@ -996,7 +996,7 @@ class ChatViewModel(
 
         Log.d(
             TAG,
-            "✅ Mesh service recreated. Old peerID: $oldPeerID, New peerID: ${meshService.myPeerID}"
+            "Mesh service recreated. Old peerID: $oldPeerID, New peerID: ${meshService.myPeerID}"
         )
     }
     
@@ -1008,9 +1008,9 @@ class ChatViewModel(
             // Request mesh service to clear all its internal data
             meshService.clearAllInternalData()
             
-            Log.d(TAG, "✅ Cleared all mesh service data")
+            Log.d(TAG, "Cleared all mesh service data")
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error clearing mesh service data: ${e.message}")
+            Log.e(TAG, "Error clearing mesh service data: ${e.message}")
         }
     }
     
@@ -1030,7 +1030,7 @@ class ChatViewModel(
                 try {
                     identityManager.clearSecureValues("favorite_relationships", "favorite_peerid_index")
                 } catch (_: Exception) { }
-                Log.d(TAG, "✅ Cleared secure identity state and secure favorites store")
+                Log.d(TAG, "Cleared secure identity state and secure favorites store")
             } catch (e: Exception) {
                 Log.d(TAG, "SecureIdentityStateManager not available or already cleared: ${e.message}")
             }
@@ -1038,12 +1038,12 @@ class ChatViewModel(
             // Clear FavoritesPersistenceService persistent relationships
             try {
                 FavoritesPersistenceService.shared.clearAllFavorites()
-                Log.d(TAG, "✅ Cleared FavoritesPersistenceService relationships")
+                Log.d(TAG, "Cleared FavoritesPersistenceService relationships")
             } catch (_: Exception) { }
             
-            Log.d(TAG, "✅ Cleared all cryptographic data")
+            Log.d(TAG, "Cleared all cryptographic data")
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error clearing cryptographic data: ${e.message}")
+            Log.e(TAG, "Error clearing cryptographic data: ${e.message}")
         }
     }
 
