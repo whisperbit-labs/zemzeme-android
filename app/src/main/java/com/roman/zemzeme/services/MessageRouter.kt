@@ -56,7 +56,23 @@ class MessageRouter private constructor(
     }
 
     fun sendPrivate(content: String, toPeerID: String, recipientNickname: String, messageID: String) {
-        // First: if this is a geohash DM alias (nostr_<pub16>), route via Nostr using global registry
+        // First: if this is a P2P peer (starts with p2p:), route via P2PTransport
+        if (toPeerID.startsWith("p2p:")) {
+            val rawPeerId = toPeerID.removePrefix("p2p:")
+            Log.d(TAG, "Routing PM via P2P direct to ${rawPeerId.take(12)}… id=${messageID.take(8)}…")
+            try {
+                val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(context)
+                val success = p2pTransport.sendDirectMessage(rawPeerId, content, recipientNickname, messageID)
+                if (!success) {
+                    Log.w(TAG, "P2P direct message send failed for ${rawPeerId.take(12)}…")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "P2P direct message error: ${e.message}")
+            }
+            return
+        }
+        
+        // Second: if this is a geohash DM alias (nostr_<pub16>), route via Nostr using global registry
         if (com.bitchat.android.nostr.GeohashAliasRegistry.contains(toPeerID)) {
             Log.d(TAG, "Routing PM via Nostr (geohash) to alias ${toPeerID.take(12)}… id=${messageID.take(8)}…")
             val recipientHex = com.bitchat.android.nostr.GeohashAliasRegistry.get(toPeerID)

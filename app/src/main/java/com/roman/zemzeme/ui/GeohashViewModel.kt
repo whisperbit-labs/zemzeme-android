@@ -133,6 +133,9 @@ class GeohashViewModel(
                                     p2pTopicsRepository.discoverTopicPeers(topicName)
                                     p2pTopicsRepository.startContinuousRefresh(topicName)
                                 }
+                                
+                                // Removed immediate boot-time broadcast as it often fires before peers are found
+                                // Presence is now handled in the topicPeers collector below
                             } catch (e: Exception) {
                                 Log.w(TAG, "Failed late P2P subscription: ${e.message}")
                             }
@@ -141,18 +144,28 @@ class GeohashViewModel(
                 }
             }
             
-            // Watch for P2P peer discovery and merge peers into the people list proactively
+            // Watch for P2P peer discovery and add peers to participant tracking
+            // This prevents flickering by using the authoritative geohashParticipants source
             viewModelScope.launch {
                 p2pTopicsRepository.topicPeers.collect { peersMap ->
                     val currentChannel = state.selectedLocationChannel.value
                     if (currentChannel is com.bitchat.android.geohash.ChannelID.Location) {
                         val topicName = "geo:${currentChannel.channel.geohash}"
+                        val geohash = currentChannel.channel.geohash
                         val peers = peersMap[topicName] ?: emptyList()
                         if (peers.isNotEmpty()) {
-                            // Merge P2P peers into geohashPeople with "p2p:" prefix
-                            val p2pPeerIds = peers.map { "p2p:$it" }
-                            state.mergeP2PPeers(p2pPeerIds)
-                            Log.d(TAG, "🔄 Updated people list with ${peers.size} P2P peers")
+                            // Add discovered P2P peers to geohashParticipants
+                            // This prevents flickering and ensures proper display name handling
+                            peers.forEach { peerId ->
+                                val participantId = "p2p:$peerId"
+                                repo.updateParticipant(geohash, participantId, Date())
+                            }
+                            Log.d(TAG, "🔄 Added ${peers.size} P2P peers to participant tracking")
+                            
+                            // PRESENCE: Broadcast when we discover peers
+                            // This ensures we tell them who we are once connected
+                            val myNickname = state.getNicknameValue() ?: "anon"
+                            p2pTopicsRepository.broadcastPresence(topicName, myNickname)
                         }
                     }
                 }
@@ -425,6 +438,55 @@ class GeohashViewModel(
         }
         return emptyList()
     }
+    
+    /**
+     * Get the display name for a P2P peer ID from cached geohash participants.
+     * @param p2pPeerId The P2P peer ID (e.g., "p2p:12D3KooW...")
+     * @return The cached display name, or null if not found
+     */
+    fun getP2PDisplayName(p2pPeerId: String): String? {
+        // Look up in geohash people list
+        val people = state.geohashPeople.value
+        val person = people.find { it.id == p2pPeerId }
+        if (person != null) {
+            return person.displayName
+        }
+        
+        // Fallback: check repo's nickname cache
+        return repo.getCachedNickname(p2pPeerId)
+    }
+
+    /**
+     * Get all cached P2P and Nostr nicknames.
+     * Used by ChatViewModel to bridge nicknames into BluetoothMeshService.
+     */
+    fun getAllP2PNicknames(): Map<String, String> = repo.getAllNicknames()
+
+    /**
+     * Ensure we are subscribed to DMs for a specific conversation geohash.
+     * Used by ChatViewModel when opening a private chat.
+     */
+    fun ensureGeohashDMSubscription(convKey: String) {
+        try {
+            val gh = repo.getConversationGeohash(convKey)
+            if (!gh.isNullOrEmpty()) {
+                val identity = NostrIdentityBridge.deriveIdentity(gh, getApplication())
+                val subId = "geo-dm-$gh"
+                if (currentDmSubId != subId) {
+                    currentDmSubId?.let { subscriptionManager.unsubscribe(it) }
+                    currentDmSubId = subId
+                    subscriptionManager.subscribeGiftWraps(
+                        pubkey = identity.publicKeyHex,
+                        sinceMs = System.currentTimeMillis() - 172800000L,
+                        id = subId,
+                        handler = { event -> dmHandler.onGiftWrap(event, gh, identity) }
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "ensureGeohashDMSubscription failed: ${e.message}")
+        }
+    }
 
     private fun switchLocationChannel(channel: com.bitchat.android.geohash.ChannelID?) {
         geoTimer?.cancel(); geoTimer = null
@@ -500,6 +562,12 @@ class GeohashViewModel(
                             // This matches the reference app's behavior for reliable peer discovery
                             p2pTopicsRepository.startContinuousRefresh(topicName)
                             Log.d(TAG, "🔄 Started continuous P2P refresh for: $topicName")
+                            
+                            // BROADCAST PRESENCE: Announce ourselves to existing peers
+                            // This triggers bidirectional exchange - existing peers will respond with their presence
+                            val myNickname = state.getNicknameValue() ?: "anon"
+                            p2pTopicsRepository.broadcastPresence(topicName, myNickname)
+                            Log.d(TAG, "📡 Broadcast P2P presence to: $topicName")
                         } catch (e: Exception) {
                             Log.w(TAG, "Failed to subscribe/discover P2P topic: ${e.message}")
                         }
@@ -540,23 +608,50 @@ class GeohashViewModel(
     /**
      * Handle incoming P2P geohash topic message.
      * Parse the wire format and display in the channel.
+     * Supports: "geohash" (chat messages) and "presence" (username announcements)
      */
     private fun handleIncomingP2PGeohashMessage(msg: TopicMessage, geohash: String) {
         try {
             // Parse the JSON message
             val json = org.json.JSONObject(msg.content)
-            val content = json.optString("content", "")
-            val sender = json.optString("sender", msg.senderID)
+            val type = json.optString("type", "geohash")
+            val sender = json.optString("sender", json.optString("nickname", msg.senderID))
             val peerID = json.optString("peerID", msg.senderID)
-            val teleported = json.optBoolean("teleported", false)
             val timestamp = json.optLong("timestamp", System.currentTimeMillis())
             
-            // Check if this is our own message (don't display duplicates)
+            // Check if this is our own message (don't process)
             val myPeerID = p2pTransport.getMyPeerID()
             if (peerID == myPeerID) {
                 Log.v(TAG, "Ignoring own P2P message from $peerID")
                 return
             }
+            
+            val participantId = "p2p:$peerID"
+            
+            // Handle presence messages (username announcements)
+            if (type == "presence") {
+                Log.d(TAG, "📡 Received P2P presence from $sender in geo:$geohash")
+                
+                // Cache the sender's nickname
+                repo.cacheNickname(participantId, sender)
+                repo.updateParticipant(geohash, participantId, Date(timestamp))
+                
+                // Respond with our own presence if we haven't recently
+                if (p2pTopicsRepository.shouldRespondToPresence(peerID)) {
+                    val myNickname = state.getNicknameValue() ?: "anon"
+                    val topicName = "geo:$geohash"
+                    viewModelScope.launch(Dispatchers.IO) {
+                        // Stagger response to avoid message storms in large groups
+                        delay(500 + kotlin.random.Random.nextLong(500))
+                        p2pTopicsRepository.broadcastPresence(topicName, myNickname)
+                    }
+                }
+                return // Don't add presence to chat messages
+            }
+            
+            // Handle regular chat messages
+            val content = json.optString("content", "")
+            val teleported = json.optBoolean("teleported", false)
             
             Log.d(TAG, "🌐 Received P2P geohash message from $sender in geo:$geohash")
             
@@ -574,8 +669,6 @@ class GeohashViewModel(
             messageManager.addChannelMessage("geo:$geohash", bitchatMessage)
             
             // Track this person in the geohash people list
-            // Use P2P peer ID as a synthetic participant ID (prefixed to avoid collision with Nostr pubkeys)
-            val participantId = "p2p:$peerID"
             repo.updateParticipant(geohash, participantId, Date(timestamp))
             repo.cacheNickname(participantId, sender)
             if (teleported) {

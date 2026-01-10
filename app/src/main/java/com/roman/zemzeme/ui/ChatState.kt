@@ -297,6 +297,16 @@ class ChatState(
     fun setPeerNicknames(nicknames: Map<String, String>) {
         _peerNicknames.value = nicknames
     }
+    
+    /**
+     * Update a single peer's nickname in the map.
+     * Used for P2P peers to add their display names individually.
+     */
+    fun updatePeerNickname(peerID: String, nickname: String) {
+        val current = _peerNicknames.value.toMutableMap()
+        current[peerID] = nickname
+        _peerNicknames.value = current
+    }
 
     fun setPeerRSSI(rssi: Map<String, Int>) {
         _peerRSSI.value = rssi
@@ -340,9 +350,12 @@ class ChatState(
         // Add P2P peers that aren't already in the list
         p2pPeerIds.forEach { peerId ->
             if (current.none { it.id == peerId }) {
+                // Generate friendly anon name from P2P peer ID suffix
+                val peerIdPart = peerId.removePrefix("p2p:")
+                val friendlyName = "anon${peerIdPart.takeLast(4)}"
                 current.add(GeoPerson(
                     id = peerId,
-                    displayName = peerId.take(8) + "...",
+                    displayName = friendlyName,
                     lastSeen = java.util.Date(),
                     transport = TransportType.P2P
                 ))

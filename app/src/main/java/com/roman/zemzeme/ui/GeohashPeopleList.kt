@@ -156,9 +156,14 @@ fun GeohashPeopleList(
                     showHashSuffix = (baseNameCounts[com.bitchat.android.ui.splitSuffix(person.displayName).first] ?: 0) > 1,
                     onTap = {
                         if (person.id != myHex) {
-                            // TODO: Re-enable when NIP-17 geohash DM issues are fixed
-                            // Start geohash DM (iOS-compatible)
-                            viewModel.startGeohashDM(person.id)
+                            if (person.id.startsWith("p2p:")) {
+                                // P2P peer - initialize P2P DM state and open sheet
+                                viewModel.startP2PDM(person.id)
+                                viewModel.showPrivateChatSheet(person.id)
+                            } else {
+                                // Nostr peer - use geohash DM
+                                viewModel.startGeohashDM(person.id)
+                            }
                             onTapPerson()
                         }
                     }

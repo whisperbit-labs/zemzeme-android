@@ -765,30 +765,57 @@ fun PrivateChatSheet(
     val verifiedFingerprints by viewModel.verifiedFingerprints.collectAsStateWithLifecycle()
 
     // Start private chat when screen opens
+    // For P2P peers, use startP2PDM to properly initialize P2P-specific state
     LaunchedEffect(peerID) {
-        viewModel.startPrivateChat(peerID)
-    }
-
-    val isNostrPeer = peerID.startsWith("nostr_") || peerID.startsWith("nostr:")
-
-    // Compute display name and title text reactively
-    val displayName = peerNicknames[peerID] ?: peerID.take(12)
-    val titleText = remember(peerID, peerNicknames) {
-        if (isNostrPeer) {
-            val gh = GeohashConversationRegistry.get(peerID) ?: "geohash"
-            val fullPubkey = GeohashAliasRegistry.get(peerID) ?: ""
-            val name = if (fullPubkey.isNotEmpty()) {
-                viewModel.geohashViewModel.displayNameForGeohashConversation(fullPubkey, gh)
-            } else {
-                peerNicknames[peerID] ?: "unknown"
-            }
-            "#$gh/@$name"
+        if (peerID.startsWith("p2p:")) {
+            viewModel.startP2PDM(peerID)
         } else {
-            peerNicknames[peerID] ?: peerID.take(12)
+            viewModel.startPrivateChat(peerID)
         }
     }
 
+    val isNostrPeer = peerID.startsWith("nostr_") || peerID.startsWith("nostr:")
+    val isP2PPeer = peerID.startsWith("p2p:")
+
     val messages = privateChats[peerID] ?: emptyList()
+    
+    // Compute display name and title text reactively
+    // Re-compute when messages change (to pick up sender nicknames from incoming messages)
+    val displayName = peerNicknames[peerID] ?: peerID.take(12)
+    val titleText = remember(peerID, peerNicknames, messages) {
+        val baseName = when {
+            isP2PPeer -> {
+                // P2P peer: check messages for sender nickname, then P2PAliasRegistry, then fallback
+                val latestSenderName = messages.lastOrNull { it.senderPeerID == peerID }?.sender
+                if (latestSenderName != null && !latestSenderName.startsWith("p2p:")) {
+                    // Update registry with latest name from message
+                    com.bitchat.android.p2p.P2PAliasRegistry.setDisplayName(peerID, latestSenderName)
+                    latestSenderName
+                } else {
+                    com.bitchat.android.p2p.P2PAliasRegistry.getDisplayName(peerID)
+                        ?: peerNicknames[peerID]
+                        ?: "p2p:${peerID.removePrefix("p2p:").take(8)}…"
+                }
+            }
+            isNostrPeer -> {
+                val gh = GeohashConversationRegistry.get(peerID) ?: "geohash"
+                val fullPubkey = GeohashAliasRegistry.get(peerID) ?: ""
+                val name = if (fullPubkey.isNotEmpty()) {
+                    viewModel.geohashViewModel.displayNameForGeohashConversation(fullPubkey, gh)
+                } else {
+                    peerNicknames[peerID] ?: "unknown"
+                }
+                "#$gh/@$name"
+            }
+            else -> {
+                peerNicknames[peerID] ?: peerID.take(12)
+            }
+        }
+        
+        baseName
+    }
+
+    // (messages already defined above for titleText computation)
     val isDirect = peerDirectMap[peerID] == true
     val isConnected = connectedPeers.contains(peerID) || isDirect
     val sessionState = peerSessionStates[peerID]
@@ -801,7 +828,8 @@ fun PrivateChatSheet(
         viewModel.isPeerVerified(peerID, verifiedFingerprints)
     }
 
-    val securityModifier = if (!isNostrPeer) {
+    // Security verification only for mesh peers (not Nostr or P2P)
+    val securityModifier = if (!isNostrPeer && !isP2PPeer) {
         Modifier.clickable { viewModel.showSecurityVerificationSheet() }
     } else {
         Modifier
@@ -891,22 +919,6 @@ fun PrivateChatSheet(
                 // TopBar (fixed at top, iOS-style)
                 BitchatSheetCenterTopBar(
                     onClose = onDismiss,
-                    modifier = Modifier.align(Alignment.TopCenter),
-                    navigationIcon = {
-                        IconButton(
-                            onClick = onDismiss,
-                            modifier = Modifier
-                                .align(Alignment.CenterStart)
-                                .padding(start = 16.dp)
-                                .size(32.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.chat_back),
-                                tint = colorScheme.onSurface
-                            )
-                        }
-                    },
                     title = {
                         // Center content: connection status + name + encryption
                         Row(
@@ -915,21 +927,27 @@ fun PrivateChatSheet(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             when {
-                                isDirect -> {
+                                isP2PPeer -> {
                                     Icon(
-                                        imageVector = Icons.Outlined.SettingsInputAntenna,
-                                        contentDescription = stringResource(R.string.cd_connected_peers),
+                                        imageVector = Icons.Filled.Wifi,
+                                        contentDescription = "P2P connection",
                                         modifier = Modifier.size(14.dp),
-                                        tint = colorScheme.onSurface.copy(alpha = 0.6f)
+                                        tint = Color(0xFF4CAF50) // Green for P2P
                                     )
-                                }
-                                isConnected -> {
-                                    Icon(
-                                        imageVector = Icons.Filled.Route,
-                                        contentDescription = stringResource(R.string.cd_ready_for_handshake),
-                                        modifier = Modifier.size(14.dp),
-                                        tint = colorScheme.onSurface.copy(alpha = 0.6f)
-                                    )
+                                    Surface(
+                                        shape = RoundedCornerShape(4.dp),
+                                        color = Color(0xFF4CAF50).copy(alpha = 0.2f)
+                                    ) {
+                                        Text(
+                                            text = "P2P",
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontSize = 10.sp,
+                                                fontWeight = FontWeight.Bold
+                                            ),
+                                            color = Color(0xFF4CAF50),
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                        )
+                                    }
                                 }
                                 isNostrPeer -> {
                                     Icon(
@@ -938,38 +956,65 @@ fun PrivateChatSheet(
                                         modifier = Modifier.size(14.dp),
                                         tint = Color(0xFF9C27B0)
                                     )
+                                    Surface(
+                                        shape = RoundedCornerShape(4.dp),
+                                        color = Color(0xFF9C27B0).copy(alpha = 0.2f)
+                                    ) {
+                                        Text(
+                                            text = "NOS",
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontSize = 10.sp,
+                                                fontWeight = FontWeight.Bold
+                                            ),
+                                            color = Color(0xFF9C27B0),
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                        )
+                                    }
+                                }
+                                isConnected -> {
+                                    // BLE Mesh / Local
+                                    Icon(
+                                        imageVector = Icons.Filled.Route,
+                                        contentDescription = stringResource(R.string.cd_ready_for_handshake),
+                                        modifier = Modifier.size(14.dp),
+                                        tint = colorScheme.onSurface.copy(alpha = 0.6f)
+                                    )
                                 }
                             }
 
-                        Text(
-                            text = titleText,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = FontFamily.Monospace
-                            ),
-                            color = if (isNostrPeer) Color(0xFFFF9500) else colorScheme.onSurface
-                        )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.then(securityModifier)
-                            ) {
-                                if (!isNostrPeer) {
-                                    NoiseSessionIcon(
-                                        sessionState = sessionState,
-                                        modifier = Modifier.size(14.dp)
-                                    )
+                            Text(
+                                text = titleText,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily.Monospace
+                                ),
+                                color = when {
+                                    isP2PPeer -> Color(0xFF4CAF50) // Green for P2P
+                                    isNostrPeer -> Color(0xFFFF9500) // Orange for Nostr
+                                    else -> colorScheme.onSurface
                                 }
+                            )
 
-                                if (isVerified) {
-                                    Spacer(modifier = Modifier.width(4.dp))
-                                    Icon(
-                                        imageVector = Icons.Filled.Verified,
-                                        contentDescription = stringResource(R.string.verify_title),
-                                        modifier = Modifier.size(14.dp),
-                                        tint = Color(0xFF32D74B) // iOS Green
-                                    )
-                                }
+                            if (isVerified) {
+                                Icon(
+                                    imageVector = Icons.Filled.VerifiedUser,
+                                    contentDescription = "Verified",
+                                    modifier = Modifier.size(16.dp),
+                                    tint = Color(0xFF4CAF50)
+                                )
+                            }
+                        }
+                    },
+                    actions = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Only show Noise session icon for mesh peers (not Nostr or P2P)
+                            if (!isNostrPeer && !isP2PPeer) {
+                                com.bitchat.android.ui.NoiseSessionIcon(
+                                    sessionState = sessionState,
+                                    modifier = Modifier.size(14.dp)
+                                )
                             }
 
                             IconButton(

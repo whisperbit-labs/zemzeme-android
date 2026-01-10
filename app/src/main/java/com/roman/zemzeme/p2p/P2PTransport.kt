@@ -207,6 +207,70 @@ class P2PTransport private constructor(
         NOSTR
     }
     
+    /**
+     * Send a direct message to a P2P peer using their raw libp2p Peer ID.
+     * This is used by MessageRouter for P2P DMs (peers prefixed with "p2p:").
+     * 
+     * @param rawPeerID The libp2p Peer ID (without "p2p:" prefix)
+     * @param content Message content
+     * @param senderNickname Sender's nickname for display
+     * @param messageID Unique message ID
+     * @return true if message was sent, false otherwise
+     */
+    fun sendDirectMessage(
+        rawPeerID: String,
+        content: String,
+        senderNickname: String,
+        messageID: String
+    ): Boolean {
+        if (!isRunning()) {
+            Log.w(TAG, "sendDirectMessage failed: P2P not running")
+            return false
+        }
+        
+        Log.d(TAG, "Sending P2P DM to ${rawPeerID.take(12)}... (content: ${content.take(30)}...)")
+        
+        return try {
+            val wireMessage = P2PWireMessage(
+                type = "dm",
+                content = content,
+                messageID = messageID,
+                senderNickname = senderNickname,
+                timestamp = System.currentTimeMillis()
+            )
+            
+            // Use blocking call for synchronous result
+            kotlinx.coroutines.runBlocking {
+                // First: try to connect to peer if not already connected
+                if (!p2pRepository.isConnected(rawPeerID)) {
+                    Log.d(TAG, "Not connected to ${rawPeerID.take(12)}..., attempting connection via DHT...")
+                    val connectResult = p2pRepository.connectToPeer(rawPeerID)
+                    if (connectResult.isFailure) {
+                        Log.w(TAG, "Failed to connect to peer: ${connectResult.exceptionOrNull()?.message}")
+                        // Try sending anyway - sometimes connections are established dynamically
+                    } else {
+                        Log.d(TAG, "Connected to ${rawPeerID.take(12)}...")
+                    }
+                } else {
+                    Log.d(TAG, "Already connected to ${rawPeerID.take(12)}...")
+                }
+                
+                // Now send the message
+                val result = p2pRepository.sendMessage(rawPeerID, gson.toJson(wireMessage))
+                if (result.isSuccess) {
+                    Log.d(TAG, "P2P DM sent successfully to ${rawPeerID.take(12)}...")
+                    true
+                } else {
+                    Log.w(TAG, "P2P DM failed: ${result.exceptionOrNull()?.message}")
+                    false
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "P2P sendDirectMessage exception: ${e.message}", e)
+            false
+        }
+    }
+    
     // ============== Topic/Channel Operations ==============
     
     /**
@@ -290,6 +354,8 @@ class P2PTransport private constructor(
     }
     
     private fun handleIncomingP2PMessage(message: P2PMessage) {
+        Log.d(TAG, "handleIncomingP2PMessage: isTopicMessage=${message.isTopicMessage}, topicName=${message.topicName}, content=${message.content.take(30)}...")
+        
         try {
             val wireMessage = gson.fromJson(message.content, P2PWireMessage::class.java)
             
@@ -299,22 +365,26 @@ class P2PTransport private constructor(
                 type = when (wireMessage.type) {
                     "dm" -> P2PMessageType.DIRECT_MESSAGE
                     "channel" -> P2PMessageType.CHANNEL_MESSAGE
-                    "topic" -> P2PMessageType.TOPIC_MESSAGE
-                    else -> P2PMessageType.DIRECT_MESSAGE
+                    "topic", "geohash" -> P2PMessageType.TOPIC_MESSAGE
+                    else -> if (message.isTopicMessage) P2PMessageType.TOPIC_MESSAGE else P2PMessageType.DIRECT_MESSAGE
                 },
                 topicName = message.topicName,
                 timestamp = wireMessage.timestamp
             )
             
+            Log.d(TAG, "Parsed wire message: type=${wireMessage.type} -> ${incomingMessage.type}")
             messageCallback?.invoke(incomingMessage)
             Log.d(TAG, "Received P2P message from ${message.senderPeerID}: ${wireMessage.content.take(50)}...")
             
         } catch (e: Exception) {
             // Message might not be in our wire format (could be raw text)
+            val computedType = if (message.isTopicMessage) P2PMessageType.TOPIC_MESSAGE else P2PMessageType.DIRECT_MESSAGE
+            Log.d(TAG, "JSON parse failed, using raw: isTopicMessage=${message.isTopicMessage} -> $computedType")
+            
             val incomingMessage = P2PIncomingMessage(
                 senderPeerID = message.senderPeerID,
                 content = message.content,
-                type = if (message.isTopicMessage) P2PMessageType.TOPIC_MESSAGE else P2PMessageType.DIRECT_MESSAGE,
+                type = computedType,
                 topicName = message.topicName,
                 timestamp = message.timestamp
             )

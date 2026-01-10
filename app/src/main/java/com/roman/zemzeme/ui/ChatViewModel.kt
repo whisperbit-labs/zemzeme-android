@@ -305,6 +305,31 @@ class ChatViewModel(
             nostrTransport.senderPeerID = meshService.myPeerID
         } catch (_: Exception) { }
 
+        // Set up P2P DM message callback to route incoming P2P direct messages to private chat
+        try {
+            val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
+            p2pTransport.setMessageCallback { incomingMessage ->
+                if (incomingMessage.type == com.bitchat.android.p2p.P2PTransport.P2PMessageType.DIRECT_MESSAGE) {
+                    // Route to private chat
+                    val senderPeerID = "p2p:${incomingMessage.senderPeerID}"
+                    val message = BitchatMessage(
+                        id = "p2p_${incomingMessage.senderPeerID}_${incomingMessage.timestamp}",
+                        sender = com.bitchat.android.p2p.P2PAliasRegistry.getDisplayName(senderPeerID) 
+                            ?: "p2p:${incomingMessage.senderPeerID.take(8)}…",
+                        content = incomingMessage.content,
+                        timestamp = java.util.Date(incomingMessage.timestamp),
+                        isRelay = false,
+                        senderPeerID = senderPeerID
+                    )
+                    // Add to private chat
+                    privateChatManager.handleIncomingPrivateMessage(message)
+                    Log.d("ChatViewModel", "Received P2P DM from $senderPeerID: ${incomingMessage.content.take(30)}...")
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ChatViewModel", "Failed to set up P2P DM callback: ${e.message}")
+        }
+
         // Note: Mesh service is now started by MainActivity
 
         // BLE receives are inserted by MessageHandler path; no VoiceNoteBus for Tor in this branch.
@@ -321,46 +346,32 @@ class ChatViewModel(
         state.setNickname(newNickname)
         dataManager.saveNickname(newNickname)
         meshService.sendBroadcastAnnounce()
+        
+        // Broadcast presence change to P2P topic (if subscribed to geohash channel)
+        val selectedChannel = state.selectedLocationChannel.value
+        if (selectedChannel is com.bitchat.android.geohash.ChannelID.Location) {
+            val topicName = "geo:${selectedChannel.channel.geohash}"
+            viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                try {
+                    val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
+                    val p2pTopicsRepository = com.bitchat.android.p2p.P2PTopicsRepository(
+                        getApplication(), p2pTransport.p2pRepository
+                    )
+                    // Force broadcast even if cooldown (username change is important)
+                    p2pTopicsRepository.broadcastPresence(topicName, newNickname, force = true)
+                    Log.d(TAG, "📡 Broadcast P2P presence after username change: $newNickname")
+                } catch (e: Exception) {
+                    Log.w(TAG, "Failed to broadcast P2P presence on nickname change: ${e.message}")
+                }
+            }
+        }
     }
     
     /**
-     * Ensure Nostr DM subscription for a geohash conversation key if known
-     * Minimal-change approach: reflectively access GeohashViewModel internals to reuse pipeline
+     * Ensure Nostr DM subscription for a geohash conversation key if known.
      */
     private fun ensureGeohashDMSubscriptionIfNeeded(convKey: String) {
-        try {
-            val repoField = GeohashViewModel::class.java.getDeclaredField("repo")
-            repoField.isAccessible = true
-            val repo = repoField.get(geohashViewModel) as com.bitchat.android.nostr.GeohashRepository
-            val gh = repo.getConversationGeohash(convKey)
-            if (!gh.isNullOrEmpty()) {
-                val subMgrField = GeohashViewModel::class.java.getDeclaredField("subscriptionManager")
-                subMgrField.isAccessible = true
-                val subMgr = subMgrField.get(geohashViewModel) as com.bitchat.android.nostr.NostrSubscriptionManager
-                val identity = com.bitchat.android.nostr.NostrIdentityBridge.deriveIdentity(gh, getApplication())
-                val subId = "geo-dm-$gh"
-                val currentDmSubField = GeohashViewModel::class.java.getDeclaredField("currentDmSubId")
-                currentDmSubField.isAccessible = true
-                val currentId = currentDmSubField.get(geohashViewModel) as String?
-                if (currentId != subId) {
-                    (currentId)?.let { subMgr.unsubscribe(it) }
-                    currentDmSubField.set(geohashViewModel, subId)
-                    subMgr.subscribeGiftWraps(
-                        pubkey = identity.publicKeyHex,
-                        sinceMs = System.currentTimeMillis() - 172800000L,
-                        id = subId,
-                        handler = { event ->
-                            val dmHandlerField = GeohashViewModel::class.java.getDeclaredField("dmHandler")
-                            dmHandlerField.isAccessible = true
-                            val dmHandler = dmHandlerField.get(geohashViewModel) as com.bitchat.android.nostr.NostrDirectMessageHandler
-                            dmHandler.onGiftWrap(event, gh, identity)
-                        }
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "ensureGeohashDMSubscriptionIfNeeded failed: ${e.message}")
-        }
+        geohashViewModel.ensureGeohashDMSubscription(convKey)
     }
 
     // MARK: - Channel Management (delegated)
@@ -448,6 +459,11 @@ class ChatViewModel(
             val openPeer: String = if (targetKey.startsWith("nostr_")) {
                 // Use the exact conversation key for geohash DMs and ensure DM subscription
                 ensureGeohashDMSubscriptionIfNeeded(targetKey)
+                targetKey
+            } else if (targetKey.startsWith("p2p:")) {
+                // P2P peers: use the exact conversation key directly
+                // Optionally init P2P DM state for proper display name handling
+                startP2PDM(targetKey)
                 targetKey
             } else {
                 // Resolve to a canonical mesh peer if needed
@@ -1066,6 +1082,44 @@ class ChatViewModel(
         geohashViewModel.startGeohashDM(pubkeyHex) { convKey ->
             showPrivateChatSheet(convKey)
         }
+    }
+
+    /**
+     * Start P2P DM with a P2P peer ID (e.g., "p2p:12D3KooW...")
+     * This function handles P2P peers discovered via libp2p DHT.
+     * Note: This only initializes state, the caller is responsible for opening the sheet.
+     */
+    fun startP2PDM(p2pPeerId: String) {
+        val rawPeerId = p2pPeerId.removePrefix("p2p:")
+        
+        // Register the P2P peer ID mapping for message routing
+        com.bitchat.android.p2p.P2PAliasRegistry.put(p2pPeerId, rawPeerId)
+        
+        // Cache the display name from geohash participants if available
+        val displayName = geohashViewModel.getP2PDisplayName(p2pPeerId)
+        if (displayName != null) {
+            com.bitchat.android.p2p.P2PAliasRegistry.setDisplayName(p2pPeerId, displayName)
+            // Also update peerNicknames for PrivateChatSheet to use
+            state.updatePeerNickname(p2pPeerId, displayName)
+        } else {
+            // Fallback: use truncated peer ID as display name
+            val fallbackName = "p2p:${rawPeerId.take(8)}..."
+            com.bitchat.android.p2p.P2PAliasRegistry.setDisplayName(p2pPeerId, fallbackName)
+        }
+        
+        Log.d(TAG, "Starting P2P DM with $p2pPeerId (rawPeerId=$rawPeerId, displayName=$displayName)")
+        
+        // CRITICAL: Set the selected private chat peer for message sending
+        // This is what sendMessage() checks to determine the recipient
+        state.setSelectedPrivateChatPeer(p2pPeerId)
+        
+        // Initialize the private chat (creates message list if doesn't exist)
+        messageManager.initializePrivateChat(p2pPeerId)
+        
+        // Clear any unread markers for this peer
+        messageManager.clearPrivateUnreadMessages(p2pPeerId)
+        
+        // Note: Don't call showPrivateChatSheet here - the caller or LaunchedEffect handles that
     }
 
     fun selectLocationChannel(channel: com.bitchat.android.geohash.ChannelID) {

@@ -299,8 +299,9 @@ class PrivateChatManager(
                 // Ensure chat exists
                 messageManager.initializePrivateChat(senderPeerID)
 
-                // Exception: Nostr messages (nostr_ prefix) originate in Kotlin layer and MUST be added here.
-                if (senderPeerID.startsWith("nostr_")) {
+                // Exception: Nostr and P2P messages originate in Kotlin layer and MUST be added here.
+                // Mesh messages come via native BLE and are handled separately.
+                if (senderPeerID.startsWith("nostr_") || senderPeerID.startsWith("p2p:")) {
                     if (suppressUnread) {
                         messageManager.addPrivateMessageNoUnread(senderPeerID, message)
                     } else {

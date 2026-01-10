@@ -107,6 +107,12 @@ class P2PTopicsRepository(
     private var activeRefreshJob: Job? = null
     private var activeRefreshTopic: String? = null
     
+    // Presence tracking to prevent broadcast storms
+    private val lastPresenceBroadcast = mutableMapOf<String, Long>() // topic -> timestamp
+    private val respondedToPeers = mutableMapOf<String, Long>() // peerID -> timestamp
+    private val PRESENCE_BROADCAST_COOLDOWN = 5_000L // 5 seconds
+    private val PRESENCE_RESPONSE_COOLDOWN = 30_000L // 30 seconds
+    
     // Event flows
     private val _incomingMessages = MutableSharedFlow<TopicMessage>(replay = 0, extraBufferCapacity = 100)
     val incomingMessages: SharedFlow<TopicMessage> = _incomingMessages.asSharedFlow()
@@ -130,6 +136,16 @@ class P2PTopicsRepository(
                     )
                     addMessageToTopic(p2pMessage.topicName, topicMsg)
                     _incomingMessages.emit(topicMsg)
+                }
+            }
+        }
+        
+        // AUTO-STARTUP FIX: Watch for P2P node to become RUNNING and re-subscribe saved topics
+        scope.launch {
+            p2pLibraryRepository.nodeStatus.collect { status ->
+                if (status == P2PNodeStatus.RUNNING) {
+                    Log.d(TAG, "🚀 P2P node is RUNNING - auto-calling onNodeStarted()")
+                    onNodeStarted()
                 }
             }
         }
@@ -403,6 +419,70 @@ class P2PTopicsRepository(
         return _topicStates.value[topicName] ?: TopicState()
     }
     
+    // ============== Presence Broadcasting ==============
+    
+    /**
+     * Broadcast our presence (nickname) to a topic.
+     * Used for: 1) Joining a topic, 2) Username changes, 3) Responding to new peers
+     * 
+     * @param topicName The topic to broadcast to
+     * @param nickname Our display name
+     * @param force If true, bypass cooldown (used for username changes)
+     */
+    suspend fun broadcastPresence(topicName: String, nickname: String, force: Boolean = false): Boolean {
+        val now = System.currentTimeMillis()
+        val lastBroadcast = lastPresenceBroadcast[topicName] ?: 0L
+        
+        // Enforce cooldown unless forced (username change)
+        if (!force && now - lastBroadcast < PRESENCE_BROADCAST_COOLDOWN) {
+            Log.d(TAG, "📡 Presence broadcast skipped (cooldown): $topicName")
+            return false
+        }
+        
+        val peerID = p2pLibraryRepository.peerID.value ?: return false
+        
+        // Build lightweight presence message (~100 bytes)
+        val message = """{"type":"presence","nickname":"${nickname.replace("\"", "\\\"")}","peerID":"$peerID","timestamp":$now}"""
+        
+        return try {
+            publishToTopic(topicName, message, nickname)
+            lastPresenceBroadcast[topicName] = now
+            Log.d(TAG, "📡 Broadcast presence to $topicName: $nickname")
+            true
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to broadcast presence to $topicName: ${e.message}")
+            false
+        }
+    }
+    
+    /**
+     * Check if we should respond to a peer's presence message.
+     * Tracks responses to prevent infinite ping-pong loops in large groups.
+     * 
+     * @return true if we should respond with our own presence
+     */
+    fun shouldRespondToPresence(peerID: String): Boolean {
+        val now = System.currentTimeMillis()
+        val lastResponse = respondedToPeers[peerID] ?: 0L
+        
+        if (now - lastResponse < PRESENCE_RESPONSE_COOLDOWN) {
+            return false // Already responded to this peer recently
+        }
+        
+        respondedToPeers[peerID] = now
+        
+        // Cleanup old entries (>5 minutes)
+        val cutoff = now - 300_000L
+        respondedToPeers.entries.removeAll { it.value < cutoff }
+        
+        return true
+    }
+    
+    /**
+     * Get our local peer ID for presence checks.
+     */
+    fun getMyPeerID(): String? = p2pLibraryRepository.peerID.value
+    
     /**
      * Get messages for a topic.
      */
@@ -471,7 +551,7 @@ class P2PTopicsRepository(
         val newState = when {
             peers.isNotEmpty() -> TopicConnectionState.CONNECTED
             state.connectionState == TopicConnectionState.CONNECTING -> TopicConnectionState.CONNECTING
-            else -> TopicConnectionState.NO_PEERS
+            else -> TopicConnectionState.CONNECTED
         }
         
         current[topicName] = state.copy(
@@ -513,10 +593,7 @@ class P2PTopicsRepository(
                 val state = current[topicName]
                 if (state?.connectionState == TopicConnectionState.CONNECTING) {
                     current[topicName] = state.copy(
-                        connectionState = if (state.meshPeerCount > 0) 
-                            TopicConnectionState.CONNECTED 
-                        else 
-                            TopicConnectionState.NO_PEERS
+                        connectionState = TopicConnectionState.CONNECTED
                     )
                     _topicStates.value = current
                 }
@@ -555,8 +632,10 @@ class P2PTopicsRepository(
         val newConnectionState = when {
             peers.isNotEmpty() -> TopicConnectionState.CONNECTED
             state.connectionState == TopicConnectionState.CONNECTING -> TopicConnectionState.CONNECTING
-            else -> TopicConnectionState.NO_PEERS
+            else -> TopicConnectionState.CONNECTED
         }
+        
+        Log.d(TAG, "TopicState update for $topicName: peers=${peers.size} providers=$providerCount state=${state.connectionState}->$newConnectionState")
         
         current[topicName] = state.copy(
             connectionState = newConnectionState,

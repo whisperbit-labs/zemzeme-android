@@ -62,6 +62,7 @@ fun formatMessageAsAnnotatedString(
             getPeerColor(message, isDark)
         }
         
+        // Resolve sender name (use static message sender for history consistency)
         // Split sender into base name and hashtag suffix
         val (baseName, suffix) = splitSuffix(message.sender)
         
@@ -85,7 +86,7 @@ fun formatMessageAsAnnotatedString(
         builder.append(truncatedBase)
         val nicknameEnd = builder.length
         
-        // Add click annotation for nickname (store canonical sender name with hash if available)
+        // Add click annotation for nickname
         if (!isSelf) {
             builder.addStringAnnotation(
                 tag = "nickname_click",
