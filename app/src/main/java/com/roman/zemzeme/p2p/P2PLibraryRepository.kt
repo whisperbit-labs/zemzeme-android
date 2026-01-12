@@ -2,6 +2,7 @@ package com.roman.zemzeme.p2p
 
 import android.content.Context
 import android.util.Log
+import com.roman.zemzeme.util.AppConstants
 import golib.Golib
 import golib.MobileConnectionHandler
 import golib.MobileMessageHandler
@@ -19,6 +20,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
@@ -76,6 +79,9 @@ class P2PLibraryRepository(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var node: P2PNode? = null
     
+    // Mutex for atomic node state transitions (prevents race conditions during startup)
+    private val nodeLock = Mutex()
+    
     // Preferences for key storage
     private val prefs by lazy {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -110,26 +116,28 @@ class P2PLibraryRepository(
     
     /**
      * Start the P2P node with the stored (or newly generated) identity.
+     * Uses Mutex to ensure atomic state transitions (prevents race conditions).
      * 
      * @param privateKeyBase64 Optional external private key (e.g., derived from BitChat identity)
      */
     suspend fun startNode(privateKeyBase64: String? = null): Result<Unit> = withContext(Dispatchers.IO) {
-        if (_nodeStatus.value == P2PNodeStatus.RUNNING) {
-            Log.d(TAG, "P2P node already running, skipping start")
-            return@withContext Result.success(Unit)
-        }
+        nodeLock.withLock {
+            if (_nodeStatus.value == P2PNodeStatus.RUNNING) {
+                Log.d(TAG, "P2P node already running, skipping start")
+                return@withLock Result.success(Unit)
+            }
         
-        _nodeStatus.value = P2PNodeStatus.STARTING
-        Log.i(TAG, "🚀 Starting P2P node...")
+            _nodeStatus.value = P2PNodeStatus.STARTING
+            Log.i(TAG, "Starting P2P node...")
         
         try {
             // Verify golib is available
             Log.d(TAG, "Checking golib availability...")
             try {
                 val golibClass = Class.forName("golib.Golib")
-                Log.d(TAG, "✓ golib.Golib class found: ${golibClass.name}")
+                Log.d(TAG, "golib.Golib class found: ${golibClass.name}")
             } catch (e: ClassNotFoundException) {
-                Log.e(TAG, "❌ golib.Golib class NOT FOUND - golib.aar may not be properly linked", e)
+                Log.e(TAG, "golib.Golib class NOT FOUND - golib.aar may not be properly linked", e)
                 _nodeStatus.value = P2PNodeStatus.ERROR
                 return@withContext Result.failure(Exception("golib library not found"))
             }
@@ -145,7 +153,7 @@ class P2PLibraryRepository(
             // Create node with port 0 (random available port)
             Log.d(TAG, "Creating P2P node with Golib.newP2PNode()...")
             val newNode = Golib.newP2PNode(privateKey, 0)
-            Log.d(TAG, "✓ P2P node created successfully")
+            Log.d(TAG, "P2P node created successfully")
             
             // Set up message handler
             newNode.setMessageHandler(object : MobileMessageHandler {
@@ -183,7 +191,7 @@ class P2PLibraryRepository(
             // Start the node FIRST - topicManager is created during Start()
             Log.d(TAG, "Starting P2P node network...")
             newNode.start()
-            Log.d(TAG, "✓ P2P node network started")
+            Log.d(TAG, "P2P node network started")
             node = newNode
             
             // CRITICAL: Set up topic handlers AFTER start() because topicManager
@@ -232,13 +240,13 @@ class P2PLibraryRepository(
             // Start periodic DHT status refresh
             startDhtStatusRefresh()
             
-            Log.i(TAG, "✅ P2P node started successfully")
+            Log.i(TAG, "P2P node started successfully")
             Log.i(TAG, "   Peer ID: ${newNode.peerID}")
             Log.i(TAG, "   Multiaddrs: ${newNode.multiaddrs}")
             
             Result.success(Unit)
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Failed to start P2P node: ${e.message}", e)
+            Log.e(TAG, "Failed to start P2P node: ${e.message}", e)
             Log.e(TAG, "   Exception type: ${e.javaClass.simpleName}")
             e.cause?.let { cause ->
                 Log.e(TAG, "   Cause: ${cause.message}")
@@ -246,6 +254,7 @@ class P2PLibraryRepository(
             _nodeStatus.value = P2PNodeStatus.ERROR
             Result.failure(e)
         }
+        } // nodeLock.withLock
     }
     
     /**
@@ -281,7 +290,7 @@ class P2PLibraryRepository(
         dhtRefreshJob?.cancel()
         dhtRefreshJob = scope.launch {
             while (true) {
-                delay(10_000L) // 10 seconds
+                delay(AppConstants.P2P.DHT_REFRESH_INTERVAL_MS)
                 
                 if (_nodeStatus.value != P2PNodeStatus.RUNNING) {
                     Log.d(TAG, "DHT refresh: Node not running, stopping refresh")

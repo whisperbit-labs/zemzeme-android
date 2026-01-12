@@ -130,4 +130,21 @@ object AppConstants {
     object Services {
         const val SEEN_MESSAGE_MAX_IDS: Int = 10_000
     }
+
+    object P2P {
+        // DHT status refresh interval
+        const val DHT_REFRESH_INTERVAL_MS: Long = 10_000L
+
+        // Topic discovery timing
+        const val TOPIC_DISCOVERY_INTERVAL_MS: Long = 5_000L
+        const val DISCOVERY_INITIAL_DELAY_MS: Long = 1_000L
+        const val DISCOVERY_SECONDARY_DELAY_MS: Long = 3_000L
+        const val DISCOVERY_FINAL_DELAY_MS: Long = 5_000L
+        const val TOPIC_DISCOVERY_ITERATIONS: Int = 6 // 30 seconds total
+
+        // Presence broadcast anti-storm cooldowns
+        const val PRESENCE_BROADCAST_COOLDOWN_MS: Long = 5_000L
+        const val PRESENCE_RESPONSE_COOLDOWN_MS: Long = 30_000L
+        const val PRESENCE_CLEANUP_THRESHOLD_MS: Long = 300_000L // 5 minutes
+    }
 }

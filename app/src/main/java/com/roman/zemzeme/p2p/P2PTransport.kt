@@ -46,7 +46,9 @@ class P2PTransport private constructor(
     }
     
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val gson = Gson()
+    
+    // Gson is thread-safe with default configuration, but we use lazy init for safety
+    private val gson: Gson by lazy { Gson() }
     
     // Repository for P2P operations
     val p2pRepository: P2PLibraryRepository by lazy {

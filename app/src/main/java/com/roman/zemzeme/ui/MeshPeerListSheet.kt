@@ -720,6 +720,33 @@ private fun UnreadBadge(
 }
 
 /**
+ * Reusable protocol badge component for P2P, Nostr, etc.
+ * Used in PrivateChatSheet header to indicate connection type.
+ */
+@Composable
+private fun ProtocolBadge(
+    text: String,
+    color: Color,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(4.dp),
+        color = color.copy(alpha = 0.2f)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            color = color,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+        )
+    }
+}
+
+/**
  * Convert RSSI value (dBm) to signal strength percentage (0-100)
  * RSSI typically ranges from -30 (excellent) to -100 (very poor)
  * Maps to 0-100 scale where:
@@ -934,20 +961,7 @@ fun PrivateChatSheet(
                                         modifier = Modifier.size(14.dp),
                                         tint = Color(0xFF4CAF50) // Green for P2P
                                     )
-                                    Surface(
-                                        shape = RoundedCornerShape(4.dp),
-                                        color = Color(0xFF4CAF50).copy(alpha = 0.2f)
-                                    ) {
-                                        Text(
-                                            text = "P2P",
-                                            style = MaterialTheme.typography.labelSmall.copy(
-                                                fontSize = 10.sp,
-                                                fontWeight = FontWeight.Bold
-                                            ),
-                                            color = Color(0xFF4CAF50),
-                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                        )
-                                    }
+                                    ProtocolBadge(text = "P2P", color = Color(0xFF4CAF50))
                                 }
                                 isNostrPeer -> {
                                     Icon(
@@ -956,20 +970,7 @@ fun PrivateChatSheet(
                                         modifier = Modifier.size(14.dp),
                                         tint = Color(0xFF9C27B0)
                                     )
-                                    Surface(
-                                        shape = RoundedCornerShape(4.dp),
-                                        color = Color(0xFF9C27B0).copy(alpha = 0.2f)
-                                    ) {
-                                        Text(
-                                            text = "NOS",
-                                            style = MaterialTheme.typography.labelSmall.copy(
-                                                fontSize = 10.sp,
-                                                fontWeight = FontWeight.Bold
-                                            ),
-                                            color = Color(0xFF9C27B0),
-                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                        )
-                                    }
+                                    ProtocolBadge(text = "NOS", color = Color(0xFF9C27B0))
                                 }
                                 isConnected -> {
                                     // BLE Mesh / Local

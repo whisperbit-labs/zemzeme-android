@@ -70,6 +70,11 @@ class GeohashViewModel(
     private var geoTimer: Job? = null
     private var globalPresenceJob: Job? = null
     private var locationChannelManager: com.bitchat.android.geohash.LocationChannelManager? = null
+    
+    // P2P watcher jobs for cleanup (prevents accumulated collectors)
+    private var p2pNodeStatusJob: Job? = null
+    private var p2pTopicPeersJob: Job? = null
+    private var p2pMessagesJob: Job? = null
 
     val geohashPeople: StateFlow<List<GeoPerson>> = state.geohashPeople
     val geohashParticipantCounts: StateFlow<Map<String, Int>> = state.geohashParticipantCounts
@@ -108,18 +113,22 @@ class GeohashViewModel(
             startGlobalPresenceHeartbeat()
             
             // Collect incoming P2P topic messages for geohash channels
-            viewModelScope.launch {
+            p2pMessagesJob = viewModelScope.launch {
                 p2pTopicsRepository.incomingMessages.collect { msg ->
-                    if (msg.topicName.startsWith("geo:")) {
-                        val geohash = msg.topicName.removePrefix("geo:")
-                        handleIncomingP2PGeohashMessage(msg, geohash)
+                    try {
+                        if (msg.topicName.startsWith("geo:")) {
+                            val geohash = msg.topicName.removePrefix("geo:")
+                            handleIncomingP2PGeohashMessage(msg, geohash)
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to process P2P topic message: ${e.message}", e)
                     }
                 }
             }
             
             // Watch for P2P node to become RUNNING and subscribe to current channel
             // This fixes the startup race condition where channel is restored before P2P is ready
-            viewModelScope.launch {
+            p2pNodeStatusJob = viewModelScope.launch {
                 p2pTransport.p2pRepository.nodeStatus.collect { status ->
                     if (status == P2PNodeStatus.RUNNING) {
                         val currentChannel = state.selectedLocationChannel.value
@@ -146,7 +155,7 @@ class GeohashViewModel(
             
             // Watch for P2P peer discovery and add peers to participant tracking
             // This prevents flickering by using the authoritative geohashParticipants source
-            viewModelScope.launch {
+            p2pTopicPeersJob = viewModelScope.launch {
                 p2pTopicsRepository.topicPeers.collect { peersMap ->
                     val currentChannel = state.selectedLocationChannel.value
                     if (currentChannel is com.bitchat.android.geohash.ChannelID.Location) {

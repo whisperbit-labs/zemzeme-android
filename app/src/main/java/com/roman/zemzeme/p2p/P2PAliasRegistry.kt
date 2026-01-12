@@ -3,6 +3,7 @@ package com.roman.zemzeme.p2p
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * P2PAliasRegistry
@@ -17,8 +18,9 @@ object P2PAliasRegistry {
     private const val KEY_PREFIX_DISPLAY = "display_"
     
     // In-memory caches
-    private val rawPeerIdMap = mutableMapOf<String, String>()
-    private val displayNameMap = mutableMapOf<String, String>()
+    // Thread-safe maps (matches BitChat patterns in NostrRelayManager, PeerManager, etc.)
+    private val rawPeerIdMap = ConcurrentHashMap<String, String>()
+    private val displayNameMap = ConcurrentHashMap<String, String>()
     
     private var prefs: SharedPreferences? = null
     

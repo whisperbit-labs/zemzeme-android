@@ -3,6 +3,7 @@ package com.roman.zemzeme.p2p
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.roman.zemzeme.util.AppConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Message received on a P2P topic (GossipSub)
@@ -103,15 +105,12 @@ class P2PTopicsRepository(
     private val _topicStates = MutableStateFlow<Map<String, TopicState>>(emptyMap())
     val topicStates: StateFlow<Map<String, TopicState>> = _topicStates.asStateFlow()
     
-    // Active continuous refresh job (for when user is actively viewing a topic)
-    private var activeRefreshJob: Job? = null
-    private var activeRefreshTopic: String? = null
+    // Per-topic refresh jobs - prevents orphaned coroutines when switching channels (memory leak fix)
+    private val refreshJobs = ConcurrentHashMap<String, Job>()
     
     // Presence tracking to prevent broadcast storms
     private val lastPresenceBroadcast = mutableMapOf<String, Long>() // topic -> timestamp
     private val respondedToPeers = mutableMapOf<String, Long>() // peerID -> timestamp
-    private val PRESENCE_BROADCAST_COOLDOWN = 5_000L // 5 seconds
-    private val PRESENCE_RESPONSE_COOLDOWN = 30_000L // 30 seconds
     
     // Event flows
     private val _incomingMessages = MutableSharedFlow<TopicMessage>(replay = 0, extraBufferCapacity = 100)
@@ -144,7 +143,7 @@ class P2PTopicsRepository(
         scope.launch {
             p2pLibraryRepository.nodeStatus.collect { status ->
                 if (status == P2PNodeStatus.RUNNING) {
-                    Log.d(TAG, "🚀 P2P node is RUNNING - auto-calling onNodeStarted()")
+                    Log.d(TAG, "P2P node is RUNNING - auto-calling onNodeStarted()")
                     onNodeStarted()
                 }
             }
@@ -274,24 +273,24 @@ class P2PTopicsRepository(
             )
             _topicStates.value = current
             
-            Log.d(TAG, "🔍 Starting DHT discovery for topic: $topicName")
+            Log.d(TAG, "Starting DHT discovery for topic: $topicName")
             
             // CRITICAL: Trigger Go-side DHT discovery (async, returns immediately)
             p2pLibraryRepository.refreshTopicPeers(topicName)
             
             // Wait for discovery to start finding peers, then refresh UI
-            delay(1000)
+            delay(AppConstants.P2P.DISCOVERY_INITIAL_DELAY_MS)
             refreshTopicPeers(topicName)
             
             // Refresh again after more time for connections to establish
-            delay(3000)
+            delay(AppConstants.P2P.DISCOVERY_SECONDARY_DELAY_MS)
             refreshTopicPeers(topicName)
             
             // One more refresh after a longer delay for slow connections
-            delay(5000)
+            delay(AppConstants.P2P.DISCOVERY_FINAL_DELAY_MS)
             refreshTopicPeers(topicName)
             
-            Log.d(TAG, "✅ DHT discovery completed for topic: $topicName")
+            Log.d(TAG, "DHT discovery completed for topic: $topicName")
         } catch (e: Exception) {
             Log.e(TAG, "Discovery failed for $topicName: ${e.message}")
             setTopicError(topicName, e.message ?: "Failed to discover peers")
@@ -304,41 +303,51 @@ class P2PTopicsRepository(
      * Critical for P2P connectivity: DHT takes time to propagate and connections may fail.
      */
     fun startContinuousRefresh(topicName: String) {
-        // Cancel any existing refresh job
-        activeRefreshJob?.cancel()
-        activeRefreshTopic = topicName
+        // Cancel any existing refresh job for this specific topic (prevents orphaned jobs)
+        refreshJobs[topicName]?.cancel()
         
-        Log.d(TAG, "🔄 Starting continuous peer refresh for: $topicName")
+        Log.d(TAG, "Starting continuous peer refresh for: $topicName")
         
-        activeRefreshJob = scope.launch {
-            // Initial discovery trigger
-            p2pLibraryRepository.refreshTopicPeers(topicName)
-            
-            // Continuous 5-second refresh loop (matches reference app behavior)
-            while (isActive) {
-                delay(5000)
-                try {
-                    p2pLibraryRepository.refreshTopicPeers(topicName)
-                    refreshTopicPeers(topicName)
-                    
-                    val state = _topicStates.value[topicName]
-                    Log.d(TAG, "🔄 Continuous refresh for $topicName: ${state?.meshPeerCount ?: 0} mesh peers, ${state?.providerCount ?: 0} providers")
-                } catch (e: Exception) {
-                    Log.w(TAG, "Continuous refresh error for $topicName: ${e.message}")
+        refreshJobs[topicName] = scope.launch {
+            try {
+                // Initial discovery trigger
+                p2pLibraryRepository.refreshTopicPeers(topicName)
+                
+                while (isActive) {
+                    delay(AppConstants.P2P.TOPIC_DISCOVERY_INTERVAL_MS)
+                    try {
+                        p2pLibraryRepository.refreshTopicPeers(topicName)
+                        refreshTopicPeers(topicName)
+                        
+                        val state = _topicStates.value[topicName]
+                        Log.d(TAG, "Continuous refresh for $topicName: ${state?.meshPeerCount ?: 0} mesh peers, ${state?.providerCount ?: 0} providers")
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Continuous refresh error for $topicName: ${e.message}")
+                    }
                 }
+            } finally {
+                // Clean up when job completes or is cancelled
+                refreshJobs.remove(topicName)
             }
         }
     }
     
     /**
-     * Stop continuous refresh.
+     * Stop continuous refresh for a topic or all topics.
      * Call this when user leaves the topic chat.
+     * @param topicName If provided, stops refresh for that topic only. If null, stops all.
      */
-    fun stopContinuousRefresh() {
-        activeRefreshJob?.cancel()
-        activeRefreshJob = null
-        Log.d(TAG, "⏹️ Stopped continuous refresh for: $activeRefreshTopic")
-        activeRefreshTopic = null
+    fun stopContinuousRefresh(topicName: String? = null) {
+        if (topicName != null) {
+            refreshJobs[topicName]?.cancel()
+            refreshJobs.remove(topicName)
+            Log.d(TAG, "Stopped continuous refresh for: $topicName")
+        } else {
+            val count = refreshJobs.size
+            refreshJobs.values.forEach { it.cancel() }
+            refreshJobs.clear()
+            Log.d(TAG, "Stopped all $count continuous refresh jobs")
+        }
     }
     
     /**
@@ -370,7 +379,7 @@ class P2PTopicsRepository(
             
             // CRITICAL: Trigger DHT discovery to find other peers on this topic!
             // Without this, we can subscribe and publish but won't receive messages from others.
-            Log.d(TAG, "🔍 Triggering DHT discovery for $topicName...")
+            Log.d(TAG, "Triggering DHT discovery for $topicName...")
             p2pLibraryRepository.refreshTopicPeers(topicName)
             
             // Also ensure we track it in Kotlin
@@ -434,8 +443,8 @@ class P2PTopicsRepository(
         val lastBroadcast = lastPresenceBroadcast[topicName] ?: 0L
         
         // Enforce cooldown unless forced (username change)
-        if (!force && now - lastBroadcast < PRESENCE_BROADCAST_COOLDOWN) {
-            Log.d(TAG, "📡 Presence broadcast skipped (cooldown): $topicName")
+        if (!force && now - lastBroadcast < AppConstants.P2P.PRESENCE_BROADCAST_COOLDOWN_MS) {
+            Log.d(TAG, "Presence broadcast skipped (cooldown): $topicName")
             return false
         }
         
@@ -447,7 +456,7 @@ class P2PTopicsRepository(
         return try {
             publishToTopic(topicName, message, nickname)
             lastPresenceBroadcast[topicName] = now
-            Log.d(TAG, "📡 Broadcast presence to $topicName: $nickname")
+            Log.d(TAG, "Broadcast presence to $topicName: $nickname")
             true
         } catch (e: Exception) {
             Log.w(TAG, "Failed to broadcast presence to $topicName: ${e.message}")
@@ -465,14 +474,14 @@ class P2PTopicsRepository(
         val now = System.currentTimeMillis()
         val lastResponse = respondedToPeers[peerID] ?: 0L
         
-        if (now - lastResponse < PRESENCE_RESPONSE_COOLDOWN) {
+        if (now - lastResponse < AppConstants.P2P.PRESENCE_RESPONSE_COOLDOWN_MS) {
             return false // Already responded to this peer recently
         }
         
         respondedToPeers[peerID] = now
         
         // Cleanup old entries (>5 minutes)
-        val cutoff = now - 300_000L
+        val cutoff = now - AppConstants.P2P.PRESENCE_CLEANUP_THRESHOLD_MS
         respondedToPeers.entries.removeAll { it.value < cutoff }
         
         return true
@@ -576,8 +585,8 @@ class P2PTopicsRepository(
         scope.launch {
             try {
                 // Periodically trigger discovery and check peers
-                repeat(6) { iteration -> // 30 seconds total
-                    delay(5000)
+                repeat(AppConstants.P2P.TOPIC_DISCOVERY_ITERATIONS) { iteration ->
+                    delay(AppConstants.P2P.TOPIC_DISCOVERY_INTERVAL_MS)
                     
                     // Re-trigger DHT discovery every other iteration
                     if (iteration % 2 == 0) {
