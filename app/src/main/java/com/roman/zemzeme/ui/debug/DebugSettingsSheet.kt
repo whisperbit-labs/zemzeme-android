@@ -350,6 +350,27 @@ fun DebugSettingsSheet(
                             )
                         }
                         
+                        // Test Update Dialog button (for UI testing)
+                        OutlinedButton(
+                            onClick = { updateManager.testShowUpdateDialog() },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = Color(0xFFFF9500)
+                            )
+                        ) {
+                            Icon(
+                                Icons.Filled.BugReport,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                "Test Update Dialog",
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                        
                         Text(
                             "Server: http://10.0.2.2:8000",
                             fontFamily = FontFamily.Monospace,
