@@ -111,6 +111,11 @@ class P2PLibraryRepository(
     
     // DHT status refresh job
     private var dhtRefreshJob: kotlinx.coroutines.Job? = null
+
+    // Health monitoring state for auto-recovery
+    private var consecutiveZeroPeerChecks = 0
+    private var lastRecoveryAttemptMs = 0L
+    private var healthCheckJob: kotlinx.coroutines.Job? = null
     
     // ============== Lifecycle ==============
     
@@ -265,15 +270,20 @@ class P2PLibraryRepository(
             // Cancel DHT refresh job
             dhtRefreshJob?.cancel()
             dhtRefreshJob = null
-            
+
+            // Cancel health monitoring job
+            healthCheckJob?.cancel()
+            healthCheckJob = null
+            consecutiveZeroPeerChecks = 0
+
             node?.stop()
             node = null
-            
+
             _nodeStatus.value = P2PNodeStatus.STOPPED
             _connectedPeers.value = emptyList()
             subscribedTopics.clear()
             _dhtStatus.value = ""
-            
+
             Log.d(TAG, "P2P node stopped")
             Result.success(Unit)
         } catch (e: Exception) {
@@ -291,12 +301,12 @@ class P2PLibraryRepository(
         dhtRefreshJob = scope.launch {
             while (true) {
                 delay(AppConstants.P2P.DHT_REFRESH_INTERVAL_MS)
-                
+
                 if (_nodeStatus.value != P2PNodeStatus.RUNNING) {
                     Log.d(TAG, "DHT refresh: Node not running, stopping refresh")
                     break
                 }
-                
+
                 try {
                     val currentNode = node
                     if (currentNode != null) {
@@ -310,6 +320,155 @@ class P2PLibraryRepository(
             }
         }
         Log.d(TAG, "Started periodic DHT status refresh (10s interval)")
+
+        // Start health monitoring for auto-recovery
+        startHealthMonitoring()
+    }
+
+    /**
+     * Start health monitoring that detects when DHT routing table drops to 0 peers
+     * and automatically triggers re-bootstrap to recover connectivity.
+     *
+     * This addresses Issue 2 from bugs.txt: "P2P Connection Loss - Zero Peers, Cannot Recover"
+     */
+    private fun startHealthMonitoring() {
+        healthCheckJob?.cancel()
+        consecutiveZeroPeerChecks = 0
+
+        healthCheckJob = scope.launch {
+            // Initial delay to let the node stabilize after startup
+            delay(AppConstants.P2P.HEALTH_CHECK_INTERVAL_MS)
+
+            while (true) {
+                delay(AppConstants.P2P.HEALTH_CHECK_INTERVAL_MS)
+
+                if (_nodeStatus.value != P2PNodeStatus.RUNNING) {
+                    Log.d(TAG, "Health check: Node not running, stopping monitoring")
+                    break
+                }
+
+                try {
+                    checkHealthAndRecover()
+                } catch (e: Exception) {
+                    Log.w(TAG, "Health check failed: ${e.message}")
+                }
+            }
+        }
+        Log.d(TAG, "Started P2P health monitoring (${AppConstants.P2P.HEALTH_CHECK_INTERVAL_MS}ms interval)")
+    }
+
+    /**
+     * Check P2P node health and trigger recovery if needed.
+     * Parses DHT status to detect 0 peers in routing table.
+     */
+    private suspend fun checkHealthAndRecover() {
+        val currentNode = node ?: return
+        val status = currentNode.dhtStatus ?: return
+
+        // Parse DHT status to extract routing table peer count
+        // Expected format contains "routing table: N peers" or similar
+        val routingTablePeers = parseRoutingTablePeers(status)
+        val connectedPeers = _connectedPeers.value.size
+
+        Log.d(TAG, "Health check: routing_table=$routingTablePeers, connected=$connectedPeers")
+
+        // Check if we have zero peers in both routing table AND connected peers
+        if (routingTablePeers == 0 && connectedPeers == 0) {
+            consecutiveZeroPeerChecks++
+            Log.w(TAG, "Zero peers detected (check $consecutiveZeroPeerChecks/${AppConstants.P2P.ZERO_PEERS_THRESHOLD_COUNT})")
+
+            if (consecutiveZeroPeerChecks >= AppConstants.P2P.ZERO_PEERS_THRESHOLD_COUNT) {
+                attemptRecovery()
+            }
+        } else {
+            // Reset counter if we have peers
+            if (consecutiveZeroPeerChecks > 0) {
+                Log.d(TAG, "Peers recovered, resetting zero-peer counter")
+                consecutiveZeroPeerChecks = 0
+            }
+        }
+    }
+
+    /**
+     * Parse DHT status string to extract routing table peer count.
+     * Returns 0 if parsing fails or peers not found.
+     */
+    private fun parseRoutingTablePeers(status: String): Int {
+        // Try to match patterns like "routing table: 84 peers" or "RT: 84"
+        val patterns = listOf(
+            Regex("""routing\s*table[:\s]+(\d+)""", RegexOption.IGNORE_CASE),
+            Regex("""RT[:\s]+(\d+)"""),
+            Regex("""(\d+)\s*peers?\s*in\s*routing""", RegexOption.IGNORE_CASE),
+            Regex("""DHT[:\s]+(\d+)""", RegexOption.IGNORE_CASE)
+        )
+
+        for (pattern in patterns) {
+            val match = pattern.find(status)
+            if (match != null) {
+                return match.groupValues[1].toIntOrNull() ?: 0
+            }
+        }
+
+        // If no pattern matches, assume healthy (avoid false positives)
+        return -1  // -1 means "unknown", won't trigger recovery
+    }
+
+    /**
+     * Attempt to recover P2P connectivity by re-bootstrapping.
+     * Respects cooldown to avoid excessive recovery attempts.
+     */
+    private suspend fun attemptRecovery() {
+        val now = System.currentTimeMillis()
+        val timeSinceLastRecovery = now - lastRecoveryAttemptMs
+
+        if (timeSinceLastRecovery < AppConstants.P2P.RECOVERY_COOLDOWN_MS) {
+            Log.d(TAG, "Recovery cooldown active, skipping (${timeSinceLastRecovery}ms since last attempt)")
+            return
+        }
+
+        Log.w(TAG, "🔄 Attempting P2P auto-recovery (re-bootstrap)...")
+        lastRecoveryAttemptMs = now
+        consecutiveZeroPeerChecks = 0
+
+        try {
+            val currentNode = node
+            if (currentNode != null) {
+                // Try DHT refresh first (lighter operation)
+                Log.d(TAG, "Step 1: Refreshing DHT...")
+                currentNode.refreshDHT()
+                delay(2000) // Give it time to work
+
+                // Check if that helped
+                val statusAfterRefresh = currentNode.dhtStatus ?: ""
+                val peersAfterRefresh = parseRoutingTablePeers(statusAfterRefresh)
+
+                if (peersAfterRefresh > 0) {
+                    Log.i(TAG, "✅ DHT refresh recovered connectivity: $peersAfterRefresh peers")
+                    _dhtStatus.value = statusAfterRefresh
+                    return
+                }
+
+                // DHT refresh didn't help, try announcing
+                Log.d(TAG, "Step 2: Announcing to DHT...")
+                currentNode.announce()
+                delay(2000)
+
+                // Final check
+                val statusAfterAnnounce = currentNode.dhtStatus ?: ""
+                val peersAfterAnnounce = parseRoutingTablePeers(statusAfterAnnounce)
+
+                if (peersAfterAnnounce > 0) {
+                    Log.i(TAG, "✅ DHT announce recovered connectivity: $peersAfterAnnounce peers")
+                    _dhtStatus.value = statusAfterAnnounce
+                } else {
+                    Log.w(TAG, "⚠️ Auto-recovery did not restore peers. Manual restart may be needed.")
+                    // Note: We don't restart the node automatically to avoid disrupting any
+                    // partial connectivity. User can force-stop the app if needed.
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Auto-recovery failed: ${e.message}", e)
+        }
     }
     
     // ============== Peer Operations ==============
@@ -550,7 +709,67 @@ class P2PLibraryRepository(
     fun getMyPublicAddress(): String {
         return node?.getMyPublicAddress() ?: "Not available"
     }
-    
+
+    // ============== Health Monitoring ==============
+
+    /**
+     * Check if the P2P node is healthy (has peers in routing table).
+     * Returns true if healthy, false if no peers detected.
+     */
+    fun isHealthy(): Boolean {
+        if (_nodeStatus.value != P2PNodeStatus.RUNNING) return false
+        val status = node?.dhtStatus ?: return false
+        val routingPeers = parseRoutingTablePeers(status)
+        val connectedPeers = _connectedPeers.value.size
+        return routingPeers > 0 || connectedPeers > 0 || routingPeers == -1
+    }
+
+    /**
+     * Get current health status for UI display.
+     */
+    fun getHealthStatus(): HealthStatus {
+        val status = node?.dhtStatus ?: "Node not started"
+        val routingPeers = parseRoutingTablePeers(status)
+        val connectedPeers = _connectedPeers.value.size
+
+        return HealthStatus(
+            isHealthy = routingPeers > 0 || connectedPeers > 0 || routingPeers == -1,
+            routingTablePeers = if (routingPeers >= 0) routingPeers else null,
+            connectedPeers = connectedPeers,
+            consecutiveZeroChecks = consecutiveZeroPeerChecks,
+            lastRecoveryAttemptMs = lastRecoveryAttemptMs
+        )
+    }
+
+    data class HealthStatus(
+        val isHealthy: Boolean,
+        val routingTablePeers: Int?,
+        val connectedPeers: Int,
+        val consecutiveZeroChecks: Int,
+        val lastRecoveryAttemptMs: Long
+    )
+
+    /**
+     * Manually trigger P2P recovery.
+     * Can be called from UI when user suspects connectivity issues.
+     */
+    suspend fun forceRecovery(): Result<Unit> = withContext(Dispatchers.IO) {
+        if (_nodeStatus.value != P2PNodeStatus.RUNNING) {
+            return@withContext Result.failure(Exception("Node not running"))
+        }
+
+        try {
+            Log.i(TAG, "Manual P2P recovery triggered by user")
+            // Reset cooldown to allow immediate recovery
+            lastRecoveryAttemptMs = 0L
+            attemptRecovery()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "Manual recovery failed: ${e.message}", e)
+            Result.failure(e)
+        }
+    }
+
     // ============== Key Management ==============
     
     private fun getStoredPrivateKey(): String? {

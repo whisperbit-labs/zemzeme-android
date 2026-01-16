@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,6 +58,11 @@ fun P2PSettingsSheet(
     // Collect P2P status
     val nodeStatus by p2pTransport.p2pRepository.nodeStatus.collectAsState()
     val connectedPeers by p2pTransport.p2pRepository.connectedPeers.collectAsState()
+    val dhtStatus by p2pTransport.p2pRepository.dhtStatus.collectAsState()
+
+    // Recovery state
+    var isRecovering by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
     
     val colorScheme = MaterialTheme.colorScheme
     val isDark = colorScheme.background.red + colorScheme.background.green + colorScheme.background.blue < 1.5f
@@ -118,13 +124,18 @@ fun P2PSettingsSheet(
                                 shape = RoundedCornerShape(16.dp)
                             ) {
                                 Column(modifier = Modifier.padding(16.dp)) {
+                                    // Check health: running but no peers = unhealthy
+                                    val isHealthy = p2pTransport.p2pRepository.isHealthy()
+                                    val isUnhealthy = nodeStatus == P2PNodeStatus.RUNNING && !isHealthy
+
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        val statusColor = when (nodeStatus) {
-                                            P2PNodeStatus.RUNNING -> if (isDark) Color(0xFF32D74B) else Color(0xFF248A3D)
-                                            P2PNodeStatus.STARTING -> Color(0xFFFF9500)
+                                        val statusColor = when {
+                                            isUnhealthy -> Color(0xFFFF9500) // Orange for unhealthy
+                                            nodeStatus == P2PNodeStatus.RUNNING -> if (isDark) Color(0xFF32D74B) else Color(0xFF248A3D)
+                                            nodeStatus == P2PNodeStatus.STARTING -> Color(0xFFFF9500)
                                             else -> Color(0xFFFF3B30)
                                         }
                                         Surface(
@@ -133,10 +144,11 @@ fun P2PSettingsSheet(
                                             modifier = Modifier.size(10.dp)
                                         ) {}
                                         Text(
-                                            text = when (nodeStatus) {
-                                                P2PNodeStatus.RUNNING -> "Connected"
-                                                P2PNodeStatus.STARTING -> "Connecting..."
-                                                P2PNodeStatus.STOPPED -> "Disconnected"
+                                            text = when {
+                                                isUnhealthy -> "No Peers"
+                                                nodeStatus == P2PNodeStatus.RUNNING -> "Connected"
+                                                nodeStatus == P2PNodeStatus.STARTING -> "Connecting..."
+                                                nodeStatus == P2PNodeStatus.STOPPED -> "Disconnected"
                                                 else -> "Error"
                                             },
                                             style = MaterialTheme.typography.bodyMedium,
@@ -144,17 +156,27 @@ fun P2PSettingsSheet(
                                             color = colorScheme.onSurface
                                         )
                                     }
-                                    
-                                    if (connectedPeers.isNotEmpty()) {
-                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                    // Show connected peers count
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = "${connectedPeers.size} peers connected",
+                                        fontSize = 13.sp,
+                                        fontFamily = FontFamily.Monospace,
+                                        color = colorScheme.onSurface.copy(alpha = 0.6f)
+                                    )
+
+                                    // Show DHT status (routing table)
+                                    if (dhtStatus.isNotBlank() && nodeStatus == P2PNodeStatus.RUNNING) {
                                         Text(
-                                            text = "${connectedPeers.size} peers connected",
-                                            fontSize = 13.sp,
+                                            text = "DHT: $dhtStatus",
+                                            fontSize = 11.sp,
                                             fontFamily = FontFamily.Monospace,
-                                            color = colorScheme.onSurface.copy(alpha = 0.6f)
+                                            color = colorScheme.onSurface.copy(alpha = 0.5f),
+                                            maxLines = 2
                                         )
                                     }
-                                    
+
                                     p2pTransport.getMyPeerID()?.let { peerID ->
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text(
@@ -163,6 +185,46 @@ fun P2PSettingsSheet(
                                             fontFamily = FontFamily.Monospace,
                                             color = colorScheme.onSurface.copy(alpha = 0.5f)
                                         )
+                                    }
+
+                                    // Recovery button when unhealthy
+                                    if (isUnhealthy || isRecovering) {
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Button(
+                                            onClick = {
+                                                isRecovering = true
+                                                coroutineScope.launch {
+                                                    try {
+                                                        p2pTransport.p2pRepository.forceRecovery()
+                                                    } finally {
+                                                        isRecovering = false
+                                                    }
+                                                }
+                                            },
+                                            enabled = !isRecovering,
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = Color(0xFFFF9500)
+                                            ),
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+                                            if (isRecovering) {
+                                                CircularProgressIndicator(
+                                                    modifier = Modifier.size(16.dp),
+                                                    color = Color.White,
+                                                    strokeWidth = 2.dp
+                                                )
+                                                Spacer(modifier = Modifier.width(8.dp))
+                                                Text("Recovering...")
+                                            } else {
+                                                Icon(
+                                                    imageVector = Icons.Default.Refresh,
+                                                    contentDescription = null,
+                                                    modifier = Modifier.size(16.dp)
+                                                )
+                                                Spacer(modifier = Modifier.width(8.dp))
+                                                Text("Recover Connection")
+                                            }
+                                        }
                                     }
                                 }
                             }

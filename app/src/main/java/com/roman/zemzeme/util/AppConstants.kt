@@ -146,6 +146,11 @@ object AppConstants {
         const val PRESENCE_BROADCAST_COOLDOWN_MS: Long = 5_000L
         const val PRESENCE_RESPONSE_COOLDOWN_MS: Long = 30_000L
         const val PRESENCE_CLEANUP_THRESHOLD_MS: Long = 300_000L // 5 minutes
+
+        // Auto-recovery: re-bootstrap when DHT routing table drops to 0 peers
+        const val HEALTH_CHECK_INTERVAL_MS: Long = 30_000L // Check every 30s
+        const val ZERO_PEERS_THRESHOLD_COUNT: Int = 2 // Trigger recovery after 2 consecutive zero-peer checks
+        const val RECOVERY_COOLDOWN_MS: Long = 60_000L // Don't attempt recovery more than once per minute
     }
 
     object Update {
