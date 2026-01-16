@@ -68,7 +68,8 @@ class GeohashViewModel(
     // P2P integration
     private val p2pConfig = P2PConfig(application)
     private val p2pTransport = P2PTransport.getInstance(application)
-    private val p2pTopicsRepository = P2PTopicsRepository(application, p2pTransport.p2pRepository)
+    // Use singleton to prevent duplicate message collectors when multiple ViewModels exist
+    private val p2pTopicsRepository = P2PTopicsRepository.getInstance(application, p2pTransport.p2pRepository)
 
     private var currentGeohashSubId: String? = null
     private var currentDmSubId: String? = null

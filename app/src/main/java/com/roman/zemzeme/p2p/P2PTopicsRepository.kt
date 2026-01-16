@@ -72,21 +72,37 @@ data class TopicInfo(
 
 /**
  * P2P Topics Repository
- * 
+ *
  * Manages P2P topic (GossipSub) subscriptions for:
  * - Geohash channels (location-based chat)
  * - Custom topic rooms
- * 
+ *
  * Delegates all P2P operations to P2PLibraryRepository.
  * Adapted from mobile_go_libp2p reference implementation.
+ *
+ * IMPORTANT: This is a singleton to prevent duplicate message collectors.
+ * Multiple instances would each create their own collector on the shared
+ * P2PLibraryRepository.incomingMessages flow, causing message duplication.
  */
-class P2PTopicsRepository(
+class P2PTopicsRepository private constructor(
     private val context: Context,
     private val p2pLibraryRepository: P2PLibraryRepository
 ) {
     companion object {
         private const val TAG = "P2PTopicsRepository"
         private const val PREFS_NAME = "p2p_topics"
+
+        @Volatile
+        private var instance: P2PTopicsRepository? = null
+
+        fun getInstance(context: Context, p2pLibraryRepository: P2PLibraryRepository): P2PTopicsRepository {
+            return instance ?: synchronized(this) {
+                instance ?: P2PTopicsRepository(context.applicationContext, p2pLibraryRepository).also {
+                    instance = it
+                    Log.d(TAG, "P2PTopicsRepository singleton created")
+                }
+            }
+        }
     }
     
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)

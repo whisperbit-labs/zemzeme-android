@@ -1196,6 +1196,28 @@ class ChatViewModel(
      */
     fun colorForNostrPubkey(pubkeyHex: String, isDark: Boolean): androidx.compose.ui.graphics.Color {
         return geohashViewModel.colorForNostrPubkey(pubkeyHex, isDark)
-}
+    }
+
+    /**
+     * Trigger P2P refresh/recovery.
+     * Calls both topic peer discovery and forces DHT recovery if needed.
+     */
+    fun refreshP2PConnection() {
+        viewModelScope.launch {
+            try {
+                val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
+
+                // First try topic peer refresh (lightweight)
+                geohashViewModel.refreshP2PPeers()
+
+                // Then force DHT recovery (heavier, re-bootstraps if needed)
+                p2pTransport.p2pRepository.forceRecovery()
+
+                Log.d("ChatViewModel", "P2P refresh triggered")
+            } catch (e: Exception) {
+                Log.e("ChatViewModel", "P2P refresh failed: ${e.message}")
+            }
+        }
+    }
 
 }

@@ -506,14 +506,14 @@ private fun LocationChannelsButton(
     onClick: () -> Unit
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    
+
     // Get current channel selection from location manager
     val selectedChannel by viewModel.selectedLocationChannel.collectAsStateWithLifecycle()
     val teleported by viewModel.isTeleported.collectAsStateWithLifecycle()
-    
+
     // Get P2P topic states for geohash channels
     val p2pTopicStates by viewModel.p2pTopicStates.collectAsStateWithLifecycle()
-    
+
     val (badgeText, badgeColor) = when (selectedChannel) {
         is com.bitchat.android.geohash.ChannelID.Mesh -> {
             "#mesh" to Color(0xFF007AFF) // iOS blue for mesh
@@ -524,7 +524,7 @@ private fun LocationChannelsButton(
         }
         null -> "#mesh" to Color(0xFF007AFF) // Default to mesh
     }
-    
+
     // Get P2P connection state for current geohash channel
     val p2pConnectionState = when (val channel = selectedChannel) {
         is com.bitchat.android.geohash.ChannelID.Location -> {
@@ -533,7 +533,11 @@ private fun LocationChannelsButton(
         }
         else -> null
     }
-    
+
+    // Check if P2P needs refresh (no peers or error state)
+    val needsRefresh = p2pConnectionState == com.bitchat.android.p2p.TopicConnectionState.NO_PEERS ||
+            p2pConnectionState == com.bitchat.android.p2p.TopicConnectionState.ERROR
+
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -551,7 +555,7 @@ private fun LocationChannelsButton(
                 color = badgeColor,
                 maxLines = 1
             )
-            
+
             // P2P connection status indicator (for geohash channels only)
             if (p2pConnectionState != null) {
                 Spacer(modifier = Modifier.width(4.dp))
@@ -559,8 +563,24 @@ private fun LocationChannelsButton(
                     connectionState = p2pConnectionState,
                     modifier = Modifier.size(6.dp)
                 )
+
+                // P2P refresh button (visible when no peers or error)
+                if (needsRefresh) {
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Refresh P2P connection",
+                        modifier = Modifier
+                            .size(14.dp)
+                            .clickable {
+                                Log.d("ChatHeader", "P2P refresh button clicked")
+                                viewModel.refreshP2PConnection()
+                            },
+                        tint = Color(0xFFFF9500) // Orange to indicate action needed
+                    )
+                }
             }
-            
+
             // Teleportation indicator (like iOS)
             if (teleported) {
                 Spacer(modifier = Modifier.width(2.dp))
