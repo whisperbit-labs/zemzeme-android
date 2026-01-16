@@ -90,6 +90,15 @@ class GeohashViewModel(
     val p2pTopicStates: StateFlow<Map<String, com.bitchat.android.p2p.TopicState>> = p2pTopicsRepository.topicStates
 
     fun initialize() {
+        // Cancel any existing P2P watcher jobs to prevent duplicate collectors
+        // This fixes the 4x message duplication bug when initialize() is called multiple times
+        p2pMessagesJob?.cancel()
+        p2pMessagesJob = null
+        p2pNodeStatusJob?.cancel()
+        p2pNodeStatusJob = null
+        p2pTopicPeersJob?.cancel()
+        p2pTopicPeersJob = null
+
         subscriptionManager.connect()
         val identity = NostrIdentityBridge.getCurrentNostrIdentity(getApplication())
         if (identity != null) {
@@ -259,6 +268,13 @@ class GeohashViewModel(
         geoTimer = null
         globalPresenceJob?.cancel()
         globalPresenceJob = null
+        // Cancel P2P watcher jobs (also done in initialize(), but explicit here for clarity)
+        p2pMessagesJob?.cancel()
+        p2pMessagesJob = null
+        p2pNodeStatusJob?.cancel()
+        p2pNodeStatusJob = null
+        p2pTopicPeersJob?.cancel()
+        p2pTopicPeersJob = null
         try { NostrIdentityBridge.clearAllAssociations(getApplication()) } catch (_: Exception) {}
         initialize()
     }
