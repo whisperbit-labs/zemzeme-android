@@ -46,7 +46,7 @@ data class TopicPeerUpdate(
 enum class TopicConnectionState {
     CONNECTING,    // Searching for peers
     CONNECTED,     // Has at least one peer
-    NO_PEERS,      // Discovery complete, no peers found
+    NO_PEERS,      // Legacy state (rendered as CONNECTING in UI)
     ERROR          // Connection error
 }
 
@@ -85,8 +85,8 @@ data class TopicInfo(
  * P2PLibraryRepository.incomingMessages flow, causing message duplication.
  */
 class P2PTopicsRepository private constructor(
-    private val context: Context,
-    private val p2pLibraryRepository: P2PLibraryRepository
+    private val p2pLibraryRepository: P2PLibraryRepository,
+    private val prefs: SharedPreferences
 ) {
     companion object {
         private const val TAG = "P2PTopicsRepository"
@@ -97,7 +97,9 @@ class P2PTopicsRepository private constructor(
 
         fun getInstance(context: Context, p2pLibraryRepository: P2PLibraryRepository): P2PTopicsRepository {
             return instance ?: synchronized(this) {
-                instance ?: P2PTopicsRepository(context.applicationContext, p2pLibraryRepository).also {
+                val appContext = context.applicationContext
+                val sharedPrefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                instance ?: P2PTopicsRepository(p2pLibraryRepository, sharedPrefs).also {
                     instance = it
                     Log.d(TAG, "P2PTopicsRepository singleton created")
                 }
@@ -106,7 +108,6 @@ class P2PTopicsRepository private constructor(
     }
     
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     
     // State flows
     private val _subscribedTopics = MutableStateFlow<List<TopicInfo>>(emptyList())
@@ -583,8 +584,8 @@ class P2PTopicsRepository private constructor(
         
         val newState = when {
             peers.isNotEmpty() -> TopicConnectionState.CONNECTED
-            state.connectionState == TopicConnectionState.CONNECTING -> TopicConnectionState.CONNECTING
-            else -> TopicConnectionState.CONNECTED
+            state.connectionState == TopicConnectionState.ERROR -> TopicConnectionState.ERROR
+            else -> TopicConnectionState.CONNECTING
         }
         
         current[topicName] = state.copy(
@@ -621,15 +622,6 @@ class P2PTopicsRepository private constructor(
                     refreshTopicPeers(topicName)
                 }
                 
-                // Mark discovery complete
-                val current = _topicStates.value.toMutableMap()
-                val state = current[topicName]
-                if (state?.connectionState == TopicConnectionState.CONNECTING) {
-                    current[topicName] = state.copy(
-                        connectionState = TopicConnectionState.CONNECTED
-                    )
-                    _topicStates.value = current
-                }
             } catch (e: Exception) {
                 Log.w(TAG, "Topic discovery failed for $topicName: ${e.message}")
             }
@@ -664,8 +656,8 @@ class P2PTopicsRepository private constructor(
         
         val newConnectionState = when {
             peers.isNotEmpty() -> TopicConnectionState.CONNECTED
-            state.connectionState == TopicConnectionState.CONNECTING -> TopicConnectionState.CONNECTING
-            else -> TopicConnectionState.CONNECTED
+            state.connectionState == TopicConnectionState.ERROR -> TopicConnectionState.ERROR
+            else -> TopicConnectionState.CONNECTING
         }
         
         Log.d(TAG, "TopicState update for $topicName: peers=${peers.size} providers=$providerCount state=${state.connectionState}->$newConnectionState")
