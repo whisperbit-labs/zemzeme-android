@@ -3,6 +3,7 @@
 # proguardFiles setting in build.gradle.
 -keep class com.roman.zemzeme.protocol.** { *; }
 -keep class com.roman.zemzeme.crypto.** { *; }
+-keep class golib.** { *; }
 -dontwarn org.bouncycastle.**
 -keep class org.bouncycastle.** { *; }
 
