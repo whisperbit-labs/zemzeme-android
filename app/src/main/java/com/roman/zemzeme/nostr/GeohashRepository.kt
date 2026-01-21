@@ -187,8 +187,12 @@ class GeohashRepository(
             NostrIdentityBridge.deriveIdentity(geohash, application).publicKeyHex
         } catch (_: Exception) { null }
         val myNickname = state.getNicknameValue() ?: "anon"
-        // exclude blocked users from people list
-        val people = participantsSnapshot.filterKeys { !dataManager.isGeohashUserBlocked(it) }
+        // Exclude blocked users and our own Nostr identity from people list.
+        val people = participantsSnapshot
+            .filterKeys { participantId ->
+                !dataManager.isGeohashUserBlocked(participantId) &&
+                    (myHex == null || !participantId.equals(myHex, ignoreCase = true))
+            }
             .map { (pubkeyHex, lastSeen) ->
             // Detect transport type: P2P participants have "p2p:" prefix
             val isP2P = pubkeyHex.startsWith("p2p:")
@@ -212,7 +216,12 @@ class GeohashRepository(
                 lastSeen = lastSeen,
                 transport = transport
             )
-        }.sortedByDescending { it.lastSeen }
+        }
+            .sortedWith(
+                compareByDescending<GeoPerson> { it.lastSeen.time }
+                    .thenBy { it.displayName.lowercase() }
+                    .thenBy { it.id }
+            )
         // Use postValue for thread safety - this can be called from background threads
         state.setGeohashPeople(people)
     }

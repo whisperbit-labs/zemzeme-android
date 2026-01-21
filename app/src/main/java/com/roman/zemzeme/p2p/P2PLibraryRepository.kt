@@ -722,7 +722,13 @@ class P2PLibraryRepository(
      */
     fun getTopicPeers(topicName: String): List<String> {
         val peersStr = node?.getTopicPeers(topicName) ?: return emptyList()
-        return peersStr.split("\n").filter { it.isNotBlank() }
+        return peersStr
+            .lineSequence()
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+            .distinct()
+            .sorted()
+            .toList()
     }
     
     /**

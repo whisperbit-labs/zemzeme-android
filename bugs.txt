@@ -1,4 +1,4 @@
-# P2P Connection Issues - Debug Session 2026-02-06
+# P2P Connection Issues - Debug Session 2026-02-06 (Updated 2026-02-10)
 
 ## Issue 1: P2P Disabled in Settings
 
@@ -154,6 +154,40 @@ This is a known Android BLE limitation. Mitigations include:
 
 ---
 
+## Issue 7: Network Tab Peer Reordering + Self Entry in Peer List
+
+**Indication:**
+- In geohash channels with higher peer counts (often 8-10+), the Network tab list visibly reshuffles between refresh cycles
+- Local user can occasionally appear/disappear in the same list
+- Behavior is harder to reproduce in smaller rooms (2-3 peers)
+
+**Problem:**
+Two things made this visible in bigger rooms:
+1. The list refreshed often, and peers with very close activity times could swap order between refreshes.
+2. The local device was not filtered early enough in every update path, so it could briefly show up and then disappear.
+
+**Fix in this build:**
+- Local device is filtered out before Network tab peer state is updated (for both Nostr and P2P paths).
+- Incoming peer IDs are normalized and sorted before merge.
+- Peer list rendering now uses deterministic tie-break ordering when activity timestamps match.
+- Added a debug-only, throttled validation log: `debug:self-filter topic-sync ...`.
+
+**Beta Test Plan (required):**
+1. Join the same geohash on multiple devices (target at least 8-10 active peers)
+2. Keep the Network tab open for 2-3 minutes with no chat activity
+3. Trigger intermittent activity from random peers (presence + messages)
+4. Verify:
+   - Local user is never shown in the peer list
+   - List order stays stable between refreshes (except legitimate rank changes due to fresh activity)
+5. On debug builds, capture logs:
+   - `adb logcat -d -t 1500 | grep -E "debug:self-filter topic-sync|GeohashViewModel|GeohashRepository"`
+
+**Expected Debug Signal:**
+- `debug:self-filter topic-sync ...` appears only when local peer ID is successfully filtered from merged topic peer input
+- Log is throttled (first 3 hits, then max once every 30 seconds)
+
+---
+
 ## Summary of Required Code Fixes
 
 1. **P2P Auto-Recovery**: Implement automatic re-bootstrap when DHT routing table drops to 0 peers
@@ -170,6 +204,10 @@ This is a known Android BLE limitation. Mitigations include:
 
 5. **Duplicate Message Bug**: Messages received 4x due to accumulated collectors
    - **STATUS: FIXED** in GeohashViewModel.kt - Cancel existing jobs before creating new ones in initialize()
+
+6. **Network Tab Peer Stability + Self Filtering**: Peer list shuffling in larger rooms and local user appearing in list
+   - **STATUS: FIXED** in GeohashMessageHandler.kt, GeohashViewModel.kt, GeohashRepository.kt, GeohashPeopleList.kt, and P2PLibraryRepository.kt
+   - **BETA VERIFICATION:** Run multi-device geohash tests with 8-10+ peers and validate debug self-filter logs on debug builds
 
 ---
 
