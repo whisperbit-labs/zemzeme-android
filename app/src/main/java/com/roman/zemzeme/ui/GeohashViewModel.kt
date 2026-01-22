@@ -1,6 +1,7 @@
 package com.roman.zemzeme.ui
 
 import android.app.Application
+import android.content.pm.ApplicationInfo
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -77,6 +78,8 @@ class GeohashViewModel(
     private var geoTimer: Job? = null
     private var globalPresenceJob: Job? = null
     private var locationChannelManager: com.bitchat.android.geohash.LocationChannelManager? = null
+    private var locationSelectedChannelJob: Job? = null
+    private var locationTeleportedJob: Job? = null
     
     // P2P watcher jobs for cleanup (prevents accumulated collectors)
     private var p2pNodeStatusJob: Job? = null
@@ -84,6 +87,11 @@ class GeohashViewModel(
     private var p2pMessagesJob: Job? = null
     private val p2pMessageSequence = AtomicLong(0L)
     private val lastConnectedP2PPeerCounts = ConcurrentHashMap<String, Int>()
+    private val selfFilteredTopicSyncCount = AtomicLong(0L)
+    private val lastSelfFilterLogAtMs = AtomicLong(0L)
+    private val isDebuggableBuild: Boolean by lazy {
+        (getApplication<Application>().applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+    }
 
     val geohashPeople: StateFlow<List<GeoPerson>> = state.geohashPeople
     val geohashParticipantCounts: StateFlow<Map<String, Int>> = state.geohashParticipantCounts
@@ -93,6 +101,13 @@ class GeohashViewModel(
     val p2pTopicStates: StateFlow<Map<String, com.bitchat.android.p2p.TopicState>> = p2pTopicsRepository.topicStates
 
     fun initialize() {
+        // Cancel location-state collectors before re-registering them.
+        // Without this, repeated initialize()/panicReset() can stack collectors.
+        locationSelectedChannelJob?.cancel()
+        locationSelectedChannelJob = null
+        locationTeleportedJob?.cancel()
+        locationTeleportedJob = null
+
         // Cancel any existing P2P watcher jobs to prevent duplicate collectors
         // This fixes the 4x message duplication bug when initialize() is called multiple times
         p2pMessagesJob?.cancel()
@@ -102,6 +117,8 @@ class GeohashViewModel(
         p2pTopicStatesJob?.cancel()
         p2pTopicStatesJob = null
         lastConnectedP2PPeerCounts.clear()
+        selfFilteredTopicSyncCount.set(0L)
+        lastSelfFilterLogAtMs.set(0L)
 
         subscriptionManager.connect()
         val identity = NostrIdentityBridge.getCurrentNostrIdentity(getApplication())
@@ -116,13 +133,13 @@ class GeohashViewModel(
         }
         try {
             locationChannelManager = com.bitchat.android.geohash.LocationChannelManager.getInstance(getApplication())
-            viewModelScope.launch {
+            locationSelectedChannelJob = viewModelScope.launch {
                 locationChannelManager?.selectedChannel?.collect { channel ->
                     state.setSelectedLocationChannel(channel)
                     switchLocationChannel(channel)
                 }
             }
-            viewModelScope.launch {
+            locationTeleportedJob = viewModelScope.launch {
                 locationChannelManager?.teleported?.collect { teleported ->
                     state.setIsTeleported(teleported)
                 }
@@ -195,10 +212,28 @@ class GeohashViewModel(
 
                         val mainPeers = topicStates[topicName]?.peers ?: emptyList()
                         val metaPeers = topicStates[metaTopicName]?.peers ?: emptyList()
-                        val connectedPeers = (mainPeers + metaPeers)
+                        val myPeerID = p2pTransport.getMyPeerID()?.trim()
+                        val normalizedPeers = (mainPeers + metaPeers)
+                            .asSequence()
                             .map { it.trim() }
                             .filter { it.isNotBlank() }
                             .distinct()
+                            .sorted()
+                            .toList()
+                        val connectedPeers = if (myPeerID.isNullOrBlank()) {
+                            normalizedPeers
+                        } else {
+                            normalizedPeers.filter { it != myPeerID }
+                        }
+
+                        if (!myPeerID.isNullOrBlank() && normalizedPeers.size != connectedPeers.size) {
+                            logSelfFilteredFromTopicSync(
+                                geohash = geohash,
+                                myPeerID = myPeerID,
+                                rawPeerCount = normalizedPeers.size,
+                                filteredPeerCount = connectedPeers.size
+                            )
+                        }
 
                         // Keep participant state synchronized with actual connected peers.
                         repo.syncConnectedP2PPeers(geohash, connectedPeers, Date())
@@ -281,6 +316,10 @@ class GeohashViewModel(
         geoTimer = null
         globalPresenceJob?.cancel()
         globalPresenceJob = null
+        locationSelectedChannelJob?.cancel()
+        locationSelectedChannelJob = null
+        locationTeleportedJob?.cancel()
+        locationTeleportedJob = null
         // Cancel P2P watcher jobs (also done in initialize(), but explicit here for clarity)
         p2pMessagesJob?.cancel()
         p2pMessagesJob = null
@@ -289,6 +328,8 @@ class GeohashViewModel(
         p2pTopicStatesJob?.cancel()
         p2pTopicStatesJob = null
         lastConnectedP2PPeerCounts.clear()
+        selfFilteredTopicSyncCount.set(0L)
+        lastSelfFilterLogAtMs.set(0L)
         try { NostrIdentityBridge.clearAllAssociations(getApplication()) } catch (_: Exception) {}
         initialize()
     }
@@ -692,6 +733,32 @@ class GeohashViewModel(
     private fun p2pMainTopicName(geohash: String): String = geohash
 
     private fun p2pMetaTopicName(geohash: String): String = "$P2P_META_PREFIX$geohash"
+
+    private fun logSelfFilteredFromTopicSync(
+        geohash: String,
+        myPeerID: String,
+        rawPeerCount: Int,
+        filteredPeerCount: Int
+    ) {
+        if (!isDebuggableBuild) {
+            return
+        }
+
+        val hit = selfFilteredTopicSyncCount.incrementAndGet()
+        val now = System.currentTimeMillis()
+        val lastLoggedAt = lastSelfFilterLogAtMs.get()
+        val shouldLogNow = hit <= 3L || now - lastLoggedAt >= 30_000L
+
+        if (!shouldLogNow) {
+            return
+        }
+
+        lastSelfFilterLogAtMs.set(now)
+        Log.d(
+            TAG,
+            "debug:self-filter topic-sync hit=$hit geo=$geohash raw=$rawPeerCount filtered=$filteredPeerCount me=${myPeerID.take(12)}"
+        )
+    }
 
     private fun normalizeP2PTimestamp(timestamp: Long): Long {
         return when {

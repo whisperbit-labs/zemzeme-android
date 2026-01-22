@@ -63,6 +63,16 @@ class GeohashMessageHandler(
                 // Blocked users check (use injected DataManager which has loaded state)
                 if (dataManager.isGeohashUserBlocked(event.pubkey)) return@launch
 
+                // Ignore our own geohash events entirely so local identity never appears in people lists.
+                val isOwnEvent = try {
+                    NostrIdentityBridge.deriveIdentity(subscribedGeohash, application)
+                        .publicKeyHex
+                        .equals(event.pubkey, ignoreCase = true)
+                } catch (_: Exception) {
+                    false
+                }
+                if (isOwnEvent) return@launch
+                
                 // Update repository (participants, nickname, teleport)
                 // Update repository on a background-safe path; repository will post updates to LiveData
                 
@@ -80,10 +90,6 @@ class GeohashMessageHandler(
 
                 // Stop here for presence events - they don't produce chat messages
                 if (event.kind == NostrKind.GEOHASH_PRESENCE) return@launch
-
-                // Skip our own events for message emission
-                val my = NostrIdentityBridge.deriveIdentity(subscribedGeohash, application)
-                if (my.publicKeyHex.equals(event.pubkey, true)) return@launch
 
                 val isTeleportPresence = event.tags.any { it.size >= 2 && it[0] == "t" && it[1] == "teleport" } &&
                                          event.content.trim().isEmpty()

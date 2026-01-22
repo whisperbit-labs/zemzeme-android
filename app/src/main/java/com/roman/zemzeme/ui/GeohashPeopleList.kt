@@ -125,7 +125,16 @@ fun GeohashPeopleList(
                     when {
                         myHex != null && a.id == myHex && b.id != myHex -> -1
                         myHex != null && b.id == myHex && a.id != myHex -> 1
-                        else -> b.lastSeen.compareTo(a.lastSeen) // Most recent first
+                        else -> {
+                            val byLastSeen = b.lastSeen.compareTo(a.lastSeen) // Most recent first
+                            if (byLastSeen != 0) {
+                                byLastSeen
+                            } else {
+                                val byName = a.displayName.lowercase(Locale.ROOT)
+                                    .compareTo(b.displayName.lowercase(Locale.ROOT))
+                                if (byName != 0) byName else a.id.compareTo(b.id)
+                            }
+                        }
                     }
                 }
             }
