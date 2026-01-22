@@ -53,15 +53,72 @@ class ChatViewModel(
     }
 
     fun sendVoiceNote(toPeerIDOrNull: String?, channelOrNull: String?, filePath: String) {
-        mediaSendingManager.sendVoiceNote(toPeerIDOrNull, channelOrNull, filePath)
+        val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
+        if (toPeerIDOrNull != null && targetPeer == null) return
+
+        if (targetPeer == null && state.selectedLocationChannel.value is com.bitchat.android.geohash.ChannelID.Location) {
+            Log.w(TAG, "Blocked voice note send in geohash location chat (BLE media-only policy)")
+            return
+        }
+
+        mediaSendingManager.sendVoiceNote(targetPeer, channelOrNull, filePath)
     }
 
     fun sendFileNote(toPeerIDOrNull: String?, channelOrNull: String?, filePath: String) {
-        mediaSendingManager.sendFileNote(toPeerIDOrNull, channelOrNull, filePath)
+        val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
+        if (toPeerIDOrNull != null && targetPeer == null) return
+
+        if (targetPeer == null && state.selectedLocationChannel.value is com.bitchat.android.geohash.ChannelID.Location) {
+            Log.w(TAG, "Blocked file send in geohash location chat (BLE media-only policy)")
+            return
+        }
+
+        mediaSendingManager.sendFileNote(targetPeer, channelOrNull, filePath)
     }
 
     fun sendImageNote(toPeerIDOrNull: String?, channelOrNull: String?, filePath: String) {
-        mediaSendingManager.sendImageNote(toPeerIDOrNull, channelOrNull, filePath)
+        val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
+        if (toPeerIDOrNull != null && targetPeer == null) return
+
+        if (targetPeer == null && state.selectedLocationChannel.value is com.bitchat.android.geohash.ChannelID.Location) {
+            Log.w(TAG, "Blocked image send in geohash location chat (BLE media-only policy)")
+            return
+        }
+
+        mediaSendingManager.sendImageNote(targetPeer, channelOrNull, filePath)
+    }
+
+    private fun resolveMediaRecipientForSend(toPeerIDOrNull: String?): String? {
+        if (toPeerIDOrNull == null) return null
+
+        if (toPeerIDOrNull.startsWith("nostr_") || toPeerIDOrNull.startsWith("nostr:")) {
+            Log.w(TAG, "Blocked media send for Nostr DM target: ${toPeerIDOrNull.take(16)}…")
+            return null
+        }
+        if (toPeerIDOrNull.startsWith("p2p:")) {
+            Log.w(TAG, "Blocked media send for P2P DM target: ${toPeerIDOrNull.take(16)}…")
+            return null
+        }
+
+        val canonicalPeerID = try {
+            com.bitchat.android.services.ConversationAliasResolver.resolveCanonicalPeerID(
+                selectedPeerID = toPeerIDOrNull,
+                connectedPeers = state.getConnectedPeersValue(),
+                meshNoiseKeyForPeer = { pid -> meshService.getPeerInfo(pid)?.noisePublicKey },
+                meshHasPeer = { pid -> meshService.getPeerInfo(pid)?.isConnected == true },
+                nostrPubHexForAlias = { alias -> com.bitchat.android.nostr.GeohashAliasRegistry.get(alias) },
+                findNoiseKeyForNostr = { key -> com.bitchat.android.favorites.FavoritesPersistenceService.shared.findNoiseKey(key) }
+            )
+        } catch (_: Exception) {
+            toPeerIDOrNull
+        }
+
+        if (!meshService.hasEstablishedSession(canonicalPeerID)) {
+            Log.w(TAG, "Blocked media send: no established BLE session for ${canonicalPeerID.take(16)}…")
+            return null
+        }
+
+        return canonicalPeerID
     }
 
     fun getCurrentNpub(): String? {
@@ -296,6 +353,7 @@ class ChatViewModel(
 
         // Initialize favorites persistence service
         com.bitchat.android.favorites.FavoritesPersistenceService.initialize(getApplication())
+        com.bitchat.android.p2p.P2PFavoritesRegistry.initialize(getApplication())
 
         // Load verified fingerprints from secure storage
         verificationHandler.loadVerifiedFingerprints()
@@ -312,8 +370,13 @@ class ChatViewModel(
             val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
             p2pTransport.setMessageCallback { incomingMessage ->
                 if (incomingMessage.type == com.bitchat.android.p2p.P2PTransport.P2PMessageType.DIRECT_MESSAGE) {
-                    // Route to private chat
                     val senderPeerID = "p2p:${incomingMessage.senderPeerID}"
+
+                    if (handleIncomingP2PFavoriteNotification(senderPeerID, incomingMessage.content)) {
+                        return@setMessageCallback
+                    }
+
+                    // Route to private chat
                     val normalizedTimestamp = normalizeP2PTimestamp(incomingMessage.timestamp)
                     val messageId = buildP2PMessageId(incomingMessage.senderPeerID, normalizedTimestamp, incomingMessage.content)
                     val message = BitchatMessage(
@@ -370,6 +433,97 @@ class ChatViewModel(
         val contentHash = content.hashCode().toUInt().toString(16)
         val sequence = p2pMessageSequence.incrementAndGet()
         return "p2p_dm_${peerID}_${timestamp}_${contentHash}_$sequence"
+    }
+
+    private fun normalizeP2PConversationKey(peerID: String): String {
+        return if (peerID.startsWith("p2p:")) peerID else "p2p:$peerID"
+    }
+
+    private fun handleIncomingP2PFavoriteNotification(senderPeerID: String, content: String): Boolean {
+        if (!content.startsWith("[FAVORITED]") && !content.startsWith("[UNFAVORITED]")) {
+            return false
+        }
+
+        return try {
+            val conversationKey = normalizeP2PConversationKey(senderPeerID)
+            val isFavorite = content.startsWith("[FAVORITED]")
+            com.bitchat.android.p2p.P2PFavoritesRegistry.setPeerFavoritedUs(conversationKey, isFavorite)
+
+            val senderName = com.bitchat.android.p2p.P2PAliasRegistry.getDisplayName(conversationKey)
+                ?: "p2p:${conversationKey.removePrefix("p2p:").take(8)}..."
+            val weFavoriteThem = com.bitchat.android.p2p.P2PFavoritesRegistry.isFavorite(conversationKey)
+            val guidance = if (isFavorite) {
+                if (weFavoriteThem) {
+                    " - mutual on P2P."
+                } else {
+                    " - favorite back to mark this P2P contact as mutual."
+                }
+            } else {
+                " - mutual P2P favorite is now off."
+            }
+
+            val action = if (isFavorite) "favorited" else "unfavorited"
+            val systemMessage = BitchatMessage(
+                id = java.util.UUID.randomUUID().toString(),
+                sender = "system",
+                content = "$senderName $action you$guidance",
+                timestamp = java.util.Date(),
+                isRelay = false,
+                isPrivate = true,
+                recipientNickname = state.getNicknameValue(),
+                senderPeerID = conversationKey
+            )
+            viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
+                privateChatManager.handleIncomingPrivateMessage(systemMessage)
+            }
+            Log.d(TAG, "Processed P2P favorite notification from $conversationKey, isFavorite=$isFavorite")
+            true
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to process P2P favorite notification: ${e.message}")
+            false
+        }
+    }
+
+    private fun toggleP2PFavorite(peerID: String) {
+        val conversationKey = normalizeP2PConversationKey(peerID)
+        val currentlyFavorite = com.bitchat.android.p2p.P2PFavoritesRegistry.isFavorite(conversationKey)
+                || dataManager.favoritePeers.contains(conversationKey)
+        val isNowFavorite = !currentlyFavorite
+
+        com.bitchat.android.p2p.P2PFavoritesRegistry.setFavorite(conversationKey, isNowFavorite)
+        if (isNowFavorite) {
+            dataManager.addFavorite(conversationKey)
+        } else {
+            dataManager.removeFavorite(conversationKey)
+        }
+        state.setFavoritePeers(dataManager.favoritePeers.toSet())
+
+        sendP2PFavoriteNotification(conversationKey, isNowFavorite)
+        Log.d(TAG, "Toggled P2P favorite: peer=$conversationKey, favorite=$isNowFavorite")
+    }
+
+    private fun sendP2PFavoriteNotification(peerID: String, isFavorite: Boolean) {
+        viewModelScope.launch {
+            try {
+                val conversationKey = normalizeP2PConversationKey(peerID)
+                val rawPeerID = conversationKey.removePrefix("p2p:")
+                val myNpub = try {
+                    com.bitchat.android.nostr.NostrIdentityBridge.getCurrentNostrIdentity(getApplication())?.npub
+                } catch (_: Exception) {
+                    null
+                }
+                val content = if (isFavorite) "[FAVORITED]:${myNpub ?: ""}" else "[UNFAVORITED]:${myNpub ?: ""}"
+                val senderNickname = state.getNicknameValue() ?: meshService.myPeerID
+                val messageID = java.util.UUID.randomUUID().toString()
+                val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
+                val sent = p2pTransport.sendDirectMessage(rawPeerID, content, senderNickname, messageID)
+                if (!sent) {
+                    Log.w(TAG, "Failed to send P2P favorite notification to $conversationKey")
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Error sending P2P favorite notification: ${e.message}")
+            }
+        }
     }
     
     /**
@@ -611,6 +765,13 @@ class ChatViewModel(
     
     fun toggleFavorite(peerID: String) {
         Log.d("ChatViewModel", "toggleFavorite called for peerID: $peerID")
+
+        if (peerID.startsWith("p2p:")) {
+            toggleP2PFavorite(peerID)
+            logCurrentFavoriteState()
+            return
+        }
+
         privateChatManager.toggleFavorite(peerID)
 
         // Persist relationship in FavoritesPersistenceService
@@ -921,6 +1082,10 @@ class ChatViewModel(
     }
     
     override fun isFavorite(peerID: String): Boolean {
+        if (peerID.startsWith("p2p:")) {
+            return com.bitchat.android.p2p.P2PFavoritesRegistry.isFavorite(peerID)
+                    || dataManager.favoritePeers.contains(peerID)
+        }
         return meshDelegateHandler.isFavorite(peerID)
     }
     
@@ -1045,7 +1210,13 @@ class ChatViewModel(
                 FavoritesPersistenceService.shared.clearAllFavorites()
                 Log.d(TAG, "Cleared FavoritesPersistenceService relationships")
             } catch (_: Exception) { }
-            
+
+            try {
+                com.bitchat.android.p2p.P2PAliasRegistry.clear()
+                com.bitchat.android.p2p.P2PFavoritesRegistry.clear()
+                Log.d(TAG, "Cleared P2P alias and favorites registries")
+            } catch (_: Exception) { }
+             
             Log.d(TAG, "Cleared all cryptographic data")
         } catch (e: Exception) {
             Log.e(TAG, "Error clearing cryptographic data: ${e.message}")

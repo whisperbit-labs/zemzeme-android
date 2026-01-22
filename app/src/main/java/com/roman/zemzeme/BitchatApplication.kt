@@ -50,6 +50,7 @@ class BitchatApplication : Application() {
         // Initialize P2P Alias Registry for P2P peer display name persistence
         try {
             com.bitchat.android.p2p.P2PAliasRegistry.initialize(this)
+            com.bitchat.android.p2p.P2PFavoritesRegistry.initialize(this)
         } catch (_: Exception) { }
 
         // Initialize mesh service preferences
