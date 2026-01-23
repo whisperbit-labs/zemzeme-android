@@ -130,6 +130,7 @@ class UpdateManager private constructor(private val context: Context) {
         private const val PREF_CACHED_APK_PATH = "cached_apk_path"
         private const val PREF_CACHED_VERSION_CODE = "cached_version_code"
         private const val PREF_CACHED_VERSION_NAME = "cached_version_name"
+        private const val PREF_DISMISSED_READY_VERSION_CODE = "dismissed_ready_version_code"
         private const val PREF_LAST_CHECK_TIME = "last_check_time"
         
         @Volatile
@@ -257,6 +258,10 @@ class UpdateManager private constructor(private val context: Context) {
                         source = UpdateSource.GITHUB
                     )
                     currentUpdateInfo = info
+                    val dismissedVersionCode = prefs.getInt(PREF_DISMISSED_READY_VERSION_CODE, -1)
+                    if (dismissedVersionCode == cachedVersionCode) {
+                        Log.d(TAG, "Cached update version $cachedVersionCode was dismissed by user; restoring as banner-only ready state")
+                    }
                     _updateState.value = UpdateState.ReadyToInstall(info, cachedPath)
                     return
                 } else {
@@ -266,6 +271,20 @@ class UpdateManager private constructor(private val context: Context) {
         }
         // Clear stale cache
         clearCachedApk()
+    }
+
+    private fun hasCachedApkForVersion(versionCode: Int): Boolean {
+        val cachedVersionCode = prefs.getInt(PREF_CACHED_VERSION_CODE, -1)
+        val cachedPath = prefs.getString(PREF_CACHED_APK_PATH, null)
+        if (cachedVersionCode != versionCode || cachedPath.isNullOrBlank()) {
+            return false
+        }
+        return try {
+            val cachedFile = File(cachedPath)
+            cachedFile.exists() && cachedFile.length() > 0
+        } catch (_: Exception) {
+            false
+        }
     }
     
     /**
@@ -429,7 +448,19 @@ class UpdateManager private constructor(private val context: Context) {
                 _updateState.value = UpdateState.Idle
                 return
             }
-            
+
+            val dismissedVersionCode = prefs.getInt(PREF_DISMISSED_READY_VERSION_CODE, -1)
+            if (dismissedVersionCode == githubUpdate.versionCode && hasCachedApkForVersion(githubUpdate.versionCode)) {
+                Log.d(TAG, "Update ${githubUpdate.versionName} was dismissed by user and is cached; skipping re-prompt")
+                currentUpdateInfo = githubUpdate
+                _updateState.value = UpdateState.Idle
+                return
+            }
+
+            if (dismissedVersionCode > 0 && githubUpdate.versionCode > dismissedVersionCode) {
+                prefs.edit().remove(PREF_DISMISSED_READY_VERSION_CODE).apply()
+            }
+             
             Log.i(TAG, "GitHub update available: ${githubUpdate.versionName} (${githubUpdate.versionCode})")
             currentUpdateInfo = githubUpdate
             _updateState.value = UpdateState.Available(githubUpdate)
@@ -643,6 +674,7 @@ class UpdateManager private constructor(private val context: Context) {
                     .putString(PREF_CACHED_APK_PATH, apkFile.absolutePath)
                     .putInt(PREF_CACHED_VERSION_CODE, info.versionCode)
                     .putString(PREF_CACHED_VERSION_NAME, info.versionName)
+                    .remove(PREF_DISMISSED_READY_VERSION_CODE)
                     .apply()
                 
                 _updateState.value = UpdateState.ReadyToInstall(info, apkFile.absolutePath)
@@ -985,6 +1017,7 @@ class UpdateManager private constructor(private val context: Context) {
             .remove(PREF_CACHED_APK_PATH)
             .remove(PREF_CACHED_VERSION_CODE)
             .remove(PREF_CACHED_VERSION_NAME)
+            .remove(PREF_DISMISSED_READY_VERSION_CODE)
             .apply()
     }
     
@@ -996,14 +1029,16 @@ class UpdateManager private constructor(private val context: Context) {
         val state = _updateState.value
         when (state) {
             is UpdateState.ReadyToInstall -> {
-                Log.d(TAG, "Update dismissed, APK cached for later")
-                // State remains ReadyToInstall - APK is still available
+                Log.d(TAG, "Update dismissed by user, APK cached for later")
+                prefs.edit().putInt(PREF_DISMISSED_READY_VERSION_CODE, state.info.versionCode).apply()
+                _updateState.value = UpdateState.Idle
             }
             is UpdateState.PendingUserAction -> {
-                Log.d(TAG, "User action cancelled, returning to ready state")
+                Log.d(TAG, "User action cancelled, deferring update")
                 currentUpdateInfo?.let {
-                    _updateState.value = UpdateState.ReadyToInstall(it, prefs.getString(PREF_CACHED_APK_PATH, "") ?: "")
+                    prefs.edit().putInt(PREF_DISMISSED_READY_VERSION_CODE, it.versionCode).apply()
                 }
+                _updateState.value = UpdateState.Idle
             }
             is UpdateState.Error -> {
                 Log.d(TAG, "Error dismissed, resetting to idle")
@@ -1013,6 +1048,15 @@ class UpdateManager private constructor(private val context: Context) {
                 // No action needed for other states
             }
         }
+    }
+
+    /**
+     * Returns true when the ready-to-install dialog should stay hidden for this version.
+     *
+     * The update remains installable from the compact banner.
+     */
+    fun isReadyDialogDismissed(versionCode: Int): Boolean {
+        return prefs.getInt(PREF_DISMISSED_READY_VERSION_CODE, -1) == versionCode
     }
     
     /**

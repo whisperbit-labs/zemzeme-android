@@ -52,74 +52,79 @@ class NostrTransport(
         messageID: String
     ) {
         transportScope.launch {
-            try {
-                // Resolve favorite by full noise key or by short peerID fallback
-                var recipientNostrPubkey: String? = null
-                
-                // Resolve by peerID first (new peerID→npub index), then fall back to noise key mapping
-                recipientNostrPubkey = resolveNostrPublicKey(to)
-                
-                if (recipientNostrPubkey == null) {
-                    Log.w(TAG, "No Nostr public key found for peerID: $to")
-                    return@launch
+            sendPrivateMessageAwait(content, to, recipientNickname, messageID)
+                .onFailure { e ->
+                    Log.e(TAG, "Failed to send private message via Nostr: ${e.message}")
                 }
-                
-                val senderIdentity = NostrIdentityBridge.getCurrentNostrIdentity(context)
-                if (senderIdentity == null) {
-                    Log.e(TAG, "No Nostr identity available")
-                    return@launch
+        }
+    }
+
+    suspend fun sendPrivateMessageAwait(
+        content: String,
+        to: String,
+        recipientNickname: String,
+        messageID: String
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            if (!NostrRelayManager.isEnabled) {
+                throw IllegalStateException("Nostr transport is disabled")
+            }
+
+            val relayManager = NostrRelayManager.getInstance(context)
+            if (!relayManager.isConnected.value) {
+                throw IllegalStateException("No connected Nostr relays")
+            }
+
+            val recipientNostrPubkey = resolveNostrPublicKey(to)
+                ?: throw IllegalStateException("No Nostr public key found for peerID: $to")
+
+            val senderIdentity = NostrIdentityBridge.getCurrentNostrIdentity(context)
+                ?: throw IllegalStateException("No Nostr identity available")
+
+            Log.d(
+                TAG,
+                "NostrTransport: preparing PM to ${recipientNostrPubkey.take(16)}... for peerID ${to.take(8)}... id=${messageID.take(8)}... nick=${recipientNickname.take(16)}"
+            )
+
+            val recipientHex = try {
+                val (hrp, data) = Bech32.decode(recipientNostrPubkey)
+                if (hrp != "npub") {
+                    throw IllegalStateException("Recipient key is not npub (hrp=$hrp)")
                 }
-                
-                Log.d(TAG, "NostrTransport: preparing PM to ${recipientNostrPubkey.take(16)}... for peerID ${to.take(8)}... id=${messageID.take(8)}...")
-                
-                // Convert recipient npub -> hex (x-only)
-                val recipientHex = try {
-                    val (hrp, data) = Bech32.decode(recipientNostrPubkey)
-                    if (hrp != "npub") {
-                        Log.e(TAG, "NostrTransport: recipient key not npub (hrp=$hrp)")
-                        return@launch
-                    }
-                    data.joinToString("") { "%02x".format(it) }
-                } catch (e: Exception) {
-                    Log.e(TAG, "NostrTransport: failed to decode npub -> hex: $e")
-                    return@launch
-                }
-                
-                // Strict: lookup the recipient's current BitChat peer ID using favorites mapping
-                val recipientPeerIDForEmbed = try {
-                    com.bitchat.android.favorites.FavoritesPersistenceService.shared
-                        .findPeerIDForNostrPubkey(recipientNostrPubkey)
-                } catch (_: Exception) { null }
-                if (recipientPeerIDForEmbed.isNullOrBlank()) {
-                    Log.e(TAG, "NostrTransport: no peerID stored for recipient npub; cannot embed PM. npub=${recipientNostrPubkey.take(16)}...")
-                    return@launch
-                }
-                val embedded = NostrEmbeddedBitChat.encodePMForNostr(
-                    content = content,
-                    messageID = messageID,
-                    recipientPeerID = recipientPeerIDForEmbed,
-                    senderPeerID = senderPeerID
-                )
-                
-                
-                if (embedded == null) {
-                    Log.e(TAG, "NostrTransport: failed to embed PM packet")
-                    return@launch
-                }
-                
-                val giftWraps = NostrProtocol.createPrivateMessage(
-                    content = embedded,
-                    recipientPubkey = recipientHex,
-                    senderIdentity = senderIdentity
-                )
-                
-                giftWraps.forEach { event ->
-                    Log.d(TAG, "NostrTransport: sending PM giftWrap id=${event.id.take(16)}...")
-                    NostrRelayManager.getInstance(context).sendEvent(event)
-                }
-                
+                data.joinToString("") { "%02x".format(it) }
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to send private message via Nostr: ${e.message}")
+                throw IllegalStateException("Failed to decode recipient npub", e)
+            }
+
+            val recipientPeerIDForEmbed = try {
+                com.bitchat.android.favorites.FavoritesPersistenceService.shared
+                    .findPeerIDForNostrPubkey(recipientNostrPubkey)
+            } catch (_: Exception) { null }
+            if (recipientPeerIDForEmbed.isNullOrBlank()) {
+                throw IllegalStateException(
+                    "No peerID stored for recipient npub: ${recipientNostrPubkey.take(16)}..."
+                )
+            }
+
+            val embedded = NostrEmbeddedBitChat.encodePMForNostr(
+                content = content,
+                messageID = messageID,
+                recipientPeerID = recipientPeerIDForEmbed,
+                senderPeerID = senderPeerID
+            ) ?: throw IllegalStateException("Failed to embed PM packet")
+
+            val giftWraps = NostrProtocol.createPrivateMessage(
+                content = embedded,
+                recipientPubkey = recipientHex,
+                senderIdentity = senderIdentity
+            )
+            if (giftWraps.isEmpty()) {
+                throw IllegalStateException("No Nostr events generated for private message")
+            }
+
+            giftWraps.forEach { event ->
+                Log.d(TAG, "NostrTransport: sending PM giftWrap id=${event.id.take(16)}...")
+                relayManager.sendEvent(event)
             }
         }
     }
@@ -223,119 +228,126 @@ class NostrTransport(
     
     fun sendFavoriteNotification(to: String, isFavorite: Boolean) {
         transportScope.launch {
-            try {
-                var recipientNostrPubkey: String? = null
-                
-                // Try to resolve from favorites persistence service
-                recipientNostrPubkey = resolveNostrPublicKey(to)
-                
-                if (recipientNostrPubkey == null) {
-                    Log.w(TAG, "No Nostr public key found for favorite notification to: $to")
-                    return@launch
+            sendFavoriteNotificationAwait(to, isFavorite)
+                .onFailure { e ->
+                    Log.e(TAG, "Failed to send favorite notification via Nostr: ${e.message}")
                 }
-                
-                val senderIdentity = NostrIdentityBridge.getCurrentNostrIdentity(context)
-                if (senderIdentity == null) {
-                    Log.e(TAG, "No Nostr identity available for favorite notification")
-                    return@launch
+        }
+    }
+
+    suspend fun sendFavoriteNotificationAwait(to: String, isFavorite: Boolean): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            if (!NostrRelayManager.isEnabled) {
+                throw IllegalStateException("Nostr transport is disabled")
+            }
+
+            val relayManager = NostrRelayManager.getInstance(context)
+            if (!relayManager.isConnected.value) {
+                throw IllegalStateException("No connected Nostr relays")
+            }
+
+            val recipientNostrPubkey = resolveNostrPublicKey(to)
+                ?: throw IllegalStateException("No Nostr public key found for favorite notification to: $to")
+
+            val senderIdentity = NostrIdentityBridge.getCurrentNostrIdentity(context)
+                ?: throw IllegalStateException("No Nostr identity available for favorite notification")
+
+            val content = if (isFavorite) {
+                "[FAVORITED]:${senderIdentity.npub}"
+            } else {
+                "[UNFAVORITED]:${senderIdentity.npub}"
+            }
+
+            val recipientHex = try {
+                val (hrp, data) = Bech32.decode(recipientNostrPubkey)
+                if (hrp != "npub") {
+                    throw IllegalStateException("Recipient key is not npub (hrp=$hrp)")
                 }
-                
-                val content = if (isFavorite) "[FAVORITED]:${senderIdentity.npub}" else "[UNFAVORITED]:${senderIdentity.npub}"
-                
-                Log.d(TAG, "NostrTransport: preparing FAVORITE($isFavorite) to ${recipientNostrPubkey.take(16)}...")
-                
-                // Convert recipient npub -> hex
-                val recipientHex = try {
-                    val (hrp, data) = Bech32.decode(recipientNostrPubkey)
-                    if (hrp != "npub") return@launch
-                    data.joinToString("") { "%02x".format(it) }
-                } catch (e: Exception) {
-                    return@launch
-                }
-                
-                val embedded = NostrEmbeddedBitChat.encodePMForNostr(
-                    content = content,
-                    messageID = UUID.randomUUID().toString(),
-                    recipientPeerID = to,
-                    senderPeerID = senderPeerID
-                )
-                
-                if (embedded == null) {
-                    Log.e(TAG, "NostrTransport: failed to embed favorite notification")
-                    return@launch
-                }
-                
-                val giftWraps = NostrProtocol.createPrivateMessage(
-                    content = embedded,
-                    recipientPubkey = recipientHex,
-                    senderIdentity = senderIdentity
-                )
-                
-                giftWraps.forEach { event ->
-                    Log.d(TAG, "NostrTransport: sending favorite giftWrap id=${event.id.take(16)}...")
-                    NostrRelayManager.getInstance(context).sendEvent(event)
-                }
-                
+                data.joinToString("") { "%02x".format(it) }
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to send favorite notification via Nostr: ${e.message}")
+                throw IllegalStateException("Failed to decode recipient npub", e)
+            }
+
+            val embedded = NostrEmbeddedBitChat.encodePMForNostr(
+                content = content,
+                messageID = UUID.randomUUID().toString(),
+                recipientPeerID = to,
+                senderPeerID = senderPeerID
+            ) ?: throw IllegalStateException("Failed to embed favorite notification")
+
+            val giftWraps = NostrProtocol.createPrivateMessage(
+                content = embedded,
+                recipientPubkey = recipientHex,
+                senderIdentity = senderIdentity
+            )
+            if (giftWraps.isEmpty()) {
+                throw IllegalStateException("No Nostr events generated for favorite notification")
+            }
+
+            giftWraps.forEach { event ->
+                Log.d(TAG, "NostrTransport: sending favorite giftWrap id=${event.id.take(16)}...")
+                relayManager.sendEvent(event)
             }
         }
     }
     
     fun sendDeliveryAck(messageID: String, to: String) {
         transportScope.launch {
-            try {
-                var recipientNostrPubkey: String? = null
-                
-                // Try to resolve from favorites persistence service
-                recipientNostrPubkey = resolveNostrPublicKey(to)
-                
-                if (recipientNostrPubkey == null) {
-                    Log.w(TAG, "No Nostr public key found for delivery ack to: $to")
-                    return@launch
+            sendDeliveryAckAwait(messageID, to)
+                .onFailure { e ->
+                    Log.e(TAG, "Failed to send delivery ack via Nostr: ${e.message}")
                 }
-                
-                val senderIdentity = NostrIdentityBridge.getCurrentNostrIdentity(context)
-                if (senderIdentity == null) {
-                    Log.e(TAG, "No Nostr identity available for delivery ack")
-                    return@launch
+        }
+    }
+
+    suspend fun sendDeliveryAckAwait(messageID: String, to: String): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            if (!NostrRelayManager.isEnabled) {
+                throw IllegalStateException("Nostr transport is disabled")
+            }
+
+            val relayManager = NostrRelayManager.getInstance(context)
+            if (!relayManager.isConnected.value) {
+                throw IllegalStateException("No connected Nostr relays")
+            }
+
+            val recipientNostrPubkey = resolveNostrPublicKey(to)
+                ?: throw IllegalStateException("No Nostr public key found for delivery ack to: $to")
+
+            val senderIdentity = NostrIdentityBridge.getCurrentNostrIdentity(context)
+                ?: throw IllegalStateException("No Nostr identity available for delivery ack")
+
+            Log.d(TAG, "NostrTransport: preparing DELIVERED ack for id=${messageID.take(8)}... to ${recipientNostrPubkey.take(16)}...")
+
+            val recipientHex = try {
+                val (hrp, data) = Bech32.decode(recipientNostrPubkey)
+                if (hrp != "npub") {
+                    throw IllegalStateException("Recipient key is not npub (hrp=$hrp)")
                 }
-                
-                Log.d(TAG, "NostrTransport: preparing DELIVERED ack for id=${messageID.take(8)}... to ${recipientNostrPubkey.take(16)}...")
-                
-                val recipientHex = try {
-                    val (hrp, data) = Bech32.decode(recipientNostrPubkey)
-                    if (hrp != "npub") return@launch
-                    data.joinToString("") { "%02x".format(it) }
-                } catch (e: Exception) {
-                    return@launch
-                }
-                
-                val ack = NostrEmbeddedBitChat.encodeAckForNostr(
-                    type = NoisePayloadType.DELIVERED,
-                    messageID = messageID,
-                    recipientPeerID = to,
-                    senderPeerID = senderPeerID
-                )
-                
-                if (ack == null) {
-                    Log.e(TAG, "NostrTransport: failed to embed DELIVERED ack")
-                    return@launch
-                }
-                
-                val giftWraps = NostrProtocol.createPrivateMessage(
-                    content = ack,
-                    recipientPubkey = recipientHex,
-                    senderIdentity = senderIdentity
-                )
-                
-                giftWraps.forEach { event ->
-                    Log.d(TAG, "NostrTransport: sending DELIVERED ack giftWrap id=${event.id.take(16)}...")
-                    NostrRelayManager.getInstance(context).sendEvent(event)
-                }
-                
+                data.joinToString("") { "%02x".format(it) }
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to send delivery ack via Nostr: ${e.message}")
+                throw IllegalStateException("Failed to decode recipient npub", e)
+            }
+
+            val ack = NostrEmbeddedBitChat.encodeAckForNostr(
+                type = NoisePayloadType.DELIVERED,
+                messageID = messageID,
+                recipientPeerID = to,
+                senderPeerID = senderPeerID
+            ) ?: throw IllegalStateException("Failed to embed DELIVERED ack")
+
+            val giftWraps = NostrProtocol.createPrivateMessage(
+                content = ack,
+                recipientPubkey = recipientHex,
+                senderIdentity = senderIdentity
+            )
+            if (giftWraps.isEmpty()) {
+                throw IllegalStateException("No Nostr events generated for delivery ack")
+            }
+
+            giftWraps.forEach { event ->
+                Log.d(TAG, "NostrTransport: sending DELIVERED ack giftWrap id=${event.id.take(16)}...")
+                relayManager.sendEvent(event)
             }
         }
     }

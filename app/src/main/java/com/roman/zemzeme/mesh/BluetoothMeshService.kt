@@ -19,6 +19,12 @@ import com.roman.zemzeme.services.VerificationService
 import com.roman.zemzeme.p2p.P2PTransport
 import com.roman.zemzeme.p2p.P2PConfig
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.*
 import kotlin.math.sign
 import kotlin.random.Random
@@ -38,6 +44,16 @@ import kotlin.random.Random
  */
 class BluetoothMeshService(private val context: Context) {
     private val debugManager by lazy { try { com.bitchat.android.ui.debug.DebugSettingsManager.getInstance() } catch (e: Exception) { null } }
+
+    data class TransportRuntimeState(
+        val desiredToggles: P2PConfig.TransportToggles,
+        val bleRunning: Boolean,
+        val p2pRunning: Boolean,
+        val nostrEnabled: Boolean,
+        val nostrConnected: Boolean,
+        val isActive: Boolean,
+        val isApplying: Boolean
+    )
     
     companion object {
         private const val TAG = "BluetoothMeshService"
@@ -78,6 +94,30 @@ class BluetoothMeshService(private val context: Context) {
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     // Tracks whether this instance has been terminated via stopServices()
     private var terminated = false
+    private val transportMutationLock = Mutex()
+
+    @Volatile
+    private var bleTransportRunning = false
+
+    @Volatile
+    private var desiredTransportToggles: P2PConfig.TransportToggles = p2pConfig.getTransportToggles()
+
+    private val _transportRuntimeState = MutableStateFlow(
+        TransportRuntimeState(
+            desiredToggles = desiredTransportToggles,
+            bleRunning = false,
+            p2pRunning = p2pTransport.isRunning(),
+            nostrEnabled = desiredTransportToggles.nostrEnabled,
+            nostrConnected = runCatching {
+                com.bitchat.android.nostr.NostrRelayManager.getInstance(context).isConnected.value
+            }.getOrDefault(false),
+            isActive = false,
+            isApplying = false
+        )
+    )
+    val transportRuntimeState: StateFlow<TransportRuntimeState> = _transportRuntimeState.asStateFlow()
+
+    private var periodicAnnounceJob: Job? = null
     
     init {
         Log.i(TAG, "Initializing BluetoothMeshService for peer=$myPeerID")
@@ -123,6 +163,28 @@ class BluetoothMeshService(private val context: Context) {
         peerManager.isPeerDirectlyConnected = { peerID ->
             connectionManager.addressPeerMap.containsValue(peerID)
         }
+
+        val configuredToggles = p2pConfig.getTransportToggles()
+        desiredTransportToggles = configuredToggles
+        updateActiveStateLocked(desiredTransportToggles)
+        publishTransportRuntimeStateLocked(isApplying = false)
+
+        serviceScope.launch {
+            p2pTransport.p2pRepository.nodeStatus.collect {
+                transportMutationLock.withLock {
+                    updateActiveStateLocked()
+                    publishTransportRuntimeStateLocked(isApplying = false)
+                }
+            }
+        }
+
+        serviceScope.launch {
+            com.bitchat.android.nostr.NostrRelayManager.getInstance(context).isConnected.collect {
+                transportMutationLock.withLock {
+                    publishTransportRuntimeStateLocked(isApplying = false)
+                }
+            }
+        }
         
         Log.d(TAG, "Delegates set up; GossipSyncManager initialized")
     }
@@ -133,10 +195,10 @@ class BluetoothMeshService(private val context: Context) {
     private fun startPeriodicDebugLogging() {
         serviceScope.launch {
             Log.d(TAG, "Starting periodic debug logging loop")
-            while (isActive) {
+            while (this@BluetoothMeshService.isActive) {
                 try {
                     delay(10000) // 10 seconds
-                    if (isActive) { // Double-check before logging
+                    if (this@BluetoothMeshService.isActive) { // Double-check before logging
                         val debugInfo = getDebugStatus()
                         Log.d(TAG, "=== PERIODIC DEBUG STATUS ===\n$debugInfo\n=== END DEBUG STATUS ===")
                     }
@@ -144,7 +206,7 @@ class BluetoothMeshService(private val context: Context) {
                     Log.e(TAG, "Error in periodic debug logging: ${e.message}")
                 }
             }
-            Log.d(TAG, "Periodic debug logging loop ended (isActive=$isActive)")
+            Log.d(TAG, "Periodic debug logging loop ended (isActive=${this@BluetoothMeshService.isActive})")
         }
     }
 
@@ -152,17 +214,208 @@ class BluetoothMeshService(private val context: Context) {
      * Send broadcast announcement every 30 seconds
      */
     private fun sendPeriodicBroadcastAnnounce() {
-        serviceScope.launch {
+        periodicAnnounceJob?.cancel()
+        periodicAnnounceJob = serviceScope.launch {
             Log.d(TAG, "Starting periodic announce loop")
-            while (isActive) {
+            while (this@BluetoothMeshService.isActive && bleTransportRunning) {
                 try {
                     delay(30000) // 30 seconds
                     sendBroadcastAnnounce()
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (e: Exception) {
                     Log.e(TAG, "Error in periodic broadcast announce: ${e.message}")
                 }
             }
-            Log.d(TAG, "Periodic announce loop ended (isActive=$isActive)")
+            Log.d(TAG, "Periodic announce loop ended (isActive=${this@BluetoothMeshService.isActive}, bleRunning=$bleTransportRunning)")
+        }
+    }
+
+    private fun stopPeriodicBroadcastAnnounce() {
+        periodicAnnounceJob?.cancel()
+        periodicAnnounceJob = null
+    }
+
+    private fun isP2PEnabledAtRuntime(): Boolean {
+        val status = p2pTransport.p2pRepository.nodeStatus.value
+        return p2pTransport.isRunning() || status == com.bitchat.android.p2p.P2PNodeStatus.STARTING
+    }
+
+    private fun normalizeMutuallyExclusiveTransportToggles(
+        toggles: P2PConfig.TransportToggles,
+        preferP2PWhenConflict: Boolean = true
+    ): P2PConfig.TransportToggles {
+        if (toggles.p2pEnabled && toggles.nostrEnabled) {
+            return if (preferP2PWhenConflict) {
+                toggles.copy(nostrEnabled = false)
+            } else {
+                toggles.copy(p2pEnabled = false)
+            }
+        }
+        return toggles
+    }
+
+    private fun publishTransportRuntimeStateLocked(isApplying: Boolean) {
+        val relayConnected = runCatching {
+            com.bitchat.android.nostr.NostrRelayManager.getInstance(context).isConnected.value
+        }.getOrDefault(false)
+
+        _transportRuntimeState.value = TransportRuntimeState(
+            desiredToggles = desiredTransportToggles,
+            bleRunning = bleTransportRunning,
+            p2pRunning = isP2PEnabledAtRuntime(),
+            nostrEnabled = desiredTransportToggles.nostrEnabled,
+            nostrConnected = relayConnected,
+            isActive = isActive,
+            isApplying = isApplying
+        )
+    }
+
+    private fun updateActiveStateLocked(toggles: P2PConfig.TransportToggles = desiredTransportToggles) {
+        val p2pExpectedOrRunning = (toggles.p2pEnabled && p2pConfig.autoStart) || isP2PEnabledAtRuntime()
+        isActive = bleTransportRunning || p2pExpectedOrRunning || toggles.nostrEnabled
+    }
+
+    private fun isTransportStateConvergedLocked(target: P2PConfig.TransportToggles): Boolean {
+        val p2pShouldRun = target.p2pEnabled && p2pConfig.autoStart
+        val p2pRunning = isP2PEnabledAtRuntime()
+
+        val bleConverged = if (target.bleEnabled) bleTransportRunning else !bleTransportRunning
+        val p2pConverged = if (p2pShouldRun) p2pRunning else !p2pRunning
+        val nostrConverged = com.bitchat.android.nostr.NostrRelayManager.isEnabled == target.nostrEnabled
+
+        return bleConverged && p2pConverged && nostrConverged
+    }
+
+    private suspend fun applyTransportSettingsLocked(
+        target: P2PConfig.TransportToggles,
+        sendBleLeaveOnDisable: Boolean
+    ) {
+        val normalizedTarget = normalizeMutuallyExclusiveTransportToggles(target, preferP2PWhenConflict = true)
+        if (normalizedTarget != target) {
+            Log.w(TAG, "P2P and Nostr cannot be enabled together; forcing Nostr off")
+        }
+
+        if (normalizedTarget.p2pEnabled && com.bitchat.android.net.TorPreferenceManager.get(context) == com.bitchat.android.net.TorMode.ON) {
+            com.bitchat.android.net.TorPreferenceManager.set(context, com.bitchat.android.net.TorMode.OFF)
+            Log.w(TAG, "Disabled Tor because P2P over Tor is not supported")
+        }
+
+        if (p2pConfig.bleEnabled != normalizedTarget.bleEnabled) {
+            p2pConfig.bleEnabled = normalizedTarget.bleEnabled
+        }
+        if (p2pConfig.p2pEnabled != normalizedTarget.p2pEnabled) {
+            p2pConfig.p2pEnabled = normalizedTarget.p2pEnabled
+        }
+        if (p2pConfig.nostrEnabled != normalizedTarget.nostrEnabled) {
+            p2pConfig.nostrEnabled = normalizedTarget.nostrEnabled
+        }
+
+        desiredTransportToggles = normalizedTarget
+
+        applyNostrEnabledLocked(normalizedTarget.nostrEnabled)
+
+        if (normalizedTarget.bleEnabled) {
+            startBleTransportLocked()
+        } else {
+            stopBleTransportLocked(sendLeave = sendBleLeaveOnDisable, cancelScope = false)
+        }
+
+        if (normalizedTarget.p2pEnabled && p2pConfig.autoStart) {
+            startP2PTransportLocked()
+        } else {
+            stopP2PTransportLocked()
+        }
+
+        updateActiveStateLocked(normalizedTarget)
+    }
+
+    private suspend fun startBleTransportLocked(): Boolean {
+        if (!p2pConfig.bleEnabled) {
+            bleTransportRunning = false
+            return false
+        }
+        if (bleTransportRunning) {
+            return true
+        }
+
+        val started = connectionManager.startServices()
+        if (started) {
+            bleTransportRunning = true
+            sendPeriodicBroadcastAnnounce()
+            gossipSyncManager.start()
+            Log.i(TAG, "BLE transport started")
+        } else {
+            bleTransportRunning = false
+            Log.w(TAG, "BLE transport failed to start (Bluetooth may be unavailable)")
+        }
+        return started
+    }
+
+    private suspend fun stopBleTransportLocked(sendLeave: Boolean, cancelScope: Boolean) {
+        if (!bleTransportRunning) {
+            if (cancelScope) {
+                connectionManager.stopServices(cancelScope = true)
+            }
+            return
+        }
+
+        if (sendLeave) {
+            runCatching { sendLeaveAnnouncement() }
+        }
+
+        stopPeriodicBroadcastAnnounce()
+        runCatching { gossipSyncManager.stop() }
+        connectionManager.stopServices(cancelScope = cancelScope)
+        bleTransportRunning = false
+        Log.i(TAG, "BLE transport stopped")
+    }
+
+    private suspend fun startP2PTransportLocked() {
+        if (!p2pConfig.p2pEnabled || !p2pConfig.autoStart) {
+            return
+        }
+        if (p2pTransport.isRunning()) {
+            return
+        }
+
+        try {
+            val identityManager = com.bitchat.android.identity.SecureIdentityStateManager(context)
+            val p2pKey = identityManager.getP2PPrivateKey()
+            p2pTransport.start(p2pKey).onSuccess {
+                Log.i(TAG, "P2P transport started with Peer ID: ${p2pTransport.getMyPeerID()}")
+                p2pTransport.getMyPeerID()?.let { peerID ->
+                    identityManager.saveP2PPeerID(peerID)
+                }
+            }.onFailure { e ->
+                Log.e(TAG, "Failed to start P2P transport: ${e.message}")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error starting P2P transport: ${e.message}", e)
+        }
+    }
+
+    private suspend fun stopP2PTransportLocked() {
+        if (!p2pTransport.isRunning() &&
+            p2pTransport.p2pRepository.nodeStatus.value == com.bitchat.android.p2p.P2PNodeStatus.STOPPED
+        ) {
+            return
+        }
+
+        runCatching { p2pTransport.stop() }
+            .onSuccess { Log.d(TAG, "P2P transport stopped") }
+            .onFailure { e -> Log.w(TAG, "Error stopping P2P transport: ${e.message}") }
+    }
+
+    private fun applyNostrEnabledLocked(enabled: Boolean) {
+        com.bitchat.android.nostr.NostrRelayManager.isEnabled = enabled
+        val relayManager = com.bitchat.android.nostr.NostrRelayManager.getInstance(context)
+        if (enabled) {
+            relayManager.connect()
+            Log.d(TAG, "Nostr transport enabled")
+        } else {
+            relayManager.disconnect()
+            Log.d(TAG, "Nostr transport disabled")
         }
     }
     
@@ -626,122 +879,144 @@ class BluetoothMeshService(private val context: Context) {
      * Start the mesh service
      */
     fun startServices() {
-        // Prevent double starts (defensive programming)
-        if (isActive) {
-            Log.w(TAG, "Mesh service already active, ignoring duplicate start request")
-            return
-        }
         if (terminated) {
             // This instance's scope was cancelled previously; refuse to start to avoid using dead scopes.
             Log.e(TAG, "Mesh service instance was terminated; create a new instance instead of restarting")
             return
         }
-        
-        Log.i(TAG, "Starting mesh service with peer ID: $myPeerID")
-        
-        // Initialize Nostr enabled state from config
-        com.bitchat.android.nostr.NostrRelayManager.isEnabled = p2pConfig.nostrEnabled
-        Log.d(TAG, "Nostr enabled from config: ${p2pConfig.nostrEnabled}")
-        
-        // Try to start BLE services (may fail if BLE is disabled)
-        val bleStarted = if (p2pConfig.bleEnabled) {
-            val result = connectionManager.startServices()
-            if (result) {
-                Log.i(TAG, "✅ BLE services started successfully")
-                // Start periodic announcements for peer discovery and connectivity
-                sendPeriodicBroadcastAnnounce()
-                Log.d(TAG, "Started periodic broadcast announcements (every 30 seconds)")
-                // Start periodic syncs
-                gossipSyncManager.start()
-                Log.d(TAG, "GossipSyncManager started")
-            } else {
-                Log.w(TAG, "⚠️ BLE services failed to start (Bluetooth may be unavailable)")
+
+        val configuredToggles = normalizeMutuallyExclusiveTransportToggles(
+            p2pConfig.getTransportToggles(),
+            preferP2PWhenConflict = true
+        )
+        desiredTransportToggles = configuredToggles
+
+        serviceScope.launch {
+            val result = applyPendingTransportSettings(sendBleLeaveOnDisable = false)
+            result.onFailure { e ->
+                Log.e(TAG, "Failed to apply transport settings on start: ${e.message}", e)
             }
-            result
-        } else {
-            Log.i(TAG, "BLE is disabled in settings, skipping Bluetooth services")
-            false
         }
-        
-        // Start P2P transport if enabled (independent of BLE)
-        if (p2pConfig.p2pEnabled && p2pConfig.autoStart) {
-            Log.i(TAG, "🚀 P2P transport enabled, starting...")
-            serviceScope.launch {
-                try {
-                    // Get P2P key from identity manager
-                    val identityManager = com.bitchat.android.identity.SecureIdentityStateManager(context)
-                    val p2pKey = identityManager.getP2PPrivateKey()
-                    Log.d(TAG, "P2P key obtained: ${if (p2pKey != null) "yes" else "generating new"}")
-                    
-                    p2pTransport.start(p2pKey).onSuccess {
-                        Log.i(TAG, "✅ P2P transport started with Peer ID: ${p2pTransport.getMyPeerID()}")
-                        // Save peer ID for reference
-                        p2pTransport.getMyPeerID()?.let { peerID ->
-                            identityManager.saveP2PPeerID(peerID)
-                        }
-                    }.onFailure { e ->
-                        Log.e(TAG, "❌ Failed to start P2P transport: ${e.message}")
-                        Log.e(TAG, "   P2P will be unavailable. Check logcat for P2PLibraryRepository errors.")
+    }
+
+    private suspend fun applyPendingTransportSettings(sendBleLeaveOnDisable: Boolean): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            transportMutationLock.withLock {
+                if (terminated) {
+                    publishTransportRuntimeStateLocked(isApplying = false)
+                    Result.failure(IllegalStateException("Service terminated"))
+                } else {
+                    if (isTransportStateConvergedLocked(desiredTransportToggles)) {
+                        updateActiveStateLocked(desiredTransportToggles)
+                        publishTransportRuntimeStateLocked(isApplying = false)
+                        return@withContext Result.success(Unit)
                     }
-                } catch (e: Exception) {
-                    Log.e(TAG, "❌ Error starting P2P transport: ${e.message}", e)
+
+                    publishTransportRuntimeStateLocked(isApplying = true)
+
+                    try {
+                        var applied: P2PConfig.TransportToggles? = null
+                        while (applied != desiredTransportToggles) {
+                            val target = desiredTransportToggles
+                            applyTransportSettingsLocked(target, sendBleLeaveOnDisable)
+                            applied = target
+                        }
+
+                        if (!this@BluetoothMeshService.isActive) {
+                            Log.w(TAG, "All transports are disabled or unavailable; mesh marked inactive")
+                        }
+
+                        publishTransportRuntimeStateLocked(isApplying = false)
+                        Result.success(Unit)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Transport apply failed: ${e.message}", e)
+                        publishTransportRuntimeStateLocked(isApplying = false)
+                        Result.failure(e)
+                    }
                 }
             }
+        }
+
+    suspend fun applyTransportSettings(settings: P2PConfig.TransportToggles): Result<Unit> {
+        if (terminated) {
+            return Result.failure(IllegalStateException("Service terminated"))
+        }
+
+        desiredTransportToggles = normalizeMutuallyExclusiveTransportToggles(
+            settings,
+            preferP2PWhenConflict = true
+        )
+        return applyPendingTransportSettings(sendBleLeaveOnDisable = true)
+    }
+
+    suspend fun setBleEnabled(enabled: Boolean): Result<Unit> {
+        if (terminated) {
+            return Result.failure(IllegalStateException("Service terminated"))
+        }
+
+        val target = desiredTransportToggles.copy(bleEnabled = enabled)
+        return applyTransportSettings(target)
+    }
+
+    suspend fun setP2PEnabled(enabled: Boolean): Result<Unit> {
+        if (terminated) {
+            return Result.failure(IllegalStateException("Service terminated"))
+        }
+
+        val target = if (enabled) {
+            desiredTransportToggles.copy(p2pEnabled = true, nostrEnabled = false)
         } else {
-            Log.d(TAG, "P2P transport not starting: enabled=${p2pConfig.p2pEnabled}, autoStart=${p2pConfig.autoStart}")
+            desiredTransportToggles.copy(p2pEnabled = false)
         }
-        
-        // Mark as active if any transport succeeded or is starting
-        isActive = bleStarted || p2pConfig.p2pEnabled
-        if (!isActive) {
-            Log.e(TAG, "❌ No transports started - mesh service inactive")
+        return applyTransportSettings(target)
+    }
+
+    suspend fun setNostrEnabled(enabled: Boolean): Result<Unit> {
+        if (terminated) {
+            return Result.failure(IllegalStateException("Service terminated"))
         }
+
+        val target = if (enabled) {
+            desiredTransportToggles.copy(nostrEnabled = true, p2pEnabled = false)
+        } else {
+            desiredTransportToggles.copy(nostrEnabled = false)
+        }
+        return applyTransportSettings(target)
     }
     
     /**
      * Stop all mesh services
      */
     fun stopServices() {
-        if (!isActive) {
-            Log.w(TAG, "Mesh service not active, ignoring stop request")
+        if (terminated) {
+            Log.w(TAG, "Mesh service already terminated, ignoring stop request")
             return
         }
-        
+
         Log.i(TAG, "Stopping Bluetooth mesh service")
-        isActive = false
-        
-        // Send leave announcement
-        sendLeaveAnnouncement()
-        
+
         serviceScope.launch {
-            Log.d(TAG, "Stopping subcomponents and cancelling scope...")
-            delay(200) // Give leave message time to send
-            
-            // Stop all components
-            gossipSyncManager.stop()
-            Log.d(TAG, "GossipSyncManager stopped")
-            connectionManager.stopServices()
-            Log.d(TAG, "BluetoothConnectionManager stop requested")
-            
-            // Stop P2P transport
-            try {
-                p2pTransport.stop()
-                Log.d(TAG, "P2P transport stopped")
-            } catch (e: Exception) {
-                Log.w(TAG, "Error stopping P2P transport: ${e.message}")
+            transportMutationLock.withLock {
+                Log.d(TAG, "Stopping subcomponents and cancelling scope...")
+                stopBleTransportLocked(sendLeave = true, cancelScope = true)
+                stopP2PTransportLocked()
+                applyNostrEnabledLocked(false)
+
+                peerManager.shutdown()
+                fragmentManager.shutdown()
+                securityManager.shutdown()
+                storeForwardManager.shutdown()
+                messageHandler.shutdown()
+                packetProcessor.shutdown()
+
+                this@BluetoothMeshService.isActive = false
+                publishTransportRuntimeStateLocked(isApplying = false)
+
+                // Mark this instance as terminated and cancel its scope so it won't be reused
+                terminated = true
+                serviceScope.cancel()
+                Log.i(TAG, "BluetoothMeshService terminated and scope cancelled")
             }
-            
-            peerManager.shutdown()
-            fragmentManager.shutdown()
-            securityManager.shutdown()
-            storeForwardManager.shutdown()
-            messageHandler.shutdown()
-            packetProcessor.shutdown()
-            
-            // Mark this instance as terminated and cancel its scope so it won't be reused
-            terminated = true
-            serviceScope.cancel()
-            Log.i(TAG, "BluetoothMeshService terminated and scope cancelled")
         }
     }
 
@@ -845,10 +1120,6 @@ class BluetoothMeshService(private val context: Context) {
                         
                         // Encrypt the payload using Noise
                         val encrypted = encryptionService.encrypt(noisePayload.encode(), recipientPeerID)
-                        if (encrypted == null) {
-                            Log.e(TAG, "❌ Failed to encrypt file for $recipientPeerID")
-                            return@launch
-                        }
                         Log.d(TAG, "🔐 Encrypted file payload: ${encrypted.size} bytes")
                         
                         // Create NOISE_ENCRYPTED packet (not FILE_TRANSFER!)
@@ -1078,6 +1349,10 @@ class BluetoothMeshService(private val context: Context) {
      * Send broadcast announce with TLV-encoded identity announcement - exactly like iOS
      */
     fun sendBroadcastAnnounce() {
+        if (!bleTransportRunning) {
+            Log.d(TAG, "Skipping broadcast announce: BLE transport is not running")
+            return
+        }
         Log.d(TAG, "Sending broadcast announce")
         serviceScope.launch {
             val nickname = try { com.bitchat.android.services.NicknameProvider.getNickname(context, myPeerID) } catch (_: Exception) { myPeerID }

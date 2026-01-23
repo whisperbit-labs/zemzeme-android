@@ -6,6 +6,8 @@ import com.roman.zemzeme.model.BitchatMessage
 import com.roman.zemzeme.model.NoisePayloadType
 import com.roman.zemzeme.nostr.NostrTransport
 import com.google.gson.Gson
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -62,10 +64,10 @@ class P2PTransport private constructor(
     
     // Mapping: BitChat Peer ID → libp2p Peer ID
     // In the future this could be extended to resolve via Nostr metadata
-    private val peerIdMapping = mutableMapOf<String, String>()
+    private val peerIdMapping = ConcurrentHashMap<String, String>()
     
     // Callback for incoming P2P messages
-    private var messageCallback: ((P2PIncomingMessage) -> Unit)? = null
+    private val messageCallback = AtomicReference<((P2PIncomingMessage) -> Unit)?>(null)
     
     init {
         // Listen for incoming P2P messages
@@ -352,7 +354,7 @@ class P2PTransport private constructor(
      * Set callback for incoming P2P messages.
      */
     fun setMessageCallback(callback: (P2PIncomingMessage) -> Unit) {
-        messageCallback = callback
+        messageCallback.set(callback)
     }
     
     private fun handleIncomingP2PMessage(message: P2PMessage) {
@@ -375,7 +377,7 @@ class P2PTransport private constructor(
             )
             
             Log.d(TAG, "Parsed wire message: type=${wireMessage.type} -> ${incomingMessage.type}")
-            messageCallback?.invoke(incomingMessage)
+            messageCallback.get()?.invoke(incomingMessage)
             Log.d(TAG, "Received P2P message from ${message.senderPeerID}: ${wireMessage.content.take(50)}...")
             
         } catch (e: Exception) {
@@ -391,7 +393,7 @@ class P2PTransport private constructor(
                 timestamp = message.timestamp
             )
             
-            messageCallback?.invoke(incomingMessage)
+            messageCallback.get()?.invoke(incomingMessage)
             Log.d(TAG, "Received raw P2P message from ${message.senderPeerID}")
         }
     }

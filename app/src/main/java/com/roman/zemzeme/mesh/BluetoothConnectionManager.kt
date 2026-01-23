@@ -236,10 +236,12 @@ class BluetoothConnectionManager(
     }
     
     /**
-     * Stop all Bluetooth services with proper cleanup
+     * Stop all Bluetooth services with proper cleanup.
+     *
+     * @param cancelScope true for final shutdown, false for runtime BLE toggles
      */
-    fun stopServices() {
-        Log.i(TAG, "Stopping power-optimized Bluetooth services")
+    fun stopServices(cancelScope: Boolean = true) {
+        Log.i(TAG, "Stopping power-optimized Bluetooth services (cancelScope=$cancelScope)")
         
         isActive = false
         
@@ -254,11 +256,14 @@ class BluetoothConnectionManager(
             
             // Stop connection tracker
             connectionTracker.stop()
-            
-            // Cancel the coroutine scope
-            connectionScope.cancel()
-            
-            Log.i(TAG, "All Bluetooth services stopped")
+
+            if (cancelScope) {
+                // Final shutdown path (service teardown). Runtime BLE toggles keep scope alive.
+                connectionScope.cancel()
+                Log.i(TAG, "All Bluetooth services stopped and scope cancelled")
+            } else {
+                Log.i(TAG, "All Bluetooth services stopped; scope kept alive for restart")
+            }
         }
     }
 

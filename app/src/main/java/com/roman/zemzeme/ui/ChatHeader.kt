@@ -506,6 +506,19 @@ private fun LocationChannelsButton(
     onClick: () -> Unit
 ) {
     val colorScheme = MaterialTheme.colorScheme
+    val context = androidx.compose.ui.platform.LocalContext.current
+
+    // Ensure transport toggle flow is initialized from persisted prefs.
+    val transportConfig = remember { com.bitchat.android.p2p.P2PConfig(context) }
+    val transportToggles by remember(transportConfig) {
+        com.bitchat.android.p2p.P2PConfig.transportTogglesFlow
+    }.collectAsStateWithLifecycle()
+    val p2pEnabled = transportToggles.p2pEnabled
+    val nostrEnabled = transportToggles.nostrEnabled
+
+    val nostrRelayManager = remember { com.bitchat.android.nostr.NostrRelayManager.getInstance(context) }
+    val nostrConnected by nostrRelayManager.isConnected.collectAsStateWithLifecycle()
+    val nostrRelays by nostrRelayManager.relays.collectAsStateWithLifecycle()
 
     // Get current channel selection from location manager
     val selectedChannel by viewModel.selectedLocationChannel.collectAsStateWithLifecycle()
@@ -528,12 +541,32 @@ private fun LocationChannelsButton(
     // Get P2P connection state for current geohash channel
     val p2pConnectionState = when (val channel = selectedChannel) {
         is com.bitchat.android.geohash.ChannelID.Location -> {
-            val topicName = channel.channel.geohash
-            p2pTopicStates[topicName]?.connectionState
+            if (p2pEnabled) {
+                val topicName = channel.channel.geohash
+                p2pTopicStates[topicName]?.connectionState
+            } else {
+                null
+            }
         }
         else -> null
     }
 
+    val nostrConnectionState = when (selectedChannel) {
+        is com.bitchat.android.geohash.ChannelID.Location -> {
+            if (nostrEnabled) {
+                when {
+                    nostrConnected || nostrRelays.any { it.isConnected } -> com.bitchat.android.p2p.TopicConnectionState.CONNECTED
+                    nostrRelays.any { it.lastError != null } -> com.bitchat.android.p2p.TopicConnectionState.ERROR
+                    else -> com.bitchat.android.p2p.TopicConnectionState.CONNECTING
+                }
+            } else {
+                null
+            }
+        }
+        else -> null
+    }
+
+    val transportConnectionState = p2pConnectionState ?: nostrConnectionState
     val needsRefresh = p2pConnectionState == com.bitchat.android.p2p.TopicConnectionState.ERROR
 
     Button(
@@ -554,11 +587,11 @@ private fun LocationChannelsButton(
                 maxLines = 1
             )
 
-            // P2P connection status indicator (for geohash channels only)
-            if (p2pConnectionState != null) {
+            // Active transport connection status indicator (for geohash channels only).
+            if (transportConnectionState != null) {
                 Spacer(modifier = Modifier.width(4.dp))
                 P2PConnectionDot(
-                    connectionState = p2pConnectionState,
+                    connectionState = transportConnectionState,
                     modifier = Modifier.size(6.dp)
                 )
 

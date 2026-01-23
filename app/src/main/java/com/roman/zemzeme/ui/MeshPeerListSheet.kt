@@ -318,9 +318,13 @@ fun PeopleSection(
         // Reactive favorite computation for all peers
         val peerFavoriteStates = remember(favoritePeers, peerFingerprints, connectedPeers) {
             connectedPeers.associateWith { peerID ->
-                // Reactive favorite computation - same as ChatHeader
-                val fingerprint = peerFingerprints[peerID]
-                fingerprint != null && favoritePeers.contains(fingerprint)
+                if (peerID.startsWith("p2p:")) {
+                    viewModel.isFavorite(peerID)
+                } else {
+                    // Reactive favorite computation - same as ChatHeader
+                    val fingerprint = peerFingerprints[peerID]
+                    fingerprint != null && favoritePeers.contains(fingerprint)
+                }
             }
         }
 
@@ -846,6 +850,7 @@ fun PrivateChatSheet(
     val isDirect = peerDirectMap[peerID] == true
     val isConnected = connectedPeers.contains(peerID) || isDirect
     val sessionState = peerSessionStates[peerID]
+    val showDmMediaButtons = !isNostrPeer && !isP2PPeer && sessionState == "established"
     val fingerprint = peerFingerprints[peerID]
     val isFavorite = remember(favoritePeers, fingerprint) {
         if (fingerprint != null) favoritePeers.contains(fingerprint) else viewModel.isFavorite(peerID)
@@ -939,7 +944,7 @@ fun PrivateChatSheet(
                         currentChannel = null,
                         nickname = nickname,
                         colorScheme = colorScheme,
-                        showMediaButtons = true
+                        showMediaButtons = showDmMediaButtons
                     )
                 }
 

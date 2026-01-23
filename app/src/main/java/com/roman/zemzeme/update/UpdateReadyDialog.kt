@@ -58,20 +58,19 @@ fun UpdateReadyDialog(
     val updateManager = UpdateManager.getInstance(context)
     val updateState by updateManager.updateState.collectAsState()
     
-    // Track if user dismissed this version's dialog
-    var dismissedVersionCode by remember { mutableStateOf(-1) }
-    
     // Track if we're showing the permission required state
     var showPermissionRequired by remember { mutableStateOf(false) }
     
-    // Show dialog when state transitions to ReadyToInstall
+    // Show dialog when state transitions to ReadyToInstall (unless user already tapped Later)
     val readyState = updateState as? UpdateState.ReadyToInstall
+    val shouldSuppressDialog = readyState?.let { state ->
+        updateManager.isReadyDialogDismissed(state.info.versionCode)
+    } ?: false
     
-    // Only show if we have a ready state and user hasn't dismissed this version
-    if (readyState != null && readyState.info.versionCode != dismissedVersionCode) {
+    if (readyState != null && !shouldSuppressDialog) {
         Dialog(
             onDismissRequest = { 
-                dismissedVersionCode = readyState.info.versionCode
+                updateManager.dismissUpdate()
                 showPermissionRequired = false
             },
             properties = DialogProperties(
@@ -205,7 +204,7 @@ fun UpdateReadyDialog(
                             
                             TextButton(
                                 onClick = { 
-                                    dismissedVersionCode = readyState.info.versionCode
+                                    updateManager.dismissUpdate()
                                     showPermissionRequired = false
                                 }
                             ) {
@@ -220,7 +219,7 @@ fun UpdateReadyDialog(
                         ) {
                             TextButton(
                                 onClick = { 
-                                    dismissedVersionCode = readyState.info.versionCode
+                                    updateManager.dismissUpdate()
                                 }
                             ) {
                                 Text("Later")

@@ -37,11 +37,13 @@ import com.roman.zemzeme.core.ui.component.sheet.BitchatBottomSheet
 import com.roman.zemzeme.net.TorMode
 import com.roman.zemzeme.net.TorPreferenceManager
 import com.roman.zemzeme.net.ArtiTorManager
+import com.roman.zemzeme.service.MeshServiceHolder
 import com.roman.zemzeme.update.UpdateManager
 import com.roman.zemzeme.update.UpdateState
 import com.roman.zemzeme.p2p.P2PConfig
 import com.roman.zemzeme.p2p.P2PTransport
 import com.roman.zemzeme.p2p.P2PNodeStatus
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -447,10 +449,32 @@ fun AboutSheet(
                         val powEnabled by PoWPreferenceManager.powEnabled.collectAsState()
                         val powDifficulty by PoWPreferenceManager.powDifficulty.collectAsState()
                         var backgroundEnabled by remember { mutableStateOf(com.bitchat.android.service.MeshServicePreferences.isBackgroundEnabled(true)) }
-                        val torMode = remember { mutableStateOf(TorPreferenceManager.get(context)) }
+                        val torMode by TorPreferenceManager.modeFlow.collectAsState()
                         val torProvider = remember { ArtiTorManager.getInstance() }
                         val torStatus by torProvider.statusFlow.collectAsState()
                         val torAvailable = remember { torProvider.isTorAvailable() }
+                        val p2pConfig = remember { P2PConfig(context) }
+                        val transportToggles by P2PConfig.transportTogglesFlow.collectAsState()
+                        val attachedMeshService by MeshServiceHolder.meshServiceFlow.collectAsState()
+                        val transportRuntimeState by produceState<com.bitchat.android.mesh.BluetoothMeshService.TransportRuntimeState?>(
+                            initialValue = attachedMeshService?.transportRuntimeState?.value,
+                            key1 = attachedMeshService
+                        ) {
+                            value = attachedMeshService?.transportRuntimeState?.value
+                            val service = attachedMeshService ?: return@produceState
+                            service.transportRuntimeState.collect { latest ->
+                                value = latest
+                            }
+                        }
+
+                        val p2pEnabled = transportRuntimeState?.desiredToggles?.p2pEnabled ?: transportToggles.p2pEnabled
+                        val nostrEnabled = transportRuntimeState?.desiredToggles?.nostrEnabled ?: transportToggles.nostrEnabled
+                        val bleEnabled = transportRuntimeState?.desiredToggles?.bleEnabled ?: transportToggles.bleEnabled
+                        val p2pTransport = remember { P2PTransport.getInstance(context) }
+                        val p2pStatus by p2pTransport.p2pRepository.nodeStatus.collectAsState()
+                        val p2pScope = rememberCoroutineScope()
+                        val p2pRunning = transportRuntimeState?.p2pRunning ?: (p2pStatus == P2PNodeStatus.RUNNING)
+                        val torP2PUnsupportedMessage = "P2P over Tor is not supported. Tor was disabled."
 
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
@@ -507,15 +531,27 @@ fun AboutSheet(
                                         icon = Icons.Filled.Security,
                                         title = "Tor Network",
                                         subtitle = stringResource(R.string.about_tor_route),
-                                        checked = torMode.value == TorMode.ON,
+                                        checked = torMode == TorMode.ON,
                                         onCheckedChange = { enabled ->
                                             if (torAvailable) {
-                                                torMode.value = if (enabled) TorMode.ON else TorMode.OFF
-                                                TorPreferenceManager.set(context, torMode.value)
+                                                if (enabled && p2pEnabled) {
+                                                    TorPreferenceManager.set(context, TorMode.OFF)
+                                                    android.widget.Toast.makeText(
+                                                        context,
+                                                        "Tor with P2P is not supported. Disable P2P first.",
+                                                        android.widget.Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    return@SettingsToggleRow
+                                                }
+
+                                                TorPreferenceManager.set(
+                                                    context,
+                                                    if (enabled) TorMode.ON else TorMode.OFF
+                                                )
                                             }
                                         },
                                         enabled = torAvailable,
-                                        statusIndicator = if (torMode.value == TorMode.ON) {
+                                        statusIndicator = if (torMode == TorMode.ON) {
                                             {
                                                 val statusColor = when {
                                                     torStatus.running && torStatus.bootstrapPercent >= 100 -> if (isDark) Color(0xFF32D74B) else Color(0xFF248A3D)
@@ -537,11 +573,6 @@ fun AboutSheet(
                                     )
                                     
                                     // P2P Network Toggle
-                                    val p2pConfig = remember { P2PConfig(context) }
-                                    var p2pEnabled by remember { mutableStateOf(p2pConfig.p2pEnabled) }
-                                    val p2pTransport = remember { P2PTransport.getInstance(context) }
-                                    val p2pStatus by p2pTransport.p2pRepository.nodeStatus.collectAsState()
-                                    val p2pScope = rememberCoroutineScope()
                                     
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Wifi,
@@ -549,29 +580,44 @@ fun AboutSheet(
                                         subtitle = "Direct peer connections via libp2p",
                                         checked = p2pEnabled,
                                         onCheckedChange = { enabled ->
-                                            p2pEnabled = enabled
+                                            if (enabled && torMode == TorMode.ON) {
+                                                TorPreferenceManager.set(context, TorMode.OFF)
+                                                android.widget.Toast.makeText(
+                                                    context,
+                                                    torP2PUnsupportedMessage,
+                                                    android.widget.Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+
                                             p2pConfig.p2pEnabled = enabled
-                                            
-                                            // Actually start/stop the P2P transport
+
                                             p2pScope.launch {
-                                                if (enabled) {
-                                                    // P2PLibraryRepository manages its own keys
-                                                    p2pTransport.start().onSuccess {
-                                                        android.util.Log.i("AboutSheet", "✅ P2P started: ${p2pTransport.getMyPeerID()}")
-                                                    }.onFailure { e ->
-                                                        android.util.Log.e("AboutSheet", "❌ P2P start failed: ${e.message}")
+                                                val meshService = attachedMeshService
+                                                if (meshService != null) {
+                                                    val result = meshService.setP2PEnabled(enabled)
+                                                    result.onFailure { e ->
+                                                        android.util.Log.e("AboutSheet", "Failed to apply P2P toggle via mesh service: ${e.message}")
                                                     }
                                                 } else {
-                                                    p2pTransport.stop()
-                                                    android.util.Log.i("AboutSheet", "P2P stopped")
+                                                    // Fallback path when mesh service is not attached
+                                                    if (enabled) {
+                                                        // P2P and Nostr are mutually exclusive.
+                                                        com.bitchat.android.nostr.NostrRelayManager.isEnabled = false
+                                                        com.bitchat.android.nostr.NostrRelayManager.getInstance(context).disconnect()
+                                                        p2pTransport.start().onFailure { fallbackError ->
+                                                            android.util.Log.e("AboutSheet", "P2P fallback start failed: ${fallbackError.message}")
+                                                        }
+                                                    } else {
+                                                        p2pTransport.stop()
+                                                    }
                                                 }
                                             }
                                         },
                                         statusIndicator = if (p2pEnabled) {
                                             {
-                                                val statusColor = when (p2pStatus) {
-                                                    P2PNodeStatus.RUNNING -> if (isDark) Color(0xFF32D74B) else Color(0xFF248A3D)
-                                                    P2PNodeStatus.STARTING -> Color(0xFFFF9500)
+                                                val statusColor = when {
+                                                    p2pRunning -> if (isDark) Color(0xFF32D74B) else Color(0xFF248A3D)
+                                                    p2pStatus == P2PNodeStatus.STARTING -> Color(0xFFFF9500)
                                                     else -> Color(0xFFFF3B30)
                                                 }
                                                 Surface(
@@ -589,9 +635,9 @@ fun AboutSheet(
                                     )
                                     
                                     // Nostr Network Toggle (for testing P2P in isolation)
-                                    var nostrEnabled by remember { mutableStateOf(p2pConfig.nostrEnabled) }
                                     val nostrRelayManager = remember { com.bitchat.android.nostr.NostrRelayManager.getInstance(context) }
                                     val nostrConnected by nostrRelayManager.isConnected.collectAsState()
+                                    val effectiveNostrConnected = transportRuntimeState?.nostrConnected ?: nostrConnected
                                     
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Cloud,
@@ -599,23 +645,31 @@ fun AboutSheet(
                                         subtitle = "Internet relay messaging",
                                         checked = nostrEnabled,
                                         onCheckedChange = { enabled ->
-                                            nostrEnabled = enabled
                                             p2pConfig.nostrEnabled = enabled
-                                            // Update static flag to prevent new connections
-                                            com.bitchat.android.nostr.NostrRelayManager.isEnabled = enabled
-                                            android.util.Log.i("AboutSheet", "Nostr toggle changed: enabled=$enabled, isEnabled=${com.bitchat.android.nostr.NostrRelayManager.isEnabled}")
-                                            // Disconnect/reconnect relays based on setting
-                                            if (!enabled) {
-                                                nostrRelayManager.disconnect()
-                                                android.widget.Toast.makeText(context, "Nostr disabled", android.widget.Toast.LENGTH_SHORT).show()
-                                            } else {
-                                                nostrRelayManager.connect()
-                                                android.widget.Toast.makeText(context, "Nostr enabled", android.widget.Toast.LENGTH_SHORT).show()
+                                            p2pScope.launch {
+                                                val meshService = attachedMeshService
+                                                if (meshService != null) {
+                                                    val result = meshService.setNostrEnabled(enabled)
+                                                    result.onFailure { e ->
+                                                        android.util.Log.e("AboutSheet", "Failed to apply Nostr toggle via mesh service: ${e.message}")
+                                                    }
+                                                } else {
+                                                    // Fallback path when mesh service is not attached
+                                                    if (enabled) {
+                                                        p2pTransport.stop()
+                                                        com.bitchat.android.nostr.NostrRelayManager.isEnabled = true
+                                                        nostrRelayManager.connect()
+                                                    } else {
+                                                        com.bitchat.android.nostr.NostrRelayManager.isEnabled = false
+                                                        nostrRelayManager.disconnect()
+                                                    }
+                                                }
                                             }
+                                            android.widget.Toast.makeText(context, if (enabled) "Nostr enabled" else "Nostr disabled", android.widget.Toast.LENGTH_SHORT).show()
                                         },
                                         statusIndicator = if (nostrEnabled) {
                                             {
-                                                val statusColor = if (nostrConnected) {
+                                                val statusColor = if (effectiveNostrConnected) {
                                                     if (isDark) Color(0xFF32D74B) else Color(0xFF248A3D)
                                                 } else {
                                                     Color(0xFFFF9500)
@@ -635,7 +689,7 @@ fun AboutSheet(
                                     )
                                     
                                     // BLE Mesh Toggle
-                                    var bleEnabled by remember { mutableStateOf(p2pConfig.bleEnabled) }
+                                    val bleRunning = transportRuntimeState?.bleRunning == true
                                     
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Bluetooth,
@@ -643,14 +697,36 @@ fun AboutSheet(
                                         subtitle = "Bluetooth proximity mesh",
                                         checked = bleEnabled,
                                         onCheckedChange = { enabled ->
-                                            bleEnabled = enabled
                                             p2pConfig.bleEnabled = enabled
+                                            p2pScope.launch {
+                                                val meshService = attachedMeshService
+                                                if (meshService != null) {
+                                                    val result = meshService.setBleEnabled(enabled)
+                                                    result.onFailure { e ->
+                                                        android.util.Log.e("AboutSheet", "Failed to apply BLE toggle: ${e.message}")
+                                                    }
+                                                }
+                                            }
                                             android.widget.Toast.makeText(
                                                 context,
-                                                if (enabled) "BLE Mesh enabled (restart app to apply)" else "BLE Mesh disabled",
+                                                if (enabled) "BLE Mesh enabled" else "BLE Mesh disabled",
                                                 android.widget.Toast.LENGTH_SHORT
                                             ).show()
-                                        }
+                                        },
+                                        statusIndicator = if (bleEnabled) {
+                                            {
+                                                val statusColor = if (bleRunning) {
+                                                    if (isDark) Color(0xFF32D74B) else Color(0xFF248A3D)
+                                                } else {
+                                                    Color(0xFFFF9500)
+                                                }
+                                                Surface(
+                                                    color = statusColor,
+                                                    shape = CircleShape,
+                                                    modifier = Modifier.size(8.dp)
+                                                ) {}
+                                            }
+                                        } else null
                                     )
                                 }
                             }
@@ -736,11 +812,11 @@ fun AboutSheet(
 
                     // Tor Status (when enabled)
                     item(key = "tor_status") {
-                        val torMode = remember { mutableStateOf(TorPreferenceManager.get(context)) }
+                        val torMode by TorPreferenceManager.modeFlow.collectAsState()
                         val torProvider = remember { ArtiTorManager.getInstance() }
                         val torStatus by torProvider.statusFlow.collectAsState()
-                        
-                        if (torMode.value == TorMode.ON) {
+
+                        if (torMode == TorMode.ON) {
                             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                                 Surface(
                                     modifier = Modifier.fillMaxWidth(),

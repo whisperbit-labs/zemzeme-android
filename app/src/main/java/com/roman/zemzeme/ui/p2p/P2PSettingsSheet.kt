@@ -1,5 +1,6 @@
 package com.roman.zemzeme.ui.p2p
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +29,9 @@ import com.roman.zemzeme.core.ui.component.sheet.BitchatBottomSheet
 import com.roman.zemzeme.p2p.P2PConfig
 import com.roman.zemzeme.p2p.P2PTransport
 import com.roman.zemzeme.p2p.P2PNodeStatus
+import com.roman.zemzeme.net.TorMode
+import com.roman.zemzeme.net.TorPreferenceManager
+import com.roman.zemzeme.service.MeshServiceHolder
 
 /**
  * P2P Settings Sheet - Configuration for libp2p networking
@@ -49,7 +54,20 @@ fun P2PSettingsSheet(
     val p2pTransport = remember { P2PTransport.getInstance(context) }
     
     // State
-    var p2pEnabled by remember { mutableStateOf(p2pConfig.p2pEnabled) }
+    val transportToggles by P2PConfig.transportTogglesFlow.collectAsState()
+    val attachedMeshService by MeshServiceHolder.meshServiceFlow.collectAsState()
+    val transportRuntimeState by produceState<com.bitchat.android.mesh.BluetoothMeshService.TransportRuntimeState?>(
+        initialValue = attachedMeshService?.transportRuntimeState?.value,
+        key1 = attachedMeshService
+    ) {
+        value = attachedMeshService?.transportRuntimeState?.value
+        val service = attachedMeshService ?: return@produceState
+        service.transportRuntimeState.collect { latest ->
+            value = latest
+        }
+    }
+
+    val p2pEnabled = transportRuntimeState?.desiredToggles?.p2pEnabled ?: transportToggles.p2pEnabled
     var useDefaultBootstrap by remember { mutableStateOf(p2pConfig.useDefaultBootstrap) }
     var customNodes by remember { mutableStateOf(p2pConfig.customBootstrapNodes) }
     var showAddNodeDialog by remember { mutableStateOf(false) }
@@ -254,8 +272,36 @@ fun P2PSettingsSheet(
                                         subtitle = "Connect directly to other BitChat peers",
                                         checked = p2pEnabled,
                                         onCheckedChange = { enabled ->
-                                            p2pEnabled = enabled
+                                            if (enabled && TorPreferenceManager.get(context) == TorMode.ON) {
+                                                TorPreferenceManager.set(context, TorMode.OFF)
+                                                android.widget.Toast.makeText(
+                                                    context,
+                                                    "P2P over Tor is not supported. Tor was disabled.",
+                                                    android.widget.Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+
                                             p2pConfig.p2pEnabled = enabled
+                                            coroutineScope.launch {
+                                                val meshService = attachedMeshService
+                                                if (meshService != null) {
+                                                    val result = meshService.setP2PEnabled(enabled)
+                                                    result.onFailure { e ->
+                                                        Log.e("P2PSettingsSheet", "Failed to apply P2P toggle: ${e.message}")
+                                                    }
+                                                } else {
+                                                    val fallbackResult = if (enabled) {
+                                                        com.bitchat.android.nostr.NostrRelayManager.isEnabled = false
+                                                        com.bitchat.android.nostr.NostrRelayManager.getInstance(context).disconnect()
+                                                        p2pTransport.start()
+                                                    } else {
+                                                        p2pTransport.stop()
+                                                    }
+                                                    fallbackResult.onFailure { e ->
+                                                        Log.e("P2PSettingsSheet", "Fallback P2P toggle failed: ${e.message}")
+                                                    }
+                                                }
+                                            }
                                         },
                                         isDark = isDark
                                     )

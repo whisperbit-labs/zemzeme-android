@@ -5,9 +5,13 @@ import android.util.Log
 import com.roman.zemzeme.mesh.BluetoothMeshService
 import com.roman.zemzeme.model.ReadReceipt
 import com.roman.zemzeme.nostr.NostrTransport
+import com.roman.zemzeme.p2p.P2PConfig
+import com.roman.zemzeme.p2p.P2PTransport
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -20,6 +24,7 @@ class MessageRouter private constructor(
 ) {
     companion object {
         private const val TAG = "MessageRouter"
+        private const val BLE_HANDSHAKE_FALLBACK_TIMEOUT_MS = 3500L
         @Volatile private var INSTANCE: MessageRouter? = null
         fun tryGetInstance(): MessageRouter? = INSTANCE
         fun getInstance(context: Context, mesh: BluetoothMeshService): MessageRouter {
@@ -42,9 +47,21 @@ class MessageRouter private constructor(
         }
     }
 
-    // Outbox: peerID -> queued (content, nickname, messageID)
-    private val outbox = mutableMapOf<String, MutableList<Triple<String, String, String>>>()
+    private data class QueuedMessage(
+        val content: String,
+        val recipientNickname: String,
+        val messageID: String,
+        val queuedAtMs: Long = System.currentTimeMillis()
+    )
+
+    // Outbox: peerID -> queued messages
+    private val outbox = mutableMapOf<String, MutableList<QueuedMessage>>()
     private val outboxLock = Any()
+    private val flushInProgressPeers = mutableSetOf<String>()
+    private val pendingBleFallbackJobs = mutableMapOf<String, Job>()
+
+    private val transportConfig by lazy { P2PConfig(context.applicationContext) }
+    private val p2pTransport by lazy { P2PTransport.getInstance(context.applicationContext) }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -63,17 +80,21 @@ class MessageRouter private constructor(
     }
 
     fun sendPrivate(content: String, toPeerID: String, recipientNickname: String, messageID: String) {
+        val toggles = currentTransportToggles()
+
         // First: if this is a P2P peer (starts with p2p:), route via P2PTransport
         if (toPeerID.startsWith("p2p:")) {
+            if (!toggles.p2pEnabled) {
+                Log.d(TAG, "P2P disabled; dropping explicit P2P DM target ${toPeerID.take(16)}...")
+                return
+            }
             val rawPeerId = toPeerID.removePrefix("p2p:")
-            Log.d(TAG, "Routing PM via P2P direct to ${rawPeerId.take(12)}… id=${messageID.take(8)}…")
-            // Launch coroutine for async P2P send (sendDirectMessage is suspend fun)
+            Log.d(TAG, "Routing PM via P2P direct to ${rawPeerId.take(12)}... id=${messageID.take(8)}...")
             scope.launch {
                 try {
-                    val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(context)
                     val success = p2pTransport.sendDirectMessage(rawPeerId, content, recipientNickname, messageID)
                     if (!success) {
-                        Log.w(TAG, "P2P direct message send failed for ${rawPeerId.take(12)}…")
+                        Log.w(TAG, "P2P direct message send failed for ${rawPeerId.take(12)}...")
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "P2P direct message error: ${e.message}")
@@ -84,7 +105,11 @@ class MessageRouter private constructor(
         
         // Second: if this is a geohash DM alias (nostr_<pub16>), route via Nostr using global registry
         if (com.bitchat.android.nostr.GeohashAliasRegistry.contains(toPeerID)) {
-            Log.d(TAG, "Routing PM via Nostr (geohash) to alias ${toPeerID.take(12)}… id=${messageID.take(8)}…")
+            if (!toggles.nostrEnabled) {
+                Log.d(TAG, "Nostr disabled; cannot route geohash alias DM ${toPeerID.take(16)}...")
+                return
+            }
+            Log.d(TAG, "Routing PM via Nostr (geohash) to alias ${toPeerID.take(12)}... id=${messageID.take(8)}...")
             val recipientHex = com.bitchat.android.nostr.GeohashAliasRegistry.get(toPeerID)
             if (recipientHex != null) {
                 // Resolve the conversation's source geohash, so we can send from anywhere
@@ -96,94 +121,209 @@ class MessageRouter private constructor(
             }
         }
 
-        val hasMesh = mesh.getPeerInfo(toPeerID)?.isConnected == true
-        val hasEstablished = mesh.hasEstablishedSession(toPeerID)
-        if (hasMesh && hasEstablished) {
-            Log.d(TAG, "Routing PM via mesh to ${toPeerID} msg_id=${messageID.take(8)}…")
+        val hasBleLink = toggles.bleEnabled && mesh.getPeerInfo(toPeerID)?.isConnected == true
+        val hasBleSession = hasBleLink && mesh.hasEstablishedSession(toPeerID)
+        if (hasBleSession) {
+            Log.d(TAG, "Routing PM via BLE mesh to ${toPeerID.take(12)}... msg_id=${messageID.take(8)}...")
             mesh.sendPrivateMessage(content, toPeerID, recipientNickname, messageID)
-        } else if (canSendViaNostr(toPeerID)) {
-            Log.d(TAG, "Routing PM via Nostr to ${toPeerID.take(32)}… msg_id=${messageID.take(8)}…")
-            nostr.sendPrivateMessage(content, toPeerID, recipientNickname, messageID)
+            return
+        }
+
+        // BLE is preferred. If peer is connected but Noise isn't established, queue + handshake
+        // and allow a bounded fallback timer to attempt P2P/Nostr later.
+        if (hasBleLink) {
+            Log.d(TAG, "Queueing PM for BLE handshake ${toPeerID.take(8)}... msg_id=${messageID.take(8)}...")
+            queueMessage(toPeerID, content, recipientNickname, messageID)
+            mesh.initiateNoiseHandshake(toPeerID)
+            scheduleBleHandshakeFallback(toPeerID, messageID)
+            return
+        }
+
+        // Next fallback: mapped P2P identity if available and enabled.
+        if (toggles.p2pEnabled && p2pTransport.isRunning()) {
+            val mappedP2PPeer = p2pTransport.getP2PPeerID(toPeerID)
+            if (!mappedP2PPeer.isNullOrBlank()) {
+                Log.d(TAG, "Routing PM via mapped P2P to ${mappedP2PPeer.take(12)}... msg_id=${messageID.take(8)}...")
+                scope.launch {
+                    val p2pSent = runCatching {
+                        p2pTransport.sendDirectMessage(mappedP2PPeer, content, recipientNickname, messageID)
+                    }.getOrElse { e ->
+                        Log.e(TAG, "Mapped P2P send error: ${e.message}")
+                        false
+                    }
+
+                    if (p2pSent) {
+                        return@launch
+                    }
+
+                    val latestToggles = currentTransportToggles()
+                    if (latestToggles.nostrEnabled && canSendViaNostr(toPeerID)) {
+                        Log.d(TAG, "Mapped P2P failed; attempting Nostr for ${toPeerID.take(12)}...")
+                        val nostrSent = nostr.sendPrivateMessageAwait(content, toPeerID, recipientNickname, messageID).isSuccess
+                        if (nostrSent) {
+                            return@launch
+                        }
+                    }
+
+                    queueMessage(toPeerID, content, recipientNickname, messageID)
+                    if (canAttemptMeshHandshake(toPeerID)) {
+                        mesh.initiateNoiseHandshake(toPeerID)
+                    }
+                }
+                return
+            }
+        }
+
+        if (toggles.nostrEnabled && canSendViaNostr(toPeerID)) {
+            Log.d(TAG, "Routing PM via Nostr to ${toPeerID.take(32)}... msg_id=${messageID.take(8)}...")
+            scope.launch {
+                val sent = nostr.sendPrivateMessageAwait(content, toPeerID, recipientNickname, messageID).isSuccess
+                if (!sent) {
+                    queueMessage(toPeerID, content, recipientNickname, messageID)
+                    if (canAttemptMeshHandshake(toPeerID)) {
+                        mesh.initiateNoiseHandshake(toPeerID)
+                    }
+                }
+            }
         } else {
             Log.d(TAG, "Queued PM for ${toPeerID} (no mesh, no Nostr mapping) msg_id=${messageID.take(8)}…")
-            synchronized(outboxLock) {
-                val q = outbox.getOrPut(toPeerID) { mutableListOf() }
-                q.add(Triple(content, recipientNickname, messageID))
+            queueMessage(toPeerID, content, recipientNickname, messageID)
+            if (canAttemptMeshHandshake(toPeerID)) {
+                Log.d(TAG, "Initiating noise handshake after queueing PM for ${toPeerID.take(8)}…")
+                mesh.initiateNoiseHandshake(toPeerID)
             }
-            Log.d(TAG, "Initiating noise handshake after queueing PM for ${toPeerID.take(8)}…")
-            mesh.initiateNoiseHandshake(toPeerID)
         }
     }
 
     fun sendReadReceipt(receipt: ReadReceipt, toPeerID: String) {
-        if ((mesh.getPeerInfo(toPeerID)?.isConnected == true) && mesh.hasEstablishedSession(toPeerID)) {
+        val toggles = currentTransportToggles()
+        if (toggles.bleEnabled && (mesh.getPeerInfo(toPeerID)?.isConnected == true) && mesh.hasEstablishedSession(toPeerID)) {
             Log.d(TAG, "Routing READ via mesh to ${toPeerID.take(8)}… id=${receipt.originalMessageID.take(8)}…")
             mesh.sendReadReceipt(receipt.originalMessageID, toPeerID, mesh.getPeerNicknames()[toPeerID] ?: mesh.myPeerID)
-        } else {
+        } else if (toggles.nostrEnabled) {
             Log.d(TAG, "Routing READ via Nostr to ${toPeerID.take(8)}… id=${receipt.originalMessageID.take(8)}…")
             nostr.sendReadReceipt(receipt, toPeerID)
+        } else {
+            Log.d(TAG, "Dropping READ receipt for ${toPeerID.take(8)}… (no enabled transport)")
         }
     }
 
     fun sendDeliveryAck(messageID: String, toPeerID: String) {
+        val toggles = currentTransportToggles()
         // Mesh delivery ACKs are sent by the receiver automatically.
         // Only route via Nostr when mesh path isn't available or when this is a geohash alias
         if (com.bitchat.android.nostr.GeohashAliasRegistry.contains(toPeerID)) {
+            if (!toggles.nostrEnabled) {
+                Log.d(TAG, "Nostr disabled; dropping geohash DELIVERED ack for ${toPeerID.take(12)}…")
+                return
+            }
             val recipientHex = com.bitchat.android.nostr.GeohashAliasRegistry.get(toPeerID)
             if (recipientHex != null) {
                 nostr.sendDeliveryAckGeohash(messageID, recipientHex, try { com.bitchat.android.nostr.NostrIdentityBridge.getCurrentNostrIdentity(context)!! } catch (_: Exception) { return })
                 return
             }
         }
-        if (!((mesh.getPeerInfo(toPeerID)?.isConnected == true) && mesh.hasEstablishedSession(toPeerID))) {
+        if (toggles.nostrEnabled && !((mesh.getPeerInfo(toPeerID)?.isConnected == true) && mesh.hasEstablishedSession(toPeerID))) {
             nostr.sendDeliveryAck(messageID, toPeerID)
         }
     }
 
     fun sendFavoriteNotification(toPeerID: String, isFavorite: Boolean) {
-        if (mesh.getPeerInfo(toPeerID)?.isConnected == true) {
+        val toggles = currentTransportToggles()
+        if (toggles.bleEnabled && mesh.getPeerInfo(toPeerID)?.isConnected == true) {
             val myNpub = try { com.bitchat.android.nostr.NostrIdentityBridge.getCurrentNostrIdentity(context)?.npub } catch (_: Exception) { null }
             val content = if (isFavorite) "[FAVORITED]:${myNpub ?: ""}" else "[UNFAVORITED]:${myNpub ?: ""}"
             val nickname = mesh.getPeerNicknames()[toPeerID] ?: toPeerID
             mesh.sendPrivateMessage(content, toPeerID, nickname)
-        } else {
+        } else if (toggles.nostrEnabled) {
             nostr.sendFavoriteNotification(toPeerID, isFavorite)
+        } else {
+            Log.d(TAG, "Dropping favorite notification for ${toPeerID.take(12)}… (no enabled transport)")
         }
     }
 
     // Flush any queued messages for a specific peerID
     fun flushOutboxFor(peerID: String) {
-        val queued = synchronized(outboxLock) { outbox[peerID]?.toMutableList() ?: return }
-        if (queued.isEmpty()) return
-        Log.d(TAG, "Flushing outbox for ${peerID.take(8)}… count=${queued.size}")
-        val sentItems = mutableListOf<Triple<String, String, String>>()
-        for ((content, nickname, messageID) in queued) {
-            var hasMesh = mesh.getPeerInfo(peerID)?.isConnected == true && mesh.hasEstablishedSession(peerID)
-            // If this is a noiseHex key, see if there is a connected mesh peer for this identity
-            if (!hasMesh && peerID.length == 64 && peerID.matches(Regex("^[0-9a-fA-F]+$"))) {
-                val meshPeer = resolveMeshPeerForNoiseHex(peerID)
-                if (meshPeer != null && mesh.getPeerInfo(meshPeer)?.isConnected == true && mesh.hasEstablishedSession(meshPeer)) {
-                    mesh.sendPrivateMessage(content, meshPeer, nickname, messageID)
-                    sentItems.add(Triple(content, nickname, messageID))
-                    continue
-                }
-            }
-            val canNostr = canSendViaNostr(peerID)
-            if (hasMesh) {
-                mesh.sendPrivateMessage(content, peerID, nickname, messageID)
-                sentItems.add(Triple(content, nickname, messageID))
-            } else if (canNostr) {
-                nostr.sendPrivateMessage(content, peerID, nickname, messageID)
-                sentItems.add(Triple(content, nickname, messageID))
+        scope.launch {
+            flushOutboxForInternal(peerID)
+        }
+    }
+
+    private suspend fun flushOutboxForInternal(peerID: String) {
+        val canFlush = synchronized(outboxLock) {
+            if (flushInProgressPeers.contains(peerID)) {
+                false
+            } else {
+                flushInProgressPeers.add(peerID)
+                true
             }
         }
-        if (sentItems.isNotEmpty()) {
-            synchronized(outboxLock) {
-                val current = outbox[peerID] ?: return
-                current.removeAll(sentItems)
-                if (current.isEmpty()) {
-                    outbox.remove(peerID)
+        if (!canFlush) {
+            return
+        }
+
+        try {
+            val queued = synchronized(outboxLock) { outbox[peerID]?.toList() ?: emptyList() }
+            if (queued.isEmpty()) {
+                return
+            }
+
+            val toggles = currentTransportToggles()
+            Log.d(TAG, "Flushing outbox for ${peerID.take(8)}... count=${queued.size}")
+
+            for (queuedMessage in queued) {
+                val meshTarget = resolveEstablishedMeshTarget(peerID, toggles)
+                if (meshTarget != null) {
+                    mesh.sendPrivateMessage(
+                        queuedMessage.content,
+                        meshTarget,
+                        queuedMessage.recipientNickname,
+                        queuedMessage.messageID
+                    )
+                    markMessageSent(peerID, queuedMessage.messageID)
+                    continue
                 }
+
+                val mappedP2PPeer = if (toggles.p2pEnabled && p2pTransport.isRunning()) {
+                    p2pTransport.getP2PPeerID(peerID)
+                } else {
+                    null
+                }
+
+                if (!mappedP2PPeer.isNullOrBlank()) {
+                    val p2pSent = runCatching {
+                        p2pTransport.sendDirectMessage(
+                            mappedP2PPeer,
+                            queuedMessage.content,
+                            queuedMessage.recipientNickname,
+                            queuedMessage.messageID
+                        )
+                    }.getOrElse { e ->
+                        Log.e(TAG, "Outbox P2P send error for ${peerID.take(12)}...: ${e.message}")
+                        false
+                    }
+
+                    if (p2pSent) {
+                        markMessageSent(peerID, queuedMessage.messageID)
+                        continue
+                    }
+                }
+
+                if (toggles.nostrEnabled && canSendViaNostr(peerID)) {
+                    val nostrSent = nostr.sendPrivateMessageAwait(
+                        queuedMessage.content,
+                        peerID,
+                        queuedMessage.recipientNickname,
+                        queuedMessage.messageID
+                    ).isSuccess
+                    if (nostrSent) {
+                        markMessageSent(peerID, queuedMessage.messageID)
+                    }
+                }
+            }
+        } finally {
+            synchronized(outboxLock) {
+                flushInProgressPeers.remove(peerID)
             }
         }
     }
@@ -194,7 +334,117 @@ class MessageRouter private constructor(
         keys.forEach { flushOutboxFor(it) }
     }
 
+    private fun currentTransportToggles(): P2PConfig.TransportToggles {
+        // Ensures flow is initialized from SharedPreferences even if this is the first caller.
+        transportConfig.getTransportToggles()
+        val toggles = P2PConfig.getCurrentTransportToggles()
+        return if (toggles.p2pEnabled && toggles.nostrEnabled) {
+            // Defensive normalization. Config should already prevent this.
+            toggles.copy(nostrEnabled = false)
+        } else {
+            toggles
+        }
+    }
+
+    private fun fallbackJobKey(peerID: String, messageID: String): String = "$peerID|$messageID"
+
+    private fun scheduleBleHandshakeFallback(peerID: String, messageID: String) {
+        val key = fallbackJobKey(peerID, messageID)
+        synchronized(outboxLock) {
+            pendingBleFallbackJobs.remove(key)?.cancel()
+            pendingBleFallbackJobs[key] = scope.launch {
+                delay(BLE_HANDSHAKE_FALLBACK_TIMEOUT_MS)
+                try {
+                    attemptFallbackForQueuedMessage(peerID, messageID)
+                } finally {
+                    synchronized(outboxLock) {
+                        pendingBleFallbackJobs.remove(key)
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun attemptFallbackForQueuedMessage(peerID: String, messageID: String) {
+        val queued = synchronized(outboxLock) {
+            outbox[peerID]?.firstOrNull { it.messageID == messageID }
+        } ?: return
+
+        val toggles = currentTransportToggles()
+
+        val meshTarget = resolveEstablishedMeshTarget(peerID, toggles)
+        if (meshTarget != null) {
+            mesh.sendPrivateMessage(queued.content, meshTarget, queued.recipientNickname, queued.messageID)
+            markMessageSent(peerID, messageID)
+            return
+        }
+
+        if (toggles.p2pEnabled && p2pTransport.isRunning()) {
+            val mappedP2PPeer = p2pTransport.getP2PPeerID(peerID)
+            if (!mappedP2PPeer.isNullOrBlank()) {
+                val p2pSent = runCatching {
+                    p2pTransport.sendDirectMessage(mappedP2PPeer, queued.content, queued.recipientNickname, queued.messageID)
+                }.getOrElse { e ->
+                    Log.e(TAG, "BLE fallback P2P send error for ${peerID.take(12)}...: ${e.message}")
+                    false
+                }
+
+                if (p2pSent) {
+                    markMessageSent(peerID, messageID)
+                    return
+                }
+            }
+        }
+
+        if (toggles.nostrEnabled && canSendViaNostr(peerID)) {
+            val nostrSent = nostr.sendPrivateMessageAwait(
+                queued.content,
+                peerID,
+                queued.recipientNickname,
+                queued.messageID
+            ).isSuccess
+            if (nostrSent) {
+                markMessageSent(peerID, messageID)
+            }
+        }
+    }
+
+    private fun resolveEstablishedMeshTarget(peerID: String, toggles: P2PConfig.TransportToggles): String? {
+        if (!toggles.bleEnabled) {
+            return null
+        }
+
+        if (mesh.getPeerInfo(peerID)?.isConnected == true && mesh.hasEstablishedSession(peerID)) {
+            return peerID
+        }
+
+        if (peerID.length == 64 && peerID.matches(Regex("^[0-9a-fA-F]+$"))) {
+            val meshPeer = resolveMeshPeerForNoiseHex(peerID)
+            if (meshPeer != null && mesh.getPeerInfo(meshPeer)?.isConnected == true && mesh.hasEstablishedSession(meshPeer)) {
+                return meshPeer
+            }
+        }
+
+        return null
+    }
+
+    private fun markMessageSent(peerID: String, messageID: String) {
+        synchronized(outboxLock) {
+            val current = outbox[peerID] ?: return
+            current.removeAll { it.messageID == messageID }
+            if (current.isEmpty()) {
+                outbox.remove(peerID)
+            }
+
+            val key = fallbackJobKey(peerID, messageID)
+            pendingBleFallbackJobs.remove(key)?.cancel()
+        }
+    }
+
     private fun canSendViaNostr(peerID: String): Boolean {
+        if (!currentTransportToggles().nostrEnabled) {
+            return false
+        }
         return try {
             // Full Noise key hex
             if (peerID.length == 64 && peerID.matches(Regex("^[0-9a-fA-F]+$"))) {
@@ -209,6 +459,26 @@ class MessageRouter private constructor(
                 false
             }
         } catch (_: Exception) { false }
+    }
+
+    private fun canAttemptMeshHandshake(peerID: String): Boolean {
+        return !(peerID.startsWith("p2p:") || peerID.startsWith("nostr_"))
+    }
+
+    private fun queueMessage(peerID: String, content: String, recipientNickname: String, messageID: String) {
+        synchronized(outboxLock) {
+            val q = outbox.getOrPut(peerID) { mutableListOf() }
+            val alreadyQueued = q.any { it.messageID == messageID }
+            if (!alreadyQueued) {
+                q.add(
+                    QueuedMessage(
+                        content = content,
+                        recipientNickname = recipientNickname,
+                        messageID = messageID
+                    )
+                )
+            }
+        }
     }
 
     private fun hexToBytes(hex: String): ByteArray {
