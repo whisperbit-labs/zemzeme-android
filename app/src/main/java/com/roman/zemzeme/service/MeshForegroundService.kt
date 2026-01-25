@@ -29,11 +29,11 @@ class MeshForegroundService : Service() {
         private const val CHANNEL_ID = "bitchat_mesh_service"
         private const val NOTIFICATION_ID = 10001
 
-        const val ACTION_START = "com.bitchat.android.service.START"
-        const val ACTION_STOP = "com.bitchat.android.service.STOP"
-        const val ACTION_QUIT = "com.bitchat.android.service.QUIT"
-        const val ACTION_UPDATE_NOTIFICATION = "com.bitchat.android.service.UPDATE_NOTIFICATION"
-        const val ACTION_NOTIFICATION_PERMISSION_GRANTED = "com.bitchat.android.action.NOTIFICATION_PERMISSION_GRANTED"
+        const val ACTION_START = "com.roman.zemzeme.service.START"
+        const val ACTION_STOP = "com.roman.zemzeme.service.STOP"
+        const val ACTION_QUIT = "com.roman.zemzeme.service.QUIT"
+        const val ACTION_UPDATE_NOTIFICATION = "com.roman.zemzeme.service.UPDATE_NOTIFICATION"
+        const val ACTION_NOTIFICATION_PERMISSION_GRANTED = "com.roman.zemzeme.action.NOTIFICATION_PERMISSION_GRANTED"
 
         fun start(context: Context) {
             val intent = Intent(context, MeshForegroundService::class.java).apply { action = ACTION_START }
@@ -124,6 +124,18 @@ class MeshForegroundService : Service() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
         createChannel()
+
+        // CRITICAL: Call startForeground() immediately to satisfy the 5-second
+        // contract from startForegroundService(). On some OEMs (Huawei, Xiaomi),
+        // onStartCommand() can be delayed beyond 5s if the main thread is blocked
+        // (e.g., battery optimization dialog), causing a fatal ANR/crash.
+        try {
+            val earlyNotification = buildNotification(0)
+            startForegroundCompat(earlyNotification)
+            isInForeground = true
+        } catch (e: Exception) {
+            Log.w("MeshForegroundService", "Early startForeground failed (non-fatal): ${e.message}")
+        }
 
         // Ensure mesh service exists in holder (create if needed)
         val existing = MeshServiceHolder.meshService
@@ -287,7 +299,7 @@ class MeshForegroundService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0)
         )
 
-        // Action: Quit Bitchat
+        // Action: Quit Zemzeme
         val quitIntent = Intent(this, MeshForegroundService::class.java).apply { action = ACTION_QUIT }
         val quitPendingIntent = PendingIntent.getService(
             this, 1, quitIntent,

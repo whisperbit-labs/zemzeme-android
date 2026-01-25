@@ -12,6 +12,7 @@ import golib.MobileConnectionHandler
 import golib.MobileMessageHandler
 import golib.MobileTopicMessageHandler
 import golib.MobileTopicPeerHandler
+import golib.MobilePeerAddressHandler
 import golib.P2PNode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -97,9 +98,20 @@ data class P2PBandwidthSummary(
 )
 
 /**
+ * V3: Detailed connection info for a connected peer.
+ */
+data class PeerConnectionInfo(
+    val remoteAddr: String = "",
+    val ip: String = "",
+    val port: String = "",
+    val transport: String = "",
+    val direction: String = ""
+)
+
+/**
  * Repository for P2P operations using the Go libp2p library (golib.aar).
  * 
- * This serves as the bridge between BitChat Android and the Go-based libp2p implementation.
+ * This serves as the bridge between Zemzeme Android and the Go-based libp2p implementation.
  * It manages:
  * - Node lifecycle (start/stop)
  * - Direct peer messaging
@@ -126,7 +138,6 @@ class P2PLibraryRepository(
         private const val PEER_CACHE_FIRST_SAVE_DELAY_MS = 2 * 60 * 1000L
         private const val PEER_CACHE_SAVE_INTERVAL_MS = 5 * 60 * 1000L
         private const val STATUS_REFRESH_INTERVAL_MS = 5_000L
-        private const val TOPIC_TRACKING_INTERVAL_SECONDS = 10L
     }
     
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -191,6 +202,13 @@ class P2PLibraryRepository(
     private val lastRecoveryAttemptMs = AtomicLong(0L)
     private var healthCheckJob: Job? = null
     private val recoveryLock = Mutex()
+
+    // V3: Focus peer tracking (prevents idle pruning of active chat peer)
+    private val _focusPeerID = MutableStateFlow<String?>(null)
+    val focusPeerID: StateFlow<String?> = _focusPeerID.asStateFlow()
+
+    // V3: Friend push observer job
+    private var friendPushJob: Job? = null
     
     // ============== Lifecycle ==============
     
@@ -198,7 +216,7 @@ class P2PLibraryRepository(
      * Start the P2P node with the stored (or newly generated) identity.
      * Uses Mutex to ensure atomic state transitions (prevents race conditions).
      * 
-     * @param privateKeyBase64 Optional external private key (e.g., derived from BitChat identity)
+     * @param privateKeyBase64 Optional external private key (e.g., derived from Zemzeme identity)
      */
     @Suppress("UNUSED_PARAMETER")
     suspend fun startNode(privateKeyBase64: String? = null): Result<Unit> = withContext(Dispatchers.IO) {
@@ -223,9 +241,16 @@ class P2PLibraryRepository(
                 }
 
                 initGoLogging()
+
+                // V3: Log golib version
+                try {
+                    val version = Golib.getVersion()
+                    Log.i(TAG, "golib version: $version")
+                } catch (_: Exception) { }
+
                 configureAndroidDNSForNetwork()
 
-                // NOTE: We intentionally ignore privateKeyBase64 because BitChat's
+                // NOTE: We intentionally ignore privateKeyBase64 because Zemzeme's
                 // identity manager key format doesn't match libp2p marshaled private keys.
                 val privateKey = getStoredPrivateKey() ?: generateAndStoreNewKey()
                 Log.d(TAG, "Private key obtained (length: ${privateKey.length})")
@@ -304,6 +329,15 @@ class P2PLibraryRepository(
                     }
                 })
 
+                // V3: Set peer address handler for tracking remote peer address changes
+                newNode.setPeerAddressHandler(object : MobilePeerAddressHandler {
+                    override fun onPeerAddressUpdated(peerID: String?, addrs: String?) {
+                        if (peerID != null && addrs != null) {
+                            Log.d(TAG, "Peer address updated: $peerID -> ${addrs.take(80)}")
+                        }
+                    }
+                })
+
                 _peerID.value = newNode.peerID
                 _multiaddrs.value = newNode.multiaddrs
                 _nodeStatus.value = P2PNodeStatus.RUNNING
@@ -363,6 +397,11 @@ class P2PLibraryRepository(
                 healthCheckJob?.cancel()
                 healthCheckJob = null
                 consecutiveZeroPeerChecks.set(0)
+
+                // V3: Stop friend push observer and clear focus state
+                friendPushJob?.cancel()
+                friendPushJob = null
+                _focusPeerID.value = null
 
                 unregisterNetworkCallbackSafely()
                 persistDailyBandwidthCache()
@@ -486,8 +525,10 @@ class P2PLibraryRepository(
      * Returns 0 if parsing fails or peers not found.
      */
     private fun parseRoutingTablePeers(status: String): Int {
-        // Try to match patterns like "routing table: 84 peers" or "RT: 84"
+        // Try to match V3 format first ("Peers:84, AminoDHT:42, AppDHT:12..."),
+        // then V2 patterns ("routing table: 84 peers", "RT: 84")
         val patterns = listOf(
+            Regex("""Peers:(\d+)"""),                                             // V3 format
             Regex("""routing\s*table[:\s]+(\d+)""", RegexOption.IGNORE_CASE),
             Regex("""RT[:\s]+(\d+)"""),
             Regex("""(\d+)\s*peers?\s*in\s*routing""", RegexOption.IGNORE_CASE),
@@ -920,7 +961,7 @@ class P2PLibraryRepository(
             val stamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
             val exportFile = File(context.cacheDir, "p2p_logs_$stamp.txt")
             val contents = buildString {
-                appendLine("BitChat P2P Debug Logs")
+                appendLine("Zemzeme P2P Debug Logs")
                 appendLine("Exported: ${Date()}")
                 appendLine("Filter: ${component ?: "all"}")
                 appendLine("Entries: ${entries.size}")
@@ -1017,20 +1058,12 @@ class P2PLibraryRepository(
 
     private fun createNodeWithTunedConfig(privateKey: String): P2PNode {
         return try {
-            val config = Golib.defaultConfig()
-            val defaultTrackingInterval = config.topicTrackingInterval
-            val tunedTrackingInterval = minOf(defaultTrackingInterval, TOPIC_TRACKING_INTERVAL_SECONDS)
-            config.topicTrackingInterval = tunedTrackingInterval
-            config.validate()
-
-            val configJson = config.toJSON()
-            Log.d(
-                TAG,
-                "Using topic tracking interval=${tunedTrackingInterval}s (default=${defaultTrackingInterval}s)"
-            )
-            Golib.createP2PNodeWithConfigJSON(privateKey, 0, configJson)
+            // V3: Use profile-based creation. TopicTrackingInterval is now managed
+            // by the LifecycleManager internally. debugNetwork=false for production.
+            Log.d(TAG, "Creating node with V3 profile-based config (mobile_client)")
+            Golib.createP2PNodeWithProfileAndMode(privateKey, 0, "mobile_client", false)
         } catch (e: Exception) {
-            Log.w(TAG, "Failed to create tuned node config, falling back to default: ${e.message}")
+            Log.w(TAG, "Profile-based node creation failed, falling back: ${e.message}")
             Golib.newP2PNode(privateKey, 0)
         }
     }
@@ -1346,7 +1379,7 @@ class P2PLibraryRepository(
     }
     
     /**
-     * Set a specific private key (e.g., derived from BitChat identity).
+     * Set a specific private key (e.g., derived from Zemzeme identity).
      * Must be called before startNode() to take effect.
      */
     fun setPrivateKey(privateKeyBase64: String) {
@@ -1368,6 +1401,165 @@ class P2PLibraryRepository(
         Log.d(TAG, "Cleared P2P keys")
     }
     
+    // ============== V3: Focus & Priority APIs ==============
+
+    /**
+     * Signal that the user has a chat screen open for this peer.
+     * The focus peer's connection will not be pruned by idle timeout.
+     * Call clearFocusPeer() when the chat screen is closed.
+     */
+    fun setFocusPeer(peerID: String) {
+        _focusPeerID.value = peerID
+        node?.setFocusPeer(peerID)
+        Log.d(TAG, "Focus peer set: $peerID")
+    }
+
+    /**
+     * Signal that the friend chat screen has been closed.
+     */
+    fun clearFocusPeer() {
+        val prev = _focusPeerID.value
+        _focusPeerID.value = null
+        node?.clearFocusPeer()
+        if (prev != null) Log.d(TAG, "Focus peer cleared (was: $prev)")
+    }
+
+    /**
+     * Signal that the user has a topic chat screen open.
+     * The focus topic gets a boosted mesh peer target.
+     * Call clearFocusTopic() when the topic screen is closed.
+     */
+    fun setFocusTopic(topicID: String) {
+        node?.setFocusTopic(topicID)
+        Log.d(TAG, "Focus topic set: $topicID")
+    }
+
+    /**
+     * Signal that the topic chat screen has been closed.
+     */
+    fun clearFocusTopic() {
+        node?.clearFocusTopic()
+        Log.d(TAG, "Focus topic cleared")
+    }
+
+    /**
+     * Connect to a peer if not already connected, then send a message.
+     * This is the preferred way to send messages — handles connect-then-send transparently.
+     */
+    suspend fun connectAndSendMessage(peerID: String, message: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            try {
+                val n = node ?: return@withContext Result.failure(Exception("Node not started"))
+                n.connectAndSendMessage(peerID, message)
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Log.e(TAG, "connectAndSendMessage failed for $peerID", e)
+                Result.failure(e)
+            }
+        }
+
+    /**
+     * Push friend peer IDs to Go for prioritized reconnection.
+     * friendsJson: JSON array of objects with "peer_id", "last_activity" (unix seconds),
+     * and "tag" (opaque label, e.g. "friend:alice").
+     */
+    fun setFriendPeers(friendsJson: String) {
+        try {
+            node?.setFriendPeers(friendsJson)
+            Log.d(TAG, "Friend peers pushed to Go")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to push friend peers: ${e.message}")
+        }
+    }
+
+    /**
+     * Push active topic IDs to Go for intelligent mesh slot allocation.
+     * topicsJson: JSON array of objects with "topic_id" and "last_activity" (unix seconds).
+     */
+    fun setActiveTopics(topicsJson: String) {
+        try {
+            node?.setActiveTopics(topicsJson)
+            Log.d(TAG, "Active topics pushed to Go")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to push active topics: ${e.message}")
+        }
+    }
+
+    // ============== V3: Connection Info ==============
+
+    /**
+     * Get detailed connection info for a connected peer.
+     * Returns null if not connected or on error.
+     */
+    fun getConnectionInfo(peerID: String): PeerConnectionInfo? {
+        val json = node?.getPeerConnectionInfo(peerID)?.takeIf { it.isNotBlank() } ?: return null
+        return try {
+            val obj = JSONObject(json)
+            PeerConnectionInfo(
+                remoteAddr = obj.optString("remote_addr", ""),
+                ip = obj.optString("ip", ""),
+                port = obj.optString("port", ""),
+                transport = obj.optString("transport", ""),
+                direction = obj.optString("direction", "")
+            )
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to parse connection info for $peerID: ${e.message}")
+            null
+        }
+    }
+
+    /**
+     * Get all multiaddresses this node is reachable at, categorized by type.
+     * Each entry is prefixed with "PUBLIC:", "PRIVATE:", or "LOCAL:".
+     */
+    fun getAllMultiaddrs(): List<String> {
+        val raw = node?.getAllMultiaddrs() ?: return emptyList()
+        if (raw.isBlank()) return emptyList()
+        return raw.split("\n").filter { it.isNotBlank() }
+    }
+
+    // ============== V3: Lifecycle & Config ==============
+
+    /**
+     * Get the current lifecycle phase as JSON.
+     * Includes: phase, uptime, health status, whether friends/topics exist.
+     */
+    fun getLifecycleStatus(): String = node?.getLifecycleStatus() ?: "{}"
+
+    /**
+     * Whether the Amino DHT is hibernating.
+     */
+    fun isAminoHibernating(): Boolean = node?.isAminoHibernating() ?: false
+
+    /**
+     * Get the running node's current config as JSON.
+     */
+    fun getCurrentConfigJson(): String? = node?.getCurrentConfig()
+
+    /**
+     * Get the default config for a specific profile as JSON.
+     */
+    fun getDefaultConfigJson(profile: String = "mobile_client"): String? {
+        return try {
+            Golib.getDefaultConfigForProfile(profile)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    /**
+     * Apply a custom config JSON to the running node.
+     * Hot-reloadable fields take effect on the next enforcement cycle.
+     */
+    fun applyConfigJson(configJson: String): Boolean {
+        return try {
+            node?.setCustomConfig(configJson)
+            true
+        } catch (_: Exception) {
+            false
+        }
+    }
+
     // ============== Internal ==============
     
     private fun updatePeerState(peerID: String, connected: Boolean) {

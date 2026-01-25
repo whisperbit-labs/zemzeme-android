@@ -2,7 +2,7 @@ package com.roman.zemzeme.p2p
 
 import android.content.Context
 import android.util.Log
-import com.roman.zemzeme.model.BitchatMessage
+import com.roman.zemzeme.model.ZemzemeMessage
 import com.roman.zemzeme.model.NoisePayloadType
 import com.roman.zemzeme.nostr.NostrTransport
 import com.google.gson.Gson
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * P2P Transport Layer for BitChat
+ * P2P Transport Layer for Zemzeme
  * 
  * This acts as a bridge between P2P (libp2p) and Nostr transports,
  * providing unified message routing with automatic fallback.
@@ -62,7 +62,7 @@ class P2PTransport private constructor(
         NostrTransport.getInstance(context)
     }
     
-    // Mapping: BitChat Peer ID → libp2p Peer ID
+    // Mapping: Zemzeme Peer ID → libp2p Peer ID
     // In the future this could be extended to resolve via Nostr metadata
     private val peerIdMapping = ConcurrentHashMap<String, String>()
     
@@ -86,7 +86,8 @@ class P2PTransport private constructor(
         val content: String,
         val type: P2PMessageType,
         val topicName: String? = null,
-        val timestamp: Long = System.currentTimeMillis()
+        val timestamp: Long = System.currentTimeMillis(),
+        val senderNickname: String? = null
     )
     
     enum class P2PMessageType {
@@ -97,7 +98,7 @@ class P2PTransport private constructor(
     
     /**
      * P2P wire message format.
-     * Wraps BitChat message content with type information.
+     * Wraps Zemzeme message content with type information.
      */
     data class P2PWireMessage(
         val type: String,               // "dm", "channel", "topic"
@@ -111,12 +112,12 @@ class P2PTransport private constructor(
     
     /**
      * Start the P2P transport layer.
-     * This should be called when BitChat mesh service starts.
+     * This should be called when Zemzeme mesh service starts.
      * 
-     * @param privateKeyBase64 Optional P2P key (derived from BitChat identity)
+     * @param privateKeyBase64 Optional P2P key (derived from Zemzeme identity)
      */
     suspend fun start(privateKeyBase64: String? = null): Result<Unit> {
-        Log.d(TAG, "Starting P2P transport...")
+        Log.i(TAG, "Starting P2P transport...")
         return p2pRepository.startNode(privateKeyBase64)
     }
     
@@ -124,7 +125,7 @@ class P2PTransport private constructor(
      * Stop the P2P transport layer.
      */
     suspend fun stop(): Result<Unit> {
-        Log.d(TAG, "Stopping P2P transport...")
+        Log.i(TAG, "Stopping P2P transport...")
         return p2pRepository.stopNode()
     }
     
@@ -149,7 +150,7 @@ class P2PTransport private constructor(
      * Tries P2P first, falls back to Nostr if needed.
      * 
      * @param content Message content
-     * @param recipientBitchatID BitChat peer ID of recipient
+     * @param recipientZemzemeID Zemzeme peer ID of recipient
      * @param recipientNickname Recipient's nickname
      * @param messageID Unique message ID
      * @param senderNickname Sender's nickname
@@ -157,14 +158,14 @@ class P2PTransport private constructor(
      */
     suspend fun sendPrivateMessage(
         content: String,
-        recipientBitchatID: String,
+        recipientZemzemeID: String,
         recipientNickname: String,
         messageID: String,
         senderNickname: String? = null
     ): Result<TransportUsed> = withContext(Dispatchers.IO) {
         
         // Check if we have a P2P mapping for this peer and if P2P is available
-        val p2pPeerID = peerIdMapping[recipientBitchatID]
+        val p2pPeerID = peerIdMapping[recipientZemzemeID]
         
         if (p2pPeerID != null && isRunning()) {
             // Try P2P first
@@ -182,7 +183,7 @@ class P2PTransport private constructor(
             )
             
             if (p2pResult.isSuccess) {
-                Log.d(TAG, "Message sent via P2P to $recipientBitchatID")
+                Log.i(TAG, "Message sent via P2P to $recipientZemzemeID")
                 return@withContext Result.success(TransportUsed.P2P)
             } else {
                 Log.w(TAG, "P2P send failed, falling back to Nostr: ${p2pResult.exceptionOrNull()?.message}")
@@ -193,11 +194,11 @@ class P2PTransport private constructor(
         try {
             nostrTransport.sendPrivateMessage(
                 content = content,
-                to = recipientBitchatID,
+                to = recipientZemzemeID,
                 recipientNickname = recipientNickname,
                 messageID = messageID
             )
-            Log.d(TAG, "Message sent via Nostr to $recipientBitchatID")
+            Log.i(TAG, "Message sent via Nostr to $recipientZemzemeID")
             Result.success(TransportUsed.NOSTR)
         } catch (e: Exception) {
             Log.e(TAG, "Both P2P and Nostr send failed", e)
@@ -232,7 +233,7 @@ class P2PTransport private constructor(
             return false
         }
         
-        Log.d(TAG, "Sending P2P DM to ${rawPeerID.take(12)}... (content: ${content.take(30)}...)")
+        Log.i(TAG, "Sending P2P DM to ${rawPeerID.take(12)}... (content: ${content.take(30)}...)")
         
         return try {
             val wireMessage = P2PWireMessage(
@@ -247,22 +248,22 @@ class P2PTransport private constructor(
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
                 // First: try to connect to peer if not already connected
                 if (!p2pRepository.isConnected(rawPeerID)) {
-                    Log.d(TAG, "Not connected to ${rawPeerID.take(12)}..., attempting connection via DHT...")
+                    Log.i(TAG, "Not connected to ${rawPeerID.take(12)}..., attempting connection via DHT...")
                     val connectResult = p2pRepository.connectToPeer(rawPeerID)
                     if (connectResult.isFailure) {
                         Log.w(TAG, "Failed to connect to peer: ${connectResult.exceptionOrNull()?.message}")
                         // Try sending anyway - sometimes connections are established dynamically
                     } else {
-                        Log.d(TAG, "Connected to ${rawPeerID.take(12)}...")
+                        Log.i(TAG, "Connected to ${rawPeerID.take(12)}...")
                     }
                 } else {
-                    Log.d(TAG, "Already connected to ${rawPeerID.take(12)}...")
+                    Log.i(TAG, "Already connected to ${rawPeerID.take(12)}...")
                 }
                 
                 // Now send the message
                 val result = p2pRepository.sendMessage(rawPeerID, gson.toJson(wireMessage))
                 if (result.isSuccess) {
-                    Log.d(TAG, "P2P DM sent successfully to ${rawPeerID.take(12)}...")
+                    Log.i(TAG, "P2P DM sent successfully to ${rawPeerID.take(12)}...")
                     true
                 } else {
                     Log.w(TAG, "P2P DM failed: ${result.exceptionOrNull()?.message}")
@@ -323,29 +324,29 @@ class P2PTransport private constructor(
     // ============== Peer ID Mapping ==============
     
     /**
-     * Register a mapping between BitChat peer ID and libp2p Peer ID.
+     * Register a mapping between Zemzeme peer ID and libp2p Peer ID.
      * Called when we discover a peer's P2P identity (e.g., via Nostr metadata or handshake).
      */
-    fun registerPeerMapping(bitchatPeerID: String, libp2pPeerID: String) {
-        peerIdMapping[bitchatPeerID] = libp2pPeerID
-        Log.d(TAG, "Registered peer mapping: $bitchatPeerID → $libp2pPeerID")
+    fun registerPeerMapping(zemzemePeerID: String, libp2pPeerID: String) {
+        peerIdMapping[zemzemePeerID] = libp2pPeerID
+        Log.i(TAG, "Registered peer mapping: $zemzemePeerID → $libp2pPeerID")
     }
     
     /**
      * Try to connect to a peer via P2P using their libp2p Peer ID.
      */
-    suspend fun connectToPeer(bitchatPeerID: String): Result<Unit> {
-        val p2pPeerID = peerIdMapping[bitchatPeerID]
-            ?: return Result.failure(Exception("No P2P ID known for peer $bitchatPeerID"))
+    suspend fun connectToPeer(zemzemePeerID: String): Result<Unit> {
+        val p2pPeerID = peerIdMapping[zemzemePeerID]
+            ?: return Result.failure(Exception("No P2P ID known for peer $zemzemePeerID"))
         
         return p2pRepository.connectToPeer(p2pPeerID)
     }
     
     /**
-     * Get the libp2p Peer ID for a BitChat peer, if known.
+     * Get the libp2p Peer ID for a Zemzeme peer, if known.
      */
-    fun getP2PPeerID(bitchatPeerID: String): String? {
-        return peerIdMapping[bitchatPeerID]
+    fun getP2PPeerID(zemzemePeerID: String): String? {
+        return peerIdMapping[zemzemePeerID]
     }
     
     // ============== Message Callbacks ==============
@@ -358,7 +359,7 @@ class P2PTransport private constructor(
     }
     
     private fun handleIncomingP2PMessage(message: P2PMessage) {
-        Log.d(TAG, "handleIncomingP2PMessage: isTopicMessage=${message.isTopicMessage}, topicName=${message.topicName}, content=${message.content.take(30)}...")
+        Log.i(TAG, "handleIncomingP2PMessage: isTopicMessage=${message.isTopicMessage}, topicName=${message.topicName}, content=${message.content.take(30)}...")
         
         try {
             val wireMessage = gson.fromJson(message.content, P2PWireMessage::class.java)
@@ -373,17 +374,18 @@ class P2PTransport private constructor(
                     else -> if (message.isTopicMessage) P2PMessageType.TOPIC_MESSAGE else P2PMessageType.DIRECT_MESSAGE
                 },
                 topicName = message.topicName,
-                timestamp = wireMessage.timestamp
+                timestamp = wireMessage.timestamp,
+                senderNickname = wireMessage.senderNickname
             )
             
-            Log.d(TAG, "Parsed wire message: type=${wireMessage.type} -> ${incomingMessage.type}")
+            Log.i(TAG, "Parsed wire message: type=${wireMessage.type} -> ${incomingMessage.type}")
             messageCallback.get()?.invoke(incomingMessage)
-            Log.d(TAG, "Received P2P message from ${message.senderPeerID}: ${wireMessage.content.take(50)}...")
+            Log.i(TAG, "Received P2P message from ${message.senderPeerID}: ${wireMessage.content.take(50)}...")
             
         } catch (e: Exception) {
             // Message might not be in our wire format (could be raw text)
             val computedType = if (message.isTopicMessage) P2PMessageType.TOPIC_MESSAGE else P2PMessageType.DIRECT_MESSAGE
-            Log.d(TAG, "JSON parse failed, using raw: isTopicMessage=${message.isTopicMessage} -> $computedType")
+            Log.i(TAG, "JSON parse failed, using raw: isTopicMessage=${message.isTopicMessage} -> $computedType")
             
             val incomingMessage = P2PIncomingMessage(
                 senderPeerID = message.senderPeerID,
@@ -394,7 +396,7 @@ class P2PTransport private constructor(
             )
             
             messageCallback.get()?.invoke(incomingMessage)
-            Log.d(TAG, "Received raw P2P message from ${message.senderPeerID}")
+            Log.i(TAG, "Received raw P2P message from ${message.senderPeerID}")
         }
     }
     

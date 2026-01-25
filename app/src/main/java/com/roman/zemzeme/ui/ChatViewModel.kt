@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import com.roman.zemzeme.mesh.BluetoothMeshDelegate
 import com.roman.zemzeme.mesh.BluetoothMeshService
 import com.roman.zemzeme.service.MeshServiceHolder
-import com.roman.zemzeme.model.BitchatMessage
-import com.roman.zemzeme.model.BitchatMessageType
+import com.roman.zemzeme.model.ZemzemeMessage
+import com.roman.zemzeme.model.ZemzemeMessageType
 import com.roman.zemzeme.nostr.NostrIdentityBridge
-import com.roman.zemzeme.protocol.BitchatPacket
+import com.roman.zemzeme.protocol.ZemzemePacket
 
 
 import kotlinx.coroutines.launch
@@ -34,7 +34,7 @@ import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicLong
 
 /**
- * Refactored ChatViewModel - Main coordinator for bitchat functionality
+ * Refactored ChatViewModel - Main coordinator for zemzeme functionality
  * Delegates specific responsibilities to specialized managers while maintaining 100% iOS compatibility
  */
 class ChatViewModel(
@@ -45,7 +45,7 @@ class ChatViewModel(
     // Made var to support mesh service replacement after panic clear
     var meshService: BluetoothMeshService = initialMeshService
         private set
-    private val debugManager by lazy { try { com.bitchat.android.ui.debug.DebugSettingsManager.getInstance() } catch (e: Exception) { null } }
+    private val debugManager by lazy { try { com.roman.zemzeme.ui.debug.DebugSettingsManager.getInstance() } catch (e: Exception) { null } }
     private val p2pMessageSequence = AtomicLong(0L)
 
     companion object {
@@ -56,7 +56,7 @@ class ChatViewModel(
         val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
         if (toPeerIDOrNull != null && targetPeer == null) return
 
-        if (targetPeer == null && state.selectedLocationChannel.value is com.bitchat.android.geohash.ChannelID.Location) {
+        if (targetPeer == null && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Location) {
             Log.w(TAG, "Blocked voice note send in geohash location chat (BLE media-only policy)")
             return
         }
@@ -68,7 +68,7 @@ class ChatViewModel(
         val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
         if (toPeerIDOrNull != null && targetPeer == null) return
 
-        if (targetPeer == null && state.selectedLocationChannel.value is com.bitchat.android.geohash.ChannelID.Location) {
+        if (targetPeer == null && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Location) {
             Log.w(TAG, "Blocked file send in geohash location chat (BLE media-only policy)")
             return
         }
@@ -80,7 +80,7 @@ class ChatViewModel(
         val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
         if (toPeerIDOrNull != null && targetPeer == null) return
 
-        if (targetPeer == null && state.selectedLocationChannel.value is com.bitchat.android.geohash.ChannelID.Location) {
+        if (targetPeer == null && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Location) {
             Log.w(TAG, "Blocked image send in geohash location chat (BLE media-only policy)")
             return
         }
@@ -101,13 +101,13 @@ class ChatViewModel(
         }
 
         val canonicalPeerID = try {
-            com.bitchat.android.services.ConversationAliasResolver.resolveCanonicalPeerID(
+            com.roman.zemzeme.services.ConversationAliasResolver.resolveCanonicalPeerID(
                 selectedPeerID = toPeerIDOrNull,
                 connectedPeers = state.getConnectedPeersValue(),
                 meshNoiseKeyForPeer = { pid -> meshService.getPeerInfo(pid)?.noisePublicKey },
                 meshHasPeer = { pid -> meshService.getPeerInfo(pid)?.isConnected == true },
-                nostrPubHexForAlias = { alias -> com.bitchat.android.nostr.GeohashAliasRegistry.get(alias) },
-                findNoiseKeyForNostr = { key -> com.bitchat.android.favorites.FavoritesPersistenceService.shared.findNoiseKey(key) }
+                nostrPubHexForAlias = { alias -> com.roman.zemzeme.nostr.GeohashAliasRegistry.get(alias) },
+                findNoiseKeyForNostr = { key -> com.roman.zemzeme.favorites.FavoritesPersistenceService.shared.findNoiseKey(key) }
             )
         } catch (_: Exception) {
             toPeerIDOrNull
@@ -207,16 +207,16 @@ class ChatViewModel(
 
 
 
-    val messages: StateFlow<List<BitchatMessage>> = state.messages
+    val messages: StateFlow<List<ZemzemeMessage>> = state.messages
     val connectedPeers: StateFlow<List<String>> = state.connectedPeers
     val nickname: StateFlow<String> = state.nickname
     val isConnected: StateFlow<Boolean> = state.isConnected
-    val privateChats: StateFlow<Map<String, List<BitchatMessage>>> = state.privateChats
+    val privateChats: StateFlow<Map<String, List<ZemzemeMessage>>> = state.privateChats
     val selectedPrivateChatPeer: StateFlow<String?> = state.selectedPrivateChatPeer
     val unreadPrivateMessages: StateFlow<Set<String>> = state.unreadPrivateMessages
     val joinedChannels: StateFlow<Set<String>> = state.joinedChannels
     val currentChannel: StateFlow<String?> = state.currentChannel
-    val channelMessages: StateFlow<Map<String, List<BitchatMessage>>> = state.channelMessages
+    val channelMessages: StateFlow<Map<String, List<ZemzemeMessage>>> = state.channelMessages
     val unreadChannelMessages: StateFlow<Map<String, Int>> = state.unreadChannelMessages
     val passwordProtectedChannels: StateFlow<Set<String>> = state.passwordProtectedChannels
     val showPasswordPrompt: StateFlow<Boolean> = state.showPasswordPrompt
@@ -238,38 +238,38 @@ class ChatViewModel(
     val privateChatSheetPeer: StateFlow<String?> = state.privateChatSheetPeer
     val showVerificationSheet: StateFlow<Boolean> = state.showVerificationSheet
     val showSecurityVerificationSheet: StateFlow<Boolean> = state.showSecurityVerificationSheet
-    val selectedLocationChannel: StateFlow<com.bitchat.android.geohash.ChannelID?> = state.selectedLocationChannel
+    val selectedLocationChannel: StateFlow<com.roman.zemzeme.geohash.ChannelID?> = state.selectedLocationChannel
     val isTeleported: StateFlow<Boolean> = state.isTeleported
     val geohashPeople: StateFlow<List<GeoPerson>> = state.geohashPeople
     val teleportedGeo: StateFlow<Set<String>> = state.teleportedGeo
     val geohashParticipantCounts: StateFlow<Map<String, Int>> = state.geohashParticipantCounts
     
     // P2P topic states for connection status UI (delegated from geohashViewModel)
-    val p2pTopicStates: StateFlow<Map<String, com.bitchat.android.p2p.TopicState>> get() = geohashViewModel.p2pTopicStates
+    val p2pTopicStates: StateFlow<Map<String, com.roman.zemzeme.p2p.TopicState>> get() = geohashViewModel.p2pTopicStates
 
     init {
         // Note: Mesh service delegate is now set by MainActivity
         loadAndInitialize()
         // Hydrate UI state from process-wide AppStateStore to survive Activity recreation
         viewModelScope.launch {
-            try { com.bitchat.android.services.AppStateStore.peers.collect { peers ->
+            try { com.roman.zemzeme.services.AppStateStore.peers.collect { peers ->
                 state.setConnectedPeers(peers)
                 state.setIsConnected(peers.isNotEmpty())
             } } catch (_: Exception) { }
         }
         viewModelScope.launch {
-            try { com.bitchat.android.services.AppStateStore.publicMessages.collect { msgs ->
+            try { com.roman.zemzeme.services.AppStateStore.publicMessages.collect { msgs ->
                 // Source of truth is AppStateStore; replace to avoid duplicate keys in LazyColumn
                 state.setMessages(msgs)
             } } catch (_: Exception) { }
         }
         viewModelScope.launch {
-            try { com.bitchat.android.services.AppStateStore.privateMessages.collect { byPeer ->
+            try { com.roman.zemzeme.services.AppStateStore.privateMessages.collect { byPeer ->
                 // Replace with store snapshot
                 state.setPrivateChats(byPeer)
                 // Recompute unread set using SeenMessageStore for robustness across Activity recreation
                 try {
-                    val seen = com.bitchat.android.services.SeenMessageStore.getInstance(getApplication())
+                    val seen = com.roman.zemzeme.services.SeenMessageStore.getInstance(getApplication())
                     val myNick = state.getNicknameValue() ?: meshService.myPeerID
                     val unread = mutableSetOf<String>()
                     byPeer.forEach { (peer, list) ->
@@ -280,14 +280,14 @@ class ChatViewModel(
             } } catch (_: Exception) { }
         }
         viewModelScope.launch {
-            try { com.bitchat.android.services.AppStateStore.channelMessages.collect { byChannel ->
+            try { com.roman.zemzeme.services.AppStateStore.channelMessages.collect { byChannel ->
                 // Replace with store snapshot
                 state.setChannelMessages(byChannel)
             } } catch (_: Exception) { }
         }
         // Subscribe to BLE transfer progress and reflect in message deliveryStatus
         viewModelScope.launch {
-            com.bitchat.android.mesh.TransferProgressManager.events.collect { evt ->
+            com.roman.zemzeme.mesh.TransferProgressManager.events.collect { evt ->
                 mediaSendingManager.handleTransferProgressEvent(evt)
             }
         }
@@ -334,11 +334,11 @@ class ChatViewModel(
 
         // Bridge DebugSettingsManager -> Chat messages when verbose logging is on
         viewModelScope.launch {
-            com.bitchat.android.ui.debug.DebugSettingsManager.getInstance().debugMessages.collect { msgs ->
-                if (com.bitchat.android.ui.debug.DebugSettingsManager.getInstance().verboseLoggingEnabled.value) {
+            com.roman.zemzeme.ui.debug.DebugSettingsManager.getInstance().debugMessages.collect { msgs ->
+                if (com.roman.zemzeme.ui.debug.DebugSettingsManager.getInstance().verboseLoggingEnabled.value) {
                     // Only show debug logs in the Mesh chat timeline to avoid leaking into geohash chats
                     val selectedLocation = state.selectedLocationChannel.value
-                    if (selectedLocation is com.bitchat.android.geohash.ChannelID.Mesh) {
+                    if (selectedLocation is com.roman.zemzeme.geohash.ChannelID.Mesh) {
                         // Append only latest debug message as system message to avoid flooding
                         msgs.lastOrNull()?.let { dm ->
                             messageManager.addSystemMessage(dm.content)
@@ -352,8 +352,8 @@ class ChatViewModel(
         geohashViewModel.initialize()
 
         // Initialize favorites persistence service
-        com.bitchat.android.favorites.FavoritesPersistenceService.initialize(getApplication())
-        com.bitchat.android.p2p.P2PFavoritesRegistry.initialize(getApplication())
+        com.roman.zemzeme.favorites.FavoritesPersistenceService.initialize(getApplication())
+        com.roman.zemzeme.p2p.P2PFavoritesRegistry.initialize(getApplication())
 
         // Load verified fingerprints from secure storage
         verificationHandler.loadVerifiedFingerprints()
@@ -361,28 +361,39 @@ class ChatViewModel(
 
         // Ensure NostrTransport knows our mesh peer ID for embedded packets
         try {
-            val nostrTransport = com.bitchat.android.nostr.NostrTransport.getInstance(getApplication())
+            val nostrTransport = com.roman.zemzeme.nostr.NostrTransport.getInstance(getApplication())
             nostrTransport.senderPeerID = meshService.myPeerID
         } catch (_: Exception) { }
 
         // Set up P2P DM message callback to route incoming P2P direct messages to private chat
         try {
-            val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
+            val p2pTransport = com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication())
             p2pTransport.setMessageCallback { incomingMessage ->
-                if (incomingMessage.type == com.bitchat.android.p2p.P2PTransport.P2PMessageType.DIRECT_MESSAGE) {
+                if (incomingMessage.type == com.roman.zemzeme.p2p.P2PTransport.P2PMessageType.DIRECT_MESSAGE) {
                     val senderPeerID = "p2p:${incomingMessage.senderPeerID}"
 
                     if (handleIncomingP2PFavoriteNotification(senderPeerID, incomingMessage.content)) {
                         return@setMessageCallback
                     }
 
+                    // Cache the sender's nickname from the wire message so subsequent
+                    // lookups via P2PAliasRegistry return the real name instead of
+                    // the raw peer ID fallback (fixes "p2p:12D3KooW..." display bug).
+                    val resolvedName = incomingMessage.senderNickname?.takeIf { it.isNotBlank() }
+                    if (resolvedName != null) {
+                        com.roman.zemzeme.p2p.P2PAliasRegistry.setDisplayName(senderPeerID, resolvedName)
+                        state.updatePeerNickname(senderPeerID, resolvedName)
+                    }
+
                     // Route to private chat
                     val normalizedTimestamp = normalizeP2PTimestamp(incomingMessage.timestamp)
                     val messageId = buildP2PMessageId(incomingMessage.senderPeerID, normalizedTimestamp, incomingMessage.content)
-                    val message = BitchatMessage(
+                    val displayName = resolvedName
+                        ?: com.roman.zemzeme.p2p.P2PAliasRegistry.getDisplayName(senderPeerID)
+                        ?: "p2p:${incomingMessage.senderPeerID.take(8)}…"
+                    val message = ZemzemeMessage(
                         id = messageId,
-                        sender = com.bitchat.android.p2p.P2PAliasRegistry.getDisplayName(senderPeerID) 
-                            ?: "p2p:${incomingMessage.senderPeerID.take(8)}…",
+                        sender = displayName,
                         content = incomingMessage.content,
                         timestamp = java.util.Date(normalizedTimestamp),
                         isRelay = false,
@@ -390,7 +401,7 @@ class ChatViewModel(
                     )
                     // Add to private chat
                     privateChatManager.handleIncomingPrivateMessage(message)
-                    Log.d("ChatViewModel", "Received P2P DM from $senderPeerID: ${incomingMessage.content.take(30)}...")
+                    Log.d("ChatViewModel", "Received P2P DM from $senderPeerID ($displayName): ${incomingMessage.content.take(30)}...")
                 }
             }
         } catch (e: Exception) {
@@ -416,7 +427,7 @@ class ChatViewModel(
         
         // Broadcast presence change to P2P topic (if subscribed to geohash channel)
         val selectedChannel = state.selectedLocationChannel.value
-        if (selectedChannel is com.bitchat.android.geohash.ChannelID.Location) {
+        if (selectedChannel is com.roman.zemzeme.geohash.ChannelID.Location) {
             geohashViewModel.broadcastP2PPresenceForCurrentChannel(newNickname, force = true)
         }
     }
@@ -447,11 +458,11 @@ class ChatViewModel(
         return try {
             val conversationKey = normalizeP2PConversationKey(senderPeerID)
             val isFavorite = content.startsWith("[FAVORITED]")
-            com.bitchat.android.p2p.P2PFavoritesRegistry.setPeerFavoritedUs(conversationKey, isFavorite)
+            com.roman.zemzeme.p2p.P2PFavoritesRegistry.setPeerFavoritedUs(conversationKey, isFavorite)
 
-            val senderName = com.bitchat.android.p2p.P2PAliasRegistry.getDisplayName(conversationKey)
+            val senderName = com.roman.zemzeme.p2p.P2PAliasRegistry.getDisplayName(conversationKey)
                 ?: "p2p:${conversationKey.removePrefix("p2p:").take(8)}..."
-            val weFavoriteThem = com.bitchat.android.p2p.P2PFavoritesRegistry.isFavorite(conversationKey)
+            val weFavoriteThem = com.roman.zemzeme.p2p.P2PFavoritesRegistry.isFavorite(conversationKey)
             val guidance = if (isFavorite) {
                 if (weFavoriteThem) {
                     " - mutual on P2P."
@@ -463,7 +474,7 @@ class ChatViewModel(
             }
 
             val action = if (isFavorite) "favorited" else "unfavorited"
-            val systemMessage = BitchatMessage(
+            val systemMessage = ZemzemeMessage(
                 id = java.util.UUID.randomUUID().toString(),
                 sender = "system",
                 content = "$senderName $action you$guidance",
@@ -486,11 +497,11 @@ class ChatViewModel(
 
     private fun toggleP2PFavorite(peerID: String) {
         val conversationKey = normalizeP2PConversationKey(peerID)
-        val currentlyFavorite = com.bitchat.android.p2p.P2PFavoritesRegistry.isFavorite(conversationKey)
+        val currentlyFavorite = com.roman.zemzeme.p2p.P2PFavoritesRegistry.isFavorite(conversationKey)
                 || dataManager.favoritePeers.contains(conversationKey)
         val isNowFavorite = !currentlyFavorite
 
-        com.bitchat.android.p2p.P2PFavoritesRegistry.setFavorite(conversationKey, isNowFavorite)
+        com.roman.zemzeme.p2p.P2PFavoritesRegistry.setFavorite(conversationKey, isNowFavorite)
         if (isNowFavorite) {
             dataManager.addFavorite(conversationKey)
         } else {
@@ -508,14 +519,14 @@ class ChatViewModel(
                 val conversationKey = normalizeP2PConversationKey(peerID)
                 val rawPeerID = conversationKey.removePrefix("p2p:")
                 val myNpub = try {
-                    com.bitchat.android.nostr.NostrIdentityBridge.getCurrentNostrIdentity(getApplication())?.npub
+                    com.roman.zemzeme.nostr.NostrIdentityBridge.getCurrentNostrIdentity(getApplication())?.npub
                 } catch (_: Exception) {
                     null
                 }
                 val content = if (isFavorite) "[FAVORITED]:${myNpub ?: ""}" else "[UNFAVORITED]:${myNpub ?: ""}"
                 val senderNickname = state.getNicknameValue() ?: meshService.myPeerID
                 val messageID = java.util.UUID.randomUUID().toString()
-                val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
+                val p2pTransport = com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication())
                 val sent = p2pTransport.sendDirectMessage(rawPeerID, content, senderNickname, messageID)
                 if (!sent) {
                     Log.w(TAG, "Failed to send P2P favorite notification to $conversationKey")
@@ -566,7 +577,7 @@ class ChatViewModel(
             // Persistently mark all messages in this conversation as read so Nostr fetches
             // after app restarts won't re-mark them as unread.
             try {
-                val seen = com.bitchat.android.services.SeenMessageStore.getInstance(getApplication())
+                val seen = com.roman.zemzeme.services.SeenMessageStore.getInstance(getApplication())
                 val chats = state.getPrivateChatsValue()
                 val messages = chats[peerID] ?: emptyList()
                 messages.forEach { msg ->
@@ -626,13 +637,13 @@ class ChatViewModel(
                 targetKey
             } else {
                 // Resolve to a canonical mesh peer if needed
-                val canonical = com.bitchat.android.services.ConversationAliasResolver.resolveCanonicalPeerID(
+                val canonical = com.roman.zemzeme.services.ConversationAliasResolver.resolveCanonicalPeerID(
                     selectedPeerID = targetKey,
                     connectedPeers = state.getConnectedPeersValue(),
                     meshNoiseKeyForPeer = { pid -> meshService.getPeerInfo(pid)?.noisePublicKey },
                     meshHasPeer = { pid -> meshService.getPeerInfo(pid)?.isConnected == true },
-                    nostrPubHexForAlias = { alias -> com.bitchat.android.nostr.GeohashAliasRegistry.get(alias) },
-                    findNoiseKeyForNostr = { key -> com.bitchat.android.favorites.FavoritesPersistenceService.shared.findNoiseKey(key) }
+                    nostrPubHexForAlias = { alias -> com.roman.zemzeme.nostr.GeohashAliasRegistry.get(alias) },
+                    findNoiseKeyForNostr = { key -> com.roman.zemzeme.favorites.FavoritesPersistenceService.shared.findNoiseKey(key) }
                 )
                 canonical ?: targetKey
             }
@@ -655,7 +666,7 @@ class ChatViewModel(
         if (content.startsWith("/")) {
             val selectedLocationForCommand = state.selectedLocationChannel.value
             commandProcessor.processCommand(content, meshService, meshService.myPeerID, { messageContent, mentions, channel ->
-                if (selectedLocationForCommand is com.bitchat.android.geohash.ChannelID.Location) {
+                if (selectedLocationForCommand is com.roman.zemzeme.geohash.ChannelID.Location) {
                     // Route command-generated public messages via Nostr in geohash channels
                     geohashViewModel.sendGeohashMessage(
                         messageContent,
@@ -680,13 +691,13 @@ class ChatViewModel(
         
         if (selectedPeer != null) {
             // If the selected peer is a temporary Nostr alias or a noise-hex identity, resolve to a canonical target
-            selectedPeer = com.bitchat.android.services.ConversationAliasResolver.resolveCanonicalPeerID(
+            selectedPeer = com.roman.zemzeme.services.ConversationAliasResolver.resolveCanonicalPeerID(
                 selectedPeerID = selectedPeer,
                 connectedPeers = state.getConnectedPeersValue(),
                 meshNoiseKeyForPeer = { pid -> meshService.getPeerInfo(pid)?.noisePublicKey },
                 meshHasPeer = { pid -> meshService.getPeerInfo(pid)?.isConnected == true },
-                nostrPubHexForAlias = { alias -> com.bitchat.android.nostr.GeohashAliasRegistry.get(alias) },
-                findNoiseKeyForNostr = { key -> com.bitchat.android.favorites.FavoritesPersistenceService.shared.findNoiseKey(key) }
+                nostrPubHexForAlias = { alias -> com.roman.zemzeme.nostr.GeohashAliasRegistry.get(alias) },
+                findNoiseKeyForNostr = { key -> com.roman.zemzeme.favorites.FavoritesPersistenceService.shared.findNoiseKey(key) }
             ).also { canonical ->
                 if (canonical != state.getSelectedPrivateChatPeerValue()) {
                     privateChatManager.startPrivateChat(canonical, meshService)
@@ -706,18 +717,18 @@ class ChatViewModel(
                 meshService.myPeerID
             ) { messageContent, peerID, recipientNicknameParam, messageId ->
                 // Route via MessageRouter (mesh when connected+established, else Nostr)
-                val router = com.bitchat.android.services.MessageRouter.getInstance(getApplication(), meshService)
+                val router = com.roman.zemzeme.services.MessageRouter.getInstance(getApplication(), meshService)
                 router.sendPrivate(messageContent, peerID, recipientNicknameParam, messageId)
             }
         } else {
             // Check if we're in a location channel
             val selectedLocationChannel = state.selectedLocationChannel.value
-            if (selectedLocationChannel is com.bitchat.android.geohash.ChannelID.Location) {
+            if (selectedLocationChannel is com.roman.zemzeme.geohash.ChannelID.Location) {
                 // Send to geohash channel via Nostr ephemeral event
                 geohashViewModel.sendGeohashMessage(content, selectedLocationChannel.channel, meshService.myPeerID, state.getNicknameValue())
             } else {
                 // Send public/channel message via mesh
-                val message = BitchatMessage(
+                val message = ZemzemeMessage(
                     sender = state.getNicknameValue() ?: meshService.myPeerID,
                     content = content,
                     timestamp = Date(),
@@ -790,7 +801,7 @@ class ChatViewModel(
                     try {
                         noiseKey = peerID.chunked(2).map { it.toInt(16).toByte() }.toByteArray()
                         // Prefer nickname from favorites store if available
-                        val rel = com.bitchat.android.favorites.FavoritesPersistenceService.shared.getFavoriteStatus(noiseKey!!)
+                        val rel = com.roman.zemzeme.favorites.FavoritesPersistenceService.shared.getFavoriteStatus(noiseKey!!)
                         if (rel != null) nickname = rel.peerNickname
                     } catch (_: Exception) { }
                 }
@@ -798,11 +809,11 @@ class ChatViewModel(
 
             if (noiseKey != null) {
                 // Determine current favorite state from DataManager using fingerprint
-                val identityManager = com.bitchat.android.identity.SecureIdentityStateManager(getApplication())
+                val identityManager = com.roman.zemzeme.identity.SecureIdentityStateManager(getApplication())
                 val fingerprint = identityManager.generateFingerprint(noiseKey!!)
                 val isNowFavorite = dataManager.favoritePeers.contains(fingerprint)
 
-                com.bitchat.android.favorites.FavoritesPersistenceService.shared.updateFavoriteStatus(
+                com.roman.zemzeme.favorites.FavoritesPersistenceService.shared.updateFavoriteStatus(
                     noisePublicKey = noiseKey!!,
                     nickname = nickname,
                     isFavorite = isNowFavorite
@@ -810,7 +821,7 @@ class ChatViewModel(
 
                 // Send favorite notification via mesh or Nostr with our npub if available
                 try {
-                    val myNostr = com.bitchat.android.nostr.NostrIdentityBridge.getCurrentNostrIdentity(getApplication())
+                    val myNostr = com.roman.zemzeme.nostr.NostrIdentityBridge.getCurrentNostrIdentity(getApplication())
                     val announcementContent = if (isNowFavorite) "[FAVORITED]:${myNostr?.npub ?: ""}" else "[UNFAVORITED]:${myNostr?.npub ?: ""}"
                     // Prefer mesh if session established, else try Nostr
                     if (meshService.hasEstablishedSession(peerID)) {
@@ -822,7 +833,7 @@ class ChatViewModel(
                             java.util.UUID.randomUUID().toString()
                         )
                     } else {
-                        val nostrTransport = com.bitchat.android.nostr.NostrTransport.getInstance(getApplication())
+                        val nostrTransport = com.roman.zemzeme.nostr.NostrTransport.getInstance(getApplication())
                         nostrTransport.senderPeerID = meshService.myPeerID
                         nostrTransport.sendFavoriteNotification(peerID, isNowFavorite)
                     }
@@ -872,7 +883,7 @@ class ChatViewModel(
         sessionStates.forEach { (peerID, newState) ->
             val old = prevStates[peerID]
             if (old != "established" && newState == "established") {
-                com.bitchat.android.services.MessageRouter
+                com.roman.zemzeme.services.MessageRouter
                     .getInstance(getApplication(), meshService)
                     .onSessionEstablished(peerID)
             }
@@ -1045,7 +1056,7 @@ class ChatViewModel(
     
     // MARK: - BluetoothMeshDelegate Implementation (delegated)
     
-    override fun didReceiveMessage(message: BitchatMessage) {
+    override fun didReceiveMessage(message: ZemzemeMessage) {
         meshDelegateHandler.didReceiveMessage(message)
     }
     
@@ -1083,7 +1094,7 @@ class ChatViewModel(
     
     override fun isFavorite(peerID: String): Boolean {
         if (peerID.startsWith("p2p:")) {
-            return com.bitchat.android.p2p.P2PFavoritesRegistry.isFavorite(peerID)
+            return com.roman.zemzeme.p2p.P2PFavoritesRegistry.isFavorite(peerID)
                     || dataManager.favoritePeers.contains(peerID)
         }
         return meshDelegateHandler.isFavorite(peerID)
@@ -1104,7 +1115,7 @@ class ChatViewModel(
         
         // Clear seen message store
         try {
-            com.bitchat.android.services.SeenMessageStore.getInstance(getApplication()).clear()
+            com.roman.zemzeme.services.SeenMessageStore.getInstance(getApplication()).clear()
         } catch (_: Exception) { }
         
         // Clear all mesh service data
@@ -1117,13 +1128,13 @@ class ChatViewModel(
         notificationManager.clearAllNotifications()
 
         // Clear all media files
-        com.bitchat.android.features.file.FileUtils.clearAllMedia(getApplication())
+        com.roman.zemzeme.features.file.FileUtils.clearAllMedia(getApplication())
         
         // Clear Nostr/geohash state, keys, connections, bookmarks, and reinitialize from scratch
         try {
             // Clear geohash bookmarks too (panic should remove everything)
             try {
-                val store = com.bitchat.android.geohash.GeohashBookmarksStore.getInstance(getApplication())
+                val store = com.roman.zemzeme.geohash.GeohashBookmarksStore.getInstance(getApplication())
                 store.clearAll()
             } catch (_: Exception) { }
 
@@ -1212,8 +1223,8 @@ class ChatViewModel(
             } catch (_: Exception) { }
 
             try {
-                com.bitchat.android.p2p.P2PAliasRegistry.clear()
-                com.bitchat.android.p2p.P2PFavoritesRegistry.clear()
+                com.roman.zemzeme.p2p.P2PAliasRegistry.clear()
+                com.roman.zemzeme.p2p.P2PFavoritesRegistry.clear()
                 Log.d(TAG, "Cleared P2P alias and favorites registries")
             } catch (_: Exception) { }
              
@@ -1269,18 +1280,18 @@ class ChatViewModel(
         val rawPeerId = p2pPeerId.removePrefix("p2p:")
         
         // Register the P2P peer ID mapping for message routing
-        com.bitchat.android.p2p.P2PAliasRegistry.put(p2pPeerId, rawPeerId)
+        com.roman.zemzeme.p2p.P2PAliasRegistry.put(p2pPeerId, rawPeerId)
         
         // Cache the display name from geohash participants if available
         val displayName = geohashViewModel.getP2PDisplayName(p2pPeerId)
         if (displayName != null) {
-            com.bitchat.android.p2p.P2PAliasRegistry.setDisplayName(p2pPeerId, displayName)
+            com.roman.zemzeme.p2p.P2PAliasRegistry.setDisplayName(p2pPeerId, displayName)
             // Also update peerNicknames for PrivateChatSheet to use
             state.updatePeerNickname(p2pPeerId, displayName)
         } else {
             // Fallback: use truncated peer ID as display name
             val fallbackName = "p2p:${rawPeerId.take(8)}..."
-            com.bitchat.android.p2p.P2PAliasRegistry.setDisplayName(p2pPeerId, fallbackName)
+            com.roman.zemzeme.p2p.P2PAliasRegistry.setDisplayName(p2pPeerId, fallbackName)
         }
         
         Log.d(TAG, "Starting P2P DM with $p2pPeerId (rawPeerId=$rawPeerId, displayName=$displayName)")
@@ -1298,7 +1309,7 @@ class ChatViewModel(
         // Note: Don't call showPrivateChatSheet here - the caller or LaunchedEffect handles that
     }
 
-    fun selectLocationChannel(channel: com.bitchat.android.geohash.ChannelID) {
+    fun selectLocationChannel(channel: com.roman.zemzeme.geohash.ChannelID) {
         geohashViewModel.selectLocationChannel(channel)
     }
 
@@ -1376,7 +1387,7 @@ class ChatViewModel(
     fun refreshP2PConnection() {
         viewModelScope.launch {
             try {
-                val p2pTransport = com.bitchat.android.p2p.P2PTransport.getInstance(getApplication())
+                val p2pTransport = com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication())
 
                 // First try topic peer refresh (lightweight)
                 geohashViewModel.refreshP2PPeers()

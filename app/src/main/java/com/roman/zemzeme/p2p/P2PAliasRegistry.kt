@@ -18,7 +18,7 @@ object P2PAliasRegistry {
     private const val KEY_PREFIX_DISPLAY = "display_"
     
     // In-memory caches
-    // Thread-safe maps (matches BitChat patterns in NostrRelayManager, PeerManager, etc.)
+    // Thread-safe maps (matches Zemzeme patterns in NostrRelayManager, PeerManager, etc.)
     private val rawPeerIdMap = ConcurrentHashMap<String, String>()
     private val displayNameMap = ConcurrentHashMap<String, String>()
     
