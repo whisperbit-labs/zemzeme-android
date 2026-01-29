@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme -->
-    <style name="Theme.Zemzeme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Enable edge-to-edge content -->
+    <!-- Base application theme for Compose -->
+    <!-- Material3 theming is handled in Compose code, this is just for the Activity container -->
+    <style name="Theme.ZemzemeAndroid" parent="android:Theme.Material.NoActionBar">
+        <!-- Edge-to-edge configuration -->
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <!-- System bar appearance controlled via WindowInsetsController in code -->
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <!-- Dark background color to prevent flash during launch -->
+        <item name="android:windowBackground">@android:color/black</item>
         <!-- Ensure smooth transitions -->
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowContentTransitions">true</item>

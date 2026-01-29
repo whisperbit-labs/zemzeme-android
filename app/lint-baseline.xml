@@ -7,7 +7,7 @@
         errorLine1="                    gatt.disconnect()"
         errorLine2="                    ~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="175"
             column="21"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="                    gatt.close()"
         errorLine2="                    ~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="176"
             column="21"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="            gattServer?.close()"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="187"
             column="13"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="                        gattServer?.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, null)"
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="268"
             column="25"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="                    gattServer?.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, null)"
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="296"
             column="21"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="        gattServer = bluetoothManager.openGattServer(context, serverCallback)"
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="301"
             column="22"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="        gattServer?.addService(service)"
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="325"
             column="9"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="        bleAdvertiser?.startAdvertising(settings, data, advertiseCallback)"
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="384"
             column="9"/>
     </issue>
@@ -95,7 +95,7 @@
         errorLine1="            bleAdvertiser.startAdvertising(settings, data, scanResponse, advertiseCallback)"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="429"
             column="13"/>
     </issue>
@@ -106,7 +106,7 @@
         errorLine1="            bleAdvertiser.startAdvertising(settings, data, advertiseCallback)"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="466"
             column="13"/>
     </issue>
@@ -117,7 +117,7 @@
         errorLine1="        bleAdvertiser.stopAdvertising(object : AdvertiseCallback() {})"
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="478"
             column="9"/>
     </issue>
@@ -128,7 +128,7 @@
         errorLine1="            bleScanner.startScan(listOf(scanFilter), scanSettings, scanCallback)"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="526"
             column="13"/>
     </issue>
@@ -139,7 +139,7 @@
         errorLine1="        bleScanner.stopScan(object : ScanCallback() {})"
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="539"
             column="9"/>
     </issue>
@@ -150,7 +150,7 @@
         errorLine1="                        gatt.discoverServices()"
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="626"
             column="25"/>
     </issue>
@@ -161,7 +161,7 @@
         errorLine1="                        gatt.close()"
         errorLine2="                        ~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="633"
             column="25"/>
     </issue>
@@ -172,7 +172,7 @@
         errorLine1="                        gatt.setCharacteristicNotification(characteristic, true)"
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="645"
             column="25"/>
     </issue>
@@ -183,7 +183,7 @@
         errorLine1="                        gatt.writeDescriptor(descriptor)"
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="652"
             column="25"/>
     </issue>
@@ -194,7 +194,7 @@
         errorLine1="        device.connectGatt(context, false, gattCallback)"
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="683"
             column="9"/>
     </issue>
@@ -205,7 +205,7 @@
         errorLine1="            gattServer?.notifyCharacteristicChanged(device, characteristic, false)"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="700"
             column="13"/>
     </issue>
@@ -216,7 +216,7 @@
         errorLine1="                gatt.writeCharacteristic(characteristic)"
         errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="721"
             column="17"/>
     </issue>
@@ -227,7 +227,7 @@
         errorLine1="                    val success = gattServer?.notifyCharacteristicChanged(device, char, false) ?: false"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="1135"
             column="35"/>
     </issue>
@@ -238,7 +238,7 @@
         errorLine1="                    val success = gatt.writeCharacteristic(characteristic)"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/mesh/BluetoothMeshService.kt"
+            file="src/main/java/com/roman/zemzeme/mesh/BluetoothMeshService.kt"
             line="1153"
             column="35"/>
     </issue>
@@ -381,7 +381,7 @@
         errorLine1="    private val context: Context = application.applicationContext"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/ui/ChatViewModel.kt"
+            file="src/main/java/com/roman/zemzeme/ui/ChatViewModel.kt"
             line="30"
             column="5"/>
     </issue>
@@ -392,7 +392,7 @@
         errorLine1="    var tripleClickCount by remember { mutableStateOf(0) }"
         errorLine2="                                       ~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/ui/ChatScreen.kt"
+            file="src/main/java/com/roman/zemzeme/ui/ChatScreen.kt"
             line="62"
             column="40"/>
     </issue>
@@ -579,7 +579,7 @@
         errorLine1="            _nickname.value = savedNickname"
         errorLine2="                              ~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/bitchat/android/ui/ChatViewModel.kt"
+            file="src/main/java/com/roman/zemzeme/ui/ChatViewModel.kt"
             line="125"
             column="31"/>
     </issue>
