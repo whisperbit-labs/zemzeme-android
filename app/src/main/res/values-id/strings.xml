@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">Zemzeme</string>
 
     <!-- Alasan izin -->
     <string name="permission_bluetooth_rationale">Izin Bluetooth diperlukan untuk chatting langsung dengan orang lain tanpa Internet.</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">Optimalisasi baterai tidak diperlukan</string>
     <string name="battery_optimization_checking">Memeriksa optimalisasi baterai</string>
     <string name="battery_optimization_why_disable">Mengapa menonaktifkan optimalisasi baterai?</string>
-    <string name="battery_optimization_explanation">bitchat berjalan di latar belakang untuk mempertahankan koneksi mesh dengan perangkat terdekat. Optimalisasi baterai dapat mengganggu koneksi ini, menyebabkan pesan tertunda atau hilang.\n\nMenonaktifkan optimalisasi baterai memastikan komunikasi peer-to-peer yang andal.</string>
+    <string name="battery_optimization_explanation">Zemzeme berjalan di latar belakang untuk mempertahankan koneksi mesh dengan perangkat terdekat. Optimalisasi baterai dapat mengganggu koneksi ini, menyebabkan pesan tertunda atau hilang.\n\nMenonaktifkan optimalisasi baterai memastikan komunikasi peer-to-peer yang andal.</string>
     <string name="battery_optimization_disable_button">Nonaktifkan optimalisasi baterai</string>
-    <string name="battery_optimization_note">Catatan: Anda dapat mengubahnya nanti di Pengaturan Android &gt; Aplikasi &gt; bitchat &gt; Baterai.</string>
-    <string name="battery_optimization_not_supported_explanation">Perangkat Anda tidak memerlukan pengaturan optimalisasi baterai. bitchat akan berjalan normal.</string>
-    <string name="battery_optimization_not_supported_message">Perangkat Anda tidak memerlukan pengaturan optimalisasi baterai. bitchat akan berjalan normal.</string>
-    <string name="battery_optimization_success_message">bitchat dapat berjalan andal di latar belakang</string>
+    <string name="battery_optimization_note">Catatan: Anda dapat mengubahnya nanti di Pengaturan Android &gt; Aplikasi &gt; Zemzeme &gt; Baterai.</string>
+    <string name="battery_optimization_not_supported_explanation">Perangkat Anda tidak memerlukan pengaturan optimalisasi baterai. Zemzeme akan berjalan normal.</string>
+    <string name="battery_optimization_not_supported_message">Perangkat Anda tidak memerlukan pengaturan optimalisasi baterai. Zemzeme akan berjalan normal.</string>
+    <string name="battery_optimization_success_message">Zemzeme dapat berjalan andal di latar belakang</string>
     <string name="battery_optimization_benefits">• Pengiriman pesan yang andal\n• Mempertahankan koneksi mesh\n• Relay pesan latar belakang\n• Mencegah putusnya koneksi</string>
     <string name="battery_optimization_check_again">Periksa lagi</string>
     <string name="battery_optimization_skip">Lewati sekarang</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">dan %1$d lagi</string>
     <string name="notification_messages_from_people">%1$d pesan dari %2$d orang</string>
     <string name="notification_more_conversations">dan %1$d percakapan lagi</string>
-    <string name="notification_active_peers_title">👥 bitchatter terdekat!</string>
+    <string name="notification_active_peers_title">👥 Zemzeme user terdekat!</string>
     <string name="notification_active_peers_one">1 orang terdekat</string>
     <string name="notification_active_peers_many">%1$d orang terdekat</string>
     <string name="notification_new_messages">Pesan baru</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">Aktivitas baru di %1$s</string>
     <string name="notification_messages_in">Pesan di %1$s</string>
     <string name="notification_joined_conversation">%1$s bergabung dengan percakapan</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d penyebutan</string>
-    <string name="notification_geohash_summary_title">bitchat – Chat lokasi</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d penyebutan</string>
+    <string name="notification_geohash_summary_title">Zemzeme – Chat lokasi</string>
     <string name="notification_geohash_summary_text">%1$d pesan dari %2$d lokasi</string>
     <string name="notification_mesh_mention_title_singular">Disebut di Mesh Chat</string>
     <string name="notification_mesh_mention_title_plural">%1$d penyebutan di Mesh Chat</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">Pilih gambar</string>
 
     <!-- Sheet tentang -->
-    <string name="about_tagline">chat mesh terdesentralisasi dengan enkripsi end-to-end</string>
+    <string name="about_tagline">Pesan bebas pengawasan dalam semua keadaan, terenkripsi ujung ke ujung</string>
     <string name="about_offline_mesh_title">Chat Mesh Offline</string>
     <string name="about_offline_mesh_desc">Berkomunikasi langsung melalui Bluetooth LE tanpa Internet atau server. Pesan diteruskan melalui perangkat terdekat untuk memperluas jangkauan.</string>
     <string name="about_online_geohash_title">Channel Geohash Online</string>
@@ -253,24 +253,24 @@
     <!-- Layar onboarding -->
     <string name="location_services_required">Layanan lokasi diperlukan</string>
     <string name="privacy_first">Privasi pertama</string>
-    <string name="location_explanation">bitchat TIDAK melacak lokasi Anda.\n\nLayanan lokasi diperlukan untuk pemindaian Bluetooth dan fitur geohash chat.</string>
-    <string name="location_needs_for">bitchat memerlukan layanan lokasi untuk:</string>
+    <string name="location_explanation">Zemzeme TIDAK melacak lokasi Anda.\n\nLayanan lokasi diperlukan untuk pemindaian Bluetooth dan fitur geohash chat.</string>
+    <string name="location_needs_for">Zemzeme memerlukan layanan lokasi untuk:</string>
     <string name="location_needs_bullets">• Pemindaian perangkat Bluetooth\n• Menemukan pengguna terdekat di jaringan mesh\n• Fitur geohash chat\n• Tidak ada pelacakan atau pengumpulan lokasi</string>
     <string name="open_location_settings">Buka pengaturan lokasi</string>
     <string name="check_again">Periksa lagi</string>
     <string name="location_services_unavailable">Layanan lokasi tidak tersedia</string>
-    <string name="location_unavailable_explanation">Layanan lokasi tidak tersedia di perangkat ini. Ini tidak biasa karena layanan lokasi standar di perangkat Android.\n\nbitchat memerlukan layanan lokasi agar pemindaian Bluetooth berfungsi dengan benar (persyaratan Android). Tanpanya, aplikasi tidak dapat menemukan pengguna terdekat.</string>
+    <string name="location_unavailable_explanation">Layanan lokasi tidak tersedia di perangkat ini. Ini tidak biasa karena layanan lokasi standar di perangkat Android.\n\nZemzeme memerlukan layanan lokasi agar pemindaian Bluetooth berfungsi dengan benar (persyaratan Android). Tanpanya, aplikasi tidak dapat menemukan pengguna terdekat.</string>
     <string name="checking_location_services">Memeriksa layanan lokasi …</string>
     <string name="bluetooth_required">Bluetooth diperlukan</string>
-    <string name="bluetooth_needs_for">bitchat memerlukan Bluetooth untuk:</string>
+    <string name="bluetooth_needs_for">Zemzeme memerlukan Bluetooth untuk:</string>
     <string name="bluetooth_needs_bullets">• Menemukan pengguna terdekat\n• Membuat koneksi jaringan mesh\n• Mengirim dan menerima pesan\n• Berfungsi tanpa Internet atau server</string>
     <string name="enable_bluetooth">Aktifkan Bluetooth</string>
     <string name="bluetooth_not_supported">Bluetooth tidak didukung</string>
-    <string name="bluetooth_unsupported_explanation">Perangkat ini tidak mendukung Bluetooth Low Energy (BLE), yang diperlukan agar bitchat berfungsi.\n\nbitchat memerlukan BLE untuk membuat jaringan mesh dan berkomunikasi dengan perangkat terdekat tanpa Internet.</string>
+    <string name="bluetooth_unsupported_explanation">Perangkat ini tidak mendukung Bluetooth Low Energy (BLE), yang diperlukan agar Zemzeme berfungsi.\n\nZemzeme memerlukan BLE untuk membuat jaringan mesh dan berkomunikasi dengan perangkat terdekat tanpa Internet.</string>
     <string name="checking_bluetooth_status">Memeriksa status Bluetooth …</string>
     <string name="battery_optimization_detected_title">Optimalisasi baterai terdeteksi</string>
     <string name="battery_optimization_enabled_title">Optimalisasi baterai diaktifkan</string>
-    <string name="battery_optimization_explanation_short">bitchat harus berjalan di latar belakang untuk mempertahankan koneksi mesh. Optimalisasi baterai dapat mengganggu koneksi ini.</string>
+    <string name="battery_optimization_explanation_short">Zemzeme harus berjalan di latar belakang untuk mempertahankan koneksi mesh. Optimalisasi baterai dapat mengganggu koneksi ini.</string>
     <string name="benefits_of_disabling">Manfaat menonaktifkan</string>
     <string name="battery_benefits_short">• pengiriman pesan yang andal\n• mempertahankan koneksi mesh\n• mencegah putusnya koneksi</string>
     <string name="disable_battery_optimization">Nonaktifkan optimalisasi baterai</string>
@@ -285,7 +285,7 @@
     <string name="privacy_bullets">• tidak ada pelacakan atau pengumpulan data\n• Bluetooth mesh chat sepenuhnya offline\n• Geohash chat menggunakan Internet</string>
     <string name="permissions_header">Izin</string>
     <string name="grant_permissions">Berikan izin</string>
-    <string name="location_tracking_warning">bitchat TIDAK melacak lokasi Anda</string>
+    <string name="location_tracking_warning">Zemzeme TIDAK melacak lokasi Anda</string>
     <string name="geohash_people_header">ORANG</string>
     <string name="nobody_around">tidak ada orang di sekitar …</string>
     <string name="you_suffix"> (Anda)</string>
@@ -314,14 +314,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- Deskripsi izin -->
-    <string name="perm_nearby_devices_desc">Diperlukan untuk menemukan pengguna bitchat melalui Bluetooth</string>
-    <string name="perm_nearby_devices_system">Izinkan bitchat terhubung dengan perangkat terdekat</string>
-    <string name="perm_location_desc">Diperlukan oleh Android untuk menemukan pengguna bitchat terdekat melalui Bluetooth</string>
-    <string name="perm_location_system">bitchat memerlukan ini untuk memindai perangkat terdekat</string>
+    <string name="perm_nearby_devices_desc">Diperlukan untuk menemukan pengguna Zemzeme melalui Bluetooth</string>
+    <string name="perm_nearby_devices_system">Izinkan Zemzeme terhubung dengan perangkat terdekat</string>
+    <string name="perm_location_desc">Diperlukan oleh Android untuk menemukan pengguna Zemzeme terdekat melalui Bluetooth</string>
+    <string name="perm_location_system">Zemzeme memerlukan ini untuk memindai perangkat terdekat</string>
     <string name="perm_notifications_desc">Terima notifikasi saat Anda menerima pesan pribadi</string>
-    <string name="perm_notifications_system">Izinkan bitchat mengirim notifikasi kepada Anda</string>
-    <string name="perm_battery_desc">Nonaktifkan optimalisasi baterai untuk memastikan bitchat berjalan andal di latar belakang dan mempertahankan koneksi jaringan mesh</string>
-    <string name="perm_battery_system">Izinkan bitchat berjalan tanpa pembatasan baterai</string>
+    <string name="perm_notifications_system">Izinkan Zemzeme mengirim notifikasi kepada Anda</string>
+    <string name="perm_battery_desc">Nonaktifkan optimalisasi baterai untuk memastikan Zemzeme berjalan andal di latar belakang dan mempertahankan koneksi jaringan mesh</string>
+    <string name="perm_battery_system">Izinkan Zemzeme berjalan tanpa pembatasan baterai</string>
 
     <!-- Jenis izin -->
     <string name="perm_type_nearby_devices">Perangkat terdekat</string>
@@ -339,10 +339,6 @@
     <string name="cancel">Batal</string>
 
     <!-- Jamak -->
-    <plurals name="notification_and_more">
-        <item quantity="one">dan %d lagi</item>
-        <item quantity="other">dan %d lagi</item>
-    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1 orang</item>
@@ -399,4 +395,56 @@
   <string name="verify_success_title">Verified</string>
   <string name="verify_success_body">You verified %1$s</string>
   <string name="verify_success_system_message">verified %1$s</string>
+
+  <!-- Kunci yang hilang -->
+  <string name="mesh_service_channel_name">Layanan mesh latar belakang</string>
+  <string name="mesh_service_channel_desc">Menjaga mesh Bluetooth tetap berjalan di latar belakang</string>
+  <string name="cd_settings">Pengaturan</string>
+  <string name="cd_location_notes">Catatan lokasi</string>
+  <string name="notification_action_quit_bitchat">Keluar dari Zemzeme</string>
+  <string name="about_background_title">jalankan di latar belakang</string>
+  <string name="about_background_desc">jaga mesh tetap aktif saat aplikasi ditutup (layanan foreground)</string>
+  <string name="about_p2p_subtitle">Koneksi langsung antar-peer via p2p</string>
+  <string name="about_nostr_subtitle">Pesan melalui relay internet</string>
+  <string name="about_ble_subtitle">Mesh kedekatan Bluetooth</string>
+  <string name="background_location_required_title">Lokasi Latar Belakang Direkomendasikan</string>
+  <string name="background_location_required_subtitle">opsional, meningkatkan keandalan mesh</string>
+  <string name="background_location_explanation">Android merekomendasikan lokasi latar belakang agar Zemzeme dapat mencari perangkat terdekat saat aplikasi tidak dibuka. Ini menjaga mesh tetap aktif setelah reboot.</string>
+  <string name="background_location_settings_tip">Saat pengaturan terbuka, pilih "Izinkan sepanjang waktu".</string>
+  <string name="background_location_needs_for">Zemzeme menggunakan lokasi latar belakang untuk:</string>
+  <string name="background_location_needs_bullets">- mencari perangkat terdekat saat aplikasi ditutup\n- menyambung kembali setelah reboot\n- menjaga mesh tetap berjalan di latar belakang</string>
+  <string name="background_location_privacy_note">Kami TIDAK PERNAH mengumpulkan atau menyimpan lokasi Anda. Privasi Anda aman.</string>
+  <string name="grant_background_location">Izinkan Lokasi Latar Belakang</string>
+  <string name="skip_background_location">Lanjut tanpa lokasi latar belakang</string>
+  <string name="dot">.</string>
+  <string name="warning_emoji">⚠️</string>
+  <string name="at_symbol">@</string>
+  <string name="app_brand">Zemzeme/</string>
+  <string name="channel_count_prefix"> · ⧉ </string>
+  <string name="mention_suggestion_at">@%1$s</string>
+  <string name="at_nickname">@%1$s</string>
+  <string name="hash_symbol">#</string>
+  <string name="underscore">_</string>
+  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+  <string name="progress_filled">█</string>
+  <string name="progress_empty">░</string>
+  <string name="image_counter">%1$d / %2$d</string>
+  <string name="status_sending">○</string>
+  <string name="status_pending">○</string>
+  <string name="status_sent">✓</string>
+  <string name="status_delivered">✓✓</string>
+  <string name="status_failed">⚠</string>
+  <string name="status_read">✓</string>
+  <string name="notification_file_pdf">📄</string>
+  <string name="notification_file_zip">🗜️</string>
+  <string name="notification_file_doc">📄</string>
+  <string name="notification_file_xls">📊</string>
+  <string name="notification_file_ppt">📈</string>
+  <string name="notification_file_generic">📎</string>
+  <string name="perm_background_location_desc">Direkomendasikan untuk mencari perangkat terdekat saat aplikasi di latar belakang</string>
+  <string name="perm_background_location_system">Izinkan akses lokasi latar belakang</string>
+  <string name="perm_type_background_location">Lokasi Latar Belakang</string>
+  <string name="tor_not_available_in_this_build">Tor tidak tersedia di build ini</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+  <string name="debug_question_mark">?</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">Zemzeme</string>
     <string name="permission_bluetooth_rationale">Bluetooth-behörighet krävs för direktmeddelanden utan internet.</string>
     <string name="permission_location_rationale">Platsbehörighet krävs för att hitta enheter i närheten via Bluetooth.</string>
     <string name="permission_notification_rationale">Aviseringsbehörighet krävs för att meddela nya meddelanden.</string>
@@ -24,12 +24,12 @@
     <string name="battery_optimization_not_required">Batterioptimering krävs inte</string>
     <string name="battery_optimization_checking">Kontrollerar batterioptimering</string>
     <string name="battery_optimization_why_disable">Varför inaktivera?</string>
-    <string name="battery_optimization_explanation">bitchat körs i bakgrunden för att upprätthålla mesh-anslutningar till enheter i närheten. Batterioptimering kan avbryta dessa och orsaka fördröjda eller missade meddelanden.\n\nAtt inaktivera säkerställer tillförlitlig P2P-meddelandetrafik.</string>
+    <string name="battery_optimization_explanation">Zemzeme körs i bakgrunden för att upprätthålla mesh-anslutningar till enheter i närheten. Batterioptimering kan avbryta dessa och orsaka fördröjda eller missade meddelanden.\n\nAtt inaktivera säkerställer tillförlitlig P2P-meddelandetrafik.</string>
     <string name="battery_optimization_disable_button">Inaktivera optimering</string>
-    <string name="battery_optimization_note">Obs: kan ändras senare i Android-inställningar &gt; Appar &gt; bitchat &gt; Batteri</string>
-    <string name="battery_optimization_not_supported_explanation">Din enhet kräver inte batterioptimeringsinställningar. bitchat körs normalt.</string>
-    <string name="battery_optimization_not_supported_message">Din enhet kräver inte batterioptimeringsinställningar. bitchat körs normalt.</string>
-    <string name="battery_optimization_success_message">bitchat kan köras tillförlitligt i bakgrunden</string>
+    <string name="battery_optimization_note">Obs: kan ändras senare i Android-inställningar &gt; Appar &gt; Zemzeme &gt; Batteri</string>
+    <string name="battery_optimization_not_supported_explanation">Din enhet kräver inte batterioptimeringsinställningar. Zemzeme körs normalt.</string>
+    <string name="battery_optimization_not_supported_message">Din enhet kräver inte batterioptimeringsinställningar. Zemzeme körs normalt.</string>
+    <string name="battery_optimization_success_message">Zemzeme kan köras tillförlitligt i bakgrunden</string>
     <string name="battery_optimization_benefits">• Tillförlitlig leverans\n• Upprätthåller mesh-anslutning\n• Bakgrundsrelä\n• Förhindrar avbrott</string>
     <string name="battery_optimization_check_again">Kontrollera igen</string>
     <string name="battery_optimization_skip">Hoppa över nu</string>
@@ -40,7 +40,7 @@
     <string name="notification_summary_more">och %1$d till</string>
     <string name="notification_messages_from_people">%1$d meddelanden från %2$d personer</string>
     <string name="notification_more_conversations">och %1$d fler konversationer</string>
-    <string name="notification_active_peers_title">👥 bitchatter i närheten!</string>
+    <string name="notification_active_peers_title">👥 Zemzeme user i närheten!</string>
     <string name="notification_active_peers_one">1 person i närheten</string>
     <string name="notification_active_peers_many">%1$d personer i närheten</string>
     <string name="notification_new_messages">Nya meddelanden</string>
@@ -51,8 +51,8 @@
     <string name="notification_new_activity_in">Ny aktivitet i %1$s</string>
     <string name="notification_messages_in">Meddelanden i %1$s</string>
     <string name="notification_joined_conversation">%1$s gick med i konversationen</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d nämningar</string>
-    <string name="notification_geohash_summary_title">bitchat – platschattar</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d nämningar</string>
+    <string name="notification_geohash_summary_title">Zemzeme – platschattar</string>
     <string name="notification_geohash_summary_text">%1$d meddelanden från %2$d platser</string>
     <string name="notification_mesh_mention_title_singular">Nämnd i Mesh‑chatt</string>
     <string name="notification_mesh_mention_title_plural">%1$d nämningar i Mesh‑chatt</string>
@@ -86,7 +86,7 @@
     <string name="close_with_emoji">❌ Stäng</string>
     <string name="pick_image">Välj bild</string>
 
-    <string name="about_tagline">decentraliserad mesh‑meddelanden med ända‑till‑ända‑kryptering</string>
+    <string name="about_tagline">Övervakningsfri meddelandekommunikation under alla omständigheter, end-to-end-krypterad</string>
     <string name="about_offline_mesh_title">Offline Mesh‑chatt</string>
     <string name="about_offline_mesh_desc">Kommunicera direkt via Bluetooth LE utan internet eller servrar. Meddelanden reläas av enheter i närheten.</string>
     <string name="about_online_geohash_title">Online Geohash‑kanaler</string>
@@ -228,8 +228,8 @@
 
     <string name="location_services_required">Platstjänster krävs</string>
     <string name="privacy_first">Integritet först</string>
-    <string name="location_explanation">bitchat SPÅRAR INTE din plats.\n\nPlatstjänster krävs för Bluetooth‑skanning och Geohash‑chatt.</string>
-    <string name="location_needs_for">bitchat behöver platstjänster för:</string>
+    <string name="location_explanation">Zemzeme SPÅRAR INTE din plats.\n\nPlatstjänster krävs för Bluetooth‑skanning och Geohash‑chatt.</string>
+    <string name="location_needs_for">Zemzeme behöver platstjänster för:</string>
     <string name="location_needs_bullets">• Bluetooth‑skanning av enheter\n• Hitta användare i närheten i mesh‑nätet\n• Geohash‑chatt\n• Ingen spårning eller insamling</string>
     <string name="open_location_settings">Öppna platsinställningar</string>
     <string name="check_again">Kontrollera igen</string>
@@ -237,15 +237,15 @@
     <string name="location_unavailable_explanation">Platstjänster saknas på den här enheten. Det är ovanligt.\n\nAndroid kräver dem för att Bluetooth‑skanning ska fungera. Utan dem kan vi inte hitta användare i närheten.</string>
     <string name="checking_location_services">Kontrollerar platstjänster…</string>
     <string name="bluetooth_required">Bluetooth krävs</string>
-    <string name="bluetooth_needs_for">bitchat behöver Bluetooth för:</string>
+    <string name="bluetooth_needs_for">Zemzeme behöver Bluetooth för:</string>
     <string name="bluetooth_needs_bullets">• Hitta användare i närheten\n• Skapa mesh‑anslutningar\n• Skicka och ta emot meddelanden\n• Fungera utan internet/ servrar</string>
     <string name="enable_bluetooth">Aktivera Bluetooth</string>
     <string name="bluetooth_not_supported">Bluetooth stöds inte</string>
-    <string name="bluetooth_unsupported_explanation">Denna enhet stöder inte Bluetooth Low Energy (BLE), vilket krävs för bitchat.\n\nBLE behövs för att bygga mesh och kommunicera utan internet.</string>
+    <string name="bluetooth_unsupported_explanation">Denna enhet stöder inte Bluetooth Low Energy (BLE), vilket krävs för Zemzeme.\n\nBLE behövs för att bygga mesh och kommunicera utan internet.</string>
     <string name="checking_bluetooth_status">Kontrollerar Bluetooth‑status…</string>
     <string name="battery_optimization_detected_title">batterioptimering upptäckt</string>
     <string name="battery_optimization_enabled_title">Batterioptimering på</string>
-    <string name="battery_optimization_explanation_short">bitchat måste köra i bakgrunden för mesh; optimering kan bryta.</string>
+    <string name="battery_optimization_explanation_short">Zemzeme måste köra i bakgrunden för mesh; optimering kan bryta.</string>
     <string name="benefits_of_disabling">Fördelar med inaktivering</string>
     <string name="battery_benefits_short">• tillförlitlig leverans\n• håller anslutning\n• förhindrar avbrott</string>
     <string name="disable_battery_optimization">Inaktivera optimering</string>
@@ -262,9 +262,9 @@
     <string name="privacy_bullets">• ingen spårning eller insamling\n• Bluetooth‑mesh‑chattar helt offline\n• geohash‑chattar använder internet</string>
     <string name="permissions_header">behörigheter</string>
     <string name="grant_permissions">Ge behörigheter</string>
-    <string name="location_tracking_warning">bitchat spårar INTE din plats</string>
+    <string name="location_tracking_warning">Zemzeme spårar INTE din plats</string>
     <string name="at_symbol">@</string>
-    <string name="app_brand">bitchat/</string>
+    <string name="app_brand">Zemzeme/</string>
     <string name="channel_count_prefix"> · ⧉ </string>
     <string name="geohash_people_header">PERSONER</string>
     <string name="nobody_around">ingen i närheten…</string>
@@ -307,12 +307,12 @@
     <string name="cd_play_voice">Spela</string>
     <string name="cd_pause_voice">Pausa</string>
 
-    <string name="perm_nearby_devices_desc">Krävs för att hitta bitchat‑användare via Bluetooth</string>
-    <string name="perm_nearby_devices_system">Tillåt bitchat att ansluta till enheter i närheten</string>
+    <string name="perm_nearby_devices_desc">Krävs för att hitta Zemzeme‑användare via Bluetooth</string>
+    <string name="perm_nearby_devices_system">Tillåt Zemzeme att ansluta till enheter i närheten</string>
     <string name="perm_location_desc">Krävs av Android för att hitta användare via Bluetooth</string>
-    <string name="perm_location_system">bitchat behöver detta för att skanna enheter</string>
+    <string name="perm_location_system">Zemzeme behöver detta för att skanna enheter</string>
     <string name="perm_notifications_desc">Ta emot aviseringar vid privata meddelanden</string>
-    <string name="perm_notifications_system">Tillåt bitchat att skicka aviseringar</string>
+    <string name="perm_notifications_system">Tillåt Zemzeme att skicka aviseringar</string>
     <string name="perm_battery_desc">Inaktivera batterioptimering för tillförlitlig drift i bakgrunden och mesh‑anslutning</string>
     <string name="perm_battery_system">Tillåt körning utan batteribegränsningar</string>
 
@@ -329,10 +329,6 @@
     <string name="join">Gå med</string>
     <string name="cancel">Avbryt</string>
 
-    <plurals name="notification_and_more">
-        <item quantity="one">och %d till</item>
-        <item quantity="other">och %d till</item>
-    </plurals>
     <plurals name="people_count">
         <item quantity="one">1 person</item>
         <item quantity="other">%d personer</item>
@@ -385,6 +381,48 @@
   <string name="verify_mutual_match_body">You and %1$s verified each other</string>
   <string name="verify_mutual_system_message">mutual verification with %1$s</string>
   <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+  <string name="verify_success_body">Du verifierade %1$s</string>
+  <string name="verify_success_system_message">verifierade %1$s</string>
+
+  <!-- Saknade nycklar -->
+  <string name="mesh_service_channel_name">Mesh-bakgrundstjänst</string>
+  <string name="mesh_service_channel_desc">Håller Bluetooth-meshen igång i bakgrunden</string>
+  <string name="cd_settings">Inställningar</string>
+  <string name="cd_location_notes">Platsanteckningar</string>
+  <string name="notification_action_quit_bitchat">Avsluta Zemzeme</string>
+  <string name="about_background_title">köra i bakgrunden</string>
+  <string name="about_background_desc">håll meshen aktiv när appen är stängd (förgrundsservice)</string>
+  <string name="about_p2p_subtitle">Direkta peerkopplingar via p2p</string>
+  <string name="about_nostr_subtitle">Meddelandehantering via internetreläer</string>
+  <string name="about_ble_subtitle">Bluetooth-närhetssmesh</string>
+  <string name="background_location_required_title">Bakgrundsplats rekommenderas</string>
+  <string name="background_location_required_subtitle">valfritt, förbättrar meshnätverkspålitligheten</string>
+  <string name="background_location_explanation">Android rekommenderar bakgrundsplats för att Zemzeme ska kunna söka efter enheter i närheten när appen inte är öppen. Detta håller meshen vid liv efter omstart.</string>
+  <string name="background_location_settings_tip">När inställningarna öppnas, välj "Tillåt hela tiden".</string>
+  <string name="background_location_needs_for">Zemzeme använder bakgrundsplats för:</string>
+  <string name="background_location_needs_bullets">- söka efter enheter i närheten när appen är stängd\n- återansluta efter omstart\n- hålla meshen igång i bakgrunden</string>
+  <string name="background_location_privacy_note">Vi samlar ALDRIG in eller lagrar din plats. Din integritet är skyddad.</string>
+  <string name="grant_background_location">Tillåt bakgrundsplats</string>
+  <string name="skip_background_location">Fortsätt utan bakgrundsplats</string>
+  <string name="perm_background_location_desc">Rekommenderas för att söka efter enheter i närheten när appen är i bakgrunden</string>
+  <string name="perm_background_location_system">Tillåt åtkomst till bakgrundsplats</string>
+  <string name="perm_type_background_location">Bakgrundsplats</string>
+  <string name="tor_not_available_in_this_build">Tor ej tillgängligt i denna version</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+
+  <string name="cd_close">Stäng</string>
+  <string name="cd_image_index_of">Bild %1$d av %2$d</string>
+  <string name="cd_mining_pow">Utvinner PoW</string>
+  <string name="cd_pick_file">Välj fil</string>
+  <string name="cd_pow_enabled">PoW aktiverat</string>
+  <string name="cd_privacy_protected">Integritet skyddad</string>
+  <string name="cd_proof_of_work">Arbetsbevis</string>
+  <string name="cd_save_current_image">Spara nuvarande bild</string>
+  <string name="debug_roles_hint">slå på/av roller och stäng alla anslutningar när de är avaktiverade</string>
+  <string name="debug_tools_desc">utvecklarverktyg för diagnostik och kontroll</string>
+  <string name="debug_verbose_hint">loggar peer-anslutningar/-frånkopplingar, anslutningsriktning, paketrouting och reläer</string>
+  <string name="pow_label_format">pow: %1$dbit</string>
+  <string name="pow_mining_ellipsis">utvinner...</string>
+  <string name="toast_failed_to_save_image">Det gick inte att spara bilden</string>
+  <string name="toast_image_saved">Bild sparad i Nedladdningar</string>
 </resources>

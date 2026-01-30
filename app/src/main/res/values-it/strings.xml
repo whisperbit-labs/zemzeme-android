@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">Zemzeme</string>
 
     <!-- Spiegazioni dei permessi -->
     <string name="permission_bluetooth_rationale">Il permesso Bluetooth è necessario per la messaggistica peer-to-peer senza internet.</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">Ottimizzazione batteria non richiesta</string>
     <string name="battery_optimization_checking">Controllo ottimizzazione batteria</string>
     <string name="battery_optimization_why_disable">Perché disattivare l\'ottimizzazione della batteria?</string>
-    <string name="battery_optimization_explanation">bitchat viene eseguito in background per mantenere le connessioni di rete mesh con i dispositivi vicini. L\'ottimizzazione della batteria può interrompere queste connessioni, causando ritardi o perdita di messaggi.\n\nDisattivare l\'ottimizzazione della batteria garantisce una messaggistica peer-to-peer affidabile.</string>
+    <string name="battery_optimization_explanation">Zemzeme viene eseguito in background per mantenere le connessioni di rete mesh con i dispositivi vicini. L\'ottimizzazione della batteria può interrompere queste connessioni, causando ritardi o perdita di messaggi.\n\nDisattivare l\'ottimizzazione della batteria garantisce una messaggistica peer-to-peer affidabile.</string>
     <string name="battery_optimization_disable_button">Disattiva ottimizzazione batteria</string>
-    <string name="battery_optimization_note">Nota: puoi modificare questa impostazione in seguito in Impostazioni Android &gt; App &gt; bitchat &gt; Batteria</string>
-    <string name="battery_optimization_not_supported_explanation">Il tuo dispositivo non richiede impostazioni di ottimizzazione della batteria. bitchat funzionerà normalmente.</string>
-    <string name="battery_optimization_not_supported_message">Il tuo dispositivo non richiede impostazioni di ottimizzazione della batteria. bitchat funzionerà normalmente.</string>
-    <string name="battery_optimization_success_message">bitchat può funzionare in modo affidabile in background</string>
+    <string name="battery_optimization_note">Nota: puoi modificare questa impostazione in seguito in Impostazioni Android &gt; App &gt; Zemzeme &gt; Batteria</string>
+    <string name="battery_optimization_not_supported_explanation">Il tuo dispositivo non richiede impostazioni di ottimizzazione della batteria. Zemzeme funzionerà normalmente.</string>
+    <string name="battery_optimization_not_supported_message">Il tuo dispositivo non richiede impostazioni di ottimizzazione della batteria. Zemzeme funzionerà normalmente.</string>
+    <string name="battery_optimization_success_message">Zemzeme può funzionare in modo affidabile in background</string>
     <string name="battery_optimization_benefits">• Garantisce la consegna affidabile dei messaggi\n• Mantiene la connettività della rete mesh\n• Consente l\'inoltro dei messaggi in background\n• Previene le interruzioni della connessione</string>
     <string name="battery_optimization_check_again">Controlla di nuovo</string>
     <string name="battery_optimization_skip">Salta per ora</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">e altri %1$d</string>
     <string name="notification_messages_from_people">%1$d messaggi da %2$d persone</string>
     <string name="notification_more_conversations">e altre %1$d conversazioni</string>
-    <string name="notification_active_peers_title">👥 bitchatter nelle vicinanze!</string>
+    <string name="notification_active_peers_title">👥 Zemzeme user nelle vicinanze!</string>
     <string name="notification_active_peers_one">1 persona nei dintorni</string>
     <string name="notification_active_peers_many">%1$d persone nei dintorni</string>
     <string name="notification_new_messages">Nuovi messaggi</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">Nuova attività in %1$s</string>
     <string name="notification_messages_in">Messaggi in %1$s</string>
     <string name="notification_joined_conversation">%1$s si è unito alla conversazione</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat - %1$d menzioni</string>
-    <string name="notification_geohash_summary_title">bitchat - chat di posizione</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme - %1$d menzioni</string>
+    <string name="notification_geohash_summary_title">Zemzeme - chat di posizione</string>
     <string name="notification_geohash_summary_text">%1$d messaggi da %2$d posizioni</string>
     <string name="notification_mesh_mention_title_singular">Menzionato nella chat mesh</string>
     <string name="notification_mesh_mention_title_plural">%1$d menzioni nella chat mesh</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">Scegli immagine</string>
 
     <!-- Schermata informazioni -->
-    <string name="about_tagline">messaggistica mesh decentralizzata con crittografia end-to-end</string>
+    <string name="about_tagline">Messaggistica senza sorveglianza in tutte le circostanze, crittografata end-to-end</string>
     <string name="about_offline_mesh_title">Chat mesh offline</string>
     <string name="about_offline_mesh_desc">Comunica direttamente tramite Bluetooth LE senza internet o server. I messaggi vengono inoltrati attraverso i dispositivi vicini per estendere la portata.</string>
     <string name="about_online_geohash_title">Canali geohash online</string>
@@ -253,24 +253,24 @@
     <!-- Schermate onboarding -->
     <string name="location_services_required">Servizi di localizzazione richiesti</string>
     <string name="privacy_first">Privacy prima di tutto</string>
-    <string name="location_explanation">bitchat NON traccia la tua posizione.\n\nI servizi di localizzazione sono necessari per la scansione Bluetooth e per la funzionalità di chat geohash.</string>
-    <string name="location_needs_for">bitchat ha bisogno dei servizi di localizzazione per:</string>
+    <string name="location_explanation">Zemzeme NON traccia la tua posizione.\n\nI servizi di localizzazione sono necessari per la scansione Bluetooth e per la funzionalità di chat geohash.</string>
+    <string name="location_needs_for">Zemzeme ha bisogno dei servizi di localizzazione per:</string>
     <string name="location_needs_bullets">• Scansione dispositivi Bluetooth\n• Scoprire utenti vicini nella rete mesh\n• Funzionalità chat geohash\n• Nessun tracciamento o raccolta di posizione</string>
     <string name="open_location_settings">Apri impostazioni di localizzazione</string>
     <string name="check_again">Controlla di nuovo</string>
     <string name="location_services_unavailable">Servizi di localizzazione non disponibili</string>
-    <string name="location_unavailable_explanation">I servizi di localizzazione non sono disponibili su questo dispositivo. Ciò è insolito poiché i servizi di localizzazione sono standard sui dispositivi Android.\n\nbitchat ha bisogno dei servizi di localizzazione per far funzionare correttamente la scansione Bluetooth (requisito Android). Senza questo, l\'app non può scoprire gli utenti vicini.</string>
+    <string name="location_unavailable_explanation">I servizi di localizzazione non sono disponibili su questo dispositivo. Ciò è insolito poiché i servizi di localizzazione sono standard sui dispositivi Android.\n\nZemzeme ha bisogno dei servizi di localizzazione per far funzionare correttamente la scansione Bluetooth (requisito Android). Senza questo, l\'app non può scoprire gli utenti vicini.</string>
     <string name="checking_location_services">Controllo servizi di localizzazione…</string>
     <string name="bluetooth_required">Bluetooth richiesto</string>
-    <string name="bluetooth_needs_for">bitchat ha bisogno del Bluetooth per:</string>
+    <string name="bluetooth_needs_for">Zemzeme ha bisogno del Bluetooth per:</string>
     <string name="bluetooth_needs_bullets">• Scoprire utenti vicini\n• Creare connessioni di rete mesh\n• Inviare e ricevere messaggi\n• Funzionare senza internet o server</string>
     <string name="enable_bluetooth">Attiva Bluetooth</string>
     <string name="bluetooth_not_supported">Bluetooth non supportato</string>
-    <string name="bluetooth_unsupported_explanation">Questo dispositivo non supporta Bluetooth Low Energy (BLE), che è necessario per il funzionamento di bitchat.\n\nbitchat ha bisogno di BLE per creare reti mesh e comunicare con dispositivi vicini senza internet.</string>
+    <string name="bluetooth_unsupported_explanation">Questo dispositivo non supporta Bluetooth Low Energy (BLE), che è necessario per il funzionamento di Zemzeme.\n\nZemzeme ha bisogno di BLE per creare reti mesh e comunicare con dispositivi vicini senza internet.</string>
     <string name="checking_bluetooth_status">Controllo stato Bluetooth…</string>
     <string name="battery_optimization_detected_title">ottimizzazione batteria rilevata</string>
     <string name="battery_optimization_enabled_title">Ottimizzazione batteria abilitata</string>
-    <string name="battery_optimization_explanation_short">bitchat deve essere eseguito in background per mantenere le connessioni mesh. l\'ottimizzazione della batteria può interrompere queste connessioni.</string>
+    <string name="battery_optimization_explanation_short">Zemzeme deve essere eseguito in background per mantenere le connessioni mesh. l\'ottimizzazione della batteria può interrompere queste connessioni.</string>
     <string name="benefits_of_disabling">Vantaggi della disattivazione</string>
     <string name="battery_benefits_short">• consegna messaggi affidabile\n• mantiene la connettività mesh\n• previene le interruzioni della connessione</string>
     <string name="disable_battery_optimization">Disattiva ottimizzazione batteria</string>
@@ -285,7 +285,7 @@
     <string name="privacy_bullets">• nessun tracciamento o raccolta dati\n• le chat mesh Bluetooth sono completamente offline\n• le chat geohash usano internet</string>
     <string name="permissions_header">permessi</string>
     <string name="grant_permissions">Concedi permessi</string>
-    <string name="location_tracking_warning">bitchat NON traccia la tua posizione</string>
+    <string name="location_tracking_warning">Zemzeme NON traccia la tua posizione</string>
     <string name="geohash_people_header">PERSONE</string>
     <string name="nobody_around">nessuno nei dintorni…</string>
     <string name="you_suffix"> (tu)</string>
@@ -314,14 +314,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- Descrizioni permessi -->
-    <string name="perm_nearby_devices_desc">Necessario per scoprire utenti bitchat tramite Bluetooth</string>
-    <string name="perm_nearby_devices_system">Consenti a bitchat di connettersi a dispositivi vicini</string>
-    <string name="perm_location_desc">Richiesto da Android per scoprire utenti bitchat vicini tramite Bluetooth</string>
-    <string name="perm_location_system">bitchat ha bisogno di questo per cercare dispositivi vicini</string>
+    <string name="perm_nearby_devices_desc">Necessario per scoprire utenti Zemzeme tramite Bluetooth</string>
+    <string name="perm_nearby_devices_system">Consenti a Zemzeme di connettersi a dispositivi vicini</string>
+    <string name="perm_location_desc">Richiesto da Android per scoprire utenti Zemzeme vicini tramite Bluetooth</string>
+    <string name="perm_location_system">Zemzeme ha bisogno di questo per cercare dispositivi vicini</string>
     <string name="perm_notifications_desc">Ricevi notifiche quando ricevi messaggi privati</string>
-    <string name="perm_notifications_system">Consenti a bitchat di inviarti notifiche</string>
-    <string name="perm_battery_desc">Disattiva l\'ottimizzazione della batteria per garantire che bitchat funzioni in modo affidabile in background e mantenga le connessioni di rete mesh</string>
-    <string name="perm_battery_system">Consenti a bitchat di funzionare senza restrizioni della batteria</string>
+    <string name="perm_notifications_system">Consenti a Zemzeme di inviarti notifiche</string>
+    <string name="perm_battery_desc">Disattiva l\'ottimizzazione della batteria per garantire che Zemzeme funzioni in modo affidabile in background e mantenga le connessioni di rete mesh</string>
+    <string name="perm_battery_system">Consenti a Zemzeme di funzionare senza restrizioni della batteria</string>
 
     <!-- Tipi di permessi -->
     <string name="perm_type_nearby_devices">Dispositivi vicini</string>
@@ -340,7 +340,7 @@
 
     <!-- Simboli e stringhe speciali -->
     <string name="at_symbol">@</string>
-    <string name="app_brand">bitchat/</string>
+    <string name="app_brand">Zemzeme/</string>
     <string name="channel_count_prefix"> · ⧉ </string>
     <string name="mention_suggestion_at">@%1$s</string>
     <string name="image_counter">%1$d / %2$d</string>
@@ -373,10 +373,6 @@
     <string name="debug_question_mark">?</string>
 
     <!-- Plurali -->
-    <plurals name="notification_and_more">
-        <item quantity="one">e %d altro</item>
-        <item quantity="other">e altri %d</item>
-    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1 persona</item>
@@ -433,4 +429,30 @@
   <string name="verify_success_title">Verificato</string>
   <string name="verify_success_body">Hai verificato %1$s</string>
   <string name="verify_success_system_message">verificato %1$s</string>
+
+  <!-- Chiavi mancanti -->
+  <string name="mesh_service_channel_name">Servizio mesh in background</string>
+  <string name="mesh_service_channel_desc">Mantiene il mesh Bluetooth attivo in background</string>
+  <string name="cd_settings">Impostazioni</string>
+  <string name="cd_location_notes">Note di posizione</string>
+  <string name="notification_action_quit_bitchat">Esci da Zemzeme</string>
+  <string name="about_background_title">esegui in background</string>
+  <string name="about_background_desc">mantieni il mesh attivo quando l\'app è chiusa (servizio in primo piano)</string>
+  <string name="about_p2p_subtitle">Connessioni dirette tra peer via p2p</string>
+  <string name="about_nostr_subtitle">Messaggistica tramite relay internet</string>
+  <string name="about_ble_subtitle">Mesh Bluetooth di prossimità</string>
+  <string name="background_location_required_title">Posizione in background consigliata</string>
+  <string name="background_location_required_subtitle">opzionale, migliora l\'affidabilità del mesh</string>
+  <string name="background_location_explanation">Android consiglia la posizione in background per consentire a Zemzeme di cercare dispositivi vicini quando l\'app non è aperta. Questo mantiene il mesh attivo dopo il riavvio.</string>
+  <string name="background_location_settings_tip">Quando si aprono le impostazioni, scegli "Consenti sempre".</string>
+  <string name="background_location_needs_for">Zemzeme usa la posizione in background per:</string>
+  <string name="background_location_needs_bullets">- cercare dispositivi vicini quando l\'app è chiusa\n- riconnettersi dopo il riavvio\n- mantenere il mesh attivo in background</string>
+  <string name="background_location_privacy_note">Non raccogliamo né archiviamo MAI la tua posizione. La tua privacy è al sicuro.</string>
+  <string name="grant_background_location">Consenti posizione in background</string>
+  <string name="skip_background_location">Continua senza posizione in background</string>
+  <string name="perm_background_location_desc">Consigliato per cercare dispositivi vicini mentre l\'app è in background</string>
+  <string name="perm_background_location_system">Consenti accesso alla posizione in background</string>
+  <string name="perm_type_background_location">Posizione in background</string>
+  <string name="tor_not_available_in_this_build">Tor non disponibile in questa versione</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
 </resources>

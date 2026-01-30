@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">젬제메</string>
 
     <!-- 권한 안내 -->
     <string name="permission_bluetooth_rationale">인터넷 없이 다른 사람과 직접 채팅하려면 블루투스 권한이 필요합니다.</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">배터리 최적화 필요 없음</string>
     <string name="battery_optimization_checking">배터리 최적화 확인 중</string>
     <string name="battery_optimization_why_disable">왜 배터리 최적화를 끄나요?</string>
-    <string name="battery_optimization_explanation">bitchat은 근처 기기와의 메쉬 연결을 유지하기 위해 백그라운드에서 동작합니다. 배터리 최적화는 이러한 연결을 중단시켜 메시지가 지연되거나 손실될 수 있습니다.\n\n배터리 최적화를 끄면 신뢰할 수 있는 P2P 통신이 보장됩니다.</string>
+    <string name="battery_optimization_explanation">Zemzeme은 근처 기기와의 메쉬 연결을 유지하기 위해 백그라운드에서 동작합니다. 배터리 최적화는 이러한 연결을 중단시켜 메시지가 지연되거나 손실될 수 있습니다.\n\n배터리 최적화를 끄면 신뢰할 수 있는 P2P 통신이 보장됩니다.</string>
     <string name="battery_optimization_disable_button">배터리 최적화 끄기</string>
-    <string name="battery_optimization_note">참고: 이후 Android 설정 &gt; 앱 &gt; bitchat &gt; 배터리에서 변경할 수 있습니다.</string>
-    <string name="battery_optimization_not_supported_explanation">이 기기는 배터리 최적화 설정이 필요하지 않습니다. bitchat은 정상적으로 동작합니다.</string>
-    <string name="battery_optimization_not_supported_message">이 기기는 배터리 최적화 설정이 필요하지 않습니다. bitchat은 정상적으로 동작합니다.</string>
-    <string name="battery_optimization_success_message">bitchat이 백그라운드에서 안정적으로 실행됩니다</string>
+    <string name="battery_optimization_note">참고: 이후 Android 설정 &gt; 앱 &gt; Zemzeme &gt; 배터리에서 변경할 수 있습니다.</string>
+    <string name="battery_optimization_not_supported_explanation">이 기기는 배터리 최적화 설정이 필요하지 않습니다. Zemzeme은 정상적으로 동작합니다.</string>
+    <string name="battery_optimization_not_supported_message">이 기기는 배터리 최적화 설정이 필요하지 않습니다. Zemzeme은 정상적으로 동작합니다.</string>
+    <string name="battery_optimization_success_message">Zemzeme이 백그라운드에서 안정적으로 실행됩니다</string>
     <string name="battery_optimization_benefits">• 신뢰할 수 있는 메시지 전달\n• 메쉬 연결 유지\n• 백그라운드 메시지 릴레이\n• 연결 끊김 방지</string>
     <string name="battery_optimization_check_again">다시 확인</string>
     <string name="battery_optimization_skip">지금 건너뛰기</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">그리고 %1$d개 더</string>
     <string name="notification_messages_from_people">%2$d명에게서 %1$d개의 메시지</string>
     <string name="notification_more_conversations">그리고 %1$d개의 대화 더</string>
-    <string name="notification_active_peers_title">👥 근처 bitchatter!</string>
+    <string name="notification_active_peers_title">👥 근처 Zemzeme user!</string>
     <string name="notification_active_peers_one">근처 1명</string>
     <string name="notification_active_peers_many">근처 %1$d명</string>
     <string name="notification_new_messages">새 메시지</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">%1$s의 새 활동</string>
     <string name="notification_messages_in">%1$s의 메시지</string>
     <string name="notification_joined_conversation">%1$s님이 대화에 참여했습니다</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d회 언급</string>
-    <string name="notification_geohash_summary_title">bitchat – 위치 채팅</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d회 언급</string>
+    <string name="notification_geohash_summary_title">Zemzeme – 위치 채팅</string>
     <string name="notification_geohash_summary_text">%2$d개의 장소에서 온 %1$d개의 메시지</string>
     <string name="notification_mesh_mention_title_singular">메쉬 채팅에서 언급됨</string>
     <string name="notification_mesh_mention_title_plural">메쉬 채팅에서 %1$d회 언급</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">이미지 선택</string>
 
     <!-- 정보 시트 -->
-    <string name="about_tagline">종단간 암호화를 갖춘 탈중앙 메쉬 채팅</string>
+    <string name="about_tagline">모든 상황에서 감시 없는 메시징, 종단 간 암호화</string>
     <string name="about_offline_mesh_title">오프라인 메쉬 채팅</string>
     <string name="about_offline_mesh_desc">인터넷이나 서버 없이 Bluetooth LE로 직접 소통합니다. 범위를 확장하기 위해 근처 기기를 통해 메시지가 중계됩니다.</string>
     <string name="about_online_geohash_title">온라인 geohash 채널</string>
@@ -253,24 +253,24 @@
     <!-- 온보딩 화면 -->
     <string name="location_services_required">위치 서비스 필요</string>
     <string name="privacy_first">개인정보 우선</string>
-    <string name="location_explanation">bitchat은 사용자의 위치를 추적하지 않습니다.\n\n블루투스 스캔 및 geohash 채팅 기능에 위치 서비스가 필요합니다.</string>
-    <string name="location_needs_for">bitchat은 다음을 위해 위치 서비스가 필요합니다:</string>
+    <string name="location_explanation">Zemzeme은 사용자의 위치를 추적하지 않습니다.\n\n블루투스 스캔 및 geohash 채팅 기능에 위치 서비스가 필요합니다.</string>
+    <string name="location_needs_for">Zemzeme은 다음을 위해 위치 서비스가 필요합니다:</string>
     <string name="location_needs_bullets">• 블루투스 기기 스캔\n• 메쉬 네트워크에서 근처 사용자 발견\n• geohash 채팅 기능\n• 추적 또는 위치 수집 없음</string>
     <string name="open_location_settings">위치 설정 열기</string>
     <string name="check_again">다시 확인</string>
     <string name="location_services_unavailable">위치 서비스를 사용할 수 없음</string>
-    <string name="location_unavailable_explanation">이 기기에서는 위치 서비스를 사용할 수 없습니다. Android 기기에서 위치 서비스는 표준이므로 이는 드문 경우입니다.\n\n블루투스 스캔이 제대로 작동하려면 bitchat에 위치 서비스가 필요합니다(Android 요구 사항). 그렇지 않으면 앱이 주변 사용자를 찾지 못합니다.</string>
+    <string name="location_unavailable_explanation">이 기기에서는 위치 서비스를 사용할 수 없습니다. Android 기기에서 위치 서비스는 표준이므로 이는 드문 경우입니다.\n\n블루투스 스캔이 제대로 작동하려면 Zemzeme에 위치 서비스가 필요합니다(Android 요구 사항). 그렇지 않으면 앱이 주변 사용자를 찾지 못합니다.</string>
     <string name="checking_location_services">위치 서비스 확인 중 …</string>
     <string name="bluetooth_required">블루투스 필요</string>
-    <string name="bluetooth_needs_for">bitchat은 다음을 위해 블루투스가 필요합니다:</string>
+    <string name="bluetooth_needs_for">Zemzeme은 다음을 위해 블루투스가 필요합니다:</string>
     <string name="bluetooth_needs_bullets">• 근처 사용자 찾기\n• 메쉬 네트워크 연결 생성\n• 메시지 보내고 받기\n• 인터넷이나 서버 없이 작동</string>
     <string name="enable_bluetooth">블루투스 켜기</string>
     <string name="bluetooth_not_supported">블루투스 미지원</string>
-    <string name="bluetooth_unsupported_explanation">이 기기는 bitchat이 동작하는 데 필요한 Bluetooth Low Energy (BLE)를 지원하지 않습니다.\n\nbitchat은 인터넷 없이 근처 장치와 통신하고 메쉬 네트워크를 생성하기 위해 BLE가 필요합니다.</string>
+    <string name="bluetooth_unsupported_explanation">이 기기는 Zemzeme이 동작하는 데 필요한 Bluetooth Low Energy (BLE)를 지원하지 않습니다.\n\nZemzeme은 인터넷 없이 근처 장치와 통신하고 메쉬 네트워크를 생성하기 위해 BLE가 필요합니다.</string>
     <string name="checking_bluetooth_status">블루투스 상태 확인 중 …</string>
     <string name="battery_optimization_detected_title">배터리 최적화 감지됨</string>
     <string name="battery_optimization_enabled_title">배터리 최적화 활성화됨</string>
-    <string name="battery_optimization_explanation_short">메쉬 연결을 유지하려면 bitchat이 백그라운드에서 실행되어야 합니다. 배터리 최적화는 이러한 연결을 방해할 수 있습니다.</string>
+    <string name="battery_optimization_explanation_short">메쉬 연결을 유지하려면 Zemzeme이 백그라운드에서 실행되어야 합니다. 배터리 최적화는 이러한 연결을 방해할 수 있습니다.</string>
     <string name="benefits_of_disabling">비활성화의 이점</string>
     <string name="battery_benefits_short">• 신뢰할 수 있는 메시지 전달\n• 메쉬 연결 유지\n• 연결 끊김 방지</string>
     <string name="disable_battery_optimization">배터리 최적화 끄기</string>
@@ -285,7 +285,7 @@
     <string name="privacy_bullets">• 추적 또는 데이터 수집 없음\n• 블루투스 메쉬 채팅은 완전 오프라인\n• geohash 채팅은 인터넷 사용</string>
     <string name="permissions_header">권한</string>
     <string name="grant_permissions">권한 허용</string>
-    <string name="location_tracking_warning">bitchat은 사용자의 위치를 추적하지 않습니다</string>
+    <string name="location_tracking_warning">Zemzeme은 사용자의 위치를 추적하지 않습니다</string>
     <string name="geohash_people_header">사람들</string>
     <string name="nobody_around">주변에 아무도 없음 …</string>
     <string name="you_suffix"> (나)</string>
@@ -314,14 +314,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- 권한 설명 -->
-    <string name="perm_nearby_devices_desc">블루투스를 통해 bitchat 사용자를 발견하는 데 필요</string>
-    <string name="perm_nearby_devices_system">근처 기기와 연결하도록 bitchat을 허용</string>
-    <string name="perm_location_desc">블루투스를 통해 근처 bitchat 사용자를 찾기 위해 Android에 필요</string>
-    <string name="perm_location_system">근처 기기를 스캔하려면 bitchat에 필요</string>
+    <string name="perm_nearby_devices_desc">블루투스를 통해 Zemzeme 사용자를 발견하는 데 필요</string>
+    <string name="perm_nearby_devices_system">근처 기기와 연결하도록 Zemzeme을 허용</string>
+    <string name="perm_location_desc">블루투스를 통해 근처 Zemzeme 사용자를 찾기 위해 Android에 필요</string>
+    <string name="perm_location_system">근처 기기를 스캔하려면 Zemzeme에 필요</string>
     <string name="perm_notifications_desc">개인 메시지를 받으면 알림 받기</string>
-    <string name="perm_notifications_system">bitchat이 알림을 보내도록 허용</string>
-    <string name="perm_battery_desc">bitchat이 백그라운드에서 안정적으로 실행되고 메쉬 연결을 유지하도록 배터리 최적화를 끄세요</string>
-    <string name="perm_battery_system">배터리 제한 없이 실행하도록 bitchat을 허용</string>
+    <string name="perm_notifications_system">Zemzeme이 알림을 보내도록 허용</string>
+    <string name="perm_battery_desc">Zemzeme이 백그라운드에서 안정적으로 실행되고 메쉬 연결을 유지하도록 배터리 최적화를 끄세요</string>
+    <string name="perm_battery_system">배터리 제한 없이 실행하도록 Zemzeme을 허용</string>
 
     <!-- 권한 유형 -->
     <string name="perm_type_nearby_devices">근처 기기</string>
@@ -339,10 +339,6 @@
     <string name="cancel">취소</string>
 
     <!-- 복수형 -->
-    <plurals name="notification_and_more">
-        <item quantity="one">그리고 %d개 더</item>
-        <item quantity="other">그리고 %d개 더</item>
-    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1명</item>
@@ -399,4 +395,56 @@
   <string name="verify_success_title">Verified</string>
   <string name="verify_success_body">You verified %1$s</string>
   <string name="verify_success_system_message">verified %1$s</string>
+
+  <!-- 누락된 키 -->
+  <string name="mesh_service_channel_name">메시 백그라운드 서비스</string>
+  <string name="mesh_service_channel_desc">Bluetooth 메시를 백그라운드에서 실행 유지</string>
+  <string name="cd_settings">설정</string>
+  <string name="cd_location_notes">위치 메모</string>
+  <string name="notification_action_quit_bitchat">Zemzeme 종료</string>
+  <string name="about_background_title">백그라운드에서 실행</string>
+  <string name="about_background_desc">앱이 닫혀 있어도 메시 활성 유지 (포그라운드 서비스)</string>
+  <string name="about_p2p_subtitle">p2p를 통한 직접 피어 연결</string>
+  <string name="about_nostr_subtitle">인터넷 릴레이 메시징</string>
+  <string name="about_ble_subtitle">Bluetooth 근접 메시</string>
+  <string name="background_location_required_title">백그라운드 위치 권장</string>
+  <string name="background_location_required_subtitle">선택 사항, 메시 안정성 향상</string>
+  <string name="background_location_explanation">Android에서는 Zemzeme가 앱이 열려 있지 않아도 근처 기기를 스캔할 수 있도록 백그라운드 위치를 권장합니다. 재부팅 후에도 메시를 유지합니다.</string>
+  <string name="background_location_settings_tip">설정이 열리면 "항상 허용"을 선택하세요.</string>
+  <string name="background_location_needs_for">Zemzeme는 다음을 위해 백그라운드 위치를 사용합니다:</string>
+  <string name="background_location_needs_bullets">- 앱이 닫혀 있을 때 근처 기기 스캔\n- 재부팅 후 재연결\n- 백그라운드에서 메시 유지</string>
+  <string name="background_location_privacy_note">위치 정보를 수집하거나 저장하지 않습니다. 개인 정보가 안전합니다.</string>
+  <string name="grant_background_location">백그라운드 위치 허용</string>
+  <string name="skip_background_location">백그라운드 위치 없이 계속</string>
+  <string name="dot">.</string>
+  <string name="warning_emoji">⚠️</string>
+  <string name="at_symbol">@</string>
+  <string name="app_brand">Zemzeme/</string>
+  <string name="channel_count_prefix"> · ⧉ </string>
+  <string name="mention_suggestion_at">@%1$s</string>
+  <string name="at_nickname">@%1$s</string>
+  <string name="hash_symbol">#</string>
+  <string name="underscore">_</string>
+  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+  <string name="progress_filled">█</string>
+  <string name="progress_empty">░</string>
+  <string name="image_counter">%1$d / %2$d</string>
+  <string name="status_sending">○</string>
+  <string name="status_pending">○</string>
+  <string name="status_sent">✓</string>
+  <string name="status_delivered">✓✓</string>
+  <string name="status_failed">⚠</string>
+  <string name="status_read">✓</string>
+  <string name="notification_file_pdf">📄</string>
+  <string name="notification_file_zip">🗜️</string>
+  <string name="notification_file_doc">📄</string>
+  <string name="notification_file_xls">📊</string>
+  <string name="notification_file_ppt">📈</string>
+  <string name="notification_file_generic">📎</string>
+  <string name="perm_background_location_desc">앱이 백그라운드에 있는 동안 근처 기기를 스캔하는 데 권장</string>
+  <string name="perm_background_location_system">백그라운드 위치 액세스 허용</string>
+  <string name="perm_type_background_location">백그라운드 위치</string>
+  <string name="tor_not_available_in_this_build">이 빌드에서는 Tor를 사용할 수 없습니다</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+  <string name="debug_question_mark">?</string>
 </resources>

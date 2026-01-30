@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">زمزمہ</string>
 
     <!-- اجازات کی وضاحت -->
     <string name="permission_bluetooth_rationale">بلوٹوتھ کی اجازت انٹرنیٹ کے بغیر دوسروں سے براہ راست چیٹ کرنے کے لیے ضروری ہے۔</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">بیٹری کی اصلاح ضروری نہیں</string>
     <string name="battery_optimization_checking">بیٹری کی اصلاح چیک کر رہے ہیں</string>
     <string name="battery_optimization_why_disable">بیٹری کی اصلاح کیوں بند کریں؟</string>
-    <string name="battery_optimization_explanation">bitchat قریبی آلات کے ساتھ میش کنیکشن برقرار رکھنے کے لیے پس منظر میں چلتا ہے۔ بیٹری کی اصلاح ان کنیکشنز کو خراب کر سکتی ہے، جس سے پیغامات دیر سے پہنچیں یا کھو جائیں۔\n\nبیٹری کی اصلاح بند کرنا قابل اعتماد پیئر‑ٹو‑پیئر کمیونیکیشن کو یقینی بناتا ہے۔</string>
+    <string name="battery_optimization_explanation">Zemzeme قریبی آلات کے ساتھ میش کنیکشن برقرار رکھنے کے لیے پس منظر میں چلتا ہے۔ بیٹری کی اصلاح ان کنیکشنز کو خراب کر سکتی ہے، جس سے پیغامات دیر سے پہنچیں یا کھو جائیں۔\n\nبیٹری کی اصلاح بند کرنا قابل اعتماد پیئر‑ٹو‑پیئر کمیونیکیشن کو یقینی بناتا ہے۔</string>
     <string name="battery_optimization_disable_button">بیٹری کی اصلاح بند کریں</string>
-    <string name="battery_optimization_note">نوٹ: آپ بعد میں Android سیٹنگز &gt; ایپس &gt; bitchat &gt; بیٹری میں اسے تبدیل کر سکتے ہیں۔</string>
-    <string name="battery_optimization_not_supported_explanation">آپ کے آلے کو بیٹری کی اصلاح کی سیٹنگز کی ضرورت نہیں۔ bitchat عام طور پر چلے گا۔</string>
-    <string name="battery_optimization_not_supported_message">آپ کے آلے کو بیٹری کی اصلاح کی سیٹنگز کی ضرورت نہیں۔ bitchat عام طور پر چلے گا۔</string>
-    <string name="battery_optimization_success_message">bitchat پس منظر میں قابل اعتماد طور پر چل سکتا ہے</string>
+    <string name="battery_optimization_note">نوٹ: آپ بعد میں Android سیٹنگز &gt; ایپس &gt; Zemzeme &gt; بیٹری میں اسے تبدیل کر سکتے ہیں۔</string>
+    <string name="battery_optimization_not_supported_explanation">آپ کے آلے کو بیٹری کی اصلاح کی سیٹنگز کی ضرورت نہیں۔ Zemzeme عام طور پر چلے گا۔</string>
+    <string name="battery_optimization_not_supported_message">آپ کے آلے کو بیٹری کی اصلاح کی سیٹنگز کی ضرورت نہیں۔ Zemzeme عام طور پر چلے گا۔</string>
+    <string name="battery_optimization_success_message">Zemzeme پس منظر میں قابل اعتماد طور پر چل سکتا ہے</string>
     <string name="battery_optimization_benefits">• پیغامات کی قابل اعتماد ڈیلیوری\n• میش کنیکشن برقرار رکھنا\n• پس منظری پیغام فارورڈنگ\n• منطقی کنیکشن سے بچاؤ</string>
     <string name="battery_optimization_check_again">دوبارہ چیک کریں</string>
     <string name="battery_optimization_skip">ابھی چھوڑیں</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">اور %1$d مزید</string>
     <string name="notification_messages_from_people">%2$d لوگوں سے %1$d پیغامات</string>
     <string name="notification_more_conversations">اور %1$d مزید گفتگو</string>
-    <string name="notification_active_peers_title">👥 قریب میں bitchatter!</string>
+    <string name="notification_active_peers_title">👥 قریب میں Zemzeme user!</string>
     <string name="notification_active_peers_one">قریب میں 1 شخص</string>
     <string name="notification_active_peers_many">قریب میں %1$d لوگ</string>
     <string name="notification_new_messages">نئے پیغامات</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">%1$s میں نئی سرگرمی</string>
     <string name="notification_messages_in">%1$s میں پیغامات</string>
     <string name="notification_joined_conversation">%1$s گفتگو میں شامل ہوا</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d ذکر</string>
-    <string name="notification_geohash_summary_title">bitchat – مقام چیٹس</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d ذکر</string>
+    <string name="notification_geohash_summary_title">Zemzeme – مقام چیٹس</string>
     <string name="notification_geohash_summary_text">%2$d مقامات سے %1$d پیغامات</string>
     <string name="notification_mesh_mention_title_singular">میش چیٹ میں ذکر</string>
     <string name="notification_mesh_mention_title_plural">میش چیٹ میں %1$d ذکر</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">تصویر منتخب کریں</string>
 
     <!-- تفصیلات شیٹ -->
-    <string name="about_tagline">غیر مرکزی میش چیٹ • اینڈ‑ٹو‑اینڈ انکرپشن</string>
+    <string name="about_tagline">تمام حالات میں نگرانی سے پاک پیغام رسانی، اینڈ ٹو اینڈ انکرپٹڈ</string>
     <string name="about_offline_mesh_title">آف لائن میش چیٹ</string>
     <string name="about_offline_mesh_desc">انٹرنیٹ یا سرورز کے بغیر Bluetooth LE کے ذریعے براہ راست بات چیت کریں۔ پیغامات قریبی آلات کے ذریعے ریلے ہوتے ہیں تاکہ رسائی بڑھے۔</string>
     <string name="about_online_geohash_title">آن لائن geohash چینلز</string>
@@ -253,8 +253,8 @@
     <!-- آن بورڈنگ اسکرینز -->
     <string name="location_services_required">مقام کی خدمات ضروری</string>
     <string name="privacy_first">پرائیویسی پہلے</string>
-    <string name="location_explanation">bitchat آپ کا مقام ٹریک نہیں کرتا۔\n\nBluetooth اسکیننگ اور geohash چیٹ فیچر کے لیے مقام کی خدمات ضروری ہیں۔</string>
-    <string name="location_needs_for">bitchat کو مقام کی خدمات کی ضرورت:</string>
+    <string name="location_explanation">Zemzeme آپ کا مقام ٹریک نہیں کرتا۔\n\nBluetooth اسکیننگ اور geohash چیٹ فیچر کے لیے مقام کی خدمات ضروری ہیں۔</string>
+    <string name="location_needs_for">Zemzeme کو مقام کی خدمات کی ضرورت:</string>
     <string name="location_needs_bullets">• Bluetooth آلات اسکیننگ\n• میش نیٹ ورک میں قریبی صارفین کی دریافت\n• geohash چیٹ فیچر\n• کوئی ٹریکنگ یا مقام کا اجماع نہیں</string>
     <string name="open_location_settings">مقام سیٹنگز کھولیں</string>
     <string name="check_again">دوبارہ چیک کریں</string>
@@ -262,15 +262,15 @@
     <string name="location_unavailable_explanation">اس آلے پر مقام کی خدمات دستیاب نہیں ہیں۔ یہ غیر معمولی ہے کیونکہ مقام کی خدمات Android آلات پر معیاری ہیں۔\n\nBluetooth اسکیننگ (Android کی ضرورت) کے ٹھیک سے کام کرنے کے لیے مقام کی خدمات ضروری ہیں۔ اس کے بغیر ایپ قریبی صارفین کو دریافت نہیں کر سکتی۔</string>
     <string name="checking_location_services">مقام کی خدمات چیک کر رہے ہیں…</string>
     <string name="bluetooth_required">Bluetooth ضروری</string>
-    <string name="bluetooth_needs_for">bitchat کو Bluetooth کی ضرورت:</string>
+    <string name="bluetooth_needs_for">Zemzeme کو Bluetooth کی ضرورت:</string>
     <string name="bluetooth_needs_bullets">• قریبی صارفین کی دریافت\n• میش نیٹ ورک کنیکشنز بنانا\n• پیغامات بھیجنا اور وصول کرنا\n• انٹرنیٹ یا سرورز کے بغیر کام کرنا</string>
     <string name="enable_bluetooth">Bluetooth فعال کریں</string>
     <string name="bluetooth_not_supported">Bluetooth تعاون یافتہ نہیں</string>
-    <string name="bluetooth_unsupported_explanation">یہ آلہ Bluetooth Low Energy (BLE) کو سپورٹ نہیں کرتا، جو bitchat کے کام کے لیے ضروری ہے۔\n\nBLE میش نیٹ ورکس بنانے اور انٹرنیٹ کے بغیر قریبی آلات کے ساتھ بات چیت کرنے کے لیے ضروری ہے۔</string>
+    <string name="bluetooth_unsupported_explanation">یہ آلہ Bluetooth Low Energy (BLE) کو سپورٹ نہیں کرتا، جو Zemzeme کے کام کے لیے ضروری ہے۔\n\nBLE میش نیٹ ورکس بنانے اور انٹرنیٹ کے بغیر قریبی آلات کے ساتھ بات چیت کرنے کے لیے ضروری ہے۔</string>
     <string name="checking_bluetooth_status">Bluetooth کی کیفیت چیک کر رہے ہیں…</string>
     <string name="battery_optimization_detected_title">بیٹری کی اصلاح کا پتہ چلا</string>
     <string name="battery_optimization_enabled_title">بیٹری کی اصلاح فعال</string>
-    <string name="battery_optimization_explanation_short">میش کنیکشنز برقرار رکھنے کے لیے bitchat کو پس منظر میں چلنا ضروری ہے۔ بیٹری کی اصلاح ان کنیکشنز کو خراب کر سکتی ہے۔</string>
+    <string name="battery_optimization_explanation_short">میش کنیکشنز برقرار رکھنے کے لیے Zemzeme کو پس منظر میں چلنا ضروری ہے۔ بیٹری کی اصلاح ان کنیکشنز کو خراب کر سکتی ہے۔</string>
     <string name="benefits_of_disabling">بند کرنے کے فوائد</string>
     <string name="battery_benefits_short">• قابل اعتماد پیغام کی ڈیلیوری\n• میش کنیکٹویٹی برقرار رکھنا\n• کنیکشن منقطع ہونے سے بچنا</string>
     <string name="disable_battery_optimization">بیٹری کی اصلاح بند کریں</string>
@@ -285,7 +285,7 @@
     <string name="privacy_bullets">• کوئی ٹریکنگ یا ڈیٹا اجماع نہیں\n• Bluetooth میش چیٹس مکمل آف لائن\n• geohash چیٹس انٹرنیٹ استعمال کرتے ہیں</string>
     <string name="permissions_header">اجازات</string>
     <string name="grant_permissions">اجازات دیں</string>
-    <string name="location_tracking_warning">bitchat آپ کا مقام ٹریک نہیں کرتا</string>
+    <string name="location_tracking_warning">Zemzeme آپ کا مقام ٹریک نہیں کرتا</string>
     <string name="geohash_people_header">لوگ</string>
     <string name="nobody_around">یہاں کوئی نہیں…</string>
     <string name="you_suffix"> (آپ)</string>
@@ -314,14 +314,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- اجازات کی تفصیل -->
-    <string name="perm_nearby_devices_desc">بلوٹوتھ کے ذریعے bitchat صارفین کی دریافت کے لیے ضروری</string>
-    <string name="perm_nearby_devices_system">bitchat کو قریبی آلات سے جڑنے کی اجازت دیں</string>
-    <string name="perm_location_desc">Android کی ضرورت: بلوٹوتھ کے ذریعے قریبی bitchat صارفین کی دریافت</string>
-    <string name="perm_location_system">قریبی آلات اسکین کرنے کے لیے bitchat کو یہ چاہیے</string>
+    <string name="perm_nearby_devices_desc">بلوٹوتھ کے ذریعے Zemzeme صارفین کی دریافت کے لیے ضروری</string>
+    <string name="perm_nearby_devices_system">Zemzeme کو قریبی آلات سے جڑنے کی اجازت دیں</string>
+    <string name="perm_location_desc">Android کی ضرورت: بلوٹوتھ کے ذریعے قریبی Zemzeme صارفین کی دریافت</string>
+    <string name="perm_location_system">قریبی آلات اسکین کرنے کے لیے Zemzeme کو یہ چاہیے</string>
     <string name="perm_notifications_desc">نجی پیغامات ملنے پر نوٹیفیکیشن حاصل کریں</string>
-    <string name="perm_notifications_system">bitchat کو آپ کو نوٹیفیکیشن بھیجنے کی اجازت دیں</string>
-    <string name="perm_battery_desc">یقینی بنانے کے لیے کہ bitchat پس منظر میں قابل اعتماد طور پر چلے اور میش کنیکشنز برقرار رکھے، بیٹری کی اصلاح بند کریں</string>
-    <string name="perm_battery_system">bitchat کو بیٹری کی پابندیوں کے بغیر چلنے کی اجازت دیں</string>
+    <string name="perm_notifications_system">Zemzeme کو آپ کو نوٹیفیکیشن بھیجنے کی اجازت دیں</string>
+    <string name="perm_battery_desc">یقینی بنانے کے لیے کہ Zemzeme پس منظر میں قابل اعتماد طور پر چلے اور میش کنیکشنز برقرار رکھے، بیٹری کی اصلاح بند کریں</string>
+    <string name="perm_battery_system">Zemzeme کو بیٹری کی پابندیوں کے بغیر چلنے کی اجازت دیں</string>
 
     <!-- اجازات کی اقسام -->
     <string name="perm_type_nearby_devices">قریبی آلات</string>
@@ -339,10 +339,6 @@
     <string name="cancel">منسوخ کریں</string>
 
     <!-- جمع -->
-    <plurals name="notification_and_more">
-        <item quantity="one">اور %d مزید</item>
-        <item quantity="other">اور %d مزید</item>
-    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1 شخص</item>
@@ -399,4 +395,56 @@
   <string name="verify_success_title">Verified</string>
   <string name="verify_success_body">You verified %1$s</string>
   <string name="verify_success_system_message">verified %1$s</string>
+
+  <!-- گمشدہ کلیدیں -->
+  <string name="mesh_service_channel_name">میش بیک گراؤنڈ سروس</string>
+  <string name="mesh_service_channel_desc">بلوٹوتھ میش کو بیک گراؤنڈ میں چلاتا رہتا ہے</string>
+  <string name="cd_settings">ترتیبات</string>
+  <string name="cd_location_notes">مقام کے نوٹس</string>
+  <string name="notification_action_quit_bitchat">Zemzeme بند کریں</string>
+  <string name="about_background_title">بیک گراؤنڈ میں چلائیں</string>
+  <string name="about_background_desc">ایپ بند ہونے پر بھی میش کو فعال رکھیں (فورگراؤنڈ سروس)</string>
+  <string name="about_p2p_subtitle">p2p کے ذریعے براہ راست پیئر کنکشن</string>
+  <string name="about_nostr_subtitle">انٹرنیٹ ریلے میسجنگ</string>
+  <string name="about_ble_subtitle">بلوٹوتھ قریبی میش</string>
+  <string name="background_location_required_title">بیک گراؤنڈ مقام تجویز کردہ</string>
+  <string name="background_location_required_subtitle">اختیاری، میش کی قابل اعتمادیت بڑھاتا ہے</string>
+  <string name="background_location_explanation">Android تجویز کرتا ہے کہ Zemzeme ایپ بند ہونے پر بھی قریبی آلات تلاش کر سکے۔ یہ ریبوٹ کے بعد بھی میش کو زندہ رکھتا ہے۔</string>
+  <string name="background_location_settings_tip">جب ترتیبات کھلیں، "ہمیشہ اجازت دیں" منتخب کریں۔</string>
+  <string name="background_location_needs_for">Zemzeme بیک گراؤنڈ مقام کو استعمال کرتا ہے:</string>
+  <string name="background_location_needs_bullets">- ایپ بند ہونے پر قریبی آلات تلاش کریں\n- ریبوٹ کے بعد دوبارہ جڑیں\n- بیک گراؤنڈ میں میش چلاتا رہے</string>
+  <string name="background_location_privacy_note">ہم آپ کا مقام کبھی جمع یا ذخیرہ نہیں کرتے۔ آپ کی رازداری محفوظ ہے۔</string>
+  <string name="grant_background_location">بیک گراؤنڈ مقام کی اجازت دیں</string>
+  <string name="skip_background_location">بیک گراؤنڈ مقام کے بغیر جاری رکھیں</string>
+  <string name="dot">.</string>
+  <string name="warning_emoji">⚠️</string>
+  <string name="at_symbol">@</string>
+  <string name="app_brand">Zemzeme/</string>
+  <string name="channel_count_prefix"> · ⧉ </string>
+  <string name="mention_suggestion_at">@%1$s</string>
+  <string name="at_nickname">@%1$s</string>
+  <string name="hash_symbol">#</string>
+  <string name="underscore">_</string>
+  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+  <string name="progress_filled">█</string>
+  <string name="progress_empty">░</string>
+  <string name="image_counter">%1$d / %2$d</string>
+  <string name="status_sending">○</string>
+  <string name="status_pending">○</string>
+  <string name="status_sent">✓</string>
+  <string name="status_delivered">✓✓</string>
+  <string name="status_failed">⚠</string>
+  <string name="status_read">✓</string>
+  <string name="notification_file_pdf">📄</string>
+  <string name="notification_file_zip">🗜️</string>
+  <string name="notification_file_doc">📄</string>
+  <string name="notification_file_xls">📊</string>
+  <string name="notification_file_ppt">📈</string>
+  <string name="notification_file_generic">📎</string>
+  <string name="perm_background_location_desc">ایپ بیک گراؤنڈ میں ہونے پر قریبی آلات تلاش کرنے کے لیے تجویز کردہ</string>
+  <string name="perm_background_location_system">بیک گراؤنڈ مقام تک رسائی کی اجازت دیں</string>
+  <string name="perm_type_background_location">بیک گراؤنڈ مقام</string>
+  <string name="tor_not_available_in_this_build">اس بلڈ میں Tor دستیاب نہیں</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+  <string name="debug_question_mark">?</string>
 </resources>

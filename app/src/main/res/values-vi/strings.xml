@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">Zemzeme</string>
 
     <!-- Lý do quyền -->
     <string name="permission_bluetooth_rationale">Quyền Bluetooth là cần thiết để trò chuyện trực tiếp với những người khác mà không cần Internet.</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">Không cần tối ưu hóa pin</string>
     <string name="battery_optimization_checking">Đang kiểm tra tối ưu hóa pin</string>
     <string name="battery_optimization_why_disable">Tại sao nên tắt tối ưu hóa pin?</string>
-    <string name="battery_optimization_explanation">bitchat chạy nền để duy trì kết nối mesh với các thiết bị gần đó. Tối ưu hóa pin có thể làm gián đoạn các kết nối này, gây ra tin nhắn bị trễ hoặc mất.\n\nTắt tối ưu hóa pin đảm bảo liên lạc ngang hàng đáng tin cậy.</string>
+    <string name="battery_optimization_explanation">Zemzeme chạy nền để duy trì kết nối mesh với các thiết bị gần đó. Tối ưu hóa pin có thể làm gián đoạn các kết nối này, gây ra tin nhắn bị trễ hoặc mất.\n\nTắt tối ưu hóa pin đảm bảo liên lạc ngang hàng đáng tin cậy.</string>
     <string name="battery_optimization_disable_button">Tắt tối ưu hóa pin</string>
-    <string name="battery_optimization_note">Lưu ý: Bạn có thể thay đổi điều này sau trong Android Settings &gt; Apps &gt; bitchat &gt; Battery.</string>
-    <string name="battery_optimization_not_supported_explanation">Thiết bị của bạn không cần cài đặt tối ưu hóa pin. bitchat sẽ chạy bình thường.</string>
-    <string name="battery_optimization_not_supported_message">Thiết bị của bạn không cần cài đặt tối ưu hóa pin. bitchat sẽ chạy bình thường.</string>
-    <string name="battery_optimization_success_message">bitchat có thể chạy đáng tin cậy trong nền</string>
+    <string name="battery_optimization_note">Lưu ý: Bạn có thể thay đổi điều này sau trong Android Settings &gt; Apps &gt; Zemzeme &gt; Battery.</string>
+    <string name="battery_optimization_not_supported_explanation">Thiết bị của bạn không cần cài đặt tối ưu hóa pin. Zemzeme sẽ chạy bình thường.</string>
+    <string name="battery_optimization_not_supported_message">Thiết bị của bạn không cần cài đặt tối ưu hóa pin. Zemzeme sẽ chạy bình thường.</string>
+    <string name="battery_optimization_success_message">Zemzeme có thể chạy đáng tin cậy trong nền</string>
     <string name="battery_optimization_benefits">• Gửi tin nhắn đáng tin cậy\n• Duy trì kết nối mesh\n• Chuyển tiếp tin nhắn nền\n• Ngăn ngừa mất kết nối</string>
     <string name="battery_optimization_check_again">Kiểm tra lại</string>
     <string name="battery_optimization_skip">Bỏ qua ngay</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">và %1$d khác</string>
     <string name="notification_messages_from_people">%1$d tin nhắn từ %2$d người</string>
     <string name="notification_more_conversations">và %1$d cuộc trò chuyện khác</string>
-    <string name="notification_active_peers_title">👥 bitchatter gần đó!</string>
+    <string name="notification_active_peers_title">👥 Zemzeme user gần đó!</string>
     <string name="notification_active_peers_one">1 người gần đó</string>
     <string name="notification_active_peers_many">%1$d người gần đó</string>
     <string name="notification_new_messages">Tin nhắn mới</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">Hoạt động mới trong %1$s</string>
     <string name="notification_messages_in">Tin nhắn trong %1$s</string>
     <string name="notification_joined_conversation">%1$s đã tham gia cuộc trò chuyện</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d lần nhắc đến</string>
-    <string name="notification_geohash_summary_title">bitchat – Trò chuyện vị trí</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d lần nhắc đến</string>
+    <string name="notification_geohash_summary_title">Zemzeme – Trò chuyện vị trí</string>
     <string name="notification_geohash_summary_text">%1$d tin nhắn từ %2$d vị trí</string>
     <string name="notification_mesh_mention_title_singular">Được nhắc đến trong Mesh Chat</string>
     <string name="notification_mesh_mention_title_plural">%1$d lần nhắc đến trong Mesh Chat</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">Chọn hình ảnh</string>
 
     <!-- Sheet giới thiệu -->
-    <string name="about_tagline">trò chuyện mesh phi tập trung với mã hóa đầu cuối</string>
+    <string name="about_tagline">Nhắn tin không bị giám sát trong mọi hoàn cảnh, được mã hóa đầu cuối</string>
     <string name="about_offline_mesh_title">Trò chuyện Mesh ngoại tuyến</string>
     <string name="about_offline_mesh_desc">Liên lạc trực tiếp qua Bluetooth LE mà không cần Internet hoặc máy chủ. Tin nhắn được chuyển tiếp qua các thiết bị gần để mở rộng phạm vi.</string>
     <string name="about_online_geohash_title">Kênh Geohash trực tuyến</string>
@@ -253,24 +253,24 @@
     <!-- Màn hình onboarding -->
     <string name="location_services_required">Yêu cầu dịch vụ vị trí</string>
     <string name="privacy_first">Quyền riêng tư trước tiên</string>
-    <string name="location_explanation">bitchat KHÔNG theo dõi vị trí của bạn.\n\nDịch vụ vị trí cần thiết cho quét Bluetooth và tính năng geohash chat.</string>
-    <string name="location_needs_for">bitchat cần dịch vụ vị trí cho:</string>
+    <string name="location_explanation">Zemzeme KHÔNG theo dõi vị trí của bạn.\n\nDịch vụ vị trí cần thiết cho quét Bluetooth và tính năng geohash chat.</string>
+    <string name="location_needs_for">Zemzeme cần dịch vụ vị trí cho:</string>
     <string name="location_needs_bullets">• Quét thiết bị Bluetooth\n• Khám phá người dùng gần đó trong mạng mesh\n• Tính năng geohash chat\n• Không theo dõi hoặc thu thập vị trí</string>
     <string name="open_location_settings">Mở cài đặt vị trí</string>
     <string name="check_again">Kiểm tra lại</string>
     <string name="location_services_unavailable">Dịch vụ vị trí không có sẵn</string>
-    <string name="location_unavailable_explanation">Dịch vụ vị trí không có sẵn trên thiết bị này. Điều này bất thường vì dịch vụ vị trí là tiêu chuẩn trên thiết bị Android.\n\nbitchat cần dịch vụ vị trí để quét Bluetooth hoạt động đúng (yêu cầu Android). Không có nó, ứng dụng không thể khám phá người dùng gần đó.</string>
+    <string name="location_unavailable_explanation">Dịch vụ vị trí không có sẵn trên thiết bị này. Điều này bất thường vì dịch vụ vị trí là tiêu chuẩn trên thiết bị Android.\n\nZemzeme cần dịch vụ vị trí để quét Bluetooth hoạt động đúng (yêu cầu Android). Không có nó, ứng dụng không thể khám phá người dùng gần đó.</string>
     <string name="checking_location_services">Đang kiểm tra dịch vụ vị trí …</string>
     <string name="bluetooth_required">Yêu cầu Bluetooth</string>
-    <string name="bluetooth_needs_for">bitchat cần Bluetooth cho:</string>
+    <string name="bluetooth_needs_for">Zemzeme cần Bluetooth cho:</string>
     <string name="bluetooth_needs_bullets">• Khám phá người dùng gần đó\n• Tạo kết nối mạng mesh\n• Gửi và nhận tin nhắn\n• Hoạt động mà không cần Internet hoặc máy chủ</string>
     <string name="enable_bluetooth">Bật Bluetooth</string>
     <string name="bluetooth_not_supported">Bluetooth không được hỗ trợ</string>
-    <string name="bluetooth_unsupported_explanation">Thiết bị này không hỗ trợ Bluetooth Low Energy (BLE), cần thiết để bitchat hoạt động.\n\nbitchat cần BLE để tạo mạng mesh và liên lạc với thiết bị gần đó mà không cần Internet.</string>
+    <string name="bluetooth_unsupported_explanation">Thiết bị này không hỗ trợ Bluetooth Low Energy (BLE), cần thiết để Zemzeme hoạt động.\n\nZemzeme cần BLE để tạo mạng mesh và liên lạc với thiết bị gần đó mà không cần Internet.</string>
     <string name="checking_bluetooth_status">Đang kiểm tra trạng thái Bluetooth …</string>
     <string name="battery_optimization_detected_title">Đã phát hiện tối ưu hóa pin</string>
     <string name="battery_optimization_enabled_title">Tối ưu hóa pin đã bật</string>
-    <string name="battery_optimization_explanation_short">bitchat phải chạy nền để duy trì kết nối mesh. Tối ưu hóa pin có thể làm gián đoạn các kết nối này.</string>
+    <string name="battery_optimization_explanation_short">Zemzeme phải chạy nền để duy trì kết nối mesh. Tối ưu hóa pin có thể làm gián đoạn các kết nối này.</string>
     <string name="benefits_of_disabling">Lợi ích của việc tắt</string>
     <string name="battery_benefits_short">• gửi tin nhắn đáng tin cậy\n• duy trì kết nối mesh\n• ngăn ngừa mất kết nối</string>
     <string name="disable_battery_optimization">Tắt tối ưu hóa pin</string>
@@ -285,7 +285,7 @@
     <string name="privacy_bullets">• không theo dõi hoặc thu thập dữ liệu\n• Bluetooth mesh chat hoàn toàn ngoại tuyến\n• Geohash chat sử dụng Internet</string>
     <string name="permissions_header">Quyền</string>
     <string name="grant_permissions">Cấp quyền</string>
-    <string name="location_tracking_warning">bitchat KHÔNG theo dõi vị trí của bạn</string>
+    <string name="location_tracking_warning">Zemzeme KHÔNG theo dõi vị trí của bạn</string>
     <string name="geohash_people_header">MỌI NGƯỜI</string>
     <string name="nobody_around">không có ai xung quanh …</string>
     <string name="you_suffix"> (bạn)</string>
@@ -314,14 +314,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- Mô tả quyền -->
-    <string name="perm_nearby_devices_desc">Cần thiết để khám phá người dùng bitchat qua Bluetooth</string>
-    <string name="perm_nearby_devices_system">Cho phép bitchat kết nối với thiết bị gần đó</string>
-    <string name="perm_location_desc">Android yêu cầu để khám phá người dùng bitchat gần đó qua Bluetooth</string>
-    <string name="perm_location_system">bitchat cần điều này để quét thiết bị gần đó</string>
+    <string name="perm_nearby_devices_desc">Cần thiết để khám phá người dùng Zemzeme qua Bluetooth</string>
+    <string name="perm_nearby_devices_system">Cho phép Zemzeme kết nối với thiết bị gần đó</string>
+    <string name="perm_location_desc">Android yêu cầu để khám phá người dùng Zemzeme gần đó qua Bluetooth</string>
+    <string name="perm_location_system">Zemzeme cần điều này để quét thiết bị gần đó</string>
     <string name="perm_notifications_desc">Nhận thông báo khi bạn nhận tin nhắn riêng</string>
-    <string name="perm_notifications_system">Cho phép bitchat gửi thông báo cho bạn</string>
-    <string name="perm_battery_desc">Tắt tối ưu hóa pin để đảm bảo bitchat chạy đáng tin cậy trong nền và duy trì kết nối mạng mesh</string>
-    <string name="perm_battery_system">Cho phép bitchat chạy mà không bị giới hạn pin</string>
+    <string name="perm_notifications_system">Cho phép Zemzeme gửi thông báo cho bạn</string>
+    <string name="perm_battery_desc">Tắt tối ưu hóa pin để đảm bảo Zemzeme chạy đáng tin cậy trong nền và duy trì kết nối mạng mesh</string>
+    <string name="perm_battery_system">Cho phép Zemzeme chạy mà không bị giới hạn pin</string>
 
     <!-- Loại quyền -->
     <string name="perm_type_nearby_devices">Thiết bị gần đó</string>
@@ -386,4 +386,90 @@
   <string name="verify_success_title">Verified</string>
   <string name="verify_success_body">You verified %1$s</string>
   <string name="verify_success_system_message">verified %1$s</string>
+
+    <!-- Dịch vụ Mesh nền -->
+    <string name="mesh_service_channel_name">Dịch vụ Mesh nền</string>
+    <string name="mesh_service_channel_desc">Giữ cho Bluetooth mesh chạy trong nền</string>
+
+    <!-- Khả năng truy cập -->
+    <string name="cd_settings">Cài đặt</string>
+    <string name="cd_location_notes">Ghi chú vị trí</string>
+
+    <!-- Hành động thông báo -->
+    <string name="notification_action_quit_bitchat">Thoát Zemzeme</string>
+
+    <!-- Giới thiệu -->
+    <string name="about_background_title">chạy nền</string>
+    <string name="about_background_desc">giữ mesh hoạt động khi đóng ứng dụng (foreground service)</string>
+    <string name="about_p2p_subtitle">Kết nối ngang hàng trực tiếp qua p2p</string>
+    <string name="about_nostr_subtitle">Nhắn tin qua relay Internet</string>
+    <string name="about_ble_subtitle">Mesh Bluetooth gần đó</string>
+
+    <!-- Vị trí nền -->
+    <string name="background_location_required_title">Khuyến nghị vị trí nền</string>
+    <string name="background_location_required_subtitle">tùy chọn, cải thiện độ tin cậy mesh</string>
+    <string name="background_location_explanation">Android khuyến nghị vị trí nền để Zemzeme có thể quét thiết bị gần đó khi ứng dụng không mở. Điều này giữ cho mesh hoạt động sau khi khởi động lại.</string>
+    <string name="background_location_settings_tip">Khi cài đặt mở, chọn "Cho phép mọi lúc".</string>
+    <string name="background_location_needs_for">Zemzeme sử dụng vị trí nền cho:</string>
+    <string name="background_location_needs_bullets">- quét thiết bị gần đó khi ứng dụng đóng\n- kết nối lại sau khi khởi động lại\n- giữ mesh chạy trong nền</string>
+    <string name="background_location_privacy_note">Chúng tôi KHÔNG BAO GIỜ thu thập hoặc lưu trữ vị trí của bạn. Quyền riêng tư của bạn được bảo vệ.</string>
+    <string name="grant_background_location">Cho phép vị trí nền</string>
+    <string name="skip_background_location">Tiếp tục mà không có vị trí nền</string>
+
+    <!-- Ký hiệu và ký tự đặc biệt -->
+    <string name="dot">.</string>
+    <string name="warning_emoji">⚠️</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
+    <string name="mention_suggestion_at">@%1$s</string>
+    <string name="image_counter">%1$d / %2$d</string>
+    <string name="at_nickname">@%1$s</string>
+    <string name="hash_symbol">#</string>
+    <string name="underscore">_</string>
+    <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+    <string name="progress_filled">█</string>
+    <string name="progress_empty">░</string>
+
+    <!-- Trạng thái tin nhắn -->
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+
+    <!-- File thông báo -->
+    <string name="notification_file_pdf">📄</string>
+    <string name="notification_file_zip">🗜️</string>
+    <string name="notification_file_doc">📄</string>
+    <string name="notification_file_xls">📊</string>
+    <string name="notification_file_ppt">📈</string>
+    <string name="notification_file_generic">📎</string>
+
+    <!-- Quyền vị trí nền -->
+    <string name="perm_background_location_desc">Khuyến nghị để quét thiết bị gần đó khi ứng dụng chạy nền</string>
+    <string name="perm_background_location_system">Cho phép truy cập vị trí nền</string>
+    <string name="perm_type_background_location">Vị trí nền</string>
+
+    <!-- Tor -->
+    <string name="tor_not_available_in_this_build">Tor không có sẵn trong bản build này</string>
+
+    <!-- Ghi chú vị trí -->
+    <plurals name="location_notes_title">
+        <item quantity="other">#%1$s ± 1 • %2$d ghi chú</item>
+    </plurals>
+    <string name="location_notes_description">thêm ghi chú ngắn vĩnh viễn vào vị trí này để những người ghé thăm khác tìm thấy.</string>
+    <string name="location_notes_relays_unavailable">geo relay không có sẵn; ghi chú tạm dừng</string>
+    <string name="location_notes_no_relays_title">không có geo relay gần đó</string>
+    <string name="location_notes_no_relays_desc">ghi chú phụ thuộc vào geo relay. kiểm tra kết nối và thử lại.</string>
+    <string name="loading_location_notes">đang tải ghi chú…</string>
+    <string name="location_notes_empty_title">chưa có ghi chú</string>
+    <string name="location_notes_empty_desc">hãy là người đầu tiên thêm ghi chú cho nơi này.</string>
+    <string name="dismiss">bỏ qua</string>
+    <string name="location_notes_input_placeholder">thêm ghi chú cho nơi này</string>
+
+    <!-- Debug -->
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
 </resources>

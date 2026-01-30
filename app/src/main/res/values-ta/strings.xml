@@ -1,8 +1,419 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TODO: Tamil translations -->
-    <string name="mesh_service_notification_content">மெஷ் இயங்குகிறது — %1$d பியர்ஸ்</string>
+    <!-- App core -->
+    <string name="app_name">ஜெம்ஜெமே</string>
+    <string name="permission_bluetooth_rationale">இணையம் இல்லாமல் நேர்நிலை செய்தி அனுப்புவதற்கு Bluetooth அனுமதி தேவை.</string>
+    <string name="permission_location_rationale">Bluetooth மூலம் அருகிலுள்ள சாதனங்களைக் கண்டுபிடிக்க இருப்பிட அனுமதி தேவை.</string>
+    <string name="permission_notification_rationale">புதிய செய்திகள் பற்றி உங்களுக்கு அறிவிக்க அறிவிப்பு அனுமதி தேவை.</string>
+    <string name="nickname_hint">புனைப்பெயர்</string>
+    <string name="message_hint">ஒரு செய்தி தட்டச்சு செய்யுங்கள்…</string>
+    <string name="channel_password_hint">கடவுச்சொல்</string>
+    <string name="join_channel">சேனலில் சேர</string>
+    <string name="leave_channel">வெளியேறு</string>
+    <string name="send_message">அனுப்பு</string>
+    <string name="show_commands">கட்டளைகளைக் காட்டு</string>
+    <string name="back">பின்னால்</string>
+    <string name="people">நபர்கள்</string>
+    <string name="channels">சேனல்கள்</string>
+    <string name="online_users">ஆன்லைன் பயனர்கள்</string>
+    <string name="no_one_connected">யாரும் இணைக்கப்படவில்லை</string>
+    <string name="emergency_clear_hint">அனைத்து தரவையும் நீக்க மூன்று முறை தட்டவும்</string>
+    <string name="your_network">நெட்வொர்க்</string>
 
+    <!-- Battery Optimization -->
+    <string name="battery_optimization_detected">பேட்டரி மேம்படுத்தல் கண்டறியப்பட்டது</string>
+    <string name="battery_optimization_disabled">பேட்டரி மேம்படுத்தல் முடக்கப்பட்டது</string>
+    <string name="battery_optimization_not_required">பேட்டரி மேம்படுத்தல் தேவையில்லை</string>
+    <string name="battery_optimization_checking">பேட்டரி மேம்படுத்தல் சரிபார்க்கிறது</string>
+    <string name="battery_optimization_why_disable">பேட்டரி மேம்படுத்தலை ஏன் முடக்க வேண்டும்?</string>
+    <string name="battery_optimization_explanation">Zemzeme அருகிலுள்ள சாதனங்களுடன் mesh நெட்வொர்க் இணைப்புகளை பராமரிக்க பின்னணியில் இயங்குகிறது. பேட்டரி மேம்படுத்தல் இந்த இணைப்புகளை தடைசெய்யலாம், இதனால் செய்திகள் தாமதமாகலாம் அல்லது தவறவிடலாம்.\n\nபேட்டரி மேம்படுத்தலை முடக்குவது நம்பகமான நேர்நிலை செய்தி அனுப்புதலை உறுதிசெய்கிறது.</string>
+    <string name="battery_optimization_disable_button">பேட்டரி மேம்படுத்தலை முடக்கு</string>
+    <string name="battery_optimization_note">குறிப்பு: இந்த அமைப்பை பின்னர் Android அமைப்புகள் > பயன்பாடுகள் > Zemzeme > பேட்டரியில் மாற்றலாம்</string>
+    <string name="battery_optimization_not_supported_explanation">உங்கள் சாதனத்திற்கு பேட்டரி மேம்படுத்தல் அமைப்புகள் தேவையில்லை. Zemzeme இயல்பாக இயங்கும்.</string>
+    <string name="battery_optimization_not_supported_message">உங்கள் சாதனத்திற்கு பேட்டரி மேம்படுத்தல் அமைப்புகள் தேவையில்லை. Zemzeme இயல்பாக இயங்கும்.</string>
+    <string name="battery_optimization_success_message">Zemzeme பின்னணியில் நம்பகமாக இயங்கலாம்</string>
+    <string name="battery_optimization_benefits">• நம்பகமான செய்தி வழங்கலை உறுதிசெய்கிறது\n• mesh நெட்வொர்க் இணைப்பை பராமரிக்கிறது\n• பின்னணி செய்தி relayகளை அனுமதிக்கிறது\n• இணைப்பு துண்டிப்புகளை தடுக்கிறது</string>
+    <string name="battery_optimization_check_again">மீண்டும் சரிபார்க்கவும்</string>
+    <string name="battery_optimization_skip">இப்போதைக்கு தவிர்</string>
+    <string name="battery_optimization_continue">தொடரவும்</string>
+    <string name="retry">மீண்டும் முயற்சி</string>
+    <string name="skip">தவிர்</string>
+
+    <!-- Notifications -->
+    <string name="notification_summary_more">மேலும் %1$d</string>
+    <string name="notification_messages_from_people">%2$d நபர்களிடமிருந்து %1$d செய்திகள்</string>
+    <string name="notification_more_conversations">மேலும் %1$d உரையாடல்கள்</string>
+    <string name="notification_active_peers_title">👥 zemzemers அருகில் உள்ளனர்!</string>
+    <string name="notification_active_peers_one">1 நபர் அருகில்</string>
+    <string name="notification_active_peers_many">%1$d நபர்கள் அருகில்</string>
+    <string name="notification_new_messages">புதிய செய்திகள்</string>
+    <string name="notification_new_location_messages">புதிய இருப்பிட செய்திகள்</string>
+    <string name="notification_mentions_in">%1$s-ல் குறிப்பிடப்பட்டது</string>
+    <string name="notification_mentions_in_more">%1$s-ல் குறிப்பிடப்பட்டது (+%2$d மேலும்)</string>
+    <string name="notification_mentions_in_plural">%2$s-ல் %1$d குறிப்புகள்</string>
+    <string name="notification_new_activity_in">%1$s-ல் புதிய செயல்பாடு</string>
+    <string name="notification_messages_in">%1$s-ல் செய்திகள்</string>
+    <string name="notification_joined_conversation">%1$s உரையாடலில் சேர்ந்தார்</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme - %1$d குறிப்புகள்</string>
+    <string name="notification_geohash_summary_title">Zemzeme - இருப்பிட அரட்டைகள்</string>
+    <string name="notification_geohash_summary_text">%2$d இருப்பிடங்களிலிருந்து %1$d செய்திகள்</string>
+    <string name="notification_mesh_mention_title_singular">Mesh Chat-ல் குறிப்பிடப்பட்டது</string>
+    <string name="notification_mesh_mention_title_plural">Mesh Chat-ல் %1$d குறிப்புகள்</string>
+    <string name="notification_more_locations">மேலும் %1$d இருப்பிடங்கள்</string>
+
+    <!-- Mesh Service Foreground Notification -->
+    <string name="mesh_service_channel_name">Mesh பின்னணி சேவை</string>
+    <string name="mesh_service_channel_desc">பின்னணியில் Bluetooth mesh இயங்குவதை தொடர்கிறது</string>
+
+    <!-- Favorites accessibility -->
+    <string name="cd_add_favorite">பிடித்தவைகளில் சேர்</string>
+    <string name="cd_remove_favorite">பிடித்தவைகளிலிருந்து நீக்கு</string>
+    <string name="cd_add_bookmark">புக்மார்க் சேர்</string>
+
+    <!-- Chat header & accessibility -->
+    <string name="chat_back">பின்னால்</string>
+    <string name="chat_channel_prefix">சேனல்: %1$s</string>
+    <string name="chat_leave">வெளியேறு</string>
+    <string name="cd_nostr_reachable">Nostr அணுகக்கூடியது</string>
+    <string name="cd_unread_private_messages">படிக்காத தனிப்பட்ட செய்திகள்</string>
+    <string name="cd_toggle_bookmark">புக்மார்க் மாற்று</string>
+    <string name="cd_location_notes">இருப்பிட குறிப்புகள்</string>
+    <string name="cd_teleported">டெலிபோர்ட் செய்யப்பட்டது</string>
+    <string name="cd_tor_status">Tor நிலை</string>
+    <string name="cd_connected_peers">இணைக்கப்பட்ட peers</string>
+    <string name="cd_geohash_participants">Geohash பங்கேற்பாளர்கள்</string>
+    <string name="cd_ready_for_handshake">Handshake-க்கு தயார்</string>
+    <string name="cd_handshake_in_progress">Handshake நடைபெறுகிறது</string>
+    <string name="cd_encrypted">முனைக்கு முனை மறைக்கப்பட்டது</string>
+    <string name="cd_handshake_failed">Handshake தோல்வியடைந்தது</string>
+    <string name="cd_settings">அமைப்புகள்</string>
+
+    <!-- File viewer dialog -->
+    <string name="file_viewer_title">📎 கோப்பு பெறப்பட்டது</string>
+    <string name="file_viewer_name">📄 %1$s</string>
+    <string name="file_viewer_size">📏 அளவு: %1$s</string>
+    <string name="file_viewer_type">🏷️ வகை: %1$s</string>
+    <string name="file_viewer_open_save">📂 திற / சேமி</string>
+    <string name="close_with_emoji">❌ மூடு</string>
+    <string name="pick_image">படம் தேர்ந்தெடு</string>
+    <string name="cd_save_current_image">தற்போதைய படத்தை சேமி</string>
+    <string name="cd_close">மூடு</string>
+    <string name="toast_image_saved">படம் Downloads-ல் சேமிக்கப்பட்டது</string>
+    <string name="toast_failed_to_save_image">படத்தை சேமிக்க தோல்வியடைந்தது</string>
+    <string name="cd_image_index_of">%2$d-ல் %1$d படம்</string>
+    <string name="cd_pick_file">கோப்பு தேர்ந்தெடு</string>
+
+    <!-- About sheet -->
+    <string name="about_tagline">அனைத்து சூழ்நிலைகளிலும் கண்காணிப்பு-இல்லாத செய்தியிடல், முனைமுனை குறியாக்கம்</string>
+    <string name="about_offline_mesh_title">ஆஃப்லைன் Mesh அரட்டை</string>
+    <string name="about_offline_mesh_desc">இணையம் அல்லது சர்வர்கள் இல்லாமல் Bluetooth LE மூலம் நேரடியாக தொடர்பு கொள்ளுங்கள். செய்திகள் வரம்பை நீட்டிக்க அருகிலுள்ள சாதனங்கள் வழியாக அனுப்பப்படுகின்றன.</string>
+    <string name="about_online_geohash_title">ஆன்லைன் Geohash சேனல்கள்</string>
+    <string name="about_online_geohash_desc">geohash அடிப்படையிலான சேனல்களைப் பயன்படுத்தி உங்கள் பகுதியிலுள்ள மக்களுடன் இணையுங்கள். பொது இணைய relayகளைப் பயன்படுத்தி meshஐ விரிவுபடுத்துங்கள்.</string>
+    <string name="about_e2e_title">முனைக்கு முனை மறைகுறியாக்கம்</string>
+    <string name="about_e2e_desc">தனிப்பட்ட செய்திகள் மறைகுறியாக்கப்படுகின்றன. சேனல் செய்திகள் பொதுவானவை.</string>
+    <string name="about_appearance">தோற்றம்</string>
+    <string name="about_system">சிஸ்டம்</string>
+    <string name="about_light">வெளிச்சம்</string>
+    <string name="about_dark">இருட்டு</string>
+    <string name="about_pow">செயல் சான்று</string>
+    <string name="about_pow_off">pow off</string>
+    <string name="about_pow_on">pow on</string>
+    <string name="about_pow_tip">spam தடுப்பிற்காக geohash செய்திகளில் செயல் சான்று சேர்க்கவும்.</string>
+    <string name="about_pow_difficulty">சிரமம்: %1$d பிட்கள் (~%2$s)</string>
+    <string name="about_pow_difficulty_attempts">சிரமம் %1$d ~%2$s hash முயற்சிகள் தேவை</string>
+    <string name="about_pow_desc_none">செயல் சான்று தேவையில்லை</string>
+    <string name="about_pow_desc_very_low">மிகக் குறைவு - குறைந்தபட்ச spam பாதுகாப்பு</string>
+    <string name="about_pow_desc_low">குறைவு - அடிப்படை spam பாதுகாப்பு</string>
+    <string name="about_pow_desc_medium">நடுத்தர - நல்ல spam பாதுகாப்பு</string>
+    <string name="about_pow_desc_high">அதிகம் - வலுவான spam பாதுகாப்பு</string>
+    <string name="about_pow_desc_very_high">மிக அதிகம் - தாமதங்களை ஏற்படுத்தலாம்</string>
+    <string name="about_pow_desc_extreme">அதீத - குறிப்பிடத்தக்க கணக்கீடு தேவை</string>
+    <string name="about_network">நெட்வொர்க்</string>
+    <string name="about_tor_off">tor off</string>
+    <string name="about_tor_on">tor on</string>
+    <string name="about_tor_route">மேம்பட்ட தனியுரிமைக்காக tor வழியாக இணையத்தை திசைமாற்றவும்.</string>
+    <string name="about_tor_status">tor நிலை: %1$s, bootstrap %2$d%%</string>
+    <string name="about_last">கடைசி: %1$s</string>
+    <string name="about_emergency_title">அவசர தரவு நீக்கம்</string>
+    <string name="about_emergency_tip">குறிப்பு: செய்திகள், சாவிகள் மற்றும் அமைப்புகள் உட்பட சேமிக்கப்பட்ட அனைத்து தரவையும் அவசரகால நீக்கம் செய்ய பயன்பாட்டு தலைப்பை மூன்று முறை கிளிக் செய்யுங்கள்.</string>
+    <string name="about_debug_settings">Debug அமைப்புகள்</string>
+    <string name="about_footer">திறந்த மூலம் • தனியுரிமை முதல் • பரவலாக்கப்பட்டது</string>
+    <string name="close_plain">மூடு</string>
+    <string name="cd_privacy_protected">தனியுரிமை பாதுகாக்கப்பட்டது</string>
+    <string name="cancel_lower">ரத்து</string>
+
+    <!-- Generic content descriptions -->
+    <string name="cd_warning">எச்சரிக்கை</string>
+    <string name="cd_location_services">இருப்பிட சேவைகள்</string>
+    <string name="cd_privacy">தனியுரிமை</string>
+    <string name="cd_error">பிழை</string>
+    <string name="cd_battery_optimization">பேட்டரி மேம்படுத்தல்</string>
+    <string name="cd_benefits">நன்மைகள்</string>
+    <string name="cd_checking_battery_optimization">பேட்டரி மேம்படுத்தல் சரிபார்க்கிறது</string>
+    <string name="cd_not_supported_battery_optimization">பேட்டரி மேம்படுத்தல் ஆதரிக்கப்படவில்லை</string>
+    <string name="cd_bluetooth">Bluetooth</string>
+    <string name="cd_unread_message">படிக்காத செய்தி</string>
+    <string name="cd_open_map">வரைபடம் திற</string>
+    <string name="cd_remove_bookmark">புக்மார்க் நீக்கு</string>
+    <string name="cd_teleport">டெலிபோர்ட்</string>
+    <string name="cd_selected">தேர்ந்தெடுக்கப்பட்டது</string>
+    <string name="notification_action_quit_bitchat">Zemzeme வெளியேறு</string>
+    <string name="about_background_title">பின்னணியில் இயக்கு</string>
+    <string name="about_background_desc">பயன்பாடு மூடப்படும்போது mesh செயலில் வைக்கவும் (முன்னணி சேவை)</string>
+    <string name="about_p2p_subtitle">p2p வழியாக நேரடி peer இணைப்புகள்</string>
+    <string name="about_nostr_subtitle">இணைய relay செய்தி</string>
+    <string name="about_ble_subtitle">Bluetooth அண்மை mesh</string>
+    <string name="cd_leave_channel">சேனல் விட்டு வெளியேறு</string>
+    <string name="cd_reachable_via_nostr">Nostr வழியாக அணுகக்கூடியது</string>
+    <string name="cd_offline_favorite">ஆஃப்லைன் பிடித்தது</string>
+    <string name="cd_decrease_precision">துல்லியத்தை குறை</string>
+    <string name="cd_increase_precision">துல்லியத்தை அதிகரி</string>
+    <string name="cd_select_geohash">Geohash தேர்ந்தெடு</string>
+    <string name="cd_scroll_to_bottom">கீழே உருட்டு</string>
+    <string name="cd_file">கோப்பு</string>
+    <string name="cd_image">படம்</string>
+    <string name="cd_cancel">ரத்து</string>
+    <string name="cd_link">இணைப்பு</string>
+    <string name="cd_record_voice">குரல் குறிப்பு பதிவு செய்</string>
+    <string name="cd_pick_media">மீடியா தேர்ந்தெடு</string>
+    <string name="cd_mining_pow">PoW சுரங்கம்</string>
+    <string name="cd_pow_enabled">PoW இயக்கப்பட்டது</string>
+    <string name="cd_proof_of_work">செயல் சான்று</string>
+    <string name="pow_mining_ellipsis">சுரங்கம் தோண்டுகிறது...</string>
+    <string name="cd_offline_mesh_chat">ஆஃப்லைன் Mesh அரட்டை</string>
+    <string name="cd_online_geohash_channels">ஆன்லைன் Geohash சேனல்கள்</string>
+    <string name="cd_end_to_end_encryption">முனைக்கு முனை மறைகுறியாக்கம்</string>
+
+    <string name="image_page_of">%2$d-ல் %1$d படம்</string>
+    <string name="image_unavailable">படம் கிடைக்கவில்லை</string>
+    <string name="image_saved_to_downloads">படம் Downloads-ல் சேமிக்கப்பட்டது</string>
+    <string name="image_save_failed">படத்தை சேமிக்க தோல்வியடைந்தது</string>
+    <string name="pick_file">கோப்பு தேர்ந்தெடு</string>
+    <string name="file_unavailable">[கோப்பு கிடைக்கவில்லை]</string>
+    <string name="unknown">தெரியவில்லை</string>
+
+    <!-- Chat user sheet actions -->
+    <string name="choose_action_message_or_user">இந்த செய்தி அல்லது பயனருக்கான செயலை தேர்ந்தெடுங்கள்</string>
+    <string name="choose_action_user">இந்த பயனருக்கான செயலை தேர்ந்தெடுங்கள்</string>
+    <string name="action_copy_message_title">செய்தி நகலெடு</string>
+    <string name="action_copy_message_subtitle">இந்த செய்தியை clipboard-ல் நகலெடு</string>
+    <string name="action_slap_title">%1$s-ஐ அறை</string>
+    <string name="action_slap_subtitle">விளையாட்டு அறை செய்தி அனுப்பு</string>
+    <string name="action_hug_title">%1$s-ஐ தழுவு</string>
+    <string name="action_hug_subtitle">நட்பான தழுவல் செய்தி அனுப்பு</string>
+    <string name="action_block_title">%1$s-ஐ தடு</string>
+    <string name="action_block_subtitle">இந்த பயனரிடமிருந்து அனைத்து செய்திகளையும் தடு</string>
+
+    <!-- Location channels sheet -->
+    <string name="location_channels_title">#இருப்பிட சேனல்கள்</string>
+    <string name="location_channels_desc">geohash சேனல்களைப் பயன்படுத்தி உங்கள் அருகிலுள்ள மக்களுடன் அரட்டையடிக்கவும். ஒரு தோராயமான geohash மட்டுமே பகிரப்படுகிறது, சரியான GPS ஒருபோதும் இல்லை. உங்கள் தனியுரிமையை பாதுகாக்க இந்த திரையை screenshot எடுக்காதீர்கள் அல்லது பகிர்க்காதீர்கள்.</string>
+    <string name="grant_location_permission">இருப்பிட அனுமதி வழங்கு</string>
+    <string name="location_permission_denied">இருப்பிட அனுமதி மறுக்கப்பட்டது. இருப்பிட சேனல்களைப் பயன்படுத்த அமைப்புகளில் இயக்கவும்.</string>
+    <string name="location_permission_granted">\u2713 இருப்பிட அனுமதி வழங்கப்பட்டது</string>
+    <string name="checking_permissions">அனுமதிகள் சரிபார்க்கிறது...</string>
+    <string name="finding_nearby_channels">அருகிலுள்ள சேனல்களைக் கண்டுபிடிக்கிறது…</string>
+    <string name="bookmarked">புக்மார்க் செய்யப்பட்டது</string>
+    <string name="geohash_placeholder">geohash</string>
+    <string name="invalid_geohash">செல்லாத geohash</string>
+    <string name="teleport">டெலிபோர்ட்</string>
+    <string name="disable_location_services">இருப்பிட சேவைகளை முடக்கு</string>
+    <string name="enable_location_services">இருப்பிட சேவைகளை இயக்கு</string>
+    <string name="mesh_label">mesh</string>
+    <string name="location_level_block">தொகுதி</string>
+    <string name="location_level_neighborhood">சுற்றுப்புறம்</string>
+    <string name="location_level_city">நகரம்</string>
+    <string name="location_level_province">மாநிலம்</string>
+    <string name="location_level_region">பகுதி</string>
+
+    <!-- Location notes sheet -->
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d குறிப்பு</item>
+        <item quantity="other">#%1$s ± 1 • %2$d குறிப்புகள்</item>
+    </plurals>
+    <string name="location_notes_description">மற்ற பார்வையாளர்கள் கண்டுபிடிக்க இந்த இருப்பிடத்தில் சிறிய நிரந்தர குறிப்புகளை சேர்க்கவும்.</string>
+    <string name="location_notes_relays_unavailable">geo relayகள் கிடைக்கவில்லை; குறிப்புகள் இடைநிறுத்தப்பட்டுள்ளன</string>
+    <string name="location_notes_no_relays_title">அருகில் geo relayகள் இல்லை</string>
+    <string name="location_notes_no_relays_desc">குறிப்புகள் geo relayகளை சார்ந்துள்ளன. இணைப்பை சரிபார்த்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="loading_location_notes">குறிப்புகள் ஏற்றுகிறது…</string>
+    <string name="location_notes_empty_title">இன்னும் குறிப்புகள் இல்லை</string>
+    <string name="location_notes_empty_desc">இந்த இடத்திற்கு முதலில் சேர்க்கவும்.</string>
+    <string name="dismiss">நிராகரி</string>
+    <string name="location_notes_input_placeholder">இந்த இடத்திற்கு ஒரு குறிப்பு சேர்</string>
+
+    <!-- Debug / Diagnostics -->
+    <string name="debug_tools">debug கருவிகள்</string>
+    <string name="debug_tools_desc">நோயறிதல் மற்றும் கட்டுப்பாட்டிற்கான டெவலப்பர் பயன்பாடுகள்</string>
+    <string name="debug_verbose_logging">விரிவான logging</string>
+    <string name="debug_verbose_hint">peer சேர்வு/வெளியேறுதல், இணைப்பு திசை, packet routing மற்றும் relayகளை log செய்கிறது</string>
+    <string name="debug_bluetooth_roles">bluetooth பாத்திரங்கள்</string>
+    <string name="debug_gatt_server">gatt சர்வர்</string>
+    <string name="debug_connections_fmt">இணைப்புகள்: %1$d / %2$d</string>
+    <string name="debug_max_server">அதிகபட்ச சர்வர்</string>
+    <string name="debug_gatt_client">gatt கிளையன்ட்</string>
+    <string name="debug_max_client">அதிகபட்ச கிளையன்ட்</string>
+    <string name="debug_overall_connections_fmt">இணைப்புகள்: %1$d / %2$d</string>
+    <string name="debug_max_overall">மொத்த அதிகபட்சம்</string>
+    <string name="debug_packet_relay">packet relay</string>
+    <string name="debug_since_start_fmt">தொடக்கத்திலிருந்து: %1$d</string>
+    <string name="debug_roles_hint">பாத்திரங்களை இயக்கு/முடக்கு மற்றும் முடக்கும்போது அனைத்து இணைப்புகளையும் மூடவும்</string>
+    <string name="debug_sync_settings">ஒத்திசைவு அமைப்புகள்</string>
+    <string name="debug_max_packets_per_sync_fmt">ஒத்திசைவுக்கு அதிகபட்ச packets: %1$d</string>
+    <string name="debug_max_gcs_filter_size_fmt">அதிகபட்ச GCS வடிகட்டி அளவு: %1$d bytes (128–1024)</string>
+    <string name="debug_target_fpr_fmt">இலக்கு FPR: %1$.2f%%</string>
+    <string name="debug_connected_devices">இணைக்கப்பட்ட சாதனங்கள்</string>
+    <string name="debug_our_device_id_fmt">எங்கள் சாதன id: %1$s</string>
+    <string name="debug_none">இல்லை</string>
+    <string name="debug_disconnect">இணைப்பு துண்டி</string>
+    <string name="debug_recent_scan_results">சமீபத்திய ஸ்கேன் முடிவுகள்</string>
+    <string name="debug_connect">இணை</string>
+    <string name="debug_debug_console">debug console</string>
+    <string name="debug_clear">அழி</string>
+    <string name="debug_relays_window_fmt">கடைசி 10வி: %1$d • 1நி: %2$d • 15நி: %3$d</string>
+    <string name="debug_derived_p_fmt">வழிவந்த P: %1$s • மதிப்பீட்டு அதிகபட்ச உறுப்புகள்: %2$s</string>
+    <string name="debug_role_server">சர்வராக (நாங்கள் host செய்கிறோம்)</string>
+    <string name="debug_role_client">கிளையன்ட்டாக (நாங்கள் இணைக்கிறோம்)</string>
+
+    <!-- Onboarding screens -->
+    <string name="location_services_required">இருப்பிட சேவைகள் தேவை</string>
+    <string name="privacy_first">தனியுரிமை முதல்</string>
+    <string name="location_explanation">Zemzeme உங்கள் இருப்பிடத்தை கண்காணிக்காது.\n\nBluetooth scanning மற்றும் Geohash அரட்டை அம்சத்திற்கு இருப்பிட சேவைகள் தேவை.</string>
+    <string name="location_needs_for">Zemzeme-க்கு இருப்பிட சேவைகள் தேவை:</string>
+    <string name="location_needs_bullets">• Bluetooth சாதன scanning\n• mesh நெட்வொர்க்கில் அருகிலுள்ள பயனர்களை கண்டுபிடிக்க\n• Geohash அரட்டை அம்சம்\n• கண்காணிப்பு அல்லது இருப்பிட சேகரிப்பு இல்லை</string>
+    <string name="background_location_required_title">பின்னணி இருப்பிடம் பரிந்துரைக்கப்படுகிறது</string>
+    <string name="background_location_required_subtitle">விருப்பமானது, mesh நம்பகத்தன்மையை மேம்படுத்துகிறது</string>
+    <string name="background_location_explanation">பயன்பாடு திறக்கப்படாத போது Zemzeme அருகிலுள்ள சாதனங்களை ஸ்கேன் செய்ய Android பின்னணி இருப்பிடத்தை பரிந்துரைக்கிறது. இது மறுதொடக்கத்திற்குப் பிறகும் mesh இயங்குவதை வைத்திருக்கிறது.</string>
+    <string name="background_location_settings_tip">அமைப்புகள் திறக்கும்போது, "எப்பொழுதும் அனுமதி" என்பதை தேர்ந்தெடுங்கள்.</string>
+    <string name="background_location_needs_for">Zemzeme பின்னணி இருப்பிடத்தைப் பயன்படுத்துகிறது:</string>
+    <string name="background_location_needs_bullets">- பயன்பாடு மூடப்படும்போது அருகிலுள்ள சாதனங்களை ஸ்கேன் செய்ய\n- மறுதொடக்கத்திற்குப் பிறகு மீண்டும் இணைக்க\n- பின்னணியில் mesh இயங்குவதை தொடர</string>
+    <string name="background_location_privacy_note">நாங்கள் உங்கள் இருப்பிடத்தை ஒருபோதும் சேகரிக்கவோ சேமிக்கவோ மாட்டோம். உங்கள் தனியுரிமை பாதுகாப்பானது.</string>
+    <string name="grant_background_location">பின்னணி இருப்பிடத்தை அனுமதி</string>
+    <string name="skip_background_location">பின்னணி இருப்பிடம் இல்லாமல் தொடரவும்</string>
+    <string name="open_location_settings">இருப்பிட அமைப்புகளை திற</string>
+    <string name="check_again">மீண்டும் சரிபார்க்கவும்</string>
+    <string name="location_services_unavailable">இருப்பிட சேவைகள் கிடைக்கவில்லை</string>
+    <string name="location_unavailable_explanation">இந்த சாதனத்தில் இருப்பிட சேவைகள் கிடைக்கவில்லை. Android சாதனங்களில் இருப்பிட சேவைகள் நிலையானதாக இருப்பதால் இது அசாதாரணமானது.\n\nZemzeme-க்கு Bluetooth scanning சரியாக வேலை செய்ய இருப்பிட சேவைகள் தேவை (Android தேவை). இல்லாமல், பயன்பாடு அருகிலுள்ள பயனர்களை கண்டுபிடிக்க முடியாது.</string>
+    <string name="checking_location_services">இருப்பிட சேவைகள் சரிபார்க்கிறது...</string>
+    <string name="bluetooth_required">Bluetooth தேவை</string>
+    <string name="bluetooth_needs_for">Zemzeme-க்கு Bluetooth தேவை:</string>
+    <string name="bluetooth_needs_bullets">• அருகிலுள்ள பயனர்களை கண்டுபிடிக்க\n• mesh நெட்வொர்க் இணைப்புகளை உருவாக்க\n• செய்திகளை அனுப்பவும் பெறவும்\n• இணையம் அல்லது சர்வர்கள் இல்லாமல் வேலை செய்ய</string>
+    <string name="enable_bluetooth">Bluetooth இயக்கு</string>
+    <string name="bluetooth_not_supported">Bluetooth ஆதரிக்கப்படவில்லை</string>
+    <string name="bluetooth_unsupported_explanation">இந்த சாதனம் Bluetooth Low Energy (BLE) ஆதரிக்கவில்லை, இது Zemzeme செயல்பட தேவை.\n\nZemzeme-க்கு mesh நெட்வொர்க்குகளை உருவாக்கவும் இணையம் இல்லாமல் அருகிலுள்ள சாதனங்களுடன் தொடர்பு கொள்ளவும் BLE தேவை.</string>
+    <string name="checking_bluetooth_status">Bluetooth நிலை சரிபார்க்கிறது...</string>
+    <string name="battery_optimization_detected_title">பேட்டரி மேம்படுத்தல் கண்டறியப்பட்டது</string>
+    <string name="battery_optimization_enabled_title">பேட்டரி மேம்படுத்தல் இயக்கப்பட்டது</string>
+    <string name="battery_optimization_explanation_short">Zemzeme mesh இணைப்புகளை பராமரிக்க பின்னணியில் இயங்க வேண்டும். பேட்டரி மேம்படுத்தல் இந்த இணைப்புகளை தடைசெய்யலாம்.</string>
+    <string name="benefits_of_disabling">முடக்குவதன் நன்மைகள்</string>
+    <string name="battery_benefits_short">• நம்பகமான செய்தி வழங்கல்\n• mesh இணைப்பை பராமரிக்கிறது\n• இணைப்பு துண்டிப்புகளை தடுக்கிறது</string>
+    <string name="disable_battery_optimization">பேட்டரி மேம்படுத்தலை முடக்கு</string>
+    <string name="battery_optimization_disabled_title">பேட்டரி மேம்படுத்தல் முடக்கப்பட்டது</string>
+    <string name="continue_btn">தொடரவும்</string>
+    <string name="initializing_mesh_network">Mesh நெட்வொர்க் தொடங்குகிறது</string>
+    <string name="dot">.</string>
+    <string name="setting_up_bluetooth">Bluetooth mesh நெட்வொர்க்கிங் அமைக்கிறது...</string>
+    <string name="should_take_seconds">இது சில நொடிகள் மட்டுமே ஆகும்</string>
+    <string name="warning_emoji">⚠️</string>
+    <string name="setup_not_complete">அமைவு முழுமையடையவில்லை</string>
+    <string name="try_again">மீண்டும் முயற்சி</string>
+    <string name="open_settings">அமைப்புகளை திற</string>
+    <string name="privacy_protected">உங்கள் தனியுரிமை பாதுகாக்கப்பட்டது</string>
+    <string name="privacy_bullets">• கண்காணிப்பு அல்லது தரவு சேகரிப்பு இல்லை\n• Bluetooth mesh அரட்டைகள் முழுமையாக ஆஃப்லைன்\n• Geohash அரட்டைகள் இணையத்தைப் பயன்படுத்துகின்றன</string>
+    <string name="permissions_header">அனுமதிகள்</string>
+    <string name="grant_permissions">அனுமதிகள் வழங்கு</string>
+    <string name="location_tracking_warning">Zemzeme உங்கள் இருப்பிடத்தை கண்காணிக்காது</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
+    <string name="geohash_people_header">நபர்கள்</string>
+    <string name="nobody_around">யாரும் அருகில் இல்லை...</string>
+    <string name="you_suffix"> (நீங்கள்)</string>
+    <string name="pan_zoom_instruction">geohash தேர்ந்தெடுக்க pan மற்றும் zoom செய்யுங்கள்</string>
+    <string name="select">தேர்ந்தெடு</string>
+    <string name="type_a_message_placeholder">ஒரு செய்தி தட்டச்சு செய்யுங்கள்...</string>
+    <string name="mention_suggestion_at">@%1$s</string>
+    <string name="mention">குறிப்பிடு</string>
+    <string name="image_counter">%1$d / %2$d</string>
+    <string name="pow_time_estimate">(~%1$s)</string>
+    <string name="at_nickname">@%1$s</string>
+    <string name="version_prefix">v%1$s</string>
+    <string name="hash_symbol">#</string>
+    <string name="underscore">_</string>
+    <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+    <string name="progress_filled">█</string>
+    <string name="progress_empty">░</string>
+    <string name="image_star">image/*</string>
+    <string name="media_type_image">படம்</string>
+    <string name="media_type_file">கோப்பு</string>
+
+    <!-- Message status icons -->
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+
+    <!-- Notification text helpers -->
+    <string name="notification_sent_image">📷 படம் அனுப்பினார்</string>
+    <string name="notification_sent_voice">🎤 குரல் செய்தி அனுப்பினார்</string>
+    <string name="notification_sent_file">📎 கோப்பு அனுப்பினார்</string>
+    <string name="notification_file_pdf">📄</string>
+    <string name="notification_file_zip">🗜️</string>
+    <string name="notification_file_doc">📄</string>
+    <string name="notification_file_xls">📊</string>
+    <string name="notification_file_ppt">📈</string>
+    <string name="notification_file_generic">📎</string>
+
+    <!-- Voice player accessibility -->
+    <string name="cd_play_voice">இயக்கு</string>
+    <string name="cd_pause_voice">இடைநிறுத்து</string>
+
+    <!-- Permission descriptions -->
+    <string name="perm_nearby_devices_desc">Bluetooth மூலம் Zemzeme பயனர்களை கண்டுபிடிக்க தேவை</string>
+    <string name="perm_nearby_devices_system">Zemzeme-ஐ அருகிலுள்ள சாதனங்களுடன் இணைக்க அனுமதி</string>
+    <string name="perm_location_desc">Bluetooth மூலம் அருகிலுள்ள Zemzeme பயனர்களை கண்டுபிடிக்க Android-ஆல் தேவை</string>
+    <string name="perm_location_system">அருகிலுள்ள சாதனங்களை ஸ்கேன் செய்ய Zemzeme-க்கு இது தேவை</string>
+    <string name="perm_background_location_desc">பயன்பாடு பின்னணியில் இருக்கும்போது அருகிலுள்ள சாதனங்களை ஸ்கேன் செய்ய பரிந்துரைக்கப்படுகிறது</string>
+    <string name="perm_background_location_system">பின்னணி இருப்பிட அணுகலை அனுமதி</string>
+    <string name="perm_notifications_desc">தனிப்பட்ட செய்திகள் பெறும்போது அறிவிப்புகளை பெறவும்</string>
+    <string name="perm_notifications_system">Zemzeme உங்களுக்கு அறிவிப்புகள் அனுப்ப அனுமதி</string>
+    <string name="perm_battery_desc">Zemzeme பின்னணியில் நம்பகமாக இயங்குவதையும் mesh நெட்வொர்க் இணைப்புகளை பராமரிப்பதையும் உறுதிசெய்ய பேட்டரி மேம்படுத்தலை முடக்கவும்</string>
+    <string name="perm_battery_system">Zemzeme பேட்டரி கட்டுப்பாடுகள் இல்லாமல் இயங்க அனுமதி</string>
+
+    <!-- Permission types -->
+    <string name="perm_type_nearby_devices">அருகிலுள்ள சாதனங்கள்</string>
+    <string name="perm_type_precise_location">துல்லியமான இருப்பிடம்</string>
+    <string name="perm_type_background_location">பின்னணி இருப்பிடம்</string>
+    <string name="perm_type_microphone">மைக்ரோஃபோன்</string>
+    <string name="perm_type_notifications">அறிவிப்புகள்</string>
+    <string name="perm_type_battery_optimization">பேட்டரி மேம்படுத்தல்</string>
+    <string name="perm_type_other">மற்றவை</string>
+
+    <!-- Password prompt dialog -->
+    <string name="pwd_prompt_title">சேனல் கடவுச்சொல் உள்ளிடவும்</string>
+    <string name="pwd_prompt_message">சேனல் %1$s கடவுச்சொல்லால் பாதுகாக்கப்பட்டுள்ளது. சேர கடவுச்சொல்லை உள்ளிடவும்.</string>
+    <string name="pwd_label">கடவுச்சொல்</string>
+    <string name="join">சேர</string>
+    <string name="cancel">ரத்து</string>
+    <string name="tor_not_available_in_this_build">இந்த build-ல் Tor கிடைக்கவில்லை</string>
+
+    <!-- Plurals -->
+    <plurals name="notification_and_more">
+        <item quantity="one">மேலும் %d</item>
+        <item quantity="other">மேலும் %d</item>
+    </plurals>
+    <plurals name="people_count">
+        <item quantity="one">1 நபர்</item>
+        <item quantity="other">%d நபர்கள்</item>
+    </plurals>
+
+    <!-- Non-translatable symbols -->
+    <string name="pow_label_format">pow: %1$dbit</string>
+    <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
+    <string name="debug_direct_suffix"> • direct</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
+    <string name="mesh_service_notification_content">மெஷ் இயங்குகிறது — %1$d பியர்ஸ்</string>
   <string name="verify_title">verify</string>
   <string name="verify_my_qr_title">scan to verify me</string>
   <string name="verify_scan_prompt_friend">scan someone elses qr</string>
@@ -39,4 +450,3 @@
   <string name="verify_success_body">You verified %1$s</string>
   <string name="verify_success_system_message">verified %1$s</string>
 </resources>
-

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">زمزمة</string>
 
     <!-- مبررات الأذونات -->
     <string name="permission_bluetooth_rationale">إذن البلوتوث مطلوب للدردشة مباشرة مع الآخرين بدون إنترنت.</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">لا حاجة لتحسين البطارية</string>
     <string name="battery_optimization_checking">جارٍ التحقق من تحسين البطارية</string>
     <string name="battery_optimization_why_disable">لماذا تعطيل تحسين البطارية؟</string>
-    <string name="battery_optimization_explanation">تعمل bitchat في الخلفية للحفاظ على اتصالات الشبكة المتشابكة مع الأجهزة القريبة. قد يقطع تحسين البطارية هذه الاتصالات مما يؤدي إلى تأخير الرسائل أو فقدانها.\n\nيساعد تعطيل تحسين البطارية في ضمان اتصال موثوق بين النظراء.</string>
+    <string name="battery_optimization_explanation">تعمل Zemzeme في الخلفية للحفاظ على اتصالات الشبكة المتشابكة مع الأجهزة القريبة. قد يقطع تحسين البطارية هذه الاتصالات مما يؤدي إلى تأخير الرسائل أو فقدانها.\n\nيساعد تعطيل تحسين البطارية في ضمان اتصال موثوق بين النظراء.</string>
     <string name="battery_optimization_disable_button">تعطيل تحسين البطارية</string>
-    <string name="battery_optimization_note">ملاحظة: يمكنك تغيير ذلك لاحقًا من إعدادات أندرويد &gt; التطبيقات &gt; bitchat &gt; البطارية.</string>
-    <string name="battery_optimization_not_supported_explanation">جهازك لا يحتاج إلى إعدادات تحسين البطارية. ستعمل bitchat بشكل طبيعي.</string>
-    <string name="battery_optimization_not_supported_message">جهازك لا يحتاج إلى إعدادات تحسين البطارية. ستعمل bitchat بشكل طبيعي.</string>
-    <string name="battery_optimization_success_message">يمكن لـ bitchat العمل بشكل موثوق في الخلفية</string>
+    <string name="battery_optimization_note">ملاحظة: يمكنك تغيير ذلك لاحقًا من إعدادات أندرويد &gt; التطبيقات &gt; Zemzeme &gt; البطارية.</string>
+    <string name="battery_optimization_not_supported_explanation">جهازك لا يحتاج إلى إعدادات تحسين البطارية. ستعمل Zemzeme بشكل طبيعي.</string>
+    <string name="battery_optimization_not_supported_message">جهازك لا يحتاج إلى إعدادات تحسين البطارية. ستعمل Zemzeme بشكل طبيعي.</string>
+    <string name="battery_optimization_success_message">يمكن لـ Zemzeme العمل بشكل موثوق في الخلفية</string>
     <string name="battery_optimization_benefits">• تسليم موثوق للرسائل\n• الحفاظ على اتصال الشبكة المتشابكة\n• تمرير الرسائل في الخلفية\n• منع انقطاع الاتصال</string>
     <string name="battery_optimization_check_again">التحقق مرة أخرى</string>
     <string name="battery_optimization_skip">تخطي الآن</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">نشاط جديد في %1$s</string>
     <string name="notification_messages_in">رسائل في %1$s</string>
     <string name="notification_joined_conversation">%1$s انضم إلى المحادثة</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d إشارات</string>
-    <string name="notification_geohash_summary_title">bitchat – محادثات المواقع</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d إشارات</string>
+    <string name="notification_geohash_summary_title">Zemzeme – محادثات المواقع</string>
     <string name="notification_geohash_summary_text">%1$d رسائل من %2$d مواقع</string>
     <string name="notification_mesh_mention_title_singular">تم ذكرك في محادثة الشبكة</string>
     <string name="notification_mesh_mention_title_plural">%1$d من الإشارات في محادثة الشبكة</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">اختيار صورة</string>
 
     <!-- ورقة حول التطبيق -->
-    <string name="about_tagline">دردشة شبكية لامركزية مع تشفير طرف إلى طرف</string>
+    <string name="about_tagline">رسائل خالية من المراقبة في جميع الظروف، مشفرة من طرف إلى طرف</string>
     <string name="about_offline_mesh_title">دردشة شبكية دون اتصال</string>
     <string name="about_offline_mesh_desc">تواصل مباشرة عبر Bluetooth LE بدون إنترنت أو خوادم. تُعاد توجيه الرسائل عبر الأجهزة القريبة لتوسيع النطاق.</string>
     <string name="about_online_geohash_title">قنوات geohash عبر الإنترنت</string>
@@ -253,24 +253,24 @@
     <!-- شاشات البدء -->
     <string name="location_services_required">خدمات الموقع مطلوبة</string>
     <string name="privacy_first">الخصوصية أولاً</string>
-    <string name="location_explanation">bitchat لا يتتبع موقعك.\n\nخدمات الموقع مطلوبة لمسح البلوتوث وميزة دردشة geohash.</string>
-    <string name="location_needs_for">bitchat يحتاج خدمات الموقع من أجل:</string>
+    <string name="location_explanation">Zemzeme لا يتتبع موقعك.\n\nخدمات الموقع مطلوبة لمسح البلوتوث وميزة دردشة geohash.</string>
+    <string name="location_needs_for">Zemzeme يحتاج خدمات الموقع من أجل:</string>
     <string name="location_needs_bullets">• مسح أجهزة البلوتوث\n• اكتشاف المستخدمين القريبين في شبكة mesh\n• ميزة دردشة geohash\n• بدون تتبع أو جمع للموقع</string>
     <string name="open_location_settings">فتح إعدادات الموقع</string>
     <string name="check_again">التحقق مرة أخرى</string>
     <string name="location_services_unavailable">خدمات الموقع غير متاحة</string>
-    <string name="location_unavailable_explanation">خدمات الموقع غير متاحة على هذا الجهاز. هذا غير معتاد لأن خدمات الموقع قياسية في أجهزة أندرويد.\n\nتتطلب bitchat خدمات الموقع لعمل مسح البلوتوث بشكل صحيح (متطلب أندرويد). بدون ذلك لا يمكن للتطبيق اكتشاف المستخدمين القريبين.</string>
+    <string name="location_unavailable_explanation">خدمات الموقع غير متاحة على هذا الجهاز. هذا غير معتاد لأن خدمات الموقع قياسية في أجهزة أندرويد.\n\nتتطلب Zemzeme خدمات الموقع لعمل مسح البلوتوث بشكل صحيح (متطلب أندرويد). بدون ذلك لا يمكن للتطبيق اكتشاف المستخدمين القريبين.</string>
     <string name="checking_location_services">جارٍ التحقق من خدمات الموقع…</string>
     <string name="bluetooth_required">البلوتوث مطلوب</string>
-    <string name="bluetooth_needs_for">bitchat يحتاج البلوتوث من أجل:</string>
+    <string name="bluetooth_needs_for">Zemzeme يحتاج البلوتوث من أجل:</string>
     <string name="bluetooth_needs_bullets">• اكتشاف المستخدمين القريبين\n• إنشاء اتصالات شبكة mesh\n• إرسال واستقبال الرسائل\n• العمل بدون إنترنت أو خوادم</string>
     <string name="enable_bluetooth">تفعيل البلوتوث</string>
     <string name="bluetooth_not_supported">البلوتوث غير مدعوم</string>
-    <string name="bluetooth_unsupported_explanation">هذا الجهاز لا يدعم Bluetooth Low Energy (BLE) المطلوب لعمل bitchat.\n\nتحتاج bitchat إلى BLE لإنشاء شبكات mesh والتواصل مع الأجهزة القريبة بدون إنترنت.</string>
+    <string name="bluetooth_unsupported_explanation">هذا الجهاز لا يدعم Bluetooth Low Energy (BLE) المطلوب لعمل Zemzeme.\n\nتحتاج Zemzeme إلى BLE لإنشاء شبكات mesh والتواصل مع الأجهزة القريبة بدون إنترنت.</string>
     <string name="checking_bluetooth_status">جارٍ التحقق من حالة البلوتوث…</string>
     <string name="battery_optimization_detected_title">تم اكتشاف تحسين البطارية</string>
     <string name="battery_optimization_enabled_title">تحسين البطارية مفعّل</string>
-    <string name="battery_optimization_explanation_short">تحتاج bitchat للعمل في الخلفية للحفاظ على اتصالات mesh. قد يقطع تحسين البطارية هذه الاتصالات.</string>
+    <string name="battery_optimization_explanation_short">تحتاج Zemzeme للعمل في الخلفية للحفاظ على اتصالات mesh. قد يقطع تحسين البطارية هذه الاتصالات.</string>
     <string name="benefits_of_disabling">فوائد التعطيل</string>
     <string name="battery_benefits_short">• تسليم موثوق للرسائل\n• يحافظ على اتصال mesh\n• يمنع انقطاع الاتصال</string>
     <string name="disable_battery_optimization">تعطيل تحسين البطارية</string>
@@ -285,7 +285,7 @@
     <string name="privacy_bullets">• بدون تتبع أو جمع للبيانات\n• دردشات Bluetooth mesh تعمل دون اتصال بالكامل\n• دردشات geohash تستخدم الإنترنت</string>
     <string name="permissions_header">الأذونات</string>
     <string name="grant_permissions">منح الأذونات</string>
-    <string name="location_tracking_warning">bitchat لا يتتبع موقعك</string>
+    <string name="location_tracking_warning">Zemzeme لا يتتبع موقعك</string>
     <string name="geohash_people_header">الأشخاص</string>
     <string name="nobody_around">لا أحد هنا…</string>
     <string name="you_suffix"> (أنت)</string>
@@ -314,14 +314,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- أوصاف الأذونات -->
-    <string name="perm_nearby_devices_desc">مطلوب لاكتشاف مستخدمي bitchat عبر البلوتوث</string>
-    <string name="perm_nearby_devices_system">اسمح لـ bitchat بالاتصال بالأجهزة القريبة</string>
-    <string name="perm_location_desc">مطلوب من أندرويد لاكتشاف مستخدمي bitchat القريبين عبر البلوتوث</string>
-    <string name="perm_location_system">bitchat يحتاج ذلك لمسح الأجهزة القريبة</string>
+    <string name="perm_nearby_devices_desc">مطلوب لاكتشاف مستخدمي Zemzeme عبر البلوتوث</string>
+    <string name="perm_nearby_devices_system">اسمح لـ Zemzeme بالاتصال بالأجهزة القريبة</string>
+    <string name="perm_location_desc">مطلوب من أندرويد لاكتشاف مستخدمي Zemzeme القريبين عبر البلوتوث</string>
+    <string name="perm_location_system">Zemzeme يحتاج ذلك لمسح الأجهزة القريبة</string>
     <string name="perm_notifications_desc">تلقي إشعارات عند استلام رسائل خاصة</string>
-    <string name="perm_notifications_system">اسمح لـ bitchat بإرسال الإشعارات إليك</string>
-    <string name="perm_battery_desc">تعطيل تحسين البطارية لضمان أن bitchat يعمل بشكل موثوق في الخلفية ويحافظ على اتصالات الشبكة المتشابكة</string>
-    <string name="perm_battery_system">اسمح لـ bitchat بالعمل بدون قيود البطارية</string>
+    <string name="perm_notifications_system">اسمح لـ Zemzeme بإرسال الإشعارات إليك</string>
+    <string name="perm_battery_desc">تعطيل تحسين البطارية لضمان أن Zemzeme يعمل بشكل موثوق في الخلفية ويحافظ على اتصالات الشبكة المتشابكة</string>
+    <string name="perm_battery_system">اسمح لـ Zemzeme بالعمل بدون قيود البطارية</string>
 
     <!-- أنواع الأذونات -->
     <string name="perm_type_nearby_devices">الأجهزة القريبة</string>
@@ -339,10 +339,6 @@
     <string name="cancel">إلغاء</string>
 
     <!-- صيغ الجمع -->
-    <plurals name="notification_and_more">
-        <item quantity="one">و%d إضافية</item>
-        <item quantity="other">و%d إضافية</item>
-    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">شخص واحد</item>
@@ -399,4 +395,56 @@
   <string name="verify_success_title">Verified</string>
   <string name="verify_success_body">You verified %1$s</string>
   <string name="verify_success_system_message">verified %1$s</string>
+
+  <!-- مفاتيح مفقودة -->
+  <string name="cd_settings">الإعدادات</string>
+  <string name="cd_location_notes">ملاحظات الموقع</string>
+  <string name="notification_action_quit_bitchat">الخروج من Zemzeme</string>
+  <string name="about_background_title">التشغيل في الخلفية</string>
+  <string name="about_background_desc">إبقاء الشبكة المتشابكة نشطة عند إغلاق التطبيق (خدمة أمامية)</string>
+  <string name="about_p2p_subtitle">اتصالات مباشرة بين الأقران عبر p2p</string>
+  <string name="about_nostr_subtitle">رسائل عبر مرحّل الإنترنت</string>
+  <string name="about_ble_subtitle">شبكة البلوتوث المتشابكة للقرب</string>
+  <string name="mesh_service_channel_name">خدمة Mesh في الخلفية</string>
+  <string name="mesh_service_channel_desc">تُبقي شبكة البلوتوث المتشابكة تعمل في الخلفية</string>
+  <string name="background_location_required_title">الموقع في الخلفية موصى به</string>
+  <string name="background_location_required_subtitle">اختياري، يحسّن موثوقية الشبكة المتشابكة</string>
+  <string name="background_location_explanation">يوصي أندرويد بالموقع في الخلفية حتى تتمكن Zemzeme من البحث عن الأجهزة القريبة عندما لا يكون التطبيق مفتوحًا. يُبقي الشبكة المتشابكة حية بعد إعادة التشغيل.</string>
+  <string name="background_location_settings_tip">عند فتح الإعدادات، اختر "السماح في جميع الأوقات".</string>
+  <string name="background_location_needs_for">تستخدم Zemzeme الموقع في الخلفية من أجل:</string>
+  <string name="background_location_needs_bullets">- البحث عن الأجهزة القريبة عند إغلاق التطبيق\n- إعادة الاتصال بعد إعادة التشغيل\n- إبقاء الشبكة المتشابكة تعمل في الخلفية</string>
+  <string name="background_location_privacy_note">نحن لا نجمع موقعك أو نخزّنه أبدًا. خصوصيتك في أمان.</string>
+  <string name="grant_background_location">السماح بالموقع في الخلفية</string>
+  <string name="skip_background_location">المتابعة بدون الموقع في الخلفية</string>
+  <string name="dot">.</string>
+  <string name="warning_emoji">⚠️</string>
+  <string name="at_symbol">@</string>
+  <string name="app_brand">Zemzeme/</string>
+  <string name="channel_count_prefix"> · ⧉ </string>
+  <string name="mention_suggestion_at">@%1$s</string>
+  <string name="image_counter">%1$d / %2$d</string>
+  <string name="at_nickname">@%1$s</string>
+  <string name="hash_symbol">#</string>
+  <string name="underscore">_</string>
+  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+  <string name="progress_filled">█</string>
+  <string name="progress_empty">░</string>
+  <string name="status_sending">○</string>
+  <string name="status_pending">○</string>
+  <string name="status_sent">✓</string>
+  <string name="status_delivered">✓✓</string>
+  <string name="status_failed">⚠</string>
+  <string name="status_read">✓</string>
+  <string name="notification_file_pdf">📄</string>
+  <string name="notification_file_zip">🗜️</string>
+  <string name="notification_file_doc">📄</string>
+  <string name="notification_file_xls">📊</string>
+  <string name="notification_file_ppt">📈</string>
+  <string name="notification_file_generic">📎</string>
+  <string name="perm_background_location_desc">موصى به للبحث عن الأجهزة القريبة عندما يكون التطبيق في الخلفية</string>
+  <string name="perm_background_location_system">السماح بالوصول إلى الموقع في الخلفية</string>
+  <string name="perm_type_background_location">الموقع في الخلفية</string>
+  <string name="tor_not_available_in_this_build">Tor غير متاح في هذا الإصدار</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+  <string name="debug_question_mark">?</string>
 </resources>

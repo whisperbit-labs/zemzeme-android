@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">जेमजेमे</string>
 
     <!-- अनुमति कारणहरू -->
     <string name="permission_bluetooth_rationale">इन्टरनेट बिना प्रत्यक्ष कुराकानीका लागि ब्लुटुथ अनुमति आवश्यक हुन्छ।</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">ब्याट्री अनुकूलन आवश्यक छैन</string>
     <string name="battery_optimization_checking">ब्याट्री अनुकूलन जाँचिँदै</string>
     <string name="battery_optimization_why_disable">ब्याट्री अनुकूलन किन बन्द गर्ने?</string>
-    <string name="battery_optimization_explanation">bitchat पछाडिबाट चल्छ ताकि नजिकका यन्त्रहरूसँग मेष जडान कायम रहोस्। ब्याट्री अनुकूलनले यी जडान विच्छेद गराउन सक्छ, जसले सन्देश ढिलो वा हराउन सक्छ।\n\nअनुकूलन बन्द गर्दा भरपर्दो peer‑to‑peer सन्देश सुनिश्चित हुन्छ।</string>
+    <string name="battery_optimization_explanation">Zemzeme पछाडिबाट चल्छ ताकि नजिकका यन्त्रहरूसँग मेष जडान कायम रहोस्। ब्याट्री अनुकूलनले यी जडान विच्छेद गराउन सक्छ, जसले सन्देश ढिलो वा हराउन सक्छ।\n\nअनुकूलन बन्द गर्दा भरपर्दो peer‑to‑peer सन्देश सुनिश्चित हुन्छ।</string>
     <string name="battery_optimization_disable_button">ब्याट्री अनुकूलन बन्द गर्नुहोस्</string>
-    <string name="battery_optimization_note">नोट: यो सेटिङ पछि Android सेटिङहरू &gt; Apps &gt; bitchat &gt; Battery मा परिवर्तन गर्न सकिन्छ।</string>
-    <string name="battery_optimization_not_supported_explanation">तपाईंको यन्त्रलाई ब्याट्री अनुकूलन सेटिङ आवश्यक छैन। bitchat सामान्य रूपमा चल्नेछ।</string>
-    <string name="battery_optimization_not_supported_message">तपाईंको यन्त्रलाई ब्याट्री अनुकूलन सेटिङ आवश्यक छैन। bitchat सामान्य रूपमा चल्नेछ।</string>
-    <string name="battery_optimization_success_message">bitchat पछाडिबाट भरपर्दो रूपमा चल्न सक्छ</string>
+    <string name="battery_optimization_note">नोट: यो सेटिङ पछि Android सेटिङहरू &gt; Apps &gt; Zemzeme &gt; Battery मा परिवर्तन गर्न सकिन्छ।</string>
+    <string name="battery_optimization_not_supported_explanation">तपाईंको यन्त्रलाई ब्याट्री अनुकूलन सेटिङ आवश्यक छैन। Zemzeme सामान्य रूपमा चल्नेछ।</string>
+    <string name="battery_optimization_not_supported_message">तपाईंको यन्त्रलाई ब्याट्री अनुकूलन सेटिङ आवश्यक छैन। Zemzeme सामान्य रूपमा चल्नेछ।</string>
+    <string name="battery_optimization_success_message">Zemzeme पछाडिबाट भरपर्दो रूपमा चल्न सक्छ</string>
     <string name="battery_optimization_benefits">• सन्देश विश्वसनीय डेलिभरी\n• मेष जडान कायम राख्ने\n• पृष्ठभूमिमा रिले\n• जडान विच्छेद हुन नदिने</string>
     <string name="battery_optimization_check_again">फेरि जाँच्नुहोस्</string>
     <string name="battery_optimization_skip">अहिलेलाई बेवास्ता गर्नुहोस्</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">र %1$d थप</string>
     <string name="notification_messages_from_people">%1$d सन्देश %2$d जनाबाट</string>
     <string name="notification_more_conversations">र %1$d अरू कुराकानी</string>
-    <string name="notification_active_peers_title">👥 नजिकै bitchatter हरू!</string>
+    <string name="notification_active_peers_title">👥 नजिकै Zemzeme user हरू!</string>
     <string name="notification_active_peers_one">१ जना नजिकै</string>
     <string name="notification_active_peers_many">%1$d जना नजिकै</string>
     <string name="notification_new_messages">नयाँ सन्देश</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">%1$s मा नयाँ गतिविधि</string>
     <string name="notification_messages_in">%1$s मा सन्देश</string>
     <string name="notification_joined_conversation">%1$s वार्तालापमा सामेल भयो</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d उल्लेख</string>
-    <string name="notification_geohash_summary_title">bitchat – स्थान च्याट</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d उल्लेख</string>
+    <string name="notification_geohash_summary_title">Zemzeme – स्थान च्याट</string>
     <string name="notification_geohash_summary_text">%2$d स्थानबाट %1$d सन्देश</string>
     <string name="notification_mesh_mention_title_singular">मेष च्याटमा उल्लेख</string>
     <string name="notification_mesh_mention_title_plural">मेष च्याटमा %1$d उल्लेख</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">तस्वीर छान्नुहोस्</string>
 
     <!-- अबाउट शीट -->
-    <string name="about_tagline">विकेन्द्रित मेष सन्देश अन्त्यदेखि अन्त्य इन्क्रिप्सनसहित</string>
+    <string name="about_tagline">सबै परिस्थितिहरूमा निगरानीमुक्त सन्देश, अन्त-देखि-अन्त इन्क्रिप्टेड</string>
     <string name="about_offline_mesh_title">अफलाइन मेष च्याट</string>
     <string name="about_offline_mesh_desc">इन्टरनेट वा सर्भर बिना सिधै Bluetooth LE मार्फत सञ्चार गर्नुहोस्। नजिकका यन्त्रहरूबाट सन्देश रिल레이 हुन्छ।</string>
     <string name="about_online_geohash_title">अनलाइन Geohash च्यानलहरू</string>
@@ -244,8 +244,8 @@
     <!-- अनबोर्डिङ स्क्रिन -->
     <string name="location_services_required">स्थान सेवाहरू आवश्यक</string>
     <string name="privacy_first">गोपनीयता पहिलो</string>
-    <string name="location_explanation">bitchat ले तपाईंको स्थान पछ्याउँदैन।\n\nब्लुटुथ स्क्यान र Geohash च्याट सुविधा लागि स्थान सेवा आवश्यक छन्।</string>
-    <string name="location_needs_for">bitchat लाई स्थान सेवा आवश्यक पर्छ:</string>
+    <string name="location_explanation">Zemzeme ले तपाईंको स्थान पछ्याउँदैन।\n\nब्लुटुथ स्क्यान र Geohash च्याट सुविधा लागि स्थान सेवा आवश्यक छन्।</string>
+    <string name="location_needs_for">Zemzeme लाई स्थान सेवा आवश्यक पर्छ:</string>
     <string name="location_needs_bullets">• ब्लुटुथ यन्त्र स्क्यान\n• मेष सञ्जालमा नजिकका प्रयोगकर्ता पत्ता लगाउने\n• Geohash च्याट सुविधा\n• कुनै ट्र्याकिङ वा स्थान सङ्कलन छैन</string>
     <string name="open_location_settings">स्थान सेटिङ खोल्नुहोस्</string>
     <string name="check_again">फेरि जाँच्नुहोस्</string>
@@ -253,15 +253,15 @@
     <string name="location_unavailable_explanation">यस यन्त्रमा स्थान सेवाहरू उपलब्ध छैनन्। यो असामान्य हो किनकि Android यन्त्रमा यो मानक हो।\n\nब्लुटुथ स्क्यान ठीकसँग चल्न (Android को आवश्यक) स्थान सेवा चाहिन्छ। अन्यथा नजिकका प्रयोगकर्ता पत्ता लाग्दैनन्।</string>
     <string name="checking_location_services">स्थान सेवाहरू जाँचिँदै…</string>
     <string name="bluetooth_required">ब्लुटुथ आवश्यक</string>
-    <string name="bluetooth_needs_for">bitchat लाई ब्लुटुथ आवश्यक छ:</string>
+    <string name="bluetooth_needs_for">Zemzeme लाई ब्लुटुथ आवश्यक छ:</string>
     <string name="bluetooth_needs_bullets">• नजिकका प्रयोगकर्ता पत्ता लगाउने\n• मेष जडान बनाउने\n• सन्देश पठाउने/प्राप्त गर्ने\n• इन्टरनेट वा सर्भर बिना काम गर्ने</string>
     <string name="enable_bluetooth">ब्लुटुथ सक्षम गर्नुहोस्</string>
     <string name="bluetooth_not_supported">ब्लुटुथ समर्थित छैन</string>
-    <string name="bluetooth_unsupported_explanation">यो यन्त्रले Bluetooth Low Energy (BLE) समर्थन गर्दैन, जुन bitchat को लागि आवश्यक छ।\n\nनजिकका यन्त्रहरूसँग इन्टरनेट बिना सञ्चार गर्न र मेष बनाउन BLE चाहिन्छ।</string>
+    <string name="bluetooth_unsupported_explanation">यो यन्त्रले Bluetooth Low Energy (BLE) समर्थन गर्दैन, जुन Zemzeme को लागि आवश्यक छ।\n\nनजिकका यन्त्रहरूसँग इन्टरनेट बिना सञ्चार गर्न र मेष बनाउन BLE चाहिन्छ।</string>
     <string name="checking_bluetooth_status">ब्लुटुथ स्थिति जाँचिँदै…</string>
     <string name="battery_optimization_detected_title">ब्याट्री अनुकूलन भेटियो</string>
     <string name="battery_optimization_enabled_title">ब्याट्री अनुकूलन सक्षम</string>
-    <string name="battery_optimization_explanation_short">मेष जडान कायम राख्न bitchat पछाडिबाट चल्नुपर्छ। ब्याट्री अनुकूलनले जडान काट्न सक्छ।</string>
+    <string name="battery_optimization_explanation_short">मेष जडान कायम राख्न Zemzeme पछाडिबाट चल्नुपर्छ। ब्याट्री अनुकूलनले जडान काट्न सक्छ।</string>
     <string name="benefits_of_disabling">बन्द गर्ने फाइदाहरू</string>
     <string name="battery_benefits_short">• भरपर्दो डेलिभरी\n• मेष कन्नेक्टिभिटी कायम\n• विच्छेद रोक्छ</string>
     <string name="disable_battery_optimization">अनुकूलन बन्द गर्नुहोस्</string>
@@ -278,9 +278,9 @@
     <string name="privacy_bullets">• कुनै ट्र्याकिङ वा डेटा सङ्कलन छैन\n• ब्लुटुथ मेष च्याट पूर्णतया अफलाइन\n• Geohash च्याट इन्टरनेट प्रयोग गर्छ</string>
     <string name="permissions_header">अनुमति</string>
     <string name="grant_permissions">अनुमति दिनुहोस्</string>
-    <string name="location_tracking_warning">bitchat ले तपाईंको स्थान पछ्याउँदैन</string>
+    <string name="location_tracking_warning">Zemzeme ले तपाईंको स्थान पछ्याउँदैन</string>
     <string name="at_symbol">@</string>
-    <string name="app_brand">bitchat/</string>
+    <string name="app_brand">Zemzeme/</string>
     <string name="channel_count_prefix"> · ⧉ </string>
     <string name="geohash_people_header">मानिसहरू</string>
     <string name="nobody_around">वरिपरि कोही छैन…</string>
@@ -327,13 +327,13 @@
     <string name="cd_pause_voice">पज</string>
 
     <!-- अनुमति विवरण -->
-    <string name="perm_nearby_devices_desc">ब्लुटुथमार्फत bitchat प्रयोगकर्ता फेला पार्न आवश्यक</string>
-    <string name="perm_nearby_devices_system">bitchat लाई नजिकका यन्त्र जडान गर्न अनुमति दिनुहोस्</string>
+    <string name="perm_nearby_devices_desc">ब्लुटुथमार्फत Zemzeme प्रयोगकर्ता फेला पार्न आवश्यक</string>
+    <string name="perm_nearby_devices_system">Zemzeme लाई नजिकका यन्त्र जडान गर्न अनुमति दिनुहोस्</string>
     <string name="perm_location_desc">Android अनुसार ब्लुटुथमार्फत नजिकका प्रयोगकर्ता फेला पार्न आवश्यक</string>
-    <string name="perm_location_system">नजिकका यन्त्र स्क्यान गर्न bitchat लाई आवश्यक</string>
+    <string name="perm_location_system">नजिकका यन्त्र स्क्यान गर्न Zemzeme लाई आवश्यक</string>
     <string name="perm_notifications_desc">निजी सन्देश आउँदा सूचना पाउनुहोस्</string>
-    <string name="perm_notifications_system">bitchat लाई तपाईंलाई सूचना पठाउन दिनुहोस्</string>
-    <string name="perm_battery_desc">bitchat लाई पछाडिबाट भरपर्दो रूपमा चलाउन र मेष जडान कायम राख्न ब्याट्री अनुकूलन बन्द गर्नुहोस्</string>
+    <string name="perm_notifications_system">Zemzeme लाई तपाईंलाई सूचना पठाउन दिनुहोस्</string>
+    <string name="perm_battery_desc">Zemzeme लाई पछाडिबाट भरपर्दो रूपमा चलाउन र मेष जडान कायम राख्न ब्याट्री अनुकूलन बन्द गर्नुहोस्</string>
     <string name="perm_battery_system">ब्याट्री प्रतिबन्ध बिना चल्न अनुमति दिनुहोस्</string>
 
     <!-- अनुमति प्रकार -->
@@ -399,4 +399,57 @@
   <string name="verify_success_title">Verified</string>
   <string name="verify_success_body">You verified %1$s</string>
   <string name="verify_success_system_message">verified %1$s</string>
+
+  <string name="mesh_service_channel_name">Zemzeme Mesh Network</string>
+  <string name="mesh_service_channel_desc">Zemzeme mesh सञ्चारका लागि</string>
+  <string name="cd_settings">सेटिङ</string>
+  <string name="cd_location_notes">स्थान नोटहरू</string>
+  <string name="cd_close">बन्द गर्नुहोस्</string>
+  <string name="cd_image_index_of">तस्वीर %1$d मध्ये %2$d</string>
+  <string name="cd_mining_pow">PoW माइनिङ</string>
+  <string name="cd_pick_file">फाइल छान्नुहोस्</string>
+  <string name="cd_pow_enabled">PoW सक्षम छ</string>
+  <string name="cd_privacy_protected">गोपनीयता सुरक्षित</string>
+  <string name="cd_proof_of_work">Proof of Work</string>
+  <string name="cd_save_current_image">हालको तस्वीर सेभ गर्नुहोस्</string>
+  <string name="notification_action_quit_bitchat">Zemzeme बन्द गर्नुहोस्</string>
+  <string name="about_background_title">ब्याकग्राउन्ड Bluetooth</string>
+  <string name="about_background_desc">उत्कृष्ट प्रदर्शनका लागि, Zemzeme लाई ब्याकग्राउन्डमा चलिरहँदा Bluetooth जडान कायम राख्न अनुमति दिनुहोस्</string>
+  <string name="about_p2p_subtitle">प्रत्यक्ष peer-to-peer सन्देश</string>
+  <string name="about_nostr_subtitle">Nostr प्रोटोकलमा आधारित</string>
+  <string name="about_ble_subtitle">Bluetooth Low Energy mesh नेटवर्क</string>
+  <string name="background_location_required_title">ब्याकग्राउन्ड स्थान पहुँच</string>
+  <string name="background_location_required_subtitle">Zemzeme लाई नजिकका मानिसहरू फेला पार्न ब्याकग्राउन्ड स्थान चाहिन्छ</string>
+  <string name="background_location_explanation">Zemzeme ले ब्याकग्राउन्ड स्थान पहुँच प्रयोग गर्दछ:</string>
+  <string name="background_location_settings_tip">सेटिङमा जानुहोस् → अनुमतिहरू → स्थान → सधैं अनुमति दिनुहोस्</string>
+  <string name="background_location_needs_for">Zemzeme लाई ब्याकग्राउन्ड स्थान चाहिन्छ:</string>
+  <string name="background_location_needs_bullets">• नजिकका प्रयोगकर्ताहरूसँग जडान गर्न\n• Bluetooth mesh नेटवर्क कायम राख्न\n• स्थान-आधारित च्यानलहरूमा भाग लिन</string>
+  <string name="background_location_privacy_note">तपाईंको स्थान कहिल्यै सर्भरमा पठाइँदैन</string>
+  <string name="grant_background_location">ब्याकग्राउन्ड स्थान अनुमति दिनुहोस्</string>
+  <string name="skip_background_location">छोड्नुहोस्</string>
+  <string name="perm_background_location_desc">नजिकका प्रयोगकर्ताहरूसँग जडान गर्न ब्याकग्राउन्ड स्थान पहुँच चाहिन्छ</string>
+  <string name="perm_background_location_system">सधैं अनुमति दिनुहोस्</string>
+  <string name="perm_type_background_location">ब्याकग्राउन्ड स्थान</string>
+  <string name="tor_not_available_in_this_build">यस build मा Tor उपलब्ध छैन</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+  <string name="debug_roles_hint">भूमिकाहरू on/off गर्नुहोस् र disable भएपछि सबै जडान बन्द गर्नुहोस्</string>
+  <string name="debug_tools_desc">diagnostics र नियन्त्रणका लागि developer उपकरणहरू</string>
+  <string name="debug_verbose_hint">peer जोड्ने/छोड्ने, जडान दिशा, packet routing र relay लग गर्दछ</string>
+  <string name="pow_label_format">pow: %1$dbit</string>
+  <string name="pow_mining_ellipsis">माइनिङ...</string>
+  <string name="toast_failed_to_save_image">तस्वीर सेभ गर्न सकिएन</string>
+  <string name="toast_image_saved">तस्वीर Downloads मा सेभ भयो</string>
+  <string name="dismiss">खारेज गर्नुहोस्</string>
+  <plurals name="location_notes_title">
+    <item quantity="one">#%1$s ± 1 • %2$d नोट</item>
+    <item quantity="other">#%1$s ± 1 • %2$d नोटहरू</item>
+  </plurals>
+  <string name="location_notes_description">यस स्थानका नोटहरू</string>
+  <string name="location_notes_relays_unavailable">Relay उपलब्ध छैन</string>
+  <string name="location_notes_no_relays_title">कुनै relay छैन</string>
+  <string name="location_notes_no_relays_desc">स्थान नोटका लागि कुनै Nostr relay कन्फिगर गरिएको छैन</string>
+  <string name="loading_location_notes">स्थान नोटहरू लोड हुँदैछ…</string>
+  <string name="location_notes_empty_title">कुनै नोट छैन</string>
+  <string name="location_notes_empty_desc">यस क्षेत्रमा अझै कसैले नोट छोडेको छैन</string>
+  <string name="location_notes_input_placeholder">यहाँ नोट लेख्नुहोस्…</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">Zemzeme</string>
 
     <!-- Fanazavana momba ny alalana -->
     <string name="permission_bluetooth_rationale">Ilaina ny alalana Bluetooth mba hifandraisan-davitra tsy misy Internet.</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">Tsy ilaina ny Fanamafisana Bateria</string>
     <string name="battery_optimization_checking">Manamarina ny Fanamafisana Bateria</string>
     <string name="battery_optimization_why_disable">Nahoana no mijanona ny fanamafisana bateria?</string>
-    <string name="battery_optimization_explanation">Mihazakazaka ao ambadika ny bitchat mba hitazona ny fifandraisana tambazotry mesh amin\'ny fitaovana akaiky. Ny fanamafisana bateria dia afaka manelingelina ireo fifandraisana ireo, ka mahatonga ny hafatra hataran-tara na very.\n\nNy fanajanona ny fanamafisana bateria dia miantoka ny fifandraisan-davitra azo itokisana.</string>
+    <string name="battery_optimization_explanation">Mihazakazaka ao ambadika ny Zemzeme mba hitazona ny fifandraisana tambazotry mesh amin\'ny fitaovana akaiky. Ny fanamafisana bateria dia afaka manelingelina ireo fifandraisana ireo, ka mahatonga ny hafatra hataran-tara na very.\n\nNy fanajanona ny fanamafisana bateria dia miantoka ny fifandraisan-davitra azo itokisana.</string>
     <string name="battery_optimization_disable_button">Hajanona ny Fanamafisana Bateria</string>
-    <string name="battery_optimization_note">Fanamarihana: Azonao ovaina ato aoriana izany amin\'ny Toetry Android &gt; Apps &gt; bitchat &gt; Bateria</string>
-    <string name="battery_optimization_not_supported_explanation">Ny fitaovanao dia tsy mila fametrahana fanamafisana bateria. Ny bitchat dia handeha ara-dalàna.</string>
-    <string name="battery_optimization_not_supported_message">Ny fitaovanao dia tsy mila fametrahana fanamafisana bateria. Ny bitchat dia handeha ara-dalàna.</string>
-    <string name="battery_optimization_success_message">Afaka mihazakazaka azo itokisana ao ambadika ny bitchat</string>
+    <string name="battery_optimization_note">Fanamarihana: Azonao ovaina ato aoriana izany amin\'ny Toetry Android &gt; Apps &gt; Zemzeme &gt; Bateria</string>
+    <string name="battery_optimization_not_supported_explanation">Ny fitaovanao dia tsy mila fametrahana fanamafisana bateria. Ny Zemzeme dia handeha ara-dalàna.</string>
+    <string name="battery_optimization_not_supported_message">Ny fitaovanao dia tsy mila fametrahana fanamafisana bateria. Ny Zemzeme dia handeha ara-dalàna.</string>
+    <string name="battery_optimization_success_message">Afaka mihazakazaka azo itokisana ao ambadika ny Zemzeme</string>
     <string name="battery_optimization_benefits">• Miantoka ny fandefasana hafatra azo itokisana\n• Mitazona ny fifandraisana tambazotry mesh\n• Mamela ny famindrana hafatra ao ambadika\n• Misoroka ny fahatapahan\'ny fifandraisana</string>
     <string name="battery_optimization_check_again">Hanamarina indray</string>
     <string name="battery_optimization_skip">Hitsambikina ankehitriny</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">ary %1$d hafa</string>
     <string name="notification_messages_from_people">%1$d hafatra avy amin\'ny olona %2$d</string>
     <string name="notification_more_conversations">ary %1$d resaka hafa</string>
-    <string name="notification_active_peers_title">👥 bitchatter akaiky!</string>
+    <string name="notification_active_peers_title">👥 Zemzeme user akaiky!</string>
     <string name="notification_active_peers_one">Olona 1 manodidina</string>
     <string name="notification_active_peers_many">Olona %1$d manodidina</string>
     <string name="notification_new_messages">Hafatra vaovao</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">Hetsika vaovao ao amin\'ny %1$s</string>
     <string name="notification_messages_in">Hafatra ao amin\'ny %1$s</string>
     <string name="notification_joined_conversation">%1$s dia niditra tamin\'ny resaka</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat - %1$d fanaovana tsiahy</string>
-    <string name="notification_geohash_summary_title">bitchat - resaka toerana</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme - %1$d fanaovana tsiahy</string>
+    <string name="notification_geohash_summary_title">Zemzeme - resaka toerana</string>
     <string name="notification_geohash_summary_text">%1$d hafatra avy amin\'ny toerana %2$d</string>
     <string name="notification_mesh_mention_title_singular">Voatonona ao amin\'ny Mesh Chat</string>
     <string name="notification_mesh_mention_title_plural">%1$d fanaovana tsiahy ao amin\'ny Mesh Chat</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">Hifidy sary</string>
 
     <!-- Momba ny takelaka -->
-    <string name="about_tagline">hafatra mesh tsy misy foibe misy fandokoana farany amin\'ny farany</string>
+    <string name="about_tagline">Fifandraisan-dresaka tsy voamarin-poana amin ny toe-javatra rehetra, voarakitra avy amin ny farany ka hatramin ny farany</string>
     <string name="about_offline_mesh_title">Mesh Chat tsy an-tserasera</string>
     <string name="about_offline_mesh_desc">Mifandraisa mivantana amin\'ny alalan\'ny Bluetooth LE tsy misy Internet na mpizara. Ny hafatra dia mamindra amin\'ny alalan\'ny fitaovana akaiky mba hanitarana ny elanelana.</string>
     <string name="about_online_geohash_title">Fantsona Geohash an-tserasera</string>
@@ -253,24 +253,24 @@
     <!-- Efijery fanombohana -->
     <string name="location_services_required">Ilaina ny Sampan-draharaham-pitoerana</string>
     <string name="privacy_first">Fiainana Manokana Voalohany</string>
-    <string name="location_explanation">Ny bitchat dia TSY manaraka ny toerananao.\n\nIlaina ny sampan-draharaham-pitoerana ho an\'ny scan Bluetooth sy ny endri-javatra resaka Geohash.</string>
-    <string name="location_needs_for">Ny bitchat dia mila sampan-draharaham-pitoerana ho an\'ny:</string>
+    <string name="location_explanation">Ny Zemzeme dia TSY manaraka ny toerananao.\n\nIlaina ny sampan-draharaham-pitoerana ho an\'ny scan Bluetooth sy ny endri-javatra resaka Geohash.</string>
+    <string name="location_needs_for">Ny Zemzeme dia mila sampan-draharaham-pitoerana ho an\'ny:</string>
     <string name="location_needs_bullets">• Scan fitaovana Bluetooth\n• Fahitana mpampiasa akaiky amin\'ny tambazotry mesh\n• Endri-javatra resaka Geohash\n• Tsy misy fanaraha-maso na fanangonana toerana</string>
     <string name="open_location_settings">Hanokatra Fametrahana Toerana</string>
     <string name="check_again">Hanamarina Indray</string>
     <string name="location_services_unavailable">Tsy Misy Sampan-draharaham-pitoerana</string>
-    <string name="location_unavailable_explanation">Tsy misy sampan-draharaham-pitoerana amin\'ity fitaovana ity. Mahagaga izany satria mahazatra amin\'ny fitaovana Android ny sampan-draharaham-pitoerana.\n\nMila sampan-draharaham-pitoerana ny bitchat mba hiasa tsara ny scan Bluetooth (takiana Android). Raha tsy izany, ny fampiharana dia tsy afaka mahita mpampiasa akaiky.</string>
+    <string name="location_unavailable_explanation">Tsy misy sampan-draharaham-pitoerana amin\'ity fitaovana ity. Mahagaga izany satria mahazatra amin\'ny fitaovana Android ny sampan-draharaham-pitoerana.\n\nMila sampan-draharaham-pitoerana ny Zemzeme mba hiasa tsara ny scan Bluetooth (takiana Android). Raha tsy izany, ny fampiharana dia tsy afaka mahita mpampiasa akaiky.</string>
     <string name="checking_location_services">Manamarina sampan-draharaham-pitoerana...</string>
     <string name="bluetooth_required">Ilaina ny Bluetooth</string>
-    <string name="bluetooth_needs_for">Mila Bluetooth ny bitchat mba:</string>
+    <string name="bluetooth_needs_for">Mila Bluetooth ny Zemzeme mba:</string>
     <string name="bluetooth_needs_bullets">• Hahita mpampiasa akaiky\n• Hamorona fifandraisana tambazotry mesh\n• Handefa sy handray hafatra\n• Hiasa tsy misy Internet na mpizara</string>
     <string name="enable_bluetooth">Alefaso ny Bluetooth</string>
     <string name="bluetooth_not_supported">Tsy Tohanana ny Bluetooth</string>
-    <string name="bluetooth_unsupported_explanation">Ity fitaovana ity dia tsy manohana ny Bluetooth Low Energy (BLE), izay ilaina mba hiasan\'ny bitchat.\n\nMila BLE ny bitchat mba hamoronana tambazotry mesh sy hifandray amin\'ny fitaovana akaiky tsy misy Internet.</string>
+    <string name="bluetooth_unsupported_explanation">Ity fitaovana ity dia tsy manohana ny Bluetooth Low Energy (BLE), izay ilaina mba hiasan\'ny Zemzeme.\n\nMila BLE ny Zemzeme mba hamoronana tambazotry mesh sy hifandray amin\'ny fitaovana akaiky tsy misy Internet.</string>
     <string name="checking_bluetooth_status">Manamarina ny toe-javatra Bluetooth...</string>
     <string name="battery_optimization_detected_title">hita ny fanamafisana bateria</string>
     <string name="battery_optimization_enabled_title">Alefa ny Fanamafisana Bateria</string>
-    <string name="battery_optimization_explanation_short">Mila mihazakazaka ao ambadika ny bitchat mba hitazona ny fifandraisana mesh. ny fanamafisana bateria dia afaka manelingelina ireo fifandraisana ireo.</string>
+    <string name="battery_optimization_explanation_short">Mila mihazakazaka ao ambadika ny Zemzeme mba hitazona ny fifandraisana mesh. ny fanamafisana bateria dia afaka manelingelina ireo fifandraisana ireo.</string>
     <string name="benefits_of_disabling">Tombontsoam-panajanona</string>
     <string name="battery_benefits_short">• fandefasana hafatra azo itokisana\n• mitazona ny fifandraisana mesh\n• misoroka ny fahatapahan\'ny fifandraisana</string>
     <string name="disable_battery_optimization">Hajanona ny Fanamafisana Bateria</string>
@@ -287,9 +287,9 @@
     <string name="privacy_bullets">• tsy misy fanaraha-maso na fanangonana angona\n• tsy an-tserasera tanteraka ny resaka mesh Bluetooth\n• mampiasa Internet ny resaka Geohash</string>
     <string name="permissions_header">alalana</string>
     <string name="grant_permissions">Omeo Alalana</string>
-    <string name="location_tracking_warning">Ny bitchat dia TSY manaraka ny toerananao</string>
+    <string name="location_tracking_warning">Ny Zemzeme dia TSY manaraka ny toerananao</string>
     <string name="at_symbol">@</string>
-    <string name="app_brand">bitchat/</string>
+    <string name="app_brand">Zemzeme/</string>
     <string name="channel_count_prefix"> · ⧉ </string>
     <string name="geohash_people_header">OLONA</string>
     <string name="nobody_around">tsy misy olona manodidina...</string>
@@ -341,14 +341,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- Famaritana alalana -->
-    <string name="perm_nearby_devices_desc">Ilaina mba hahitana mpampiasa bitchat amin\'ny alalan\'ny Bluetooth</string>
-    <string name="perm_nearby_devices_system">Avelao ny bitchat hifandray amin\'ny fitaovana akaiky</string>
-    <string name="perm_location_desc">Takian\'ny Android mba hahitana mpampiasa bitchat akaiky amin\'ny alalan\'ny Bluetooth</string>
-    <string name="perm_location_system">Mila izany ny bitchat mba hisikidy fitaovana akaiky</string>
+    <string name="perm_nearby_devices_desc">Ilaina mba hahitana mpampiasa Zemzeme amin\'ny alalan\'ny Bluetooth</string>
+    <string name="perm_nearby_devices_system">Avelao ny Zemzeme hifandray amin\'ny fitaovana akaiky</string>
+    <string name="perm_location_desc">Takian\'ny Android mba hahitana mpampiasa Zemzeme akaiky amin\'ny alalan\'ny Bluetooth</string>
+    <string name="perm_location_system">Mila izany ny Zemzeme mba hisikidy fitaovana akaiky</string>
     <string name="perm_notifications_desc">Mandray fampandrenesana rehefa mahazo hafatra manokana ianao</string>
-    <string name="perm_notifications_system">Avelao ny bitchat handefasa fampandrenesana aminao</string>
-    <string name="perm_battery_desc">Ajanony ny fanamafisana bateria mba hahazoana antoka fa mihazakazaka azo itokisana ao ambadika ny bitchat ary mitazona ny fifandraisana tambazotry mesh</string>
-    <string name="perm_battery_system">Avelao ny bitchat handeha tsy misy famerana bateria</string>
+    <string name="perm_notifications_system">Avelao ny Zemzeme handefasa fampandrenesana aminao</string>
+    <string name="perm_battery_desc">Ajanony ny fanamafisana bateria mba hahazoana antoka fa mihazakazaka azo itokisana ao ambadika ny Zemzeme ary mitazona ny fifandraisana tambazotry mesh</string>
+    <string name="perm_battery_system">Avelao ny Zemzeme handeha tsy misy famerana bateria</string>
 
     <!-- Karazana alalana -->
     <string name="perm_type_nearby_devices">Fitaovana Akaiky</string>
@@ -366,10 +366,6 @@
     <string name="cancel">Hanafoana</string>
 
     <!-- Plurals -->
-    <plurals name="notification_and_more">
-        <item quantity="one">ary %d hafa</item>
-        <item quantity="other">ary %d hafa</item>
-    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">Olona 1</item>
@@ -411,6 +407,46 @@
   <string name="verify_mutual_match_body">You and %1$s verified each other</string>
   <string name="verify_mutual_system_message">mutual verification with %1$s</string>
   <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+  <string name="verify_success_body">Nanamarina anao %1$s</string>
+  <string name="verify_success_system_message">namarina %1$s</string>
+
+  <!-- Fanalahidin\'ny teny tsy hita -->
+  <string name="mesh_service_channel_name">Serivisy Mesh amin\'ny aorian\'ny sekoly</string>
+  <string name="mesh_service_channel_desc">Mitazona ny Bluetooth mesh miasa amin\'ny aorian\'ny sekoly</string>
+  <string name="cd_settings">Fametrahana</string>
+  <string name="cd_location_notes">Fanamarihana toerana</string>
+  <string name="notification_action_quit_bitchat">Hiala ao amin\'ny Zemzeme</string>
+  <string name="about_background_title">mandehana amin\'ny aorian\'ny sekoly</string>
+  <string name="about_background_desc">mitazona ny mesh mavitrika rehefa voatsipy ny app (serivisy amin\'ny aloha)</string>
+  <string name="about_p2p_subtitle">Fifandraisan\'ny mivantana amin\'ny p2p</string>
+  <string name="about_nostr_subtitle">Fandefasana hafatra amin\'ny relay internet</string>
+  <string name="about_ble_subtitle">Mesh Bluetooth akaiky</string>
+  <string name="background_location_required_title">Toerana amin\'ny aorian\'ny sekoly dia tsara</string>
+  <string name="background_location_required_subtitle">tsy voatery, manampy ny fahazakana mesh</string>
+  <string name="background_location_explanation">Android dia manoro ny toerana amin\'ny aorian\'ny sekoly mba ahafahana Zemzeme mitady fitaovana akaiky rehefa tsy misokatra ny app. Izany dia mitazona ny mesh misy afo rehefa averina.</string>
+  <string name="background_location_settings_tip">Rehefa misokatra ny fametrahana, misafidy "Avelao foana".</string>
+  <string name="background_location_needs_for">Zemzeme dia mampiasa toerana amin\'ny aorian\'ny sekoly ho an\'ny:</string>
+  <string name="background_location_needs_bullets">- mitady fitaovana akaiky rehefa voatsipy ny app\n- mamerina fifandraisan\'ny rehefa averina\n- mitazona ny mesh miasa amin\'ny aorian\'ny sekoly</string>
+  <string name="background_location_privacy_note">Tsy manangona na mitahiry ny toeranao MIHITSY izahay. Voaro ny fiainanao manokana.</string>
+  <string name="grant_background_location">Avelao ny toerana amin\'ny aorian\'ny sekoly</string>
+  <string name="skip_background_location">Mitohy tsy misy toerana amin\'ny aorian\'ny sekoly</string>
+  <string name="perm_background_location_desc">Tsara raha ny app dia amin\'ny aorian\'ny sekoly mba mitady fitaovana akaiky</string>
+  <string name="perm_background_location_system">Avelao ny fidirana toerana amin\'ny aorian\'ny sekoly</string>
+  <string name="perm_type_background_location">Toerana amin\'ny aorian\'ny sekoly</string>
+  <string name="tor_not_available_in_this_build">Tor tsy misy amin\'ity version ity</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+  <string name="debug_question_mark">?</string>
+  <plurals name="location_notes_title">
+    <item quantity="one">#%1$s ± 1 • %2$d fanamarihana</item>
+    <item quantity="other">#%1$s ± 1 • %2$d fanamarihana</item>
+  </plurals>
+  <string name="location_notes_description">menomero fanamarihana fohy maharitra amin\'ity toerana ity mba ho hitan\'ny mpitsidika hafa.</string>
+  <string name="location_notes_relays_unavailable">geo relays tsy misy; fanamarihana napetraka</string>
+  <string name="location_notes_no_relays_title">tsy misy geo relays akaiky</string>
+  <string name="location_notes_no_relays_desc">ny fanamarihana dia miankina amin\'ny geo relays. jereo ny fifandraisan\'ny ary andramo indray.</string>
+  <string name="loading_location_notes">mampiditra ny fanamarihana…</string>
+  <string name="location_notes_empty_title">tsy misy fanamarihana mbola</string>
+  <string name="location_notes_empty_desc">aoka ho voalohany ianao hanomezana fanamarihana amin\'ity toerana ity.</string>
+  <string name="dismiss">akatona</string>
+  <string name="location_notes_input_placeholder">menomero fanamarihana amin\'ity toerana ity</string>
 </resources>

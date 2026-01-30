@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bitchat</string>
+    <string name="app_name">زمزمه</string>
 
     <!-- توضیح مجوزها -->
     <string name="permission_bluetooth_rationale">برای چت مستقیم با دیگران بدون اینترنت، به مجوز بلوتوث نیاز است.</string>
@@ -29,12 +29,12 @@
     <string name="battery_optimization_not_required">بهینه‌سازی باتری لازم نیست</string>
     <string name="battery_optimization_checking">در حال بررسی بهینه‌سازی باتری</string>
     <string name="battery_optimization_why_disable">چرا بهینه‌سازی باتری را غیرفعال کنیم؟</string>
-    <string name="battery_optimization_explanation">bitchat برای حفظ اتصال مِش با دستگاه‌های نزدیک در پس‌زمینه اجرا می‌شود. بهینه‌سازی باتری می‌تواند این اتصال‌ها را قطع کند و باعث تأخیر یا از دست رفتن پیام‌ها شود.\n\nغیرفعال‌کردن بهینه‌سازی باتری، ارتباط همتابه‌همتای قابل اعتماد را تضمین می‌کند.</string>
+    <string name="battery_optimization_explanation">زمزمه برای حفظ اتصال مِش با دستگاه‌های نزدیک در پس‌زمینه اجرا می‌شود. بهینه‌سازی باتری می‌تواند این اتصال‌ها را قطع کند و باعث تأخیر یا از دست رفتن پیام‌ها شود.\n\nغیرفعال‌کردن بهینه‌سازی باتری، ارتباط همتابه‌همتای قابل اعتماد را تضمین می‌کند.</string>
     <string name="battery_optimization_disable_button">غیرفعال‌کردن بهینه‌سازی باتری</string>
-    <string name="battery_optimization_note">توجه: می‌توانید بعداً در تنظیمات اندروید &gt; برنامه‌ها &gt; bitchat &gt; باتری این مورد را تغییر دهید.</string>
-    <string name="battery_optimization_not_supported_explanation">دستگاه شما به تنظیمات بهینه‌سازی باتری نیاز ندارد. bitchat به‌صورت عادی اجرا می‌شود.</string>
-    <string name="battery_optimization_not_supported_message">دستگاه شما به تنظیمات بهینه‌سازی باتری نیاز ندارد. bitchat به‌صورت عادی اجرا می‌شود.</string>
-    <string name="battery_optimization_success_message">bitchat می‌تواند با اطمینان در پس‌زمینه اجرا شود</string>
+    <string name="battery_optimization_note">توجه: می‌توانید بعداً در تنظیمات اندروید &gt; برنامه‌ها &gt; زمزمه &gt; باتری این مورد را تغییر دهید.</string>
+    <string name="battery_optimization_not_supported_explanation">دستگاه شما به تنظیمات بهینه‌سازی باتری نیاز ندارد. زمزمه به‌صورت عادی اجرا می‌شود.</string>
+    <string name="battery_optimization_not_supported_message">دستگاه شما به تنظیمات بهینه‌سازی باتری نیاز ندارد. زمزمه به‌صورت عادی اجرا می‌شود.</string>
+    <string name="battery_optimization_success_message">زمزمه می‌تواند با اطمینان در پس‌زمینه اجرا شود</string>
     <string name="battery_optimization_benefits">• تحویل مطمئن پیام‌ها\n• حفظ اتصال مِش\n• رلهٔ پیام در پس‌زمینه\n• جلوگیری از قطع اتصال</string>
     <string name="battery_optimization_check_again">بررسی مجدد</string>
     <string name="battery_optimization_skip">فعلاً رد کردن</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">و %1$d مورد دیگر</string>
     <string name="notification_messages_from_people">%1$d پیام از %2$d نفر</string>
     <string name="notification_more_conversations">و %1$d گفت‌وگوی دیگر</string>
-    <string name="notification_active_peers_title">👥 کاربران bitchat در نزدیکی!</string>
+    <string name="notification_active_peers_title">👥 کاربران زمزمه در نزدیکی!</string>
     <string name="notification_active_peers_one">۱ نفر در نزدیکی</string>
     <string name="notification_active_peers_many">%1$d نفر در نزدیکی</string>
     <string name="notification_new_messages">پیام‌های جدید</string>
@@ -57,8 +57,8 @@
     <string name="notification_new_activity_in">فعالیت جدید در %1$s</string>
     <string name="notification_messages_in">پیام‌ها در %1$s</string>
     <string name="notification_joined_conversation">%1$s به گفت‌وگو پیوست</string>
-    <string name="notification_geohash_summary_title_mentions">bitchat – %1$d مورد ذکر</string>
-    <string name="notification_geohash_summary_title">bitchat – گفت‌وگوی مکانی</string>
+    <string name="notification_geohash_summary_title_mentions">زمزمه – %1$d مورد ذکر</string>
+    <string name="notification_geohash_summary_title">زمزمه – گفت‌وگوی مکانی</string>
     <string name="notification_geohash_summary_text">%1$d پیام از %2$d موقعیت</string>
     <string name="notification_mesh_mention_title_singular">ذکر در گفت‌وگوی مِش</string>
     <string name="notification_mesh_mention_title_plural">%1$d مورد ذکر در گفت‌وگوی مِش</string>
@@ -96,7 +96,7 @@
     <string name="pick_image">انتخاب تصویر</string>
 
     <!-- برگهٔ درباره -->
-    <string name="about_tagline">گفت‌وگوی مِش غیرمتمرکز با رمزگذاری سرتاسری</string>
+    <string name="about_tagline">پیام‌رسانی بدون نظارت در تمام شرایط، رمزگذاری‌شده سراسری</string>
     <string name="about_offline_mesh_title">گفت‌وگوی مِش آفلاین</string>
     <string name="about_offline_mesh_desc">بدون اینترنت یا سرور، مستقیماً از طریق Bluetooth LE ارتباط برقرار کنید. پیام‌ها از طریق دستگاه‌های نزدیک رله می‌شوند تا بُرد افزایش یابد.</string>
     <string name="about_online_geohash_title">کانال‌های geohash آنلاین</string>
@@ -253,24 +253,24 @@
     <!-- صفحه‌های آغازین -->
     <string name="location_services_required">خدمات مکان لازم است</string>
     <string name="privacy_first">حریم خصوصی در اولویت</string>
-    <string name="location_explanation">bitchat موقعیت شما را پیگیری نمی‌کند.\n\nبرای اسکن بلوتوث و قابلیت گفت‌وگوی geohash، خدمات مکان لازم است.</string>
-    <string name="location_needs_for">bitchat به خدمات مکان برای موارد زیر نیاز دارد:</string>
+    <string name="location_explanation">زمزمه موقعیت شما را پیگیری نمی‌کند.\n\nبرای اسکن بلوتوث و قابلیت گفت‌وگوی geohash، خدمات مکان لازم است.</string>
+    <string name="location_needs_for">زمزمه به خدمات مکان برای موارد زیر نیاز دارد:</string>
     <string name="location_needs_bullets">• اسکن دستگاه‌های بلوتوث\n• یافتن کاربران نزدیک در شبکهٔ مِش\n• قابلیت گفت‌وگوی geohash\n• بدون پیگیری یا جمع‌آوری موقعیت</string>
     <string name="open_location_settings">باز کردن تنظیمات مکان</string>
     <string name="check_again">بررسی دوباره</string>
     <string name="location_services_unavailable">خدمات مکان در دسترس نیست</string>
-    <string name="location_unavailable_explanation">خدمات مکان در این دستگاه در دسترس نیست. این غیرمعمول است زیرا خدمات مکان در دستگاه‌های اندرویدی استاندارد است.\n\nبرای عملکرد صحیح اسکن بلوتوث (الزام اندروید) bitchat به خدمات مکان نیاز دارد. بدون آن، برنامه نمی‌تواند کاربران نزدیک را بیابد.</string>
+    <string name="location_unavailable_explanation">خدمات مکان در این دستگاه در دسترس نیست. این غیرمعمول است زیرا خدمات مکان در دستگاه‌های اندرویدی استاندارد است.\n\nبرای عملکرد صحیح اسکن بلوتوث (الزام اندروید) زمزمه به خدمات مکان نیاز دارد. بدون آن، برنامه نمی‌تواند کاربران نزدیک را بیابد.</string>
     <string name="checking_location_services">در حال بررسی خدمات مکان …</string>
     <string name="bluetooth_required">بلوتوث لازم است</string>
-    <string name="bluetooth_needs_for">bitchat به بلوتوث برای موارد زیر نیاز دارد:</string>
+    <string name="bluetooth_needs_for">زمزمه به بلوتوث برای موارد زیر نیاز دارد:</string>
     <string name="bluetooth_needs_bullets">• یافتن کاربران نزدیک\n• ایجاد اتصال‌های شبکهٔ مِش\n• ارسال و دریافت پیام‌ها\n• کار بدون اینترنت یا سرور</string>
     <string name="enable_bluetooth">فعال‌کردن بلوتوث</string>
     <string name="bluetooth_not_supported">بلوتوث پشتیبانی نمی‌شود</string>
-    <string name="bluetooth_unsupported_explanation">این دستگاه از Bluetooth Low Energy (BLE) که برای کارکرد bitchat لازم است پشتیبانی نمی‌کند.\n\nbitchat برای ایجاد شبکهٔ مِش و ارتباط با دستگاه‌های نزدیک بدون اینترنت به BLE نیاز دارد.</string>
+    <string name="bluetooth_unsupported_explanation">این دستگاه از Bluetooth Low Energy (BLE) که برای کارکرد زمزمه لازم است پشتیبانی نمی‌کند.\n\nزمزمه برای ایجاد شبکهٔ مِش و ارتباط با دستگاه‌های نزدیک بدون اینترنت به BLE نیاز دارد.</string>
     <string name="checking_bluetooth_status">در حال بررسی وضعیت بلوتوث …</string>
     <string name="battery_optimization_detected_title">بهینه‌سازی باتری شناسایی شد</string>
     <string name="battery_optimization_enabled_title">بهینه‌سازی باتری فعال است</string>
-    <string name="battery_optimization_explanation_short">برای حفظ اتصال مِش، bitchat باید در پس‌زمینه اجرا شود. بهینه‌سازی باتری می‌تواند این اتصال‌ها را مختل کند.</string>
+    <string name="battery_optimization_explanation_short">برای حفظ اتصال مِش، زمزمه باید در پس‌زمینه اجرا شود. بهینه‌سازی باتری می‌تواند این اتصال‌ها را مختل کند.</string>
     <string name="benefits_of_disabling">مزایای غیرفعالسازی</string>
     <string name="battery_benefits_short">• تحویل مطمئن پیام‌ها\n• حفظ اتصال مِش\n• جلوگیری از قطع اتصال</string>
     <string name="disable_battery_optimization">غیرفعال‌کردن بهینه‌سازی باتری</string>
@@ -285,7 +285,7 @@
     <string name="privacy_bullets">• بدون پیگیری یا جمع‌آوری داده\n• گفت‌وگوی مِش بلوتوث کاملاً آفلاین است\n• گفت‌وگوی geohash از اینترنت استفاده می‌کند</string>
     <string name="permissions_header">مجوزها</string>
     <string name="grant_permissions">اعطای مجوزها</string>
-    <string name="location_tracking_warning">bitchat موقعیت شما را پیگیری نمی‌کند</string>
+    <string name="location_tracking_warning">زمزمه موقعیت شما را پیگیری نمی‌کند</string>
     <string name="geohash_people_header">افراد</string>
     <string name="nobody_around">کسی در اطراف نیست …</string>
     <string name="you_suffix"> (شما)</string>
@@ -314,14 +314,14 @@
     <string name="pow_label_format">pow: %1$dbit</string>
 
     <!-- توضیحات مجوز -->
-    <string name="perm_nearby_devices_desc">برای یافتن کاربران bitchat از طریق بلوتوث لازم است</string>
-    <string name="perm_nearby_devices_system">به bitchat اجازه دهید با دستگاه‌های نزدیک متصل شود</string>
-    <string name="perm_location_desc">برای یافتن کاربران نزدیک bitchat از طریق بلوتوث به‌وسیلهٔ اندروید لازم است</string>
-    <string name="perm_location_system">bitchat برای اسکن دستگاه‌های نزدیک به این مورد نیاز دارد</string>
+    <string name="perm_nearby_devices_desc">برای یافتن کاربران زمزمه از طریق بلوتوث لازم است</string>
+    <string name="perm_nearby_devices_system">به زمزمه اجازه دهید با دستگاه‌های نزدیک متصل شود</string>
+    <string name="perm_location_desc">برای یافتن کاربران نزدیک زمزمه از طریق بلوتوث به‌وسیلهٔ اندروید لازم است</string>
+    <string name="perm_location_system">زمزمه برای اسکن دستگاه‌های نزدیک به این مورد نیاز دارد</string>
     <string name="perm_notifications_desc">هنگام دریافت پیام خصوصی اعلان دریافت کنید</string>
-    <string name="perm_notifications_system">به bitchat اجازه دهید برای شما اعلان ارسال کند</string>
-    <string name="perm_battery_desc">بهینه‌سازی باتری را غیرفعال کنید تا اطمینان حاصل شود bitchat به‌طور قابل اعتماد در پس‌زمینه اجرا شده و اتصال‌های شبکهٔ مِش را حفظ می‌کند</string>
-    <string name="perm_battery_system">به bitchat اجازه دهید بدون محدودیت باتری اجرا شود</string>
+    <string name="perm_notifications_system">به زمزمه اجازه دهید برای شما اعلان ارسال کند</string>
+    <string name="perm_battery_desc">بهینه‌سازی باتری را غیرفعال کنید تا اطمینان حاصل شود زمزمه به‌طور قابل اعتماد در پس‌زمینه اجرا شده و اتصال‌های شبکهٔ مِش را حفظ می‌کند</string>
+    <string name="perm_battery_system">به زمزمه اجازه دهید بدون محدودیت باتری اجرا شود</string>
 
     <!-- گونه‌های مجوز -->
     <string name="perm_type_nearby_devices">دستگاه‌های نزدیک</string>
@@ -351,39 +351,104 @@
 
     <string name="mesh_service_notification_content">مش در حال اجرا — %1$d همتا</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+  <!-- تأیید هویت و اثرانگشت -->
+  <string name="verify_title">تأیید هویت</string>
+  <string name="verify_my_qr_title">اسکن کنید تا هویتم را تأیید کنید</string>
+  <string name="verify_scan_prompt_friend">کد QR شخص دیگری را اسکن کنید</string>
+  <string name="verify_scan_someone">کد QR شخص دیگری را اسکن کنید</string>
+  <string name="verify_show_my_qr">نمایش کد QR من</string>
+  <string name="verify_remove">حذف تأیید</string>
+  <string name="verify_qr_unavailable">کد QR در دسترس نیست</string>
+  <string name="verify_camera_permission">برای اسکن کد QR، به مجوز دوربین نیاز است</string>
+  <string name="verify_request_camera">فعال‌سازی دوربین</string>
+  <string name="verify_paste_label">الصاق آدرس تأیید</string>
+  <string name="verify_validate">اعتبارسنجی</string>
+  <string name="verify_scanned">درخواست تأیید ارسال شد</string>
+  <string name="security_verification_title">تأیید امنیتی</string>
+  <string name="fingerprint_their">اثرانگشت آن‌ها</string>
+  <string name="fingerprint_yours">اثرانگشت شما</string>
+  <string name="fingerprint_pending">دست‌دهی در انتظار</string>
+  <string name="fingerprint_no_peer">برای مشاهدهٔ اثرانگشت‌ها، یک چت خصوصی باز کنید</string>
+  <string name="fingerprint_status_verified">رمزگذاری‌شده &amp; تأییدشده</string>
+  <string name="fingerprint_status_encrypted">رمزگذاری‌شده</string>
+  <string name="fingerprint_status_handshaking">در حال دست‌دهی</string>
+  <string name="fingerprint_status_failed">دست‌دهی ناموفق بود</string>
+  <string name="fingerprint_status_uninitialized">رمزگذاری نشده</string>
+  <string name="fingerprint_verified_label">تأییدشده</string>
+  <string name="fingerprint_verified_message">شما هویت این شخص را تأیید کرده‌اید.</string>
+  <string name="fingerprint_not_verified_label">تأیید نشده</string>
+  <string name="fingerprint_not_verified_message_fmt">این اثرانگشت‌ها را با %1$s از طریق یک کانال امن مقایسه کنید.</string>
+  <string name="fingerprint_mark_verified">علامت‌گذاری به‌عنوان تأییدشده</string>
+  <string name="fingerprint_start_handshake">شروع دست‌دهی</string>
+  <string name="fingerprint_copy">کپی</string>
+  <string name="verify_mutual_match_title">تأیید متقابل</string>
+  <string name="verify_mutual_match_body">شما و %1$s یکدیگر را تأیید کردید</string>
+  <string name="verify_mutual_system_message">تأیید متقابل با %1$s</string>
+  <string name="verify_success_title">تأییدشده</string>
+  <string name="verify_success_body">شما %1$s را تأیید کردید</string>
+  <string name="verify_success_system_message">%1$s تأیید شد</string>
+
+  <string name="mesh_service_channel_name">سرویس مِش زمزمه</string>
+  <string name="mesh_service_channel_desc">سرویس بلوتوث مِش را در پس‌زمینه فعال نگه می‌دارد</string>
+  <string name="cd_settings">تنظیمات</string>
+  <string name="cd_location_notes">یادداشت‌های مکان</string>
+  <string name="notification_action_quit_bitchat">خروج از زمزمه</string>
+  <string name="about_background_title">اجرا در پس‌زمینه</string>
+  <string name="about_background_desc">برای حفظ اتصال مِش پس از بستن برنامه (سرویس پیش‌زمینه)</string>
+  <string name="about_p2p_subtitle">اتصال مستقیم همتابه‌همتا</string>
+  <string name="about_nostr_subtitle">پیام‌رسانی از طریق رله اینترنتی</string>
+  <string name="about_ble_subtitle">مِش مجاورتی بلوتوث</string>
+  <string name="background_location_required_title">موقعیت پس‌زمینه توصیه می‌شود</string>
+  <string name="background_location_required_subtitle">اختیاری، قابلیت اطمینان مِش را بهبود می‌دهد</string>
+  <string name="background_location_explanation">اندروید موقعیت پس‌زمینه را توصیه می‌کند تا زمزمه بتواند هنگامی که برنامه باز نیست دستگاه‌های نزدیک را اسکن کند. این کار باعث می‌شود مِش پس از راه‌اندازی مجدد فعال بماند.</string>
+  <string name="background_location_settings_tip">وقتی تنظیمات باز می‌شود، «همیشه مجاز» را انتخاب کنید.</string>
+  <string name="background_location_needs_for">زمزمه از موقعیت پس‌زمینه برای موارد زیر استفاده می‌کند:</string>
+  <string name="background_location_needs_bullets">- اسکن دستگاه‌های نزدیک هنگام بسته بودن برنامه\n- اتصال مجدد پس از راه‌اندازی\n- حفظ اجرای مِش در پس‌زمینه</string>
+  <string name="background_location_privacy_note">ما موقعیت شما را هرگز جمع‌آوری یا ذخیره نمی‌کنیم. حریم خصوصی شما در امان است.</string>
+  <string name="grant_background_location">اجازهٔ موقعیت پس‌زمینه</string>
+  <string name="skip_background_location">ادامه بدون موقعیت پس‌زمینه</string>
+  <string name="dot">.</string>
+  <string name="warning_emoji">⚠️</string>
+  <string name="at_symbol">@</string>
+  <string name="app_brand">Zemzeme/</string>
+  <string name="channel_count_prefix"> · ⧉ </string>
+  <string name="mention_suggestion_at">@%1$s</string>
+  <string name="at_nickname">@%1$s</string>
+  <string name="hash_symbol">#</string>
+  <string name="underscore">_</string>
+  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+  <string name="progress_filled">█</string>
+  <string name="progress_empty">░</string>
+  <string name="image_counter">%1$d / %2$d</string>
+  <string name="status_sending">○</string>
+  <string name="status_pending">○</string>
+  <string name="status_sent">✓</string>
+  <string name="status_delivered">✓✓</string>
+  <string name="status_failed">⚠</string>
+  <string name="status_read">✓</string>
+  <string name="notification_file_pdf">📄</string>
+  <string name="notification_file_zip">🗜️</string>
+  <string name="notification_file_doc">📄</string>
+  <string name="notification_file_xls">📊</string>
+  <string name="notification_file_ppt">📈</string>
+  <string name="notification_file_generic">📎</string>
+  <string name="perm_background_location_desc">برای اسکن دستگاه‌های نزدیک هنگامی که برنامه در پس‌زمینه است توصیه می‌شود</string>
+  <string name="perm_background_location_system">اجازهٔ دسترسی به موقعیت در پس‌زمینه</string>
+  <string name="perm_type_background_location">موقعیت پس‌زمینه</string>
+  <string name="tor_not_available_in_this_build">Tor در این نسخه موجود نیست</string>
+  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+  <string name="debug_question_mark">?</string>
+  <plurals name="location_notes_title">
+    <item quantity="one">#%1$s ± 1 • %2$d یادداشت</item>
+    <item quantity="other">#%1$s ± 1 • %2$d یادداشت</item>
+  </plurals>
+  <string name="location_notes_description">یادداشت‌های کوتاه دائمی به این مکان اضافه کنید تا بازدیدکنندگان آینده بیابند.</string>
+  <string name="location_notes_relays_unavailable">رله‌های جغرافیایی در دسترس نیستند؛ یادداشت‌ها متوقف شده‌اند</string>
+  <string name="location_notes_no_relays_title">هیچ رلهٔ جغرافیایی نزدیکی نیست</string>
+  <string name="location_notes_no_relays_desc">یادداشت‌ها به رله‌های جغرافیایی نیاز دارند. اتصال را بررسی کنید و دوباره امتحان کنید.</string>
+  <string name="loading_location_notes">در حال بارگذاری یادداشت‌ها …</string>
+  <string name="location_notes_empty_title">هنوز هیچ یادداشتی نیست</string>
+  <string name="location_notes_empty_desc">اولین نفری باشید که برای این مکان یادداشت می‌گذارد.</string>
+  <string name="dismiss">بستن</string>
+  <string name="location_notes_input_placeholder">یادداشتی برای این مکان اضافه کنید</string>
 </resources>
