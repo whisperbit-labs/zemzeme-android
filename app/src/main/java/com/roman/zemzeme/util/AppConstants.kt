@@ -161,8 +161,8 @@ object AppConstants {
         const val READ_TIMEOUT_SECONDS = 300L             // 5 min for large APK
         const val WRITE_TIMEOUT_SECONDS = 60L
 
-        // GitHub Releases API (official Zemzeme repo)
-        const val GITHUB_OWNER = "permissionlesstech"
+        // GitHub Releases API
+        const val GITHUB_OWNER = "whisperbit-labs"
         const val GITHUB_REPO = "zemzeme-android"
         const val GITHUB_API_URL = "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/releases/latest"
 
