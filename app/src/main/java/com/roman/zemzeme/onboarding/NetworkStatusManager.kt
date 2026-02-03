@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Manages network connectivity state detection and monitoring.
- * Exposes a companion-level StateFlow so any composable can collect it directly
+ * Exposes companion-level StateFlows so any composable can collect them directly
  * (same pattern as P2PConfig.transportTogglesFlow).
  *
  * Uses both registerDefaultNetworkCallback AND a CONNECTIVITY_ACTION BroadcastReceiver
@@ -41,27 +41,27 @@ class NetworkStatusManager(private val context: Context) {
     private var connectivityReceiver: BroadcastReceiver? = null
 
     init {
-        // Set initial status immediately on creation
-        _airplaneModeFlow.value = isAirplaneModeOn()
-        _networkStatusFlow.value = checkNetworkStatus()
+        refreshStatus()
     }
 
     private fun isAirplaneModeOn(): Boolean =
         Global.getInt(context.contentResolver, Global.AIRPLANE_MODE_ON, 0) != 0
 
     /**
-     * One-shot check of current network status
+     * Re-evaluate network + airplane-mode state and update the companion flows.
      */
-    fun checkNetworkStatus(): NetworkStatus {
+    fun refreshStatus() {
+        _airplaneModeFlow.value = isAirplaneModeOn()
+
         val result = try {
             val activeNetwork = connectivityManager.activeNetwork
             if (activeNetwork == null) {
-                Log.d(TAG, "checkNetworkStatus: DISCONNECTED (no active network)")
+                Log.d(TAG, "refreshStatus: DISCONNECTED (no active network)")
                 NetworkStatus.DISCONNECTED
             } else {
                 val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
                 if (capabilities == null) {
-                    Log.d(TAG, "checkNetworkStatus: DISCONNECTED (no capabilities)")
+                    Log.d(TAG, "refreshStatus: DISCONNECTED (no capabilities)")
                     NetworkStatus.DISCONNECTED
                 } else {
                     val hasTransport = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
@@ -80,18 +80,16 @@ class NetworkStatusManager(private val context: Context) {
                             hasInternet -> NetworkStatus.CONNECTED_NO_INTERNET
                             else -> NetworkStatus.DISCONNECTED
                         }
-                        Log.d(TAG, "checkNetworkStatus: $status (hasTransport=$hasTransport hasInternet=$hasInternet validated=$validated)")
+                        Log.d(TAG, "refreshStatus: $status (hasTransport=$hasTransport hasInternet=$hasInternet validated=$validated)")
                         status
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to check network status: ${e.message}")
+            Log.e(TAG, "Failed to refresh network status: ${e.message}")
             NetworkStatus.DISCONNECTED
         }
         _networkStatusFlow.value = result
-        _airplaneModeFlow.value = isAirplaneModeOn()
-        return result
     }
 
     /**
@@ -104,24 +102,24 @@ class NetworkStatusManager(private val context: Context) {
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 Log.d(TAG, "Network available")
-                checkNetworkStatus()
+                refreshStatus()
             }
 
             override fun onLost(network: Network) {
                 Log.d(TAG, "Network lost")
-                checkNetworkStatus()
+                refreshStatus()
             }
 
             override fun onCapabilitiesChanged(
                 network: Network,
                 networkCapabilities: NetworkCapabilities
             ) {
-                checkNetworkStatus()
+                refreshStatus()
             }
 
             override fun onUnavailable() {
                 Log.d(TAG, "Network unavailable")
-                _networkStatusFlow.value = NetworkStatus.DISCONNECTED
+                refreshStatus()
             }
         }
 
@@ -139,7 +137,7 @@ class NetworkStatusManager(private val context: Context) {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(ctx: Context, intent: Intent?) {
                 Log.d(TAG, "Broadcast received: ${intent?.action}")
-                checkNetworkStatus()
+                refreshStatus()
             }
         }
         try {

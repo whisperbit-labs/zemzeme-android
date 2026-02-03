@@ -772,8 +772,8 @@ class MainActivity : OrientationAwareActivity() {
                 }
             }
             
-            // Check network status on resume (updates companion-level flow directly)
-            networkStatusManager.checkNetworkStatus()
+            // Refresh network + airplane-mode state on resume
+            networkStatusManager.refreshStatus()
 
             // Check if location services were disabled while app was backgrounded
             val currentLocationStatus = locationStatusManager.checkLocationStatus()
