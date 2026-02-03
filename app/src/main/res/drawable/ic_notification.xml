@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-  <background android:drawable="@mipmap/ic_launcher_adaptive_back"/>
-  <foreground android:drawable="@mipmap/ic_launcher_adaptive_fore"/>
-</adaptive-icon>
+<!-- Notification bar icon: white Z on transparent background.
+     Android 5+ uses only the alpha channel for notification icons — must be white/transparent. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M3,4 L21,4 L21,7 L9,17 L21,17 L21,20 L3,20 L3,17 L15,7 L3,7 Z" />
+</vector>
