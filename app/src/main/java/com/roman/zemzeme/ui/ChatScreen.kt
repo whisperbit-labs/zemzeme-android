@@ -12,8 +12,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.BluetoothDisabled
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
@@ -25,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.zIndex
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.roman.zemzeme.geohash.isMeshView
 import com.roman.zemzeme.model.ZemzemeMessage
 import com.roman.zemzeme.ui.media.FullScreenImageViewer
 
@@ -39,7 +43,7 @@ import com.roman.zemzeme.ui.media.FullScreenImageViewer
  * - ChatUIUtils: Utility functions for formatting and colors
  */
 @Composable
-fun ChatScreen(viewModel: ChatViewModel) {
+fun ChatScreen(viewModel: ChatViewModel, isBluetoothEnabled: Boolean = true) {
     val colorScheme = MaterialTheme.colorScheme
     val messages by viewModel.messages.collectAsStateWithLifecycle()
     val connectedPeers by viewModel.connectedPeers.collectAsStateWithLifecycle()
@@ -86,6 +90,8 @@ fun ChatScreen(viewModel: ChatViewModel) {
 
     // Get location channel info for timeline switching
     val selectedLocationChannel by viewModel.selectedLocationChannel.collectAsStateWithLifecycle()
+    val transportToggles by com.roman.zemzeme.p2p.P2PConfig.transportTogglesFlow.collectAsStateWithLifecycle()
+    val isBleSettingEnabled = transportToggles.bleEnabled
 
     // Determine what messages to show based on current context (unified timelines)
     // Legacy private chat timeline removed - private chats now exclusively use PrivateChatSheet
@@ -129,6 +135,15 @@ fun ChatScreen(viewModel: ChatViewModel) {
                     .windowInsetsPadding(WindowInsets.statusBars)
                     .height(headerHeight)
             )
+
+            // BLE disconnection banner — shown in #mesh view when BT or BLE setting is off
+            if (shouldShowBleMeshBanner(isBluetoothEnabled, isBleSettingEnabled, currentChannel, selectedLocationChannel)) {
+                BleMeshBanner(
+                    isBluetoothEnabled = isBluetoothEnabled,
+                    isBleSettingEnabled = isBleSettingEnabled,
+                    onOpenAppSettings = { viewModel.showAppInfo() }
+                )
+            }
 
             // Messages area - takes up available space, will compress when keyboard appears
             MessagesList(
@@ -237,7 +252,8 @@ fun ChatScreen(viewModel: ChatViewModel) {
                 currentChannel = currentChannel,
                 nickname = nickname,
                 colorScheme = colorScheme,
-                showMediaButtons = showMediaButtons
+                showMediaButtons = showMediaButtons,
+                enabled = !shouldShowBleMeshBanner(isBluetoothEnabled, isBleSettingEnabled, currentChannel, selectedLocationChannel)
             )
         }
 
@@ -307,6 +323,7 @@ fun ChatScreen(viewModel: ChatViewModel) {
 
     // Dialogs and Sheets
     ChatDialogs(
+        isBluetoothEnabled = isBluetoothEnabled,
         showPasswordDialog = showPasswordDialog,
         passwordPromptChannel = passwordPromptChannel,
         passwordInput = passwordInput,
@@ -347,6 +364,73 @@ fun ChatScreen(viewModel: ChatViewModel) {
     )
 }
 
+private fun shouldShowBleMeshBanner(
+    isBluetoothEnabled: Boolean,
+    isBleSettingEnabled: Boolean,
+    currentChannel: String?,
+    selectedLocationChannel: com.roman.zemzeme.geohash.ChannelID?
+): Boolean = (!isBluetoothEnabled || !isBleSettingEnabled) && currentChannel == null && selectedLocationChannel.isMeshView
+
+@Composable
+private fun BleMeshBanner(
+    isBluetoothEnabled: Boolean,
+    isBleSettingEnabled: Boolean,
+    onOpenAppSettings: () -> Unit
+) {
+    val context = LocalContext.current
+    val bannerColor = Color(0xFFFF3B30)
+
+    val bannerText = if (!isBleSettingEnabled) {
+        stringResource(com.roman.zemzeme.R.string.ble_banner_mesh_disabled)
+    } else {
+        stringResource(com.roman.zemzeme.R.string.ble_banner_off)
+    }
+
+    // Setting disabled → go to app settings (the BT dialog handles the rest)
+    // Setting enabled but BT off → go to Android BT settings
+    val onEnableClick: () -> Unit = if (!isBleSettingEnabled) {
+        onOpenAppSettings
+    } else {
+        { context.startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
+    }
+
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = bannerColor.copy(alpha = 0.12f)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.BluetoothDisabled,
+                contentDescription = null,
+                tint = bannerColor,
+                modifier = Modifier.size(16.dp)
+            )
+            Text(
+                text = bannerText,
+                style = MaterialTheme.typography.bodySmall,
+                color = bannerColor,
+                modifier = Modifier.weight(1f)
+            )
+            TextButton(
+                onClick = onEnableClick,
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Text(
+                    text = stringResource(com.roman.zemzeme.R.string.ble_banner_enable_btn),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = bannerColor
+                )
+            }
+        }
+    }
+}
+
 @Composable
 fun ChatInputSection(
     messageText: TextFieldValue,
@@ -365,7 +449,8 @@ fun ChatInputSection(
     currentChannel: String?,
     nickname: String,
     colorScheme: ColorScheme,
-    showMediaButtons: Boolean
+    showMediaButtons: Boolean,
+    enabled: Boolean = true
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -402,6 +487,7 @@ fun ChatInputSection(
                 currentChannel = currentChannel,
                 nickname = nickname,
                 showMediaButtons = showMediaButtons,
+                enabled = enabled,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -467,6 +553,7 @@ private fun ChatFloatingHeader(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ChatDialogs(
+    isBluetoothEnabled: Boolean,
     showPasswordDialog: Boolean,
     passwordPromptChannel: String?,
     passwordInput: String,
@@ -508,6 +595,7 @@ private fun ChatDialogs(
     AboutSheet(
         isPresented = showAppInfo,
         onDismiss = onAppInfoDismiss,
+        isBluetoothEnabled = isBluetoothEnabled,
         onShowDebug = { showDebugSheet = true }
     )
     if (showDebugSheet) {
