@@ -727,6 +727,35 @@ private fun GroupActionSheet(
                     }
                 }
 
+                // Clear chat button
+                Surface(
+                    onClick = onClear,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    color = colorScheme.surfaceVariant
+                ) {
+                    Row(
+                        Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Icon(
+                            Icons.Outlined.LayersClear,
+                            contentDescription = null,
+                            tint = colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(22.dp)
+                        )
+                        Text(
+                            "Clear chat",
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Medium,
+                                color = colorScheme.onSurfaceVariant
+                            )
+                        )
+                    }
+                }
+
                 // Delete group button
                 if (showDelete) {
                     Surface(
@@ -755,35 +784,6 @@ private fun GroupActionSheet(
                                 )
                             )
                         }
-                    }
-                }
-
-                // Clear chat button
-                Surface(
-                    onClick = onClear,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
-                    color = colorScheme.surfaceVariant
-                ) {
-                    Row(
-                        Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(14.dp)
-                    ) {
-                        Icon(
-                            Icons.Outlined.LayersClear,
-                            contentDescription = null,
-                            tint = colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(22.dp)
-                        )
-                        Text(
-                            "Clear chat",
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontFamily = FontFamily.Monospace,
-                                fontWeight = FontWeight.Medium,
-                                color = colorScheme.onSurfaceVariant
-                            )
-                        )
                     }
                 }
 
