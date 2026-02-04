@@ -397,6 +397,27 @@
   <string name="about_p2p_subtitle">সরাসরি পিয়ার-টু-পিয়ার মেসেজিং</string>
   <string name="about_nostr_subtitle">Nostr প্রোটোকলের উপর ভিত্তি করে</string>
   <string name="about_ble_subtitle">ব্লুটুথ লো এনার্জি মেশ নেটওয়ার্ক</string>
+    <string name="ble_setting_off_subtitle">ব্লুটুথ বন্ধ — BLE Mesh ব্যবহার করতে চালু করুন</string>
+    <string name="ble_banner_off">ব্লুটুথ বন্ধ — BLE Mesh অনুপলব্ধ</string>
+    <string name="ble_setting_dialog_title">ব্লুটুথ প্রয়োজন</string>
+    <string name="ble_setting_dialog_msg">ব্লুটুথ বন্ধ আছে। BLE Mesh ব্যবহার করতে চালু করুন।</string>
+    <string name="ble_setting_dialog_btn">ব্লুটুথ সেটিংস খুলুন</string>
+    <string name="ble_banner_enable_btn">চালু করুন</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh নিষ্ক্রিয়</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="background_location_required_title">ব্যাকগ্রাউন্ড অবস্থান অ্যাক্সেস</string>
   <string name="background_location_required_subtitle">Zemzeme-এর কাছাকাছি মানুষ খুঁজে পেতে ব্যাকগ্রাউন্ড অবস্থান প্রয়োজন</string>
   <string name="background_location_explanation">Zemzeme ব্যাকগ্রাউন্ড অবস্থান অ্যাক্সেস ব্যবহার করে:</string>

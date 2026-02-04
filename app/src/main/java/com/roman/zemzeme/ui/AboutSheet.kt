@@ -16,6 +16,10 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.WifiOff
+import androidx.compose.material.icons.filled.AirplanemodeActive
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -41,8 +45,63 @@ import com.roman.zemzeme.service.MeshServiceHolder
 import com.roman.zemzeme.p2p.P2PConfig
 import com.roman.zemzeme.p2p.P2PTransport
 import com.roman.zemzeme.p2p.P2PNodeStatus
+import android.content.Intent
+import android.provider.Settings
+import com.roman.zemzeme.onboarding.NetworkStatus
+import com.roman.zemzeme.onboarding.NetworkStatusManager
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
+/**
+ * All possible states for the Network transport toggles (P2P, Nostr).
+ */
+private enum class NetworkToggleState(
+    val subtitleResId: Int,
+    val subtitleColor: Color?
+) {
+    /** Setting ON + Internet available — fully operational */
+    ACTIVE(subtitleResId = R.string.about_p2p_subtitle, subtitleColor = null),
+
+    /** Setting ON + No internet — user wants transport but no connectivity */
+    NETWORK_OFF(subtitleResId = R.string.network_setting_off_subtitle, subtitleColor = Color(0xFFFF3B30)),
+
+    /** Setting OFF (regardless of network) — user disabled this transport */
+    DISABLED(subtitleResId = R.string.about_p2p_subtitle, subtitleColor = null);
+
+    companion object {
+        fun from(userEnabled: Boolean, networkAvailable: Boolean): NetworkToggleState = when {
+            userEnabled && networkAvailable -> ACTIVE
+            userEnabled -> NETWORK_OFF
+            else -> DISABLED
+        }
+    }
+}
+
+/**
+ * All possible states for the BLE Mesh toggle.
+ */
+private enum class BleMeshToggleState(
+    val isChecked: Boolean,
+    val subtitleResId: Int,
+    val subtitleColor: Color?
+) {
+    /** Setting ON + Bluetooth ON — fully operational */
+    ACTIVE(isChecked = true, subtitleResId = R.string.about_ble_subtitle, subtitleColor = null),
+
+    /** Setting ON + Bluetooth OFF — user wants BLE but hardware is off */
+    BLUETOOTH_OFF(isChecked = false, subtitleResId = R.string.ble_setting_off_subtitle, subtitleColor = Color(0xFFFF9500)),
+
+    /** Setting OFF (regardless of Bluetooth) — user disabled BLE Mesh */
+    DISABLED(isChecked = false, subtitleResId = R.string.about_ble_subtitle, subtitleColor = null);
+
+    companion object {
+        fun from(userEnabled: Boolean, systemBtEnabled: Boolean): BleMeshToggleState = when {
+            userEnabled && systemBtEnabled -> ACTIVE
+            userEnabled -> BLUETOOTH_OFF
+            else -> DISABLED
+        }
+    }
+}
 
 /**
  * Feature row for displaying app capabilities
@@ -138,11 +197,12 @@ private fun SettingsToggleRow(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     enabled: Boolean = true,
+    subtitleColor: Color? = null,
     statusIndicator: (@Composable () -> Unit)? = null
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val isDark = colorScheme.background.red + colorScheme.background.green + colorScheme.background.blue < 1.5f
-    
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -155,9 +215,9 @@ private fun SettingsToggleRow(
             tint = if (enabled) colorScheme.primary else colorScheme.onSurface.copy(alpha = 0.3f),
             modifier = Modifier.size(22.dp)
         )
-        
+
         Spacer(modifier = Modifier.width(14.dp))
-        
+
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -177,7 +237,7 @@ private fun SettingsToggleRow(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall,
-                color = colorScheme.onSurface.copy(alpha = if (enabled) 0.6f else 0.3f),
+                color = subtitleColor ?: colorScheme.onSurface.copy(alpha = if (enabled) 0.6f else 0.3f),
                 lineHeight = 16.sp
             )
         }
@@ -207,10 +267,13 @@ private fun SettingsToggleRow(
 fun AboutSheet(
     isPresented: Boolean,
     onDismiss: () -> Unit,
+    isBluetoothEnabled: Boolean = true,
     onShowDebug: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val networkStatus by NetworkStatusManager.networkStatusFlow.collectAsState()
+    val isAirplaneModeOn by NetworkStatusManager.airplaneModeFlow.collectAsState()
     
     // Get version name from package info
     val versionName = remember {
@@ -450,16 +513,328 @@ fun AboutSheet(
                                         checked = powEnabled,
                                         onCheckedChange = { PoWPreferenceManager.setPowEnabled(it) }
                                     )
-                                    
+
                                     HorizontalDivider(
                                         modifier = Modifier.padding(start = 56.dp),
                                         color = colorScheme.outline.copy(alpha = 0.12f)
                                     )
-                                    
-                                    // Tor Toggle
+
+                                    // BLE Mesh Toggle
+                                    val bleToggleState = remember(bleEnabled, isBluetoothEnabled) {
+                                        BleMeshToggleState.from(bleEnabled, isBluetoothEnabled)
+                                    }
+
+                                    var showBluetoothRequiredDialog by remember { mutableStateOf(false) }
+                                    val bleRunning = transportRuntimeState?.bleRunning == true
+
+                                    SettingsToggleRow(
+                                        icon = Icons.Filled.Bluetooth,
+                                        title = "BLE Mesh",
+                                        subtitle = stringResource(bleToggleState.subtitleResId),
+                                        subtitleColor = bleToggleState.subtitleColor,
+                                        checked = bleToggleState.isChecked,
+                                        onCheckedChange = { enabled ->
+                                            if (enabled && !isBluetoothEnabled) {
+                                                p2pConfig.bleEnabled = true
+                                                showBluetoothRequiredDialog = true
+                                            } else {
+                                                p2pConfig.bleEnabled = enabled
+                                                p2pScope.launch {
+                                                    val meshService = attachedMeshService
+                                                    if (meshService != null) {
+                                                        val result = meshService.setBleEnabled(enabled)
+                                                        result.onFailure { e ->
+                                                            android.util.Log.e("AboutSheet", "Failed to apply BLE toggle: ${e.message}")
+                                                        }
+                                                    }
+                                                }
+                                                android.widget.Toast.makeText(
+                                                    context,
+                                                    if (enabled) "BLE Mesh enabled" else "BLE Mesh disabled",
+                                                    android.widget.Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        },
+                                        statusIndicator = if (bleToggleState.isChecked) {
+                                            {
+                                                val statusColor = if (bleRunning) {
+                                                    if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
+                                                } else {
+                                                    Color(0xFFFF9500)
+                                                }
+                                                Surface(
+                                                    color = statusColor,
+                                                    shape = CircleShape,
+                                                    modifier = Modifier.size(8.dp)
+                                                ) {}
+                                            }
+                                        } else null
+                                    )
+
+                                    if (showBluetoothRequiredDialog) {
+                                        AlertDialog(
+                                            onDismissRequest = { showBluetoothRequiredDialog = false },
+                                            title = { Text(stringResource(R.string.ble_setting_dialog_title)) },
+                                            text = { Text(stringResource(R.string.ble_setting_dialog_msg)) },
+                                            confirmButton = {
+                                                TextButton(onClick = {
+                                                    showBluetoothRequiredDialog = false
+                                                    context.startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
+                                                }) {
+                                                    Text(stringResource(R.string.ble_setting_dialog_btn))
+                                                }
+                                            },
+                                            dismissButton = {
+                                                TextButton(onClick = { showBluetoothRequiredDialog = false }) {
+                                                    Text(stringResource(android.R.string.cancel))
+                                                }
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+
+                    // NETWORK section — Tor, P2P, Nostr
+                    item(key = "network_settings") {
+                        val torMode by TorPreferenceManager.modeFlow.collectAsState()
+                        val torProvider = remember { ArtiTorManager.getInstance() }
+                        val torStatus by torProvider.statusFlow.collectAsState()
+                        val torAvailable = remember { torProvider.isTorAvailable() }
+                        val p2pConfig = remember { P2PConfig(context) }
+                        val transportToggles by P2PConfig.transportTogglesFlow.collectAsState()
+                        val attachedMeshService by MeshServiceHolder.meshServiceFlow.collectAsState()
+                        val transportRuntimeState by produceState<com.roman.zemzeme.mesh.BluetoothMeshService.TransportRuntimeState?>(
+                            initialValue = attachedMeshService?.transportRuntimeState?.value,
+                            key1 = attachedMeshService
+                        ) {
+                            value = attachedMeshService?.transportRuntimeState?.value
+                            val service = attachedMeshService ?: return@produceState
+                            service.transportRuntimeState.collect { latest ->
+                                value = latest
+                            }
+                        }
+
+                        val p2pEnabled = transportRuntimeState?.desiredToggles?.p2pEnabled ?: transportToggles.p2pEnabled
+                        val nostrEnabled = transportRuntimeState?.desiredToggles?.nostrEnabled ?: transportToggles.nostrEnabled
+                        val p2pTransport = remember { P2PTransport.getInstance(context) }
+                        val p2pStatus by p2pTransport.p2pRepository.nodeStatus.collectAsState()
+                        val p2pScope = rememberCoroutineScope()
+                        val p2pRunning = transportRuntimeState?.p2pRunning ?: (p2pStatus == P2PNodeStatus.RUNNING)
+                        val torP2PUnsupportedMessage = "P2P over Tor is not supported. Tor was disabled."
+
+                        val isNetworkAvailable = networkStatus == NetworkStatus.CONNECTED
+
+                        val nostrRelayManager = remember { com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context) }
+                        val nostrConnected by nostrRelayManager.isConnected.collectAsState()
+                        val effectiveNostrConnected = transportRuntimeState?.nostrConnected ?: nostrConnected
+
+                        var showNetworkRequiredDialog by remember { mutableStateOf(false) }
+
+                        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                            Text(
+                                text = "NETWORK",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = colorScheme.onBackground.copy(alpha = 0.5f),
+                                letterSpacing = 0.5.sp,
+                                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+                            )
+
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = colorScheme.surface,
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                Column {
+                                    // Network status warning — inside the card as first row
+                                    if (!isNetworkAvailable) {
+                                        val warningIcon = if (isAirplaneModeOn) Icons.Filled.AirplanemodeActive else Icons.Filled.WifiOff
+                                        val warningText = if (isAirplaneModeOn) stringResource(R.string.network_airplane_mode) else stringResource(R.string.network_not_available)
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(Color(0xFFFF3B30).copy(alpha = 0.12f))
+                                                .clickable {
+                                                    try {
+                                                        if (isAirplaneModeOn) {
+                                                            context.startActivity(Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS))
+                                                        } else {
+                                                            context.startActivity(Intent(android.provider.Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
+                                                        }
+                                                    } catch (_: Exception) {
+                                                        context.startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
+                                                    }
+                                                }
+                                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = warningIcon,
+                                                contentDescription = null,
+                                                tint = Color(0xFFFF3B30),
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                            Text(
+                                                text = warningText,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = Color(0xFFFF3B30)
+                                            )
+                                        }
+                                    } else if (!p2pEnabled && !nostrEnabled) {
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(Color(0xFFFF9500).copy(alpha = 0.12f))
+                                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.CloudOff,
+                                                contentDescription = null,
+                                                tint = Color(0xFFFF9500),
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                            Text(
+                                                text = stringResource(R.string.network_transports_off_hint),
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = Color(0xFFFF9500)
+                                            )
+                                        }
+                                    }
+
+                                    // P2P Network Toggle
+                                    val p2pToggleState = NetworkToggleState.from(p2pEnabled, isNetworkAvailable)
+
+                                    SettingsToggleRow(
+                                        icon = Icons.Filled.Wifi,
+                                        title = "P2P Network",
+                                        subtitle = stringResource(p2pToggleState.subtitleResId),
+                                        subtitleColor = p2pToggleState.subtitleColor,
+                                        checked = p2pEnabled,
+                                        onCheckedChange = { enabled ->
+                                            if (enabled && torMode == TorMode.ON) {
+                                                TorPreferenceManager.set(context, TorMode.OFF)
+                                                android.widget.Toast.makeText(
+                                                    context,
+                                                    torP2PUnsupportedMessage,
+                                                    android.widget.Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+
+                                            p2pConfig.p2pEnabled = enabled
+
+                                            if (enabled && !isNetworkAvailable) {
+                                                showNetworkRequiredDialog = true
+                                            }
+
+                                            p2pScope.launch {
+                                                val meshService = attachedMeshService
+                                                if (meshService != null) {
+                                                    val result = meshService.setP2PEnabled(enabled)
+                                                    result.onFailure { e ->
+                                                        android.util.Log.e("AboutSheet", "Failed to apply P2P toggle via mesh service: ${e.message}")
+                                                    }
+                                                } else {
+                                                    // Fallback path when mesh service is not attached
+                                                    if (enabled) {
+                                                        com.roman.zemzeme.nostr.NostrRelayManager.isEnabled = false
+                                                        com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context).disconnect()
+                                                        p2pTransport.start().onFailure { fallbackError ->
+                                                            android.util.Log.e("AboutSheet", "P2P fallback start failed: ${fallbackError.message}")
+                                                        }
+                                                    } else {
+                                                        p2pTransport.stop()
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        statusIndicator = if (p2pEnabled) {
+                                            {
+                                                val statusColor = when {
+                                                    !isNetworkAvailable -> Color(0xFFFF3B30)
+                                                    p2pRunning -> if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
+                                                    p2pStatus == P2PNodeStatus.STARTING -> Color(0xFFFF9500)
+                                                    else -> Color(0xFFFF3B30)
+                                                }
+                                                Surface(
+                                                    color = statusColor,
+                                                    shape = CircleShape,
+                                                    modifier = Modifier.size(8.dp)
+                                                ) {}
+                                            }
+                                        } else null
+                                    )
+
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(start = 56.dp),
+                                        color = colorScheme.outline.copy(alpha = 0.12f)
+                                    )
+
+                                    // Nostr Relays Toggle
+                                    val nostrToggleState = NetworkToggleState.from(nostrEnabled, isNetworkAvailable)
+
+                                    SettingsToggleRow(
+                                        icon = Icons.Filled.Cloud,
+                                        title = "Nostr Relays",
+                                        subtitle = stringResource(nostrToggleState.subtitleResId),
+                                        subtitleColor = nostrToggleState.subtitleColor,
+                                        checked = nostrEnabled,
+                                        onCheckedChange = { enabled ->
+                                            p2pConfig.nostrEnabled = enabled
+
+                                            if (enabled && !isNetworkAvailable) {
+                                                showNetworkRequiredDialog = true
+                                            }
+
+                                            p2pScope.launch {
+                                                val meshService = attachedMeshService
+                                                if (meshService != null) {
+                                                    val result = meshService.setNostrEnabled(enabled)
+                                                    result.onFailure { e ->
+                                                        android.util.Log.e("AboutSheet", "Failed to apply Nostr toggle via mesh service: ${e.message}")
+                                                    }
+                                                } else {
+                                                    if (enabled) {
+                                                        p2pTransport.stop()
+                                                        com.roman.zemzeme.nostr.NostrRelayManager.isEnabled = true
+                                                        nostrRelayManager.connect()
+                                                    } else {
+                                                        com.roman.zemzeme.nostr.NostrRelayManager.isEnabled = false
+                                                        nostrRelayManager.disconnect()
+                                                    }
+                                                }
+                                            }
+                                            android.widget.Toast.makeText(context, if (enabled) "Nostr enabled" else "Nostr disabled", android.widget.Toast.LENGTH_SHORT).show()
+                                        },
+                                        statusIndicator = if (nostrEnabled) {
+                                            {
+                                                val statusColor = when {
+                                                    !isNetworkAvailable -> Color(0xFFFF3B30)
+                                                    effectiveNostrConnected -> if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
+                                                    else -> Color(0xFFFF9500)
+                                                }
+                                                Surface(
+                                                    color = statusColor,
+                                                    shape = CircleShape,
+                                                    modifier = Modifier.size(8.dp)
+                                                ) {}
+                                            }
+                                        } else null
+                                    )
+
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(start = 56.dp),
+                                        color = colorScheme.outline.copy(alpha = 0.12f)
+                                    )
+
+                                    // Tor Toggle — routes Nostr traffic through Tor (indented as sub-option)
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Security,
-                                        title = "Tor Network",
+                                        title = "  Tor (Nostr)",
                                         subtitle = stringResource(R.string.about_tor_route),
                                         checked = torMode == TorMode.ON,
                                         onCheckedChange = { enabled ->
@@ -480,7 +855,7 @@ fun AboutSheet(
                                                 )
                                             }
                                         },
-                                        enabled = torAvailable,
+                                        enabled = torAvailable && isNetworkAvailable && nostrEnabled,
                                         statusIndicator = if (torMode == TorMode.ON) {
                                             {
                                                 val statusColor = when {
@@ -496,171 +871,9 @@ fun AboutSheet(
                                             }
                                         } else null
                                     )
-                                    
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(start = 56.dp),
-                                        color = colorScheme.outline.copy(alpha = 0.12f)
-                                    )
-                                    
-                                    // P2P Network Toggle
-                                    
-                                    SettingsToggleRow(
-                                        icon = Icons.Filled.Wifi,
-                                        title = "P2P Network",
-                                        subtitle = stringResource(R.string.about_p2p_subtitle),
-                                        checked = p2pEnabled,
-                                        onCheckedChange = { enabled ->
-                                            if (enabled && torMode == TorMode.ON) {
-                                                TorPreferenceManager.set(context, TorMode.OFF)
-                                                android.widget.Toast.makeText(
-                                                    context,
-                                                    torP2PUnsupportedMessage,
-                                                    android.widget.Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-
-                                            p2pConfig.p2pEnabled = enabled
-
-                                            p2pScope.launch {
-                                                val meshService = attachedMeshService
-                                                if (meshService != null) {
-                                                    val result = meshService.setP2PEnabled(enabled)
-                                                    result.onFailure { e ->
-                                                        android.util.Log.e("AboutSheet", "Failed to apply P2P toggle via mesh service: ${e.message}")
-                                                    }
-                                                } else {
-                                                    // Fallback path when mesh service is not attached
-                                                    if (enabled) {
-                                                        // P2P and Nostr are mutually exclusive.
-                                                        com.roman.zemzeme.nostr.NostrRelayManager.isEnabled = false
-                                                        com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context).disconnect()
-                                                        p2pTransport.start().onFailure { fallbackError ->
-                                                            android.util.Log.e("AboutSheet", "P2P fallback start failed: ${fallbackError.message}")
-                                                        }
-                                                    } else {
-                                                        p2pTransport.stop()
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        statusIndicator = if (p2pEnabled) {
-                                            {
-                                                val statusColor = when {
-                                                    p2pRunning -> if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
-                                                    p2pStatus == P2PNodeStatus.STARTING -> Color(0xFFFF9500)
-                                                    else -> Color(0xFFFF3B30)
-                                                }
-                                                Surface(
-                                                    color = statusColor,
-                                                    shape = CircleShape,
-                                                    modifier = Modifier.size(8.dp)
-                                                ) {}
-                                            }
-                                        } else null
-                                    )
-                                    
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(start = 56.dp),
-                                        color = colorScheme.outline.copy(alpha = 0.12f)
-                                    )
-                                    
-                                    // Nostr Network Toggle (for testing P2P in isolation)
-                                    val nostrRelayManager = remember { com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context) }
-                                    val nostrConnected by nostrRelayManager.isConnected.collectAsState()
-                                    val effectiveNostrConnected = transportRuntimeState?.nostrConnected ?: nostrConnected
-                                    
-                                    SettingsToggleRow(
-                                        icon = Icons.Filled.Cloud,
-                                        title = "Nostr Relays",
-                                        subtitle = stringResource(R.string.about_nostr_subtitle),
-                                        checked = nostrEnabled,
-                                        onCheckedChange = { enabled ->
-                                            p2pConfig.nostrEnabled = enabled
-                                            p2pScope.launch {
-                                                val meshService = attachedMeshService
-                                                if (meshService != null) {
-                                                    val result = meshService.setNostrEnabled(enabled)
-                                                    result.onFailure { e ->
-                                                        android.util.Log.e("AboutSheet", "Failed to apply Nostr toggle via mesh service: ${e.message}")
-                                                    }
-                                                } else {
-                                                    // Fallback path when mesh service is not attached
-                                                    if (enabled) {
-                                                        p2pTransport.stop()
-                                                        com.roman.zemzeme.nostr.NostrRelayManager.isEnabled = true
-                                                        nostrRelayManager.connect()
-                                                    } else {
-                                                        com.roman.zemzeme.nostr.NostrRelayManager.isEnabled = false
-                                                        nostrRelayManager.disconnect()
-                                                    }
-                                                }
-                                            }
-                                            android.widget.Toast.makeText(context, if (enabled) "Nostr enabled" else "Nostr disabled", android.widget.Toast.LENGTH_SHORT).show()
-                                        },
-                                        statusIndicator = if (nostrEnabled) {
-                                            {
-                                                val statusColor = if (effectiveNostrConnected) {
-                                                    if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
-                                                } else {
-                                                    Color(0xFFFF9500)
-                                                }
-                                                Surface(
-                                                    color = statusColor,
-                                                    shape = CircleShape,
-                                                    modifier = Modifier.size(8.dp)
-                                                ) {}
-                                            }
-                                        } else null
-                                    )
-                                    
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(start = 56.dp),
-                                        color = colorScheme.outline.copy(alpha = 0.12f)
-                                    )
-                                    
-                                    // BLE Mesh Toggle
-                                    val bleRunning = transportRuntimeState?.bleRunning == true
-                                    
-                                    SettingsToggleRow(
-                                        icon = Icons.Filled.Bluetooth,
-                                        title = "BLE Mesh",
-                                        subtitle = stringResource(R.string.about_ble_subtitle),
-                                        checked = bleEnabled,
-                                        onCheckedChange = { enabled ->
-                                            p2pConfig.bleEnabled = enabled
-                                            p2pScope.launch {
-                                                val meshService = attachedMeshService
-                                                if (meshService != null) {
-                                                    val result = meshService.setBleEnabled(enabled)
-                                                    result.onFailure { e ->
-                                                        android.util.Log.e("AboutSheet", "Failed to apply BLE toggle: ${e.message}")
-                                                    }
-                                                }
-                                            }
-                                            android.widget.Toast.makeText(
-                                                context,
-                                                if (enabled) "BLE Mesh enabled" else "BLE Mesh disabled",
-                                                android.widget.Toast.LENGTH_SHORT
-                                            ).show()
-                                        },
-                                        statusIndicator = if (bleEnabled) {
-                                            {
-                                                val statusColor = if (bleRunning) {
-                                                    if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
-                                                } else {
-                                                    Color(0xFFFF9500)
-                                                }
-                                                Surface(
-                                                    color = statusColor,
-                                                    shape = CircleShape,
-                                                    modifier = Modifier.size(8.dp)
-                                                ) {}
-                                            }
-                                        } else null
-                                    )
                                 }
                             }
-                            
+
                             // Tor unavailable hint
                             if (!torAvailable) {
                                 Text(
@@ -669,6 +882,18 @@ fun AboutSheet(
                                     fontFamily = FontFamily.Monospace,
                                     color = colorScheme.onBackground.copy(alpha = 0.5f),
                                     modifier = Modifier.padding(start = 16.dp, top = 8.dp)
+                                )
+                            }
+
+                            if (showNetworkRequiredDialog) {
+                                AlertDialog(
+                                    onDismissRequest = { showNetworkRequiredDialog = false },
+                                    title = { Text(stringResource(R.string.network_setting_dialog_title)) },
+                                    confirmButton = {
+                                        TextButton(onClick = { showNetworkRequiredDialog = false }) {
+                                            Text(stringResource(android.R.string.ok))
+                                        }
+                                    }
                                 )
                             }
                         }

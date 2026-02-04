@@ -163,6 +163,27 @@
     <string name="about_p2p_subtitle">Прямі однорангові з\'єднання через p2p</string>
     <string name="about_nostr_subtitle">Обмін повідомленнями через інтернет-ретранслятори</string>
     <string name="about_ble_subtitle">Mesh Bluetooth у близькості</string>
+    <string name="ble_setting_off_subtitle">Bluetooth вимкнено — увімкніть для використання BLE Mesh</string>
+    <string name="ble_banner_off">Bluetooth вимкнено — BLE Mesh недоступний</string>
+    <string name="ble_setting_dialog_title">Потрібен Bluetooth</string>
+    <string name="ble_setting_dialog_msg">Bluetooth вимкнено. Увімкніть його для використання BLE Mesh.</string>
+    <string name="ble_setting_dialog_btn">Відкрити налаштування Bluetooth</string>
+    <string name="ble_banner_enable_btn">Увімкнути</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh вимкнено</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
     <string name="cd_leave_channel">Покинути канал</string>
     <string name="cd_reachable_via_nostr">Доступний через Nostr</string>
     <string name="cd_offline_favorite">Офлайн-обране</string>

@@ -395,6 +395,27 @@
   <string name="about_p2p_subtitle">p2p üzerinden doğrudan eşler arası bağlantılar</string>
   <string name="about_nostr_subtitle">İnternet aktarıcısı üzerinden mesajlaşma</string>
   <string name="about_ble_subtitle">Bluetooth yakınlık mesh\'i</string>
+    <string name="ble_setting_off_subtitle">Bluetooth kapalı — BLE Mesh kullanmak için açın</string>
+    <string name="ble_banner_off">Bluetooth kapalı — BLE Mesh kullanılamıyor</string>
+    <string name="ble_setting_dialog_title">Bluetooth Gerekli</string>
+    <string name="ble_setting_dialog_msg">Bluetooth kapalı. BLE Mesh kullanmak için açın.</string>
+    <string name="ble_setting_dialog_btn">Bluetooth Ayarlarını Aç</string>
+    <string name="ble_banner_enable_btn">Etkinleştir</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh devre dışı</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="background_location_required_title">Arka Plan Konumu Önerilir</string>
   <string name="background_location_required_subtitle">isteğe bağlı, mesh güvenilirliğini artırır</string>
   <string name="background_location_explanation">Android, Zemzeme\'nın uygulama açık olmadığında yakındaki cihazları tarayabilmesi için arka plan konumunu önerir. Bu, yeniden başlatmanın ardından mesh\'i canlı tutar.</string>

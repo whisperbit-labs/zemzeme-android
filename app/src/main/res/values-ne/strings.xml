@@ -418,6 +418,27 @@
   <string name="about_p2p_subtitle">प्रत्यक्ष peer-to-peer सन्देश</string>
   <string name="about_nostr_subtitle">Nostr प्रोटोकलमा आधारित</string>
   <string name="about_ble_subtitle">Bluetooth Low Energy mesh नेटवर्क</string>
+    <string name="ble_setting_off_subtitle">ब्लुटुथ बन्द छ — BLE Mesh प्रयोग गर्न सक्रिय गर्नुहोस्</string>
+    <string name="ble_banner_off">ब्लुटुथ बन्द छ — BLE Mesh उपलब्ध छैन</string>
+    <string name="ble_setting_dialog_title">ब्लुटुथ आवश्यक छ</string>
+    <string name="ble_setting_dialog_msg">ब्लुटुथ बन्द छ। BLE Mesh प्रयोग गर्न सक्रिय गर्नुहोस्।</string>
+    <string name="ble_setting_dialog_btn">ब्लुटुथ सेटिङ खोल्नुहोस्</string>
+    <string name="ble_banner_enable_btn">सक्रिय गर्नुहोस्</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh निष्क्रिय छ</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="background_location_required_title">ब्याकग्राउन्ड स्थान पहुँच</string>
   <string name="background_location_required_subtitle">Zemzeme लाई नजिकका मानिसहरू फेला पार्न ब्याकग्राउन्ड स्थान चाहिन्छ</string>
   <string name="background_location_explanation">Zemzeme ले ब्याकग्राउन्ड स्थान पहुँच प्रयोग गर्दछ:</string>

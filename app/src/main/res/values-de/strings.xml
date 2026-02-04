@@ -406,6 +406,27 @@
   <string name="about_p2p_subtitle">Direkte Peer-Verbindungen über p2p</string>
   <string name="about_nostr_subtitle">Nachrichten über Internet-Relay</string>
   <string name="about_ble_subtitle">Bluetooth-Proximity-Mesh</string>
+    <string name="ble_setting_off_subtitle">Bluetooth ist aus — aktivieren Sie es für BLE Mesh</string>
+    <string name="ble_banner_off">Bluetooth ist aus — BLE Mesh nicht verfügbar</string>
+    <string name="ble_setting_dialog_title">Bluetooth erforderlich</string>
+    <string name="ble_setting_dialog_msg">Bluetooth ist ausgeschaltet. Aktivieren Sie es, um BLE Mesh zu verwenden.</string>
+    <string name="ble_setting_dialog_btn">Bluetooth-Einstellungen öffnen</string>
+    <string name="ble_banner_enable_btn">Aktivieren</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh ist deaktiviert</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="mesh_service_channel_name">Mesh-Hintergrunddienst</string>
   <string name="mesh_service_channel_desc">Hält das Bluetooth-Mesh im Hintergrund am Laufen</string>
   <string name="background_location_required_title">Hintergrundstandort empfohlen</string>

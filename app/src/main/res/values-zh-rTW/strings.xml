@@ -207,6 +207,27 @@
   <string name="about_p2p_subtitle">透過 P2P 直接節點連線</string>
   <string name="about_nostr_subtitle">網路中繼傳訊</string>
   <string name="about_ble_subtitle">藍牙近距離網狀網路</string>
+  <string name="ble_setting_off_subtitle">藍牙已關閉 — 開啟以使用 BLE Mesh</string>
+  <string name="ble_banner_off">藍牙已關閉 — BLE Mesh 無法使用</string>
+  <string name="ble_setting_dialog_title">需要藍牙</string>
+  <string name="ble_setting_dialog_msg">藍牙已關閉。請開啟以使用 BLE Mesh。</string>
+  <string name="ble_setting_dialog_btn">開啟藍牙設定</string>
+  <string name="ble_banner_enable_btn">開啟</string>
+  <string name="ble_banner_mesh_disabled">BLE Mesh 已停用</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="cd_leave_channel">離開頻道</string>
   <string name="cd_reachable_via_nostr">可透過 Nostr 連線</string>
   <string name="cd_offline_favorite">離線我的最愛</string>

@@ -404,6 +404,27 @@
     <string name="about_p2p_subtitle">การเชื่อมต่อเพียร์โดยตรงผ่าน p2p</string>
     <string name="about_nostr_subtitle">การส่งข้อความผ่าน relay อินเทอร์เน็ต</string>
     <string name="about_ble_subtitle">เครือข่าย mesh ผ่าน Bluetooth ใกล้เคียง</string>
+    <string name="ble_setting_off_subtitle">Bluetooth ปิดอยู่ — เปิดเพื่อใช้ BLE Mesh</string>
+    <string name="ble_banner_off">Bluetooth ปิดอยู่ — BLE Mesh ไม่พร้อมใช้งาน</string>
+    <string name="ble_setting_dialog_title">ต้องการ Bluetooth</string>
+    <string name="ble_setting_dialog_msg">Bluetooth ปิดอยู่ เปิดเพื่อใช้ BLE Mesh</string>
+    <string name="ble_setting_dialog_btn">เปิดการตั้งค่า Bluetooth</string>
+    <string name="ble_banner_enable_btn">เปิดใช้งาน</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh ถูกปิดใช้งาน</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
 
     <!-- ตำแหน่งเบื้องหลัง -->
     <string name="background_location_required_title">แนะนำตำแหน่งเบื้องหลัง</string>

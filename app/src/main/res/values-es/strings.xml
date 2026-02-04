@@ -407,6 +407,27 @@
   <string name="about_p2p_subtitle">Conexiones directas entre pares vía p2p</string>
   <string name="about_nostr_subtitle">Mensajería por retransmisor de internet</string>
   <string name="about_ble_subtitle">Mesh Bluetooth de proximidad</string>
+    <string name="ble_setting_off_subtitle">Bluetooth está apagado — actívalo para usar BLE Mesh</string>
+    <string name="ble_banner_off">Bluetooth está apagado — BLE Mesh no disponible</string>
+    <string name="ble_setting_dialog_title">Bluetooth requerido</string>
+    <string name="ble_setting_dialog_msg">Bluetooth está apagado. Actívalo para usar BLE Mesh.</string>
+    <string name="ble_setting_dialog_btn">Abrir ajustes de Bluetooth</string>
+    <string name="ble_banner_enable_btn">Activar</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh está desactivado</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="background_location_required_title">Ubicación en segundo plano recomendada</string>
   <string name="background_location_required_subtitle">opcional, mejora la fiabilidad del mesh</string>
   <string name="background_location_explanation">Android recomienda la ubicación en segundo plano para que Zemzeme pueda buscar dispositivos cercanos mientras la app no está abierta. Esto mantiene el mesh activo tras reiniciar.</string>

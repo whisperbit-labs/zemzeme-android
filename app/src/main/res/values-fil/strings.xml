@@ -418,6 +418,27 @@
   <string name="about_p2p_subtitle">Direktang peer-to-peer na pagmemensahe</string>
   <string name="about_nostr_subtitle">Batay sa Nostr na protokol</string>
   <string name="about_ble_subtitle">Bluetooth Low Energy mesh network</string>
+    <string name="ble_setting_off_subtitle">Naka-off ang Bluetooth — i-on para gamitin ang BLE Mesh</string>
+    <string name="ble_banner_off">Naka-off ang Bluetooth — hindi available ang BLE Mesh</string>
+    <string name="ble_setting_dialog_title">Kailangan ang Bluetooth</string>
+    <string name="ble_setting_dialog_msg">Naka-off ang Bluetooth. I-on ito para gamitin ang BLE Mesh.</string>
+    <string name="ble_setting_dialog_btn">Buksan ang Bluetooth Settings</string>
+    <string name="ble_banner_enable_btn">I-enable</string>
+    <string name="ble_banner_mesh_disabled">Naka-disable ang BLE Mesh</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="background_location_required_title">Access sa Background na Lokasyon</string>
   <string name="background_location_required_subtitle">Nangangailangan ang Zemzeme ng background na lokasyon upang mahanap ang mga taong malapit</string>
   <string name="background_location_explanation">Ginagamit ng Zemzeme ang access sa background na lokasyon:</string>

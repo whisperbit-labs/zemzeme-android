@@ -407,6 +407,27 @@
   <string name="about_p2p_subtitle">p2p를 통한 직접 피어 연결</string>
   <string name="about_nostr_subtitle">인터넷 릴레이 메시징</string>
   <string name="about_ble_subtitle">Bluetooth 근접 메시</string>
+    <string name="ble_setting_off_subtitle">블루투스가 꺼져 있음 — BLE Mesh를 사용하려면 켜세요</string>
+    <string name="ble_banner_off">블루투스가 꺼져 있음 — BLE Mesh 사용 불가</string>
+    <string name="ble_setting_dialog_title">블루투스 필요</string>
+    <string name="ble_setting_dialog_msg">블루투스가 꺼져 있습니다. BLE Mesh를 사용하려면 켜세요.</string>
+    <string name="ble_setting_dialog_btn">블루투스 설정 열기</string>
+    <string name="ble_banner_enable_btn">활성화</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh가 비활성화됨</string>
+  <!-- Network connectivity -->
+  <string name="network_setting_off_subtitle">No internet — check your connection</string>
+  <string name="network_not_available">No internet connection</string>
+  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
+  <string name="network_no_internet">Connected but no internet detected</string>
+  <string name="network_setting_dialog_title">Internet Required</string>
+  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
+  <string name="network_setting_dialog_btn">Connection Settings</string>
+  <string name="network_banner_disconnected">No internet — check your connection settings</string>
+  <string name="network_banner_airplane_mode">Airplane mode is on</string>
+  <string name="network_airplane_mode">Airplane mode is on</string>
+  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
+  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
+  <string name="network_banner_settings_btn">Settings</string>
   <string name="background_location_required_title">백그라운드 위치 권장</string>
   <string name="background_location_required_subtitle">선택 사항, 메시 안정성 향상</string>
   <string name="background_location_explanation">Android에서는 Zemzeme가 앱이 열려 있지 않아도 근처 기기를 스캔할 수 있도록 백그라운드 위치를 권장합니다. 재부팅 후에도 메시를 유지합니다.</string>
