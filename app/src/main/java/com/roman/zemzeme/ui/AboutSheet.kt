@@ -297,7 +297,41 @@ fun AboutSheet(
 
     val colorScheme = MaterialTheme.colorScheme
     val isDark = colorScheme.background.red + colorScheme.background.green + colorScheme.background.blue < 1.5f
-    
+
+    // Hoist shared state to avoid duplicate collection in multiple LazyColumn items
+    LaunchedEffect(Unit) { PoWPreferenceManager.init(context) }
+    val powEnabled by PoWPreferenceManager.powEnabled.collectAsState()
+    val powDifficulty by PoWPreferenceManager.powDifficulty.collectAsState()
+    var backgroundEnabled by remember { mutableStateOf(com.roman.zemzeme.service.MeshServicePreferences.isBackgroundEnabled(true)) }
+    val torMode by TorPreferenceManager.modeFlow.collectAsState()
+    val torProvider = remember { ArtiTorManager.getInstance() }
+    val torStatus by torProvider.statusFlow.collectAsState()
+    val torAvailable = remember { torProvider.isTorAvailable() }
+    val p2pConfig = remember { P2PConfig(context) }
+    val transportToggles by P2PConfig.transportTogglesFlow.collectAsState()
+    val attachedMeshService by MeshServiceHolder.meshServiceFlow.collectAsState()
+    val transportRuntimeState by produceState<com.roman.zemzeme.mesh.BluetoothMeshService.TransportRuntimeState?>(
+        initialValue = attachedMeshService?.transportRuntimeState?.value,
+        key1 = attachedMeshService
+    ) {
+        value = attachedMeshService?.transportRuntimeState?.value
+        val service = attachedMeshService ?: return@produceState
+        service.transportRuntimeState.collect { latest ->
+            value = latest
+        }
+    }
+    val p2pEnabled = transportRuntimeState?.desiredToggles?.p2pEnabled ?: transportToggles.p2pEnabled
+    val nostrEnabled = transportRuntimeState?.desiredToggles?.nostrEnabled ?: transportToggles.nostrEnabled
+    val bleEnabled = transportRuntimeState?.desiredToggles?.bleEnabled ?: transportToggles.bleEnabled
+    val p2pTransport = remember { P2PTransport.getInstance(context) }
+    val p2pStatus by p2pTransport.p2pRepository.nodeStatus.collectAsState()
+    val p2pScope = rememberCoroutineScope()
+    val p2pRunning = transportRuntimeState?.p2pRunning ?: (p2pStatus == P2PNodeStatus.RUNNING)
+    val isNetworkAvailable = networkStatus == NetworkStatus.CONNECTED
+    val nostrRelayManager = remember { com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context) }
+    val nostrConnected by nostrRelayManager.isConnected.collectAsState()
+    val effectiveNostrConnected = transportRuntimeState?.nostrConnected ?: nostrConnected
+
     if (isPresented) {
         ZemzemeBottomSheet(
             modifier = modifier,
@@ -438,37 +472,6 @@ fun AboutSheet(
 
                     // Settings Section - Unified Card with Toggles
                     item(key = "settings") {
-                        LaunchedEffect(Unit) { PoWPreferenceManager.init(context) }
-                        val powEnabled by PoWPreferenceManager.powEnabled.collectAsState()
-                        val powDifficulty by PoWPreferenceManager.powDifficulty.collectAsState()
-                        var backgroundEnabled by remember { mutableStateOf(com.roman.zemzeme.service.MeshServicePreferences.isBackgroundEnabled(true)) }
-                        val torMode by TorPreferenceManager.modeFlow.collectAsState()
-                        val torProvider = remember { ArtiTorManager.getInstance() }
-                        val torStatus by torProvider.statusFlow.collectAsState()
-                        val torAvailable = remember { torProvider.isTorAvailable() }
-                        val p2pConfig = remember { P2PConfig(context) }
-                        val transportToggles by P2PConfig.transportTogglesFlow.collectAsState()
-                        val attachedMeshService by MeshServiceHolder.meshServiceFlow.collectAsState()
-                        val transportRuntimeState by produceState<com.roman.zemzeme.mesh.BluetoothMeshService.TransportRuntimeState?>(
-                            initialValue = attachedMeshService?.transportRuntimeState?.value,
-                            key1 = attachedMeshService
-                        ) {
-                            value = attachedMeshService?.transportRuntimeState?.value
-                            val service = attachedMeshService ?: return@produceState
-                            service.transportRuntimeState.collect { latest ->
-                                value = latest
-                            }
-                        }
-
-                        val p2pEnabled = transportRuntimeState?.desiredToggles?.p2pEnabled ?: transportToggles.p2pEnabled
-                        val nostrEnabled = transportRuntimeState?.desiredToggles?.nostrEnabled ?: transportToggles.nostrEnabled
-                        val bleEnabled = transportRuntimeState?.desiredToggles?.bleEnabled ?: transportToggles.bleEnabled
-                        val p2pTransport = remember { P2PTransport.getInstance(context) }
-                        val p2pStatus by p2pTransport.p2pRepository.nodeStatus.collectAsState()
-                        val p2pScope = rememberCoroutineScope()
-                        val p2pRunning = transportRuntimeState?.p2pRunning ?: (p2pStatus == P2PNodeStatus.RUNNING)
-                        val torP2PUnsupportedMessage = "P2P over Tor is not supported. Tor was disabled."
-
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
                                 text = "SETTINGS",
@@ -599,38 +602,7 @@ fun AboutSheet(
 
                     // NETWORK section — Tor, P2P, Nostr
                     item(key = "network_settings") {
-                        val torMode by TorPreferenceManager.modeFlow.collectAsState()
-                        val torProvider = remember { ArtiTorManager.getInstance() }
-                        val torStatus by torProvider.statusFlow.collectAsState()
-                        val torAvailable = remember { torProvider.isTorAvailable() }
-                        val p2pConfig = remember { P2PConfig(context) }
-                        val transportToggles by P2PConfig.transportTogglesFlow.collectAsState()
-                        val attachedMeshService by MeshServiceHolder.meshServiceFlow.collectAsState()
-                        val transportRuntimeState by produceState<com.roman.zemzeme.mesh.BluetoothMeshService.TransportRuntimeState?>(
-                            initialValue = attachedMeshService?.transportRuntimeState?.value,
-                            key1 = attachedMeshService
-                        ) {
-                            value = attachedMeshService?.transportRuntimeState?.value
-                            val service = attachedMeshService ?: return@produceState
-                            service.transportRuntimeState.collect { latest ->
-                                value = latest
-                            }
-                        }
-
-                        val p2pEnabled = transportRuntimeState?.desiredToggles?.p2pEnabled ?: transportToggles.p2pEnabled
-                        val nostrEnabled = transportRuntimeState?.desiredToggles?.nostrEnabled ?: transportToggles.nostrEnabled
-                        val p2pTransport = remember { P2PTransport.getInstance(context) }
-                        val p2pStatus by p2pTransport.p2pRepository.nodeStatus.collectAsState()
-                        val p2pScope = rememberCoroutineScope()
-                        val p2pRunning = transportRuntimeState?.p2pRunning ?: (p2pStatus == P2PNodeStatus.RUNNING)
                         val torP2PUnsupportedMessage = "P2P over Tor is not supported. Tor was disabled."
-
-                        val isNetworkAvailable = networkStatus == NetworkStatus.CONNECTED
-
-                        val nostrRelayManager = remember { com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context) }
-                        val nostrConnected by nostrRelayManager.isConnected.collectAsState()
-                        val effectiveNostrConnected = transportRuntimeState?.nostrConnected ?: nostrConnected
-
                         var showNetworkRequiredDialog by remember { mutableStateOf(false) }
 
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
@@ -901,9 +873,6 @@ fun AboutSheet(
 
                     // PoW Difficulty Slider (when enabled)
                     item(key = "pow_slider") {
-                        val powEnabled by PoWPreferenceManager.powEnabled.collectAsState()
-                        val powDifficulty by PoWPreferenceManager.powDifficulty.collectAsState()
-                        
                         if (powEnabled) {
                             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                                 Surface(
@@ -967,10 +936,6 @@ fun AboutSheet(
 
                     // Tor Status (when enabled)
                     item(key = "tor_status") {
-                        val torMode by TorPreferenceManager.modeFlow.collectAsState()
-                        val torProvider = remember { ArtiTorManager.getInstance() }
-                        val torStatus by torProvider.statusFlow.collectAsState()
-
                         if (torMode == TorMode.ON) {
                             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                                 Surface(

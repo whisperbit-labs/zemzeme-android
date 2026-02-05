@@ -28,7 +28,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.DeleteOutline
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.GroupAdd
 import androidx.compose.material.icons.outlined.Hub
@@ -74,7 +73,7 @@ private data class ActionTarget(
     val displayName: String
 )
 
-private enum class PendingAction { DELETE, CLEAR, RENAME }
+private enum class PendingAction { DELETE, CLEAR }
 
 // ── HomeScreen ──
 
@@ -400,12 +399,6 @@ fun HomeScreen(
             groupName = target.displayName,
             showDelete = target.type != "mesh" && target.type != "location",
             deleteLabel = if (target.type == "dm") "Delete chat" else "Delete group",
-            showRename = target.type == "group",
-            onRename = {
-                pendingActionTarget = target
-                actionTarget = null
-                pendingAction = PendingAction.RENAME
-            },
             onDelete = {
                 pendingActionTarget = target
                 actionTarget = null
@@ -464,19 +457,6 @@ fun HomeScreen(
         )
     }
 
-    if (pendingAction == PendingAction.RENAME && pendingActionTarget != null) {
-        val target = pendingActionTarget!!
-        RenameGroupDialog(
-            currentName = target.displayName,
-            onConfirm = { newName ->
-                chatViewModel.renameGroup(target.key, newName)
-                pendingAction = null
-                pendingActionTarget = null
-            },
-            onDismiss = { pendingAction = null; pendingActionTarget = null }
-        )
-    }
-
     // ── Create / Join dialogs ──
 
     if (showCreateDialog) {
@@ -520,6 +500,13 @@ fun HomeScreen(
             }
         )
     }
+
+    // About / Settings sheet
+    val showAppInfo by chatViewModel.showAppInfo.collectAsStateWithLifecycle()
+    AboutSheet(
+        isPresented = showAppInfo,
+        onDismiss = { chatViewModel.hideAppInfo() }
+    )
 }
 
 // ══════════════════════════════════════════════
@@ -656,8 +643,6 @@ private fun GroupActionSheet(
     groupName: String,
     showDelete: Boolean = true,
     deleteLabel: String = "Delete group",
-    showRename: Boolean = false,
-    onRename: () -> Unit = {},
     onDelete: () -> Unit,
     onClear: () -> Unit,
     onDismiss: () -> Unit
@@ -696,13 +681,13 @@ private fun GroupActionSheet(
 
                 HorizontalDivider(color = extended.borderSubtle)
 
-                // Rename group button
-                if (showRename) {
+                // Delete group button
+                if (showDelete) {
                     Surface(
-                        onClick = onRename,
+                        onClick = onDelete,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        color = colorScheme.surfaceVariant
+                        color = colorScheme.errorContainer.copy(alpha = 0.4f)
                     ) {
                         Row(
                             Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
@@ -710,17 +695,17 @@ private fun GroupActionSheet(
                             horizontalArrangement = Arrangement.spacedBy(14.dp)
                         ) {
                             Icon(
-                                Icons.Outlined.Edit,
+                                Icons.Outlined.DeleteOutline,
                                 contentDescription = null,
-                                tint = colorScheme.onSurfaceVariant,
+                                tint = colorScheme.error,
                                 modifier = Modifier.size(22.dp)
                             )
                             Text(
-                                "Rename group",
+                                deleteLabel,
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontFamily = FontFamily.Monospace,
                                     fontWeight = FontWeight.Medium,
-                                    color = colorScheme.onSurfaceVariant
+                                    color = colorScheme.error
                                 )
                             )
                         }
@@ -753,37 +738,6 @@ private fun GroupActionSheet(
                                 color = colorScheme.onSurfaceVariant
                             )
                         )
-                    }
-                }
-
-                // Delete group button
-                if (showDelete) {
-                    Surface(
-                        onClick = onDelete,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp),
-                        color = colorScheme.errorContainer.copy(alpha = 0.4f)
-                    ) {
-                        Row(
-                            Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(14.dp)
-                        ) {
-                            Icon(
-                                Icons.Outlined.DeleteOutline,
-                                contentDescription = null,
-                                tint = colorScheme.error,
-                                modifier = Modifier.size(22.dp)
-                            )
-                            Text(
-                                deleteLabel,
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontFamily = FontFamily.Monospace,
-                                    fontWeight = FontWeight.Medium,
-                                    color = colorScheme.error
-                                )
-                            )
-                        }
                     }
                 }
 
@@ -884,28 +838,6 @@ private fun JoinGroupDialog(onDismiss: () -> Unit, onConfirm: (String, String) -
                 onClick = { if (geohash.isNotBlank()) onConfirm(geohash.trim(), nickname.trim().ifEmpty { geohash.trim() }) },
                 enabled = geohash.isNotBlank()
             ) { Text("Join") }
-        },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
-    )
-}
-
-@Composable
-private fun RenameGroupDialog(currentName: String, onDismiss: () -> Unit, onConfirm: (String) -> Unit) {
-    var newName by remember { mutableStateOf(currentName) }
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Rename Group", style = MaterialTheme.typography.titleMedium.copy(fontFamily = FontFamily.Monospace)) },
-        text = {
-            OutlinedTextField(
-                value = newName, onValueChange = { newName = it },
-                label = { Text("Group name") }, singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = { if (newName.isNotBlank()) onConfirm(newName.trim()) }, enabled = newName.isNotBlank()) {
-                Text("Rename")
-            }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
     )
