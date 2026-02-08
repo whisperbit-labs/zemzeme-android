@@ -337,13 +337,7 @@ class MessageRouter private constructor(
     private fun currentTransportToggles(): P2PConfig.TransportToggles {
         // Ensures flow is initialized from SharedPreferences even if this is the first caller.
         transportConfig.getTransportToggles()
-        val toggles = P2PConfig.getCurrentTransportToggles()
-        return if (toggles.p2pEnabled && toggles.nostrEnabled) {
-            // Defensive normalization. Config should already prevent this.
-            toggles.copy(nostrEnabled = false)
-        } else {
-            toggles
-        }
+        return P2PConfig.getCurrentTransportToggles()
     }
 
     private fun fallbackJobKey(peerID: String, messageID: String): String = "$peerID|$messageID"
