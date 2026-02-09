@@ -19,10 +19,8 @@ class CommandProcessor(
         CommandSuggestion("/block", emptyList(), "[nickname]", "block or list blocked peers"),
         CommandSuggestion("/channels", emptyList(), null, "show all discovered channels"),
         CommandSuggestion("/clear", emptyList(), null, "clear chat messages"),
-        CommandSuggestion("/hug", emptyList(), "<nickname>", "send someone a warm hug"),
         CommandSuggestion("/j", listOf("/join"), "<channel>", "join or create a channel"),
         CommandSuggestion("/m", listOf("/msg"), "<nickname> [message]", "send private message"),
-        CommandSuggestion("/slap", emptyList(), "<nickname>", "slap someone with a trout"),
         CommandSuggestion("/unblock", emptyList(), "<nickname>", "unblock a peer"),
         CommandSuggestion("/w", emptyList(), null, "see who's online")
     )
@@ -42,8 +40,6 @@ class CommandProcessor(
             "/pass" -> handlePassCommand(parts, myPeerID)
             "/block" -> handleBlockCommand(parts, meshService)
             "/unblock" -> handleUnblockCommand(parts, meshService)
-            "/hug" -> handleActionCommand(parts, "gives", "a warm hug 🫂", meshService, myPeerID, onSendMessage)
-            "/slap" -> handleActionCommand(parts, "slaps", "around a bit with a large trout 🐟", meshService, myPeerID, onSendMessage)
             "/channels" -> handleChannelsCommand()
             else -> handleUnknownCommand(cmd)
         }
@@ -280,66 +276,6 @@ class CommandProcessor(
         }
     }
     
-    private fun handleActionCommand(
-        parts: List<String>, 
-        verb: String, 
-        object_: String, 
-        meshService: BluetoothMeshService,
-        myPeerID: String,
-        onSendMessage: (String, List<String>, String?) -> Unit
-    ) {
-        if (parts.size > 1) {
-            val targetName = parts[1].removePrefix("@")
-            val actionMessage = "* ${state.getNicknameValue() ?: "someone"} $verb $targetName $object_ *"
-
-            // If we're in a geohash location channel, don't add a local echo here.
-            // GeohashViewModel.sendGeohashMessage() will add the local echo with proper metadata.
-            val isInLocationChannel = state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Location
-
-            // Send as regular message
-            if (state.getSelectedPrivateChatPeerValue() != null) {
-                val peerID = state.getSelectedPrivateChatPeerValue()!!
-                privateChatManager.sendPrivateMessage(
-                    actionMessage,
-                    peerID,
-                    getPeerNickname(peerID, meshService),
-                    state.getNicknameValue(),
-                    myPeerID
-                ) { content, peerIdParam, recipientNicknameParam, messageId ->
-                    sendPrivateMessageVia(meshService, content, peerIdParam, recipientNicknameParam, messageId)
-                }
-            } else if (isInLocationChannel) {
-                // Let the transport layer add the echo; just send it out
-                onSendMessage(actionMessage, emptyList(), null)
-            } else {
-                val message = ZemzemeMessage(
-                    sender = state.getNicknameValue() ?: myPeerID,
-                    content = actionMessage,
-                    timestamp = Date(),
-                    isRelay = false,
-                    senderPeerID = myPeerID,
-                    channel = state.getCurrentChannelValue()
-                )
-                
-                if (state.getCurrentChannelValue() != null) {
-                    channelManager.addChannelMessage(state.getCurrentChannelValue()!!, message, myPeerID)
-                    onSendMessage(actionMessage, emptyList(), state.getCurrentChannelValue())
-                } else {
-                    messageManager.addMessage(message)
-                    onSendMessage(actionMessage, emptyList(), null)
-                }
-            }
-        } else {
-            val systemMessage = ZemzemeMessage(
-                sender = "system",
-                content = "usage: /${parts[0].removePrefix("/")} <nickname>",
-                timestamp = Date(),
-                isRelay = false
-            )
-            messageManager.addMessage(systemMessage)
-        }
-    }
-    
     private fun handleChannelsCommand() {
         val allChannels = channelManager.getJoinedChannelsList()
         val channelList = if (allChannels.isEmpty()) {
@@ -392,7 +328,7 @@ class CommandProcessor(
     }
     
     private fun getAllAvailableCommands(): List<CommandSuggestion> {
-        // Add channel-specific commands if in a channel
+        // Commands only available inside a channel
         val channelCommands = if (state.getCurrentChannelValue() != null) {
             listOf(
                 CommandSuggestion("/pass", emptyList(), "[password]", "change channel password"),
@@ -402,7 +338,7 @@ class CommandProcessor(
         } else {
             emptyList()
         }
-        
+
         return baseCommands + channelCommands
     }
     

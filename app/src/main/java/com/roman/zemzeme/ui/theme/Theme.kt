@@ -114,7 +114,8 @@ data class ExtendedColors(
     val textTertiary: Color,
     val glowColor: Color,
     val success: Color,
-    val link: Color
+    val link: Color,
+    val contactGreen: Color
 )
 
 val DarkExtendedColors = ExtendedColors(
@@ -132,7 +133,8 @@ val DarkExtendedColors = ExtendedColors(
     textTertiary = TextTertiary,
     glowColor = ElectricCyan.copy(alpha = 0.4f),
     success = SemanticSuccess,
-    link = SemanticLink
+    link = SemanticLink,
+    contactGreen = Color(0xFF30D158)
 )
 
 val LightExtendedColors = ExtendedColors(
@@ -150,7 +152,8 @@ val LightExtendedColors = ExtendedColors(
     textTertiary = TextTertiaryLight,
     glowColor = ElectricCyanDark.copy(alpha = 0.2f),
     success = MatrixGreenDark,
-    link = SemanticLink
+    link = SemanticLink,
+    contactGreen = Color(0xFF248A3D)
 )
 
 val LocalExtendedColors = staticCompositionLocalOf { DarkExtendedColors }

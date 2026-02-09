@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,7 +104,7 @@ fun PoWStatusIndicator(
                             stringResource(R.string.pow_label_format, powDifficulty)
                         },
                         fontSize = 11.sp,
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         color = if (isMining) Color(0xFFFF9500) else {
                             colorScheme.onSurface.copy(alpha = 0.7f)
                         }
@@ -114,7 +115,7 @@ fun PoWStatusIndicator(
                         Text(
                             text = stringResource(R.string.pow_time_estimate, NostrProofOfWork.estimateMiningTime(powDifficulty)),
                             fontSize = 9.sp,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             color = colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                     }

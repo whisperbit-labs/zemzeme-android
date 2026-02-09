@@ -17,7 +17,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,6 +60,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -98,8 +98,7 @@ fun QrScannerSheet(
 ) {
     if (!isPresented) return
 
-    val isDark = isSystemInDarkTheme()
-    val accent = if (isDark) Color.Green else Color(0xFF008000)
+    val accent = MaterialTheme.colorScheme.primary
 
     var selectedTab by remember { mutableStateOf(0) } // 0 = Scan, 1 = My QR
     val nickname by viewModel.nickname.collectAsStateWithLifecycle()
@@ -130,7 +129,7 @@ fun QrScannerSheet(
                 Text(
                     text = stringResource(R.string.verify_title).uppercase(),
                     fontSize = 14.sp,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     color = accent
                 )
                 CloseButton(onClick = onDismiss)
@@ -154,7 +153,7 @@ fun QrScannerSheet(
                     text = {
                         Text(
                             text = "Scan",
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 14.sp
                         )
                     }
@@ -165,7 +164,7 @@ fun QrScannerSheet(
                     text = {
                         Text(
                             text = "My QR",
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 14.sp
                         )
                     }
@@ -211,9 +210,8 @@ fun VerificationSheet(
 ) {
     if (!isPresented) return
 
-    val isDark = isSystemInDarkTheme()
-    val accent = if (isDark) Color.Green else Color(0xFF008000)
-    
+    val accent = MaterialTheme.colorScheme.primary
+
     var selectedTab by remember { mutableStateOf(0) } // 0 = My Code, 1 = Scan
     val nickname by viewModel.nickname.collectAsStateWithLifecycle()
     val npub = remember { viewModel.getCurrentNpub() }
@@ -257,7 +255,7 @@ fun VerificationSheet(
                     text = {
                         Text(
                             text = "My QR",
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 14.sp
                         )
                     }
@@ -268,7 +266,7 @@ fun VerificationSheet(
                     text = {
                         Text(
                             text = "Scan",
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 14.sp
                         )
                     }
@@ -321,7 +319,7 @@ fun VerificationSheet(
                     ) {
                         Text(
                             text = stringResource(R.string.verify_remove),
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 12.sp
                         )
                     }
@@ -345,7 +343,7 @@ private fun VerificationHeader(
         Text(
             text = stringResource(R.string.verify_title).uppercase(),
             fontSize = 14.sp,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             color = accent
         )
         CloseButton(onClick = onClose)
@@ -371,7 +369,7 @@ private fun MyQrTabContent(
         Text(
             text = stringResource(R.string.verify_my_qr_title),
             style = MaterialTheme.typography.titleMedium,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             color = accent
         )
         
@@ -384,7 +382,7 @@ private fun MyQrTabContent(
                     .background(Color.White)
                     .padding(20.dp) // Quiet zone
             ) {
-                QRCodeImage(data = qrString, size = 260.dp)
+                QRCodeImage(data = qrString, size = 260.dp, dotColor = accent)
             }
         } else {
             Box(
@@ -396,7 +394,7 @@ private fun MyQrTabContent(
             ) {
                 Text(
                     text = stringResource(R.string.verify_qr_unavailable),
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 12.sp,
                     color = Color.Black.copy(alpha = 0.6f)
                 )
@@ -409,7 +407,7 @@ private fun MyQrTabContent(
         Text(
             text = nickname,
             style = MaterialTheme.typography.headlineSmall,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
@@ -420,7 +418,7 @@ private fun MyQrTabContent(
         Text(
             text = stringResource(R.string.app_name).lowercase(),
             style = MaterialTheme.typography.bodyMedium,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             textAlign = TextAlign.Center
         )
@@ -468,7 +466,7 @@ private fun ScanTabContent(
                 Text(
                     text = stringResource(R.string.verify_scan_prompt_friend),
                     color = Color.White,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 12.sp,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
@@ -499,7 +497,7 @@ private fun ScanTabContent(
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = stringResource(R.string.verify_camera_permission),
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -510,7 +508,7 @@ private fun ScanTabContent(
                 ) {
                     Text(
                         text = stringResource(R.string.verify_request_camera),
-                        fontFamily = FontFamily.Monospace
+                        fontFamily = NunitoFontFamily
                     )
                 }
             }
@@ -590,9 +588,15 @@ private fun ScannerView(
 }
 
 @Composable
-private fun QRCodeImage(data: String, size: Dp) {
+private fun QRCodeImage(data: String, size: Dp, dotColor: Color = Color.Black) {
     val sizePx = with(LocalDensity.current) { size.toPx().toInt() }
-    val bitmap = remember(data, sizePx) { generateQrBitmap(data, sizePx) }
+    val dotArgb = dotColor.value.toLong().let { android.graphics.Color.argb(
+        ((dotColor.alpha) * 255).toInt(),
+        ((dotColor.red)   * 255).toInt(),
+        ((dotColor.green) * 255).toInt(),
+        ((dotColor.blue)  * 255).toInt(),
+    )}
+    val bitmap = remember(data, sizePx, dotArgb) { generateQrBitmap(data, sizePx, dotArgb) }
     if (bitmap != null) {
         Image(
             bitmap = bitmap.asImageBitmap(),
@@ -602,24 +606,23 @@ private fun QRCodeImage(data: String, size: Dp) {
     }
 }
 
-private fun generateQrBitmap(data: String, sizePx: Int): Bitmap? {
+private fun generateQrBitmap(data: String, sizePx: Int, dotArgb: Int = android.graphics.Color.BLACK): Bitmap? {
     if (data.isBlank() || sizePx <= 0) return null
     return try {
         val matrix = QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, sizePx, sizePx)
-        bitmapFromMatrix(matrix)
+        bitmapFromMatrix(matrix, dotArgb)
     } catch (_: Exception) {
         null
     }
 }
 
-private fun bitmapFromMatrix(matrix: BitMatrix): Bitmap {
+private fun bitmapFromMatrix(matrix: BitMatrix, dotArgb: Int = android.graphics.Color.BLACK): Bitmap {
     val width = matrix.width
     val height = matrix.height
     val bitmap = createBitmap(width, height)
     for (x in 0 until width) {
         for (y in 0 until height) {
-            bitmap[x, y] =
-                if (matrix[x, y]) android.graphics.Color.BLACK else android.graphics.Color.WHITE
+            bitmap[x, y] = if (matrix[x, y]) dotArgb else android.graphics.Color.WHITE
         }
     }
     return bitmap

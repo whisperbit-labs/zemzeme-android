@@ -21,7 +21,8 @@ class MeshDelegateHandler(
     private val coroutineScope: CoroutineScope,
     private val onHapticFeedback: () -> Unit,
     private val getMyPeerID: () -> String,
-    private val getMeshService: () -> BluetoothMeshService
+    private val getMeshService: () -> BluetoothMeshService,
+    private val onContactAdd: ((String) -> Unit)? = null
 ) : BluetoothMeshDelegate {
 
     override fun didReceiveMessage(message: ZemzemeMessage) {
@@ -47,6 +48,11 @@ class MeshDelegateHandler(
                 // Private message
                 privateChatManager.handleIncomingPrivateMessage(message)
 
+                // Auto-add sender as contact
+                message.senderPeerID?.let { senderPeerID ->
+                    onContactAdd?.invoke(senderPeerID)
+                }
+
                 // Reactive read receipts: if chat is focused, send immediately for this message
                 message.senderPeerID?.let { senderPeerID ->
                     sendReadReceiptIfFocused(message)
@@ -67,8 +73,9 @@ class MeshDelegateHandler(
                 // Channel message: AppStateStore is the source of truth for list; only manage unread
                 if (state.getJoinedChannelsValue().contains(message.channel)) {
                     val channel = message.channel
-                    val viewingClassic = state.getCurrentChannelValue() == channel
-                    val viewingGeohash = try {
+                    val isOnChat = state.isOnChatScreen.value
+                    val viewingClassic = isOnChat && state.getCurrentChannelValue() == channel
+                    val viewingGeohash = isOnChat && try {
                         if (channel.startsWith("geo:")) {
                             val geo = channel.removePrefix("geo:")
                             val selected = state.selectedLocationChannel.value
@@ -83,6 +90,12 @@ class MeshDelegateHandler(
                 }
             } else {
                 // Public mesh message: AppStateStore is the source of truth; avoid double-adding to UI state
+                // Track unread mesh count when not viewing mesh chat screen
+                val isOnChat = state.isOnChatScreen.value
+                val viewingMesh = isOnChat && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Mesh
+                if (!viewingMesh) {
+                    state.setUnreadMeshCount(state.getUnreadMeshCountValue() + 1)
+                }
                 // Still run mention detection/notifications
                 checkAndTriggerMeshMentionNotification(message)
             }

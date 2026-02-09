@@ -56,6 +56,15 @@ class DebugSettingsManager private constructor() {
     private val _p2pLogComponent = MutableStateFlow(P2P_LOG_COMPONENT_ALL)
     val p2pLogComponent: StateFlow<String> = _p2pLogComponent.asStateFlow()
 
+    // Debug UI mode: show detailed connection info in chat headers and peer lists
+    private val _debugUiEnabled = MutableStateFlow(false)
+    val debugUiEnabled: StateFlow<Boolean> = _debugUiEnabled.asStateFlow()
+
+    fun setDebugUiEnabled(enabled: Boolean) {
+        DebugPreferenceManager.setDebugUiEnabled(enabled)
+        _debugUiEnabled.value = enabled
+    }
+
     // Visibility of the debug sheet; gates heavy work
     private val _debugSheetVisible = MutableStateFlow(false)
     val debugSheetVisible: StateFlow<Boolean> = _debugSheetVisible.asStateFlow()
@@ -80,6 +89,7 @@ class DebugSettingsManager private constructor() {
             _maxServerConnections.value = DebugPreferenceManager.getMaxConnectionsServer(8)
             _maxClientConnections.value = DebugPreferenceManager.getMaxConnectionsClient(8)
             _p2pLogComponent.value = DebugPreferenceManager.getP2pLogComponent(P2P_LOG_COMPONENT_ALL)
+            _debugUiEnabled.value = DebugPreferenceManager.getDebugUiEnabled(false)
         } catch (_: Exception) {
             // Preferences not ready yet; keep defaults. They will be applied on first change.
         }

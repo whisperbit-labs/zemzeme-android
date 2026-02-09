@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -179,7 +180,7 @@ class GeohashPickerActivity : OrientationAwareActivity() {
                                 text = stringResource(R.string.pan_zoom_instruction),
                                 fontSize = 12.sp,
                                 textAlign = TextAlign.Center,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier
                                     .padding(horizontal = 14.dp, vertical = 10.dp)
@@ -204,7 +205,7 @@ class GeohashPickerActivity : OrientationAwareActivity() {
                                 Text(
                                     text = if (currentGeohash.isNotEmpty()) "#${currentGeohash}" else "select location",
                                     fontSize = BASE_FONT_SIZE.sp,
-                                    fontFamily = FontFamily.Monospace,
+                                    fontFamily = NunitoFontFamily,
                                     fontWeight = FontWeight.Medium,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier
@@ -270,7 +271,7 @@ class GeohashPickerActivity : OrientationAwareActivity() {
                                         Text(
                                             text = stringResource(R.string.select),
                                             fontSize = (BASE_FONT_SIZE - 2).sp,
-                                            fontFamily = FontFamily.Monospace
+                                            fontFamily = NunitoFontFamily
                                         )
                                     }
                                 }

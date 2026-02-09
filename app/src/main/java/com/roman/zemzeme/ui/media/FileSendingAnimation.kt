@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.roman.zemzeme.R
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import kotlinx.coroutines.delay
 
 /**
@@ -96,7 +97,7 @@ fun FileSendingAnimation(
                 androidx.compose.material3.Text(
                     text = revealedText,
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         color = Color.White
                     ),
                     modifier = Modifier.padding(end = 2.dp)
@@ -107,7 +108,7 @@ fun FileSendingAnimation(
                     androidx.compose.material3.Text(
                         text = stringResource(R.string.underscore),
                         style = MaterialTheme.typography.bodyMedium.copy(
-                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             color = Color.White
                         )
                     )
@@ -149,7 +150,7 @@ private fun FileProgressBars(
     androidx.compose.material3.Text(
         text = progressString,
         style = MaterialTheme.typography.bodySmall.copy(
-            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             color = Color(0xFF00FF7F) // Matrix green
         ),
         modifier = modifier

@@ -20,6 +20,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -150,6 +151,7 @@ fun MessageItem(
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val timeFormatter = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
+    val haptic = LocalHapticFeedback.current
 
     // Determine if this message was sent by self
     val isSelf = message.senderPeerID == meshService.myPeerID ||
@@ -175,13 +177,26 @@ fun MessageItem(
 
     val isDark = colorScheme.background.red + colorScheme.background.green + colorScheme.background.blue < 1.5f
     val baseColor = if (isSelf) Color(0xFFFF9500) else getPeerColor(message, isDark)
-    val (baseName, suffix) = splitSuffix(message.sender)
+    val resolvedSender = if (message.sender.startsWith("p2p:")) {
+        message.senderPeerID?.let { pid ->
+            com.roman.zemzeme.p2p.P2PAliasRegistry.getDisplayName(pid)
+        } ?: "User"
+    } else message.sender
+    val (baseName, suffix) = splitSuffix(resolvedSender)
 
     // Modern message layout with avatar
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 2.dp),
+            .padding(vertical = 2.dp)
+            .pointerInput(message.id) {
+                detectTapGestures(
+                    onLongPress = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        onMessageLongPress?.invoke(message)
+                    }
+                )
+            },
         horizontalArrangement = if (isSelf) Arrangement.End else Arrangement.Start
     ) {
         // Message content column with sender name and bubble
@@ -204,7 +219,6 @@ fun MessageItem(
             ) {
                 // Sender name (only for received messages)
                 if (!isSelf) {
-                    val haptic = LocalHapticFeedback.current
                     Text(
                         text = truncateNickname(baseName) + suffix,
                         fontSize = 13.sp,
@@ -525,10 +539,6 @@ private fun MessageBubbleContent(
                                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                                 return@detectTapGestures
                             }
-                        },
-                        onLongPress = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onMessageLongPress?.invoke(message)
                         }
                     )
                 },
@@ -689,7 +699,7 @@ private fun RenderFileMessage(
             var headerLayout by remember { mutableStateOf<TextLayoutResult?>(null) }
             Text(
                 text = headerText,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 color = colorScheme.onSurface,
                 modifier = Modifier.pointerInput(message.id) {
                     detectTapGestures(onTap = { pos ->
@@ -758,7 +768,7 @@ private fun RenderFileMessage(
                             }
                         }
                     } else {
-                        Text(text = stringResource(R.string.file_unavailable), fontFamily = FontFamily.Monospace, color = Color.Gray)
+                        Text(text = stringResource(R.string.file_unavailable), fontFamily = NunitoFontFamily, color = Color.Gray)
                     }
                 }
             }
@@ -873,7 +883,7 @@ private fun RenderFileMessage(
                     }
                 )
             },
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             softWrap = true,
             overflow = TextOverflow.Visible,
             style = androidx.compose.ui.text.TextStyle(

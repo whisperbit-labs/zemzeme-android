@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -115,7 +116,7 @@ fun P2PSettingsSheet(
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "P2P Networking",
+                                text = stringResource(R.string.p2p_networking_title),
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = colorScheme.onBackground
@@ -132,7 +133,7 @@ fun P2PSettingsSheet(
                     item(key = "status") {
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
-                                text = "STATUS",
+                                text = stringResource(R.string.section_status),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = colorScheme.onBackground.copy(alpha = 0.5f),
                                 letterSpacing = 0.5.sp,
@@ -165,11 +166,11 @@ fun P2PSettingsSheet(
                                         ) {}
                                         Text(
                                             text = when {
-                                                isUnhealthy -> "No Peers"
-                                                nodeStatus == P2PNodeStatus.RUNNING -> "Connected"
-                                                nodeStatus == P2PNodeStatus.STARTING -> "Connecting..."
-                                                nodeStatus == P2PNodeStatus.STOPPED -> "Disconnected"
-                                                else -> "Error"
+                                                isUnhealthy -> stringResource(R.string.p2p_status_no_peers)
+                                                nodeStatus == P2PNodeStatus.RUNNING -> stringResource(R.string.p2p_status_connected)
+                                                nodeStatus == P2PNodeStatus.STARTING -> stringResource(R.string.p2p_status_connecting)
+                                                nodeStatus == P2PNodeStatus.STOPPED -> stringResource(R.string.p2p_status_disconnected)
+                                                else -> stringResource(R.string.p2p_status_error)
                                             },
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.Medium,
@@ -180,18 +181,18 @@ fun P2PSettingsSheet(
                                     // Show connected peers count
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "${connectedPeers.size} peers connected",
+                                        text = stringResource(R.string.p2p_peers_connected_fmt, connectedPeers.size),
                                         fontSize = 13.sp,
-                                        fontFamily = FontFamily.Monospace,
+                                        fontFamily = NunitoFontFamily,
                                         color = colorScheme.onSurface.copy(alpha = 0.6f)
                                     )
 
                                     // Show DHT status (routing table)
                                     if (dhtStatus.isNotBlank() && nodeStatus == P2PNodeStatus.RUNNING) {
                                         Text(
-                                            text = "DHT: $dhtStatus",
+                                            text = stringResource(R.string.p2p_dht_fmt, dhtStatus),
                                             fontSize = 11.sp,
-                                            fontFamily = FontFamily.Monospace,
+                                            fontFamily = NunitoFontFamily,
                                             color = colorScheme.onSurface.copy(alpha = 0.5f),
                                             maxLines = 2
                                         )
@@ -200,9 +201,9 @@ fun P2PSettingsSheet(
                                     p2pTransport.getMyPeerID()?.let { peerID ->
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text(
-                                            text = "Peer ID: ${peerID.take(12)}...${peerID.takeLast(6)}",
+                                            text = stringResource(R.string.p2p_peer_id_fmt, peerID.take(12), peerID.takeLast(6)),
                                             fontSize = 11.sp,
-                                            fontFamily = FontFamily.Monospace,
+                                            fontFamily = NunitoFontFamily,
                                             color = colorScheme.onSurface.copy(alpha = 0.5f)
                                         )
                                     }
@@ -234,7 +235,7 @@ fun P2PSettingsSheet(
                                                     strokeWidth = 2.dp
                                                 )
                                                 Spacer(modifier = Modifier.width(8.dp))
-                                                Text("Recovering...")
+                                                Text(stringResource(R.string.p2p_recovering))
                                             } else {
                                                 Icon(
                                                     imageVector = Icons.Default.Refresh,
@@ -242,7 +243,7 @@ fun P2PSettingsSheet(
                                                     modifier = Modifier.size(16.dp)
                                                 )
                                                 Spacer(modifier = Modifier.width(8.dp))
-                                                Text("Recover Connection")
+                                                Text(stringResource(R.string.p2p_recover_connection))
                                             }
                                         }
                                     }
@@ -255,7 +256,7 @@ fun P2PSettingsSheet(
                     item(key = "settings") {
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
-                                text = "SETTINGS",
+                                text = stringResource(R.string.p2p_settings_header),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = colorScheme.onBackground.copy(alpha = 0.5f),
                                 letterSpacing = 0.5.sp,
@@ -270,15 +271,15 @@ fun P2PSettingsSheet(
                                     // P2P Enabled Toggle
                                     SettingsToggleRow(
                                         icon = Icons.Default.Wifi,
-                                        title = "Enable P2P",
-                                        subtitle = "Connect directly to other Zemzeme peers",
+                                        title = stringResource(R.string.p2p_enable),
+                                        subtitle = stringResource(R.string.p2p_enable_desc),
                                         checked = p2pEnabled,
                                         onCheckedChange = { enabled ->
                                             if (enabled && TorPreferenceManager.get(context) == TorMode.ON) {
                                                 TorPreferenceManager.set(context, TorMode.OFF)
                                                 android.widget.Toast.makeText(
                                                     context,
-                                                    "P2P over Tor is not supported. Tor was disabled.",
+                                                    context.getString(R.string.toast_p2p_tor_disabled),
                                                     android.widget.Toast.LENGTH_SHORT
                                                 ).show()
                                             }
@@ -316,8 +317,8 @@ fun P2PSettingsSheet(
                                     // Default Bootstrap Nodes Toggle
                                     SettingsToggleRow(
                                         icon = Icons.Default.Hub,
-                                        title = "Use Default Nodes",
-                                        subtitle = "Connect to public IPFS bootstrap nodes",
+                                        title = stringResource(R.string.p2p_use_default_nodes),
+                                        subtitle = stringResource(R.string.p2p_default_nodes_desc),
                                         checked = useDefaultBootstrap,
                                         onCheckedChange = { enabled ->
                                             useDefaultBootstrap = enabled
@@ -339,7 +340,7 @@ fun P2PSettingsSheet(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "CUSTOM BOOTSTRAP NODES",
+                                    text = stringResource(R.string.p2p_custom_nodes_header),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = colorScheme.onBackground.copy(alpha = 0.5f),
                                     letterSpacing = 0.5.sp,
@@ -348,7 +349,7 @@ fun P2PSettingsSheet(
                                 IconButton(onClick = { showAddNodeDialog = true }) {
                                     Icon(
                                         imageVector = Icons.Default.Add,
-                                        contentDescription = "Add node",
+                                        contentDescription = stringResource(R.string.cd_add_node),
                                         tint = colorScheme.primary
                                     )
                                 }
@@ -367,7 +368,7 @@ fun P2PSettingsSheet(
                                 shape = RoundedCornerShape(16.dp)
                             ) {
                                 Text(
-                                    text = "No custom nodes configured. Tap + to add.",
+                                    text = stringResource(R.string.p2p_no_custom_nodes),
                                     fontSize = 13.sp,
                                     color = colorScheme.onSurface.copy(alpha = 0.5f),
                                     modifier = Modifier.padding(16.dp)
@@ -397,7 +398,7 @@ fun P2PSettingsSheet(
                                     Text(
                                         text = node.take(50) + if (node.length > 50) "..." else "",
                                         fontSize = 12.sp,
-                                        fontFamily = FontFamily.Monospace,
+                                        fontFamily = NunitoFontFamily,
                                         color = colorScheme.onSurface,
                                         modifier = Modifier.weight(1f)
                                     )
@@ -409,7 +410,7 @@ fun P2PSettingsSheet(
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Delete,
-                                            contentDescription = "Remove",
+                                            contentDescription = stringResource(R.string.cd_remove),
                                             tint = colorScheme.error
                                         )
                                     }
@@ -422,9 +423,9 @@ fun P2PSettingsSheet(
                     item(key = "debug") {
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
-                                text = "Active nodes: ${p2pConfig.getActiveBootstrapNodes().size}",
+                                text = stringResource(R.string.p2p_active_nodes_fmt, p2pConfig.getActiveBootstrapNodes().size),
                                 fontSize = 12.sp,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 color = colorScheme.onBackground.copy(alpha = 0.4f),
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
@@ -454,12 +455,12 @@ fun P2PSettingsSheet(
             AlertDialog(
                 onDismissRequest = { showAddNodeDialog = false },
                 title = {
-                    Text("Add Bootstrap Node")
+                    Text(stringResource(R.string.p2p_add_bootstrap_node))
                 },
                 text = {
                     Column {
                         Text(
-                            text = "Enter multiaddr for the bootstrap node:",
+                            text = stringResource(R.string.p2p_enter_multiaddr),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -468,7 +469,7 @@ fun P2PSettingsSheet(
                             onValueChange = { newNodeAddress = it },
                             placeholder = { Text("/ip4/...") },
                             textStyle = MaterialTheme.typography.bodySmall.copy(
-                                fontFamily = FontFamily.Monospace
+                                fontFamily = NunitoFontFamily
                             ),
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -485,12 +486,12 @@ fun P2PSettingsSheet(
                             }
                         }
                     ) {
-                        Text("Add")
+                        Text(stringResource(R.string.action_add))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showAddNodeDialog = false }) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 }
             )
@@ -602,7 +603,7 @@ fun P2PStatusIndicator(
             Text(
                 text = "P2P",
                 fontSize = 11.sp,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontWeight = FontWeight.Medium,
                 color = colorScheme.onSurface.copy(alpha = 0.7f)
             )
@@ -610,7 +611,7 @@ fun P2PStatusIndicator(
                 Text(
                     text = "${connectedPeers.size}",
                     fontSize = 10.sp,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     color = colorScheme.onSurface.copy(alpha = 0.5f)
                 )
             }

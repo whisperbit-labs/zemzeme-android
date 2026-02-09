@@ -27,6 +27,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import com.roman.zemzeme.mesh.BluetoothMeshService
 import com.roman.zemzeme.model.ZemzemeMessage
 import com.roman.zemzeme.model.ZemzemeMessageType
@@ -61,7 +62,7 @@ fun ImageMessageItem(
         var headerLayout by remember { mutableStateOf<TextLayoutResult?>(null) }
         Text(
             text = headerText,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             color = colorScheme.onSurface,
             modifier = Modifier.pointerInput(message.id) {
                 detectTapGestures(onTap = { pos ->
@@ -72,7 +73,7 @@ fun ImageMessageItem(
                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         onNicknameClick.invoke(ann.first().item)
                     }
-                }, onLongPress = { onMessageLongPress?.invoke(message) })
+                })
             },
             onTextLayout = { headerLayout = it }
         )
@@ -145,7 +146,7 @@ fun ImageMessageItem(
                 }
             }
         } else {
-            Text(text = stringResource(com.roman.zemzeme.R.string.image_unavailable), fontFamily = FontFamily.Monospace, color = Color.Gray)
+            Text(text = stringResource(com.roman.zemzeme.R.string.image_unavailable), fontFamily = NunitoFontFamily, color = Color.Gray)
         }
     }
 }

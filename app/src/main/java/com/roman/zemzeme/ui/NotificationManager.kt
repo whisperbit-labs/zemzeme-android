@@ -93,8 +93,8 @@ class NotificationManager(
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // DM notifications channel
-            val dmName = "Direct Messages"
-            val dmDescriptionText = "Notifications for private messages from other users"
+            val dmName = context.getString(R.string.notification_channel_direct_messages)
+            val dmDescriptionText = context.getString(R.string.notification_channel_dm_desc)
             val dmImportance = NotificationManager.IMPORTANCE_HIGH
             val dmChannel = NotificationChannel(CHANNEL_ID, dmName, dmImportance).apply {
                 description = dmDescriptionText
@@ -104,8 +104,8 @@ class NotificationManager(
             systemNotificationManager.createNotificationChannel(dmChannel)
 
             // Geohash notifications channel
-            val geohashName = "Geohash Chats"
-            val geohashDescriptionText = "Notifications for mentions and messages in geohash location channels"
+            val geohashName = context.getString(R.string.notification_channel_geohash_chats)
+            val geohashDescriptionText = context.getString(R.string.notification_channel_geohash_desc)
             val geohashImportance = NotificationManager.IMPORTANCE_HIGH
             val geohashChannel = NotificationChannel(GEOHASH_CHANNEL_ID, geohashName, geohashImportance).apply {
                 description = geohashDescriptionText

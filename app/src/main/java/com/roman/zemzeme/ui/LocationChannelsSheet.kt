@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -132,7 +133,7 @@ fun LocationChannelsSheet(
                         Text(
                             text = stringResource(R.string.location_channels_desc),
                             fontSize = 12.sp,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                             modifier = Modifier
                                 .padding(horizontal = 24.dp)
@@ -155,7 +156,7 @@ fun LocationChannelsSheet(
                                             Text(
                                                 text = stringResource(R.string.location_permission_denied),
                                                 fontSize = 11.sp,
-                                                fontFamily = FontFamily.Monospace,
+                                                fontFamily = NunitoFontFamily,
                                                 color = Color.Red.copy(alpha = 0.8f)
                                             )
                                             TextButton(
@@ -169,7 +170,7 @@ fun LocationChannelsSheet(
                                                 Text(
                                                     text = stringResource(R.string.open_settings),
                                                     fontSize = 11.sp,
-                                                    fontFamily = FontFamily.Monospace
+                                                    fontFamily = NunitoFontFamily
                                                 )
                                             }
                                         }
@@ -178,7 +179,7 @@ fun LocationChannelsSheet(
                                         Text(
                                             text = stringResource(R.string.location_permission_granted),
                                             fontSize = 11.sp,
-                                            fontFamily = FontFamily.Monospace,
+                                            fontFamily = NunitoFontFamily,
                                             color = standardGreen
                                         )
                                     }
@@ -257,7 +258,7 @@ fun LocationChannelsSheet(
                                 Text(
                                     text = stringResource(R.string.finding_nearby_channels),
                                     fontSize = 12.sp,
-                                    fontFamily = FontFamily.Monospace
+                                    fontFamily = NunitoFontFamily
                                 )
                             }
                         }
@@ -269,7 +270,7 @@ fun LocationChannelsSheet(
                             Text(
                                 text = stringResource(R.string.bookmarked),
                                 style = MaterialTheme.typography.labelLarge,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -337,7 +338,7 @@ fun LocationChannelsSheet(
                                 Text(
                                     text = stringResource(R.string.hash_symbol),
                                     fontSize = BASE_FONT_SIZE.sp,
-                                    fontFamily = FontFamily.Monospace,
+                                    fontFamily = NunitoFontFamily,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                 )
 
@@ -357,7 +358,7 @@ fun LocationChannelsSheet(
                                     },
                                     textStyle = androidx.compose.ui.text.TextStyle(
                                         fontSize = BASE_FONT_SIZE.sp,
-                                        fontFamily = FontFamily.Monospace,
+                                        fontFamily = NunitoFontFamily,
                                         color = MaterialTheme.colorScheme.onSurface
                                     ),
                                     modifier = Modifier
@@ -380,7 +381,7 @@ fun LocationChannelsSheet(
                                             Text(
                                                 text = stringResource(R.string.geohash_placeholder),
                                                 fontSize = BASE_FONT_SIZE.sp,
-                                                fontFamily = FontFamily.Monospace,
+                                                fontFamily = NunitoFontFamily,
                                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
                                             )
                                         }
@@ -438,7 +439,7 @@ fun LocationChannelsSheet(
                                         Text(
                                             text = stringResource(R.string.teleport),
                                             fontSize = BASE_FONT_SIZE.sp,
-                                            fontFamily = FontFamily.Monospace
+                                            fontFamily = NunitoFontFamily
                                         )
                                         Icon(
                                             imageVector = Icons.Filled.PinDrop,
@@ -458,7 +459,7 @@ fun LocationChannelsSheet(
                             Text(
                                 text = customError!!,
                                 fontSize = 12.sp,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 color = Color.Red,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -500,7 +501,7 @@ fun LocationChannelsSheet(
                                 Text(
                                     text = if (locationServicesEnabled) stringResource(R.string.disable_location_services) else stringResource(R.string.enable_location_services),
                                     fontSize = 12.sp,
-                                    fontFamily = FontFamily.Monospace
+                                    fontFamily = NunitoFontFamily
                                 )
                             }
                         }
@@ -585,7 +586,7 @@ private fun ChannelRow(
                     Text(
                         text = baseTitle,
                         fontSize = BASE_FONT_SIZE.sp,
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         fontWeight = if (titleBold) FontWeight.Bold else FontWeight.Normal,
                         color = titleColor ?: MaterialTheme.colorScheme.onSurface
                     )
@@ -594,7 +595,7 @@ private fun ChannelRow(
                         Text(
                             text = count,
                             fontSize = 11.sp,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     }
@@ -603,7 +604,7 @@ private fun ChannelRow(
                 Text(
                     text = subtitle,
                     fontSize = 12.sp,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }

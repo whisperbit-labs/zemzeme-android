@@ -2,35 +2,47 @@ package com.roman.zemzeme.ui
 
 
 import android.util.Log
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.res.stringResource
-import com.roman.zemzeme.R
+import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.roman.zemzeme.core.ui.utils.singleOrTripleClickable
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.roman.zemzeme.R
+import com.roman.zemzeme.core.ui.utils.singleOrTripleClickable
+import com.roman.zemzeme.geohash.ChannelID
+import com.roman.zemzeme.geohash.LocationChannelManager
+import com.roman.zemzeme.net.ArtiTorManager
+import com.roman.zemzeme.net.TorMode
+import com.roman.zemzeme.nostr.NostrRelayManager
+import com.roman.zemzeme.p2p.P2PConfig
+import com.roman.zemzeme.p2p.TopicConnectionState
+import com.roman.zemzeme.ui.connectioninfo.ConnectionDisplayData
+import com.roman.zemzeme.ui.connectioninfo.ConnectionIndicatorFactory
 
 /**
  * Header components for ChatScreen
@@ -44,10 +56,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun TorStatusDot(
     modifier: Modifier = Modifier
 ) {
-    val torProvider = remember { com.roman.zemzeme.net.ArtiTorManager.getInstance() }
+    val torProvider = remember { ArtiTorManager.getInstance() }
     val torStatus by torProvider.statusFlow.collectAsState()
     
-    if (torStatus.mode != com.roman.zemzeme.net.TorMode.OFF) {
+    if (torStatus.mode != TorMode.OFF) {
         val dotColor = when {
             torStatus.running && torStatus.bootstrapPercent < 100 -> Color(0xFFFF9500) // Orange - bootstrapping
             torStatus.running && torStatus.bootstrapPercent >= 100 -> Color(0xFF00F5FF) // Green - connected
@@ -134,7 +146,7 @@ fun NicknameEditor(
             onValueChange = onValueChange,
             textStyle = MaterialTheme.typography.titleLarge.copy(
                 color = colorScheme.primary,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontSize = 20.sp
             ),
             cursorBrush = SolidColor(colorScheme.primary),
@@ -158,14 +170,14 @@ fun NicknameEditor(
  */
 @Composable
 fun P2PConnectionDot(
-    connectionState: com.roman.zemzeme.p2p.TopicConnectionState,
+    connectionState: TopicConnectionState,
     modifier: Modifier = Modifier
 ) {
     val dotColor = when (connectionState) {
-        com.roman.zemzeme.p2p.TopicConnectionState.CONNECTING -> Color(0xFFFF9500) // Orange
-        com.roman.zemzeme.p2p.TopicConnectionState.CONNECTED -> Color(0xFF00F5FF) // Green
-        com.roman.zemzeme.p2p.TopicConnectionState.NO_PEERS -> Color(0xFFFF9500)
-        com.roman.zemzeme.p2p.TopicConnectionState.ERROR -> Color.Red
+        TopicConnectionState.CONNECTING -> Color(0xFFFF9500) // Orange
+        TopicConnectionState.CONNECTED -> Color(0xFF00F5FF) // Green
+        TopicConnectionState.NO_PEERS -> Color(0xFFFF9500)
+        TopicConnectionState.ERROR -> Color.Red
     }
     
     Canvas(
@@ -185,55 +197,55 @@ fun PeerCounter(
     joinedChannels: Set<String>,
     hasUnreadChannels: Map<String, Int>,
     isConnected: Boolean,
-    selectedLocationChannel: com.roman.zemzeme.geohash.ChannelID?,
+    selectedLocationChannel: ChannelID?,
     geohashPeople: List<GeoPerson>,
+    topicConnectionState: TopicConnectionState? = null,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    
+
+    // Connection-state-aware colors — must match ConnectionIndicator colors
+    val greenConnected = colorScheme.primary
+    val orangeSearching = Color(0xFFFF9500)
+    val blueConnecting = Color(0xFF2196F3)
+    val redError = Color(0xFFFF3B30)
+
     // Compute channel-aware people count, display text, and color
     val (displayText, countColor) = when (selectedLocationChannel) {
-        is com.roman.zemzeme.geohash.ChannelID.Location -> {
-            // Geohash channel: show geohash participants with P2P/Nostr split
-            val nostrCount = geohashPeople.count { it.transport == TransportType.NOSTR }
-            val p2pCount = geohashPeople.count { it.transport == TransportType.P2P }
+        is ChannelID.Location -> {
             val totalCount = geohashPeople.size
-            
-            // Show format: "3" (total only) or "2|1" (nostr|p2p) if both active
-            val text = if (p2pCount > 0 && nostrCount > 0) {
-                "$nostrCount|$p2pCount"  // Purple|Green split
-            } else {
-                "$totalCount"
-            }
-            
-            val green = Color(0xFF00F5FF)
-            val purple = Color(0xFF9C27B0)
-            // Color: green if P2P, purple if only Nostr, gray if none
+            val text = "$totalCount"
+
+            // Color matches the connection indicator:
+            // Green = connected with peers, Blue = connecting/idle, Orange = searching, Red = error
             val color = when {
-                p2pCount > 0 -> green
-                nostrCount > 0 -> purple
-                else -> Color.Gray
+                topicConnectionState == TopicConnectionState.CONNECTED && totalCount > 0 -> greenConnected
+                topicConnectionState == TopicConnectionState.CONNECTED -> blueConnecting
+                topicConnectionState == TopicConnectionState.ERROR -> redError
+                topicConnectionState == TopicConnectionState.CONNECTING -> blueConnecting
+                topicConnectionState == TopicConnectionState.NO_PEERS -> orangeSearching
+                topicConnectionState == null -> Color.Gray
+                else -> orangeSearching
             }
             Pair(text, color)
         }
-        is com.roman.zemzeme.geohash.ChannelID.Mesh,
+        is ChannelID.Mesh,
         null -> {
             // Mesh channel: show Bluetooth-connected peers (excluding self)
             val count = connectedPeers.size
-            val meshBlue = Color(0xFF007AFF) // iOS-style blue for mesh
-            Pair("$count", if (isConnected && count > 0) meshBlue else Color.Gray)
+            Pair("$count", if (isConnected && count > 0) greenConnected else Color.Gray)
         }
     }
     
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { onClick() }.padding(end = 8.dp) // Added right margin to match "zemzeme" logo spacing
+        modifier = modifier.clickable { onClick() }.padding(horizontal = 8.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Group,
             contentDescription = when (selectedLocationChannel) {
-                is com.roman.zemzeme.geohash.ChannelID.Location -> stringResource(R.string.cd_geohash_participants)
+                is ChannelID.Location -> stringResource(R.string.cd_geohash_participants)
                 else -> stringResource(R.string.cd_connected_peers)
             },
             modifier = Modifier.size(24.dp),
@@ -277,12 +289,56 @@ fun ChatHeaderContent(
 
     when {
         currentChannel != null -> {
-            // Channel header
+            // Channel header — collect connection state from all transports
+            val context = LocalContext.current
+            val p2pTopicStates by viewModel.p2pTopicStates.collectAsStateWithLifecycle()
+            val topicState = p2pTopicStates[currentChannel]
+            val transportConfig = remember { P2PConfig(context) }
+            val transportToggles by remember(transportConfig) {
+                P2PConfig.transportTogglesFlow
+            }.collectAsStateWithLifecycle()
+            val chP2pEnabled = transportToggles.p2pEnabled
+            val chNostrRelayManager = remember { NostrRelayManager.getInstance(context) }
+            val chNostrConnected by chNostrRelayManager.isConnected.collectAsStateWithLifecycle()
+            val geohashPeople by viewModel.geohashPeople.collectAsStateWithLifecycle()
+
+            val p2pTopicPeers = topicState?.peers?.size ?: 0
+            val p2pConnected = chP2pEnabled && p2pTopicPeers > 0
+
+            // Deduplicate peers by ID
+            val uniqueIds = geohashPeople.map { it.id }.toSet()
+            val dedupedCount = uniqueIds.size
+            val chHasP2P = geohashPeople.any { it.transport == TransportType.P2P }
+            val chHasNostr = geohashPeople.any { it.transport == TransportType.NOSTR }
+            val hasRecentPeers = dedupedCount > 0
+
+            val chStage = when {
+                p2pConnected || (chNostrConnected && hasRecentPeers) ->
+                    ConnectionDisplayData.ChannelStage.CONNECTED
+                chP2pEnabled && (topicState?.providerCount ?: 0) > 0 ->
+                    ConnectionDisplayData.ChannelStage.CONNECTING
+                chP2pEnabled ->
+                    ConnectionDisplayData.ChannelStage.SEARCHING
+                chNostrConnected && !hasRecentPeers ->
+                    ConnectionDisplayData.ChannelStage.NOSTR_IDLE
+                transportToggles.nostrEnabled ->
+                    ConnectionDisplayData.ChannelStage.SEARCHING
+                else ->
+                    ConnectionDisplayData.ChannelStage.ERROR
+            }
+
             ChannelHeader(
                 channel = currentChannel,
                 onBackClick = onBackClick,
                 onLeaveChannel = { viewModel.leaveChannel(currentChannel) },
-                onSidebarClick = onSidebarClick
+                onSidebarClick = onSidebarClick,
+                channelConnectionData = ConnectionDisplayData.ChannelConnection(
+                    stage = chStage,
+                    peerCount = dedupedCount,
+                    error = topicState?.error
+                ),
+                hasP2P = chHasP2P || p2pConnected,
+                hasNostr = chHasNostr || chNostrConnected
             )
         }
         else -> {
@@ -303,16 +359,19 @@ private fun ChannelHeader(
     channel: String,
     onBackClick: () -> Unit,
     onLeaveChannel: () -> Unit,
-    onSidebarClick: () -> Unit
+    onSidebarClick: () -> Unit,
+    channelConnectionData: ConnectionDisplayData.ChannelConnection? = null,
+    hasP2P: Boolean = false,
+    hasNostr: Boolean = false
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Left: back arrow + channel name
+        // Left: back arrow + channel name + connection indicator
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f)
@@ -322,22 +381,33 @@ private fun ChannelHeader(
                 modifier = Modifier.size(40.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.back),
                     modifier = Modifier.size(24.dp),
                     tint = colorScheme.primary
                 )
             }
 
-            Text(
-                text = stringResource(R.string.chat_channel_prefix, channel),
-                fontSize = 22.sp,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Default,
-                letterSpacing = 0.sp,
-                color = Color.White,
-                modifier = Modifier.clickable { onSidebarClick() }
-            )
+            Column {
+                Text(
+                    text = stringResource(R.string.chat_channel_prefix, channel),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = FontFamily.Default,
+                    letterSpacing = 0.sp,
+                    color = colorScheme.onSurface,
+                    modifier = Modifier.clickable { onSidebarClick() }
+                )
+
+                // Connection indicator below channel name
+                if (channelConnectionData != null) {
+                    ConnectionIndicatorFactory.ChannelIndicator(
+                        data = channelConnectionData,
+                        hasP2P = hasP2P,
+                        hasNostr = hasNostr
+                    )
+                }
+            }
         }
 
         // Right: leave button
@@ -365,6 +435,44 @@ private fun MainHeader(
     val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
     val selectedLocationChannel by viewModel.selectedLocationChannel.collectAsStateWithLifecycle()
     val geohashPeople by viewModel.geohashPeople.collectAsStateWithLifecycle()
+    val p2pTopicStates by viewModel.p2pTopicStates.collectAsStateWithLifecycle()
+
+    // Derive combined connection state (P2P + Nostr) for PeerCounter color
+    // Must match the same logic used in LocationChannelsButton for the connection indicator
+    val context = LocalContext.current
+    val transportConfig = remember { P2PConfig(context) }
+    val transportToggles by remember(transportConfig) {
+        P2PConfig.transportTogglesFlow
+    }.collectAsStateWithLifecycle()
+    val nostrRelayManager = remember { NostrRelayManager.getInstance(context) }
+    val nostrConnected by nostrRelayManager.isConnected.collectAsStateWithLifecycle()
+    val nostrRelays by nostrRelayManager.relays.collectAsStateWithLifecycle()
+    val p2pEnabled = transportToggles.p2pEnabled
+    val nostrEnabled = transportToggles.nostrEnabled
+
+    val nostrIsUp = nostrEnabled && (nostrConnected || nostrRelays.any { it.isConnected })
+
+    val topicConnectionState = when (val channel = selectedLocationChannel) {
+        is ChannelID.Location -> {
+            val topicState = p2pTopicStates[channel.channel.geohash]
+            val p2pPeers = topicState?.peers?.size ?: 0
+            val p2pConnected = p2pEnabled && p2pPeers > 0
+            val hasRecentPeers = geohashPeople.isNotEmpty()
+
+            when {
+                p2pConnected || (nostrIsUp && hasRecentPeers) ->
+                    TopicConnectionState.CONNECTED
+                nostrIsUp && !hasRecentPeers ->
+                    TopicConnectionState.CONNECTING // Blue: connected but no peers yet
+                p2pEnabled && (topicState?.providerCount ?: 0) > 0 ->
+                    TopicConnectionState.CONNECTING // Blue: connecting
+                p2pEnabled || nostrEnabled ->
+                    TopicConnectionState.NO_PEERS // Orange: searching
+                else -> TopicConnectionState.ERROR
+            }
+        }
+        else -> null
+    }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -372,13 +480,13 @@ private fun MainHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Left: back button + channel name
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
             IconButton(
                 onClick = onBackToHome,
                 modifier = Modifier.size(40.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.back),
                     modifier = Modifier.size(24.dp),
                     tint = colorScheme.primary
@@ -419,27 +527,6 @@ private fun MainHeader(
                 )
             }
 
-            // Unread channel badge
-            val totalUnread = hasUnreadChannels.values.sum()
-            if (totalUnread > 0) {
-                Box(contentAlignment = Alignment.Center) {
-                    Surface(
-                        shape = CircleShape,
-                        color = Color.Red,
-                        modifier = Modifier.size(22.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(
-                                text = if (totalUnread > 99) "99+" else "$totalUnread",
-                                fontSize = 11.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-            }
-
             // Peer counter
             PeerCounter(
                 connectedPeers = connectedPeers.filter { it != viewModel.meshService.myPeerID },
@@ -448,6 +535,7 @@ private fun MainHeader(
                 isConnected = isConnected,
                 selectedLocationChannel = selectedLocationChannel,
                 geohashPeople = geohashPeople,
+                topicConnectionState = topicConnectionState,
                 onClick = onSidebarClick
             )
         }
@@ -459,17 +547,18 @@ private fun LocationChannelsButton(
     viewModel: ChatViewModel
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val isDark = colorScheme.background.red + colorScheme.background.green + colorScheme.background.blue < 1.5f
+    val context = LocalContext.current
 
     // Ensure transport toggle flow is initialized from persisted prefs.
-    val transportConfig = remember { com.roman.zemzeme.p2p.P2PConfig(context) }
+    val transportConfig = remember { P2PConfig(context) }
     val transportToggles by remember(transportConfig) {
-        com.roman.zemzeme.p2p.P2PConfig.transportTogglesFlow
+        P2PConfig.transportTogglesFlow
     }.collectAsStateWithLifecycle()
     val p2pEnabled = transportToggles.p2pEnabled
     val nostrEnabled = transportToggles.nostrEnabled
 
-    val nostrRelayManager = remember { com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context) }
+    val nostrRelayManager = remember { NostrRelayManager.getInstance(context) }
     val nostrConnected by nostrRelayManager.isConnected.collectAsStateWithLifecycle()
     val nostrRelays by nostrRelayManager.relays.collectAsStateWithLifecycle()
 
@@ -483,30 +572,30 @@ private fun LocationChannelsButton(
     // Get group nicknames and location names for display
     val groupNicknames by viewModel.groupNicknames.collectAsStateWithLifecycle()
     val locationChannelManager = remember {
-        try { com.roman.zemzeme.geohash.LocationChannelManager.getInstance(context) } catch (_: Exception) { null }
+        try { LocationChannelManager.getInstance(context) } catch (_: Exception) { null }
     }
     val locationNames by locationChannelManager?.locationNames?.collectAsStateWithLifecycle()
         ?: remember { mutableStateOf(emptyMap()) }
 
     val (badgeText, badgeColor) = when (selectedChannel) {
-        is com.roman.zemzeme.geohash.ChannelID.Mesh -> {
-            "mesh" to Color.White
+        is ChannelID.Mesh -> {
+            "bluetooth" to colorScheme.onSurface
         }
-        is com.roman.zemzeme.geohash.ChannelID.Location -> {
-            val geohash = (selectedChannel as com.roman.zemzeme.geohash.ChannelID.Location).channel.geohash
-            val level = (selectedChannel as com.roman.zemzeme.geohash.ChannelID.Location).channel.level
+        is ChannelID.Location -> {
+            val geohash = (selectedChannel as ChannelID.Location).channel.geohash
+            val level = (selectedChannel as ChannelID.Location).channel.level
             // Try group nickname first, then location name, then fallback to geohash
             val displayName = groupNicknames[geohash]
                 ?: locationNames[level]
                 ?: geohash
-            displayName to Color.White
+            displayName to colorScheme.onSurface
         }
-        null -> "mesh" to Color.White
+        null -> "bluetooth" to colorScheme.onSurface
     }
 
     // Get P2P connection state for current geohash channel
     val p2pConnectionState = when (val channel = selectedChannel) {
-        is com.roman.zemzeme.geohash.ChannelID.Location -> {
+        is ChannelID.Location -> {
             if (p2pEnabled) {
                 val topicName = channel.channel.geohash
                 p2pTopicStates[topicName]?.connectionState
@@ -518,12 +607,12 @@ private fun LocationChannelsButton(
     }
 
     val nostrConnectionState = when (selectedChannel) {
-        is com.roman.zemzeme.geohash.ChannelID.Location -> {
+        is ChannelID.Location -> {
             if (nostrEnabled) {
                 when {
-                    nostrConnected || nostrRelays.any { it.isConnected } -> com.roman.zemzeme.p2p.TopicConnectionState.CONNECTED
-                    nostrRelays.any { it.lastError != null } -> com.roman.zemzeme.p2p.TopicConnectionState.ERROR
-                    else -> com.roman.zemzeme.p2p.TopicConnectionState.CONNECTING
+                    nostrConnected || nostrRelays.any { it.isConnected } -> TopicConnectionState.CONNECTED
+                    nostrRelays.any { it.lastError != null } -> TopicConnectionState.ERROR
+                    else -> TopicConnectionState.CONNECTING
                 }
             } else {
                 null
@@ -533,7 +622,7 @@ private fun LocationChannelsButton(
     }
 
     val transportConnectionState = p2pConnectionState ?: nostrConnectionState
-    val needsRefresh = p2pConnectionState == com.roman.zemzeme.p2p.TopicConnectionState.ERROR
+    val needsRefresh = p2pConnectionState == TopicConnectionState.ERROR
 
     val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
     val nickname by viewModel.nickname.collectAsStateWithLifecycle()
@@ -552,51 +641,89 @@ private fun LocationChannelsButton(
                 maxLines = 1
             )
 
-            Spacer(modifier = Modifier.width(4.dp))
-
-            // Connection status dot
-            if (transportConnectionState != null) {
-                // Geohash channel: use P2P/Nostr transport state
-                P2PConnectionDot(
-                    connectionState = transportConnectionState,
-                    modifier = Modifier.size(10.dp)
+            // P2P refresh button (visible only on error)
+            if (needsRefresh) {
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = stringResource(R.string.cd_refresh_p2p),
+                    modifier = Modifier
+                        .size(22.dp)
+                        .clickable {
+                            Log.d("ChatHeader", "P2P refresh button clicked")
+                            viewModel.refreshP2PConnection()
+                        },
+                    tint = Color(0xFFFF9500) // Orange to indicate action needed
                 )
-
-                // P2P refresh button (visible only on error)
-                if (needsRefresh) {
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Refresh P2P connection",
-                        modifier = Modifier
-                            .size(22.dp)
-                            .clickable {
-                                Log.d("ChatHeader", "P2P refresh button clicked")
-                                viewModel.refreshP2PConnection()
-                            },
-                        tint = Color(0xFFFF9500) // Orange to indicate action needed
-                    )
-                }
-            } else {
-                // Mesh channel: green when connected, red when disconnected
-                Canvas(modifier = Modifier.size(10.dp)) {
-                    drawCircle(
-                        color = if (isConnected) Color(0xFF4CAF50) else Color.Red,
-                        radius = size.minDimension / 2,
-                        center = Offset(size.width / 2, size.height / 2)
-                    )
-                }
             }
         }
 
-        // Subtitle: Group ID for groups, empty for mesh
-        if (selectedChannel is com.roman.zemzeme.geohash.ChannelID.Location) {
-            val geohash = (selectedChannel as com.roman.zemzeme.geohash.ChannelID.Location).channel.geohash
+        // Subtitle: Group ID + connection indicator for groups, peer status for mesh
+        if (selectedChannel is ChannelID.Location) {
+            val geohash = (selectedChannel as ChannelID.Location).channel.geohash
+            val topicState = p2pTopicStates[geohash]
+            val people by viewModel.geohashPeople.collectAsStateWithLifecycle()
+
+            // Show geohash ID between title and connection indicator
             Text(
-                text = "Group ID: $geohash",
-                fontSize = 12.sp,
-                color = Color.White.copy(alpha = 0.5f),
-                maxLines = 1
+                text = stringResource(R.string.label_group_id_fmt, geohash),
+                fontSize = 11.sp,
+                fontFamily = NunitoFontFamily,
+                color = colorScheme.onSurface.copy(alpha = if (isDark) 0.6f else 0.45f)
+            )
+
+            // Deduplicate: same peer can appear via P2P and Nostr
+            val uniquePeerIds = people.map { it.id }.toSet()
+            val dedupedCount = uniquePeerIds.size
+            val hasP2PPeers = people.any { it.transport == TransportType.P2P }
+            val hasNostrPeers = people.any { it.transport == TransportType.NOSTR }
+
+            val p2pTopicPeers = topicState?.peers?.size ?: 0
+            val p2pConnected = p2pEnabled && p2pTopicPeers > 0
+            val nostrIsUp = nostrConnectionState == TopicConnectionState.CONNECTED
+            val hasRecentPeers = dedupedCount > 0
+
+            val channelStage = when {
+                p2pConnected || (nostrIsUp && hasRecentPeers) ->
+                    ConnectionDisplayData.ChannelStage.CONNECTED
+                p2pEnabled && (topicState?.providerCount ?: 0) > 0 ->
+                    ConnectionDisplayData.ChannelStage.CONNECTING
+                p2pEnabled ->
+                    ConnectionDisplayData.ChannelStage.SEARCHING
+                nostrIsUp && !hasRecentPeers ->
+                    ConnectionDisplayData.ChannelStage.NOSTR_IDLE
+                nostrEnabled ->
+                    ConnectionDisplayData.ChannelStage.SEARCHING
+                else ->
+                    ConnectionDisplayData.ChannelStage.ERROR
+            }
+
+            // Connection status on its own line
+            ConnectionIndicatorFactory.ChannelIndicator(
+                data = ConnectionDisplayData.ChannelConnection(
+                    stage = channelStage,
+                    peerCount = dedupedCount,
+                    error = topicState?.error
+                ),
+                hasP2P = hasP2PPeers || p2pConnected,
+                hasNostr = hasNostrPeers || nostrIsUp
+            )
+        } else if (selectedChannel is ChannelID.Mesh || selectedChannel == null) {
+            // Mesh: show peer connection status (no group ID)
+            val connectedPeers by viewModel.connectedPeers.collectAsStateWithLifecycle()
+            val meshPeerCount = connectedPeers.size
+            val meshStage = if (meshPeerCount > 0)
+                ConnectionDisplayData.ChannelStage.CONNECTED
+            else if (isConnected)
+                ConnectionDisplayData.ChannelStage.SEARCHING
+            else
+                ConnectionDisplayData.ChannelStage.SEARCHING
+
+            ConnectionIndicatorFactory.ChannelIndicator(
+                data = ConnectionDisplayData.ChannelConnection(
+                    stage = meshStage,
+                    peerCount = meshPeerCount
+                )
             )
         }
     }

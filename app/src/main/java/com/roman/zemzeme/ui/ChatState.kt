@@ -160,7 +160,18 @@ class ChatState(
     // Group nicknames (geohash → local nickname)
     private val _groupNicknames = MutableStateFlow<Map<String, String>>(emptyMap())
     val groupNicknames: StateFlow<Map<String, String>> = _groupNicknames.asStateFlow()
-    
+
+    // Unread mesh message count (for HomeScreen badge)
+    private val _unreadMeshCount = MutableStateFlow(0)
+    val unreadMeshCount: StateFlow<Int> = _unreadMeshCount.asStateFlow()
+
+    // Contacts (peers with private chat history)
+    private val _contacts = MutableStateFlow<Set<String>>(emptySet())
+    val contacts: StateFlow<Set<String>> = _contacts.asStateFlow()
+
+    // Whether user is currently on the ChatScreen (vs HomeScreen)
+    private val _isOnChatScreen = MutableStateFlow(false)
+    val isOnChatScreen: StateFlow<Boolean> = _isOnChatScreen.asStateFlow()
 
     val hasUnreadChannels: StateFlow<Boolean> = _unreadChannelMessages
         .map { unreadMap -> unreadMap.values.any { it > 0 } }
@@ -210,7 +221,9 @@ class ChatState(
     fun getCustomGroupsValue() = _customGroups.value
     fun getGeographicGroupsValue() = _geographicGroups.value
     fun getGroupNicknamesValue() = _groupNicknames.value
-    
+    fun getUnreadMeshCountValue() = _unreadMeshCount.value
+    fun getContactsValue() = _contacts.value
+
     // Setters for state updates
     fun setMessages(messages: List<ZemzemeMessage>) {
         _messages.value = messages
@@ -413,5 +426,17 @@ class ChatState(
 
     fun setGroupNicknames(nicknames: Map<String, String>) {
         _groupNicknames.value = nicknames
+    }
+
+    fun setUnreadMeshCount(count: Int) {
+        _unreadMeshCount.value = count
+    }
+
+    fun setContacts(contacts: Set<String>) {
+        _contacts.value = contacts
+    }
+
+    fun setIsOnChatScreen(onChatScreen: Boolean) {
+        _isOnChatScreen.value = onChatScreen
     }
 }

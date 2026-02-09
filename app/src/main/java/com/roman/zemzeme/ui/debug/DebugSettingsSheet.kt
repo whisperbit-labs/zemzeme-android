@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,13 +65,13 @@ fun MeshTopologySection() {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(Icons.Filled.SettingsEthernet, contentDescription = null, tint = Color(0xFF8E8E93))
-                Text("mesh topology", fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(stringResource(R.string.debug_mesh_topology), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
             val nodes = snapshot.nodes
             val edges = snapshot.edges
             val empty = nodes.isEmpty()
             if (empty) {
-                Text("no gossip yet", fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.6f))
+                Text(stringResource(R.string.debug_no_gossip), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.6f))
             } else {
                 ForceDirectedMeshGraph(
                     nodes = nodes,
@@ -91,7 +92,7 @@ fun MeshTopologySection() {
                         val label = "${node.peerID.take(8)} • ${node.nickname ?: "unknown"}"
                         Text(
                             text = label,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 11.sp,
                             color = colorScheme.onSurface.copy(alpha = 0.85f)
                         )
@@ -192,7 +193,7 @@ fun DebugSettingsSheet(
                 item {
                     Text(
                         text = stringResource(R.string.debug_tools_desc),
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         fontSize = 12.sp,
                         color = colorScheme.onSurface.copy(alpha = 0.7f)
                     )
@@ -206,13 +207,13 @@ fun DebugSettingsSheet(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.SettingsEthernet, contentDescription = null, tint = Color(0xFF00C851))
-                            Text(stringResource(R.string.debug_verbose_logging), fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_verbose_logging), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                             Spacer(Modifier.weight(1f))
                             Switch(checked = verboseLogging, onCheckedChange = { manager.setVerboseLoggingEnabled(it) })
                         }
                         Text(
                             stringResource(R.string.debug_verbose_hint),
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 11.sp,
                             color = colorScheme.onSurface.copy(alpha = 0.7f)
                         )
@@ -237,21 +238,21 @@ fun DebugSettingsSheet(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.SystemUpdate, contentDescription = null, tint = Color(0xFF5AC8FA))
-                            Text("self-update (dev)", fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_self_update), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                         }
-                        Text("Current version: $versionInfo", fontFamily = FontFamily.Monospace, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = Color(0xFF5AC8FA))
-                        Text("Download and install updates from GitHub releases", fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_current_version_fmt, versionInfo), fontFamily = NunitoFontFamily, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = Color(0xFF5AC8FA))
+                        Text(stringResource(R.string.debug_download_updates_desc), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
 
                         val statusText = when (val s = updateState) {
-                            is UpdateState.Idle -> "Ready"
-                            is UpdateState.Checking -> "Checking for updates..."
-                            is UpdateState.Available -> "Update available: ${s.info.versionName}"
-                            is UpdateState.Downloading -> "Downloading: ${(s.progress * 100).toInt()}%"
-                            is UpdateState.ReadyToInstall -> "Ready to install: ${s.info.versionName}"
-                            is UpdateState.Installing -> "Installing..."
-                            is UpdateState.Success -> "Update installed! Restart app."
-                            is UpdateState.PendingUserAction -> "Waiting for user confirmation..."
-                            is UpdateState.Error -> "Error: ${s.message}"
+                            is UpdateState.Idle -> stringResource(R.string.update_status_ready)
+                            is UpdateState.Checking -> stringResource(R.string.update_status_checking)
+                            is UpdateState.Available -> stringResource(R.string.update_status_available, s.info.versionName)
+                            is UpdateState.Downloading -> stringResource(R.string.update_status_downloading, (s.progress * 100).toInt())
+                            is UpdateState.ReadyToInstall -> stringResource(R.string.update_status_ready_install, s.info.versionName)
+                            is UpdateState.Installing -> stringResource(R.string.update_status_installing)
+                            is UpdateState.Success -> stringResource(R.string.update_status_success)
+                            is UpdateState.PendingUserAction -> stringResource(R.string.update_status_pending_action)
+                            is UpdateState.Error -> stringResource(R.string.update_status_error, s.message)
                         }
                         val statusColor = when (updateState) {
                             is UpdateState.Idle -> colorScheme.onSurface.copy(alpha = 0.6f)
@@ -261,7 +262,7 @@ fun DebugSettingsSheet(
                             is UpdateState.PendingUserAction -> Color(0xFFFF9500)
                             is UpdateState.Error -> Color(0xFFFF3B30)
                         }
-                        Text(statusText, fontFamily = FontFamily.Monospace, fontSize = 12.sp, color = statusColor)
+                        Text(statusText, fontFamily = NunitoFontFamily, fontSize = 12.sp, color = statusColor)
 
                         if (updateState is UpdateState.Downloading) {
                             val progress = (updateState as UpdateState.Downloading).progress
@@ -300,11 +301,11 @@ fun DebugSettingsSheet(
                         ) {
                             Text(
                                 text = when {
-                                    !updateManager.canRequestPackageInstalls() -> "Grant Install Permission"
-                                    isReadyToInstall -> "Install Update"
-                                    else -> "Check for Updates"
+                                    !updateManager.canRequestPackageInstalls() -> stringResource(R.string.update_grant_install_permission)
+                                    isReadyToInstall -> stringResource(R.string.update_install)
+                                    else -> stringResource(R.string.update_check)
                                 },
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 fontWeight = FontWeight.Medium
                             )
                         }
@@ -316,12 +317,12 @@ fun DebugSettingsSheet(
                         ) {
                             Icon(Icons.Filled.BugReport, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(8.dp))
-                            Text("Test Update Dialog", fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_test_update_dialog), fontFamily = NunitoFontFamily, fontWeight = FontWeight.Medium)
                         }
 
                         Text(
                             "Source: github.com/whisperbit-labs/zemzeme-android",
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 10.sp,
                             color = colorScheme.onSurface.copy(alpha = 0.5f)
                         )
@@ -340,10 +341,10 @@ fun DebugSettingsSheet(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.Bluetooth, contentDescription = null, tint = Color(0xFF007AFF))
-                            Text(stringResource(R.string.debug_bluetooth_roles), fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_bluetooth_roles), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.debug_gatt_server), fontFamily = FontFamily.Monospace, modifier = Modifier.weight(1f))
+                            Text(stringResource(R.string.debug_gatt_server), fontFamily = NunitoFontFamily, modifier = Modifier.weight(1f))
                             Switch(checked = gattServerEnabled, onCheckedChange = {
                                 manager.setGattServerEnabled(it)
                                 scope.launch {
@@ -352,9 +353,9 @@ fun DebugSettingsSheet(
                             })
                         }
                         val serverCount = connectedDevices.count { it.connectionType == ConnectionType.GATT_SERVER }
-                        Text(stringResource(R.string.debug_connections_fmt, serverCount, maxServer), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_connections_fmt, serverCount, maxServer), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.debug_max_server), fontFamily = FontFamily.Monospace, modifier = Modifier.width(90.dp))
+                            Text(stringResource(R.string.debug_max_server), fontFamily = NunitoFontFamily, modifier = Modifier.width(90.dp))
                             Slider(
                                 value = maxServer.toFloat(),
                                 onValueChange = { manager.setMaxServerConnections(it.toInt().coerceAtLeast(1)) },
@@ -363,7 +364,7 @@ fun DebugSettingsSheet(
                             )
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.debug_gatt_client), fontFamily = FontFamily.Monospace, modifier = Modifier.weight(1f))
+                            Text(stringResource(R.string.debug_gatt_client), fontFamily = NunitoFontFamily, modifier = Modifier.weight(1f))
                             Switch(checked = gattClientEnabled, onCheckedChange = {
                                 manager.setGattClientEnabled(it)
                                 scope.launch {
@@ -372,9 +373,9 @@ fun DebugSettingsSheet(
                             })
                         }
                         val clientCount = connectedDevices.count { it.connectionType == ConnectionType.GATT_CLIENT }
-                        Text(stringResource(R.string.debug_connections_fmt, clientCount, maxClient), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_connections_fmt, clientCount, maxClient), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.debug_max_client), fontFamily = FontFamily.Monospace, modifier = Modifier.width(90.dp))
+                            Text(stringResource(R.string.debug_max_client), fontFamily = NunitoFontFamily, modifier = Modifier.width(90.dp))
                             Slider(
                                 value = maxClient.toFloat(),
                                 onValueChange = { manager.setMaxClientConnections(it.toInt().coerceAtLeast(1)) },
@@ -383,9 +384,9 @@ fun DebugSettingsSheet(
                             )
                         }
                         val overallCount = connectedDevices.size
-                        Text(stringResource(R.string.debug_overall_connections_fmt, overallCount, maxOverall), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_overall_connections_fmt, overallCount, maxOverall), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.debug_max_overall), fontFamily = FontFamily.Monospace, modifier = Modifier.width(90.dp))
+                            Text(stringResource(R.string.debug_max_overall), fontFamily = NunitoFontFamily, modifier = Modifier.width(90.dp))
                             Slider(
                                 value = maxOverall.toFloat(),
                                 onValueChange = { manager.setMaxConnectionsOverall(it.toInt().coerceAtLeast(1)) },
@@ -395,7 +396,7 @@ fun DebugSettingsSheet(
                         }
                         Text(
                             stringResource(R.string.debug_roles_hint),
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 11.sp,
                             color = colorScheme.onSurface.copy(alpha = 0.7f)
                         )
@@ -411,7 +412,7 @@ fun DebugSettingsSheet(
 
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.PowerSettingsNew, contentDescription = null, tint = Color(0xFFFF9500))
-                            Text(stringResource(R.string.debug_packet_relay), fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_packet_relay), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                             Spacer(Modifier.weight(1f))
                             Switch(checked = packetRelayEnabled, onCheckedChange = { manager.setPacketRelayEnabled(it) })
                         }
@@ -447,18 +448,18 @@ fun DebugSettingsSheet(
                                 FilterChip(
                                     selected = graphMode == GraphMode.OVERALL,
                                     onClick = { graphMode = GraphMode.OVERALL },
-                                    label = { Text("Overall") }
+                                    label = { Text(stringResource(R.string.debug_overall)) }
                                 )
                                 FilterChip(
                                     selected = graphMode == GraphMode.PER_DEVICE,
                                     onClick = { graphMode = GraphMode.PER_DEVICE },
-                                    label = { Text("Per Device") },
+                                    label = { Text(stringResource(R.string.debug_per_device)) },
                                     leadingIcon = { Icon(Icons.Filled.Devices, contentDescription = null) }
                                 )
                                 FilterChip(
                                     selected = graphMode == GraphMode.PER_PEER,
                                     onClick = { graphMode = GraphMode.PER_PEER },
-                                    label = { Text("Per Peer") },
+                                    label = { Text(stringResource(R.string.debug_per_peer)) },
                                     leadingIcon = { Icon(Icons.Filled.SettingsEthernet, contentDescription = null) }
                                 )
                             }
@@ -547,13 +548,13 @@ fun DebugSettingsSheet(
                             // Helper functions moved to top-level composable below to avoid scope issues
 
                             // Render two blocks: Incoming and Outgoing
-                            Text("Incoming", fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                            Text(stringResource(R.string.debug_incoming), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                             Text(
                                 "${relayStats.lastSecondIncoming}/s • ${relayStats.lastMinuteIncoming}/m • ${relayStats.last15MinuteIncoming}/15m • total ${relayStats.totalIncomingCount}",
-                                fontFamily = FontFamily.Monospace, fontSize = 10.sp, color = colorScheme.onSurface.copy(alpha = 0.6f)
+                                fontFamily = NunitoFontFamily, fontSize = 10.sp, color = colorScheme.onSurface.copy(alpha = 0.6f)
                             )
                             DrawGraphBlock(
-                                title = "Incoming",
+                                title = stringResource(R.string.debug_incoming),
                                 stackedKeys = stackedKeysIncoming,
                                 stackedSeries = stackedSeriesIncoming,
                                 overallSeries = if (graphMode == GraphMode.OVERALL) overallSeriesIncoming else null,
@@ -603,13 +604,13 @@ fun DebugSettingsSheet(
                             if (graphMode != GraphMode.OVERALL && stackedKeysIncoming.isNotEmpty()) { /* legend printed inside DrawGraphBlock */ }
 
                             Spacer(Modifier.height(8.dp))
-                            Text("Outgoing", fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                            Text(stringResource(R.string.debug_outgoing), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                             Text(
                                 "${relayStats.lastSecondOutgoing}/s • ${relayStats.lastMinuteOutgoing}/m • ${relayStats.last15MinuteOutgoing}/15m • total ${relayStats.totalOutgoingCount}",
-                                fontFamily = FontFamily.Monospace, fontSize = 10.sp, color = colorScheme.onSurface.copy(alpha = 0.6f)
+                                fontFamily = NunitoFontFamily, fontSize = 10.sp, color = colorScheme.onSurface.copy(alpha = 0.6f)
                             )
                             DrawGraphBlock(
-                                title = "Outgoing",
+                                title = stringResource(R.string.debug_outgoing),
                                 stackedKeys = stackedKeysOutgoing,
                                 stackedSeries = stackedSeriesOutgoing,
                                 overallSeries = if (graphMode == GraphMode.OVERALL) overallSeriesOutgoing else null,
@@ -668,17 +669,17 @@ fun DebugSettingsSheet(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.SettingsEthernet, contentDescription = null, tint = Color(0xFF9C27B0))
-                            Text("sync settings", fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_sync_settings), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                         }
-                        Text(stringResource(R.string.debug_max_packets_per_sync_fmt, seenCapacity), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_max_packets_per_sync_fmt, seenCapacity), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                         Slider(value = seenCapacity.toFloat(), onValueChange = { manager.setSeenPacketCapacity(it.toInt()) }, valueRange = 10f..1000f, steps = 99)
-                        Text(stringResource(R.string.debug_max_gcs_filter_size_fmt, gcsMaxBytes), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_max_gcs_filter_size_fmt, gcsMaxBytes), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                         Slider(value = gcsMaxBytes.toFloat(), onValueChange = { manager.setGcsMaxBytes(it.toInt()) }, valueRange = 128f..1024f, steps = 0)
-                        Text(stringResource(R.string.debug_target_fpr_fmt, gcsFpr), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_target_fpr_fmt, gcsFpr), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                         Slider(value = gcsFpr.toFloat(), onValueChange = { manager.setGcsFprPercent(it.toDouble()) }, valueRange = 0.1f..5.0f, steps = 49)
                         val p = remember(gcsFpr) { com.roman.zemzeme.sync.GCSFilter.deriveP(gcsFpr / 100.0) }
                         val nmax = remember(gcsFpr, gcsMaxBytes) { com.roman.zemzeme.sync.GCSFilter.estimateMaxElementsForSize(gcsMaxBytes, p) }
-                        Text(stringResource(R.string.debug_derived_p_fmt, p.toString(), nmax.toString()), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_derived_p_fmt, p.toString(), nmax.toString()), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                     }
                 }
             }
@@ -689,22 +690,22 @@ fun DebugSettingsSheet(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.Devices, contentDescription = null, tint = Color(0xFF4CAF50))
-                            Text(stringResource(R.string.debug_connected_devices), fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_connected_devices), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                         }
                         val localAddr = remember { meshService.connectionManager.getLocalAdapterAddress() }
-                        Text(stringResource(R.string.debug_our_device_id_fmt, localAddr ?: stringResource(R.string.unknown)), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                        Text(stringResource(R.string.debug_our_device_id_fmt, localAddr ?: stringResource(R.string.unknown)), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                         if (connectedDevices.isEmpty()) {
-                            Text("none", fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.6f))
+                            Text(stringResource(R.string.debug_none), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.6f))
                         } else {
                             connectedDevices.forEach { dev ->
                                 Surface(shape = RoundedCornerShape(8.dp), color = colorScheme.surface.copy(alpha = 0.6f)) {
                                     Row(Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Column(Modifier.weight(1f)) {
-                                            Text((dev.peerID ?: stringResource(R.string.unknown)) + " • ${dev.deviceAddress}", fontFamily = FontFamily.Monospace, fontSize = 12.sp)
+                                            Text((dev.peerID ?: stringResource(R.string.unknown)) + " • ${dev.deviceAddress}", fontFamily = NunitoFontFamily, fontSize = 12.sp)
                                             val roleLabel = if (dev.connectionType == ConnectionType.GATT_SERVER) stringResource(R.string.debug_role_server) else stringResource(R.string.debug_role_client)
-                                            Text("${dev.nickname ?: ""} • " + stringResource(R.string.debug_rssi_fmt, dev.rssi ?: stringResource(R.string.debug_question_mark)) + " • $roleLabel" + (if (dev.isDirectConnection) stringResource(R.string.debug_direct_suffix) else ""), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                                            Text("${dev.nickname ?: ""} • " + stringResource(R.string.debug_rssi_fmt, dev.rssi ?: stringResource(R.string.debug_question_mark)) + " • $roleLabel" + (if (dev.isDirectConnection) stringResource(R.string.debug_direct_suffix) else ""), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                                         }
-                                        Text(stringResource(R.string.debug_disconnect), color = Color(0xFFBF1A1A), fontFamily = FontFamily.Monospace, modifier = Modifier.clickable {
+                                        Text(stringResource(R.string.debug_disconnect), color = Color(0xFFBF1A1A), fontFamily = NunitoFontFamily, modifier = Modifier.clickable {
                                             meshService.connectionManager.disconnectAddress(dev.deviceAddress)
                                         })
                                     }
@@ -721,19 +722,19 @@ fun DebugSettingsSheet(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.Bluetooth, contentDescription = null, tint = Color(0xFF007AFF))
-                            Text(stringResource(R.string.debug_recent_scan_results), fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_recent_scan_results), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                         }
                         if (scanResults.isEmpty()) {
-                            Text(stringResource(R.string.debug_none), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.6f))
+                            Text(stringResource(R.string.debug_none), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.6f))
                         } else {
                             scanResults.forEach { res ->
                                 Surface(shape = RoundedCornerShape(8.dp), color = colorScheme.surface.copy(alpha = 0.6f)) {
                                     Row(Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Column(Modifier.weight(1f)) {
-                                            Text((res.peerID ?: stringResource(R.string.unknown)) + " • ${res.deviceAddress}", fontFamily = FontFamily.Monospace, fontSize = 12.sp)
-                                            Text(stringResource(R.string.debug_rssi_fmt, res.rssi.toString()), fontFamily = FontFamily.Monospace, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
+                                            Text((res.peerID ?: stringResource(R.string.unknown)) + " • ${res.deviceAddress}", fontFamily = NunitoFontFamily, fontSize = 12.sp)
+                                            Text(stringResource(R.string.debug_rssi_fmt, res.rssi.toString()), fontFamily = NunitoFontFamily, fontSize = 11.sp, color = colorScheme.onSurface.copy(alpha = 0.7f))
                                         }
-                                        Text(stringResource(R.string.debug_connect), color = Color(0xFF00C851), fontFamily = FontFamily.Monospace, modifier = Modifier.clickable {
+                                        Text(stringResource(R.string.debug_connect), color = Color(0xFF00C851), fontFamily = NunitoFontFamily, modifier = Modifier.clickable {
                                             meshService.connectionManager.connectToAddress(res.deviceAddress)
                                         })
                                     }
@@ -750,15 +751,15 @@ fun DebugSettingsSheet(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(Icons.Filled.BugReport, contentDescription = null, tint = Color(0xFFFF9500))
-                            Text(stringResource(R.string.debug_debug_console), fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.debug_debug_console), fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                             Spacer(Modifier.weight(1f))
-                            Text(stringResource(R.string.debug_clear), color = Color(0xFFBF1A1A), fontFamily = FontFamily.Monospace, modifier = Modifier.clickable {
+                            Text(stringResource(R.string.debug_clear), color = Color(0xFFBF1A1A), fontFamily = NunitoFontFamily, modifier = Modifier.clickable {
                                 manager.clearDebugMessages()
                             })
                         }
                         Column(Modifier.heightIn(max = 260.dp).background(colorScheme.surface.copy(alpha = 0.5f)).padding(8.dp)) {
                             debugMessages.takeLast(100).reversed().forEach { msg ->
-                                Text("${msg.content}", fontFamily = FontFamily.Monospace, fontSize = 11.sp)
+                                Text("${msg.content}", fontFamily = NunitoFontFamily, fontSize = 11.sp)
                             }
                         }
                     }
@@ -875,7 +876,7 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(Icons.Filled.SettingsEthernet, contentDescription = null, tint = Color(0xFF5AC8FA))
-                Text("p2p diagnostics", fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text("p2p diagnostics", fontFamily = NunitoFontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 Spacer(Modifier.weight(1f))
                 Box(Modifier.size(10.dp).background(statusColor, RoundedCornerShape(99.dp)))
             }
@@ -886,13 +887,13 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
 
             Text(
                 text = "node: $statusLabel • host peers: $totalConnectedPeers • uptime: $uptimeText",
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontSize = 11.sp,
                 color = colorScheme.onSurface.copy(alpha = 0.85f)
             )
             Text(
                 text = "dht: ${if (dhtStatus.isBlank()) "unavailable" else dhtStatus}",
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontSize = 11.sp,
                 color = colorScheme.onSurface.copy(alpha = 0.75f),
                 maxLines = 3
@@ -901,13 +902,13 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
             val totalRate = bandwidthSummary.currentRateInBytesPerSec + bandwidthSummary.currentRateOutBytesPerSec
             Text(
                 text = "bw session: ${p2pRepository.formatBytes(bandwidthSummary.sessionTotalBytes)} • current: ${p2pRepository.formatRate(totalRate)}",
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontSize = 11.sp,
                 color = colorScheme.onSurface.copy(alpha = 0.75f)
             )
             Text(
                 text = "in ${p2pRepository.formatRate(bandwidthSummary.currentRateInBytesPerSec)} • out ${p2pRepository.formatRate(bandwidthSummary.currentRateOutBytesPerSec)} • daily ${p2pRepository.formatBytes(bandwidthSummary.dailyTotalBytes)}",
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontSize = 10.sp,
                 color = colorScheme.onSurface.copy(alpha = 0.65f)
             )
@@ -923,7 +924,7 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
                         label = {
                             Text(
                                 componentLabels[component] ?: component,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 fontSize = 11.sp
                             )
                         }
@@ -940,7 +941,7 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
                     enabled = !isRefreshing,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(if (isRefreshing) "Refreshing..." else "Refresh")
+                    Text(stringResource(if (isRefreshing) R.string.debug_refreshing else R.string.debug_refresh))
                 }
 
                 OutlinedButton(
@@ -960,7 +961,7 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
                     enabled = !isRefreshing,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Clear Logs")
+                    Text(stringResource(R.string.debug_clear_logs))
                 }
             }
 
@@ -1000,13 +1001,13 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
                 enabled = !isSharing,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(if (isSharing) "Preparing export..." else "Share Logs")
+                Text(stringResource(if (isSharing) R.string.debug_preparing_export else R.string.debug_share_logs))
             }
 
             if (errorMessage != null) {
                 Text(
                     text = errorMessage ?: "",
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 11.sp,
                     color = Color(0xFFFF3B30)
                 )
@@ -1015,7 +1016,7 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
             if (lastRefreshedAt != null) {
                 Text(
                     text = "last refresh ${formatLogTimestamp(lastRefreshedAt ?: 0L)}",
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 10.sp,
                     color = colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -1032,7 +1033,7 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
                 if (visibleLogs.isEmpty()) {
                     Text(
                         text = "no p2p logs",
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         fontSize = 11.sp,
                         color = colorScheme.onSurface.copy(alpha = 0.6f)
                     )
@@ -1040,7 +1041,7 @@ private fun P2PDiagnosticsSection(manager: DebugSettingsManager) {
                     visibleLogs.forEach { entry ->
                         Text(
                             text = "${formatLogTimestamp(entry.timestamp)} ${entry.level}/${entry.component} ${entry.event} ${entry.message}",
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = NunitoFontFamily,
                             fontSize = 10.sp,
                             color = colorScheme.onSurface.copy(alpha = 0.9f)
                         )
@@ -1156,7 +1157,7 @@ private fun DrawGraphBlock(
             Box(Modifier.width(leftGutter).fillMaxHeight()) {
                 Text(
                     "p/s",
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 10.sp,
                     color = colorScheme.onSurface.copy(alpha = 0.7f),
                     modifier = Modifier.align(Alignment.CenterStart).padding(start = 2.dp).rotate(-90f)
@@ -1170,14 +1171,14 @@ private fun DrawGraphBlock(
                 }
                 Text(
                     topLabel,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 10.sp,
                     color = colorScheme.onSurface.copy(alpha = 0.7f),
                     modifier = Modifier.align(Alignment.TopEnd).padding(end = 4.dp)
                 )
                 Text(
                     "0",
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 10.sp,
                     color = colorScheme.onSurface.copy(alpha = 0.7f),
                     modifier = Modifier.align(Alignment.BottomEnd).padding(end = 4.dp)
@@ -1202,8 +1203,8 @@ private fun DrawGraphBlock(
                     ) {
                         Box(Modifier.size(10.dp).background(swatchColor, RoundedCornerShape(2.dp)))
                         Column {
-                            Text(legendTitleFor(key), fontFamily = FontFamily.Monospace, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (dimmed) 0.6f else 0.95f))
-                            Text(legendMetricsFor(key), fontFamily = FontFamily.Monospace, fontSize = 9.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (dimmed) 0.45f else 0.75f))
+                            Text(legendTitleFor(key), fontFamily = NunitoFontFamily, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (dimmed) 0.6f else 0.95f))
+                            Text(legendMetricsFor(key), fontFamily = NunitoFontFamily, fontSize = 9.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (dimmed) 0.45f else 0.75f))
                         }
                     }
                 }

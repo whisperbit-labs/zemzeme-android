@@ -13,31 +13,34 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material.icons.filled.AirplanemodeActive
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.roman.zemzeme.nostr.NostrProofOfWork
-import com.roman.zemzeme.nostr.PoWPreferenceManager
 import androidx.compose.ui.res.stringResource
 import com.roman.zemzeme.R
 import com.roman.zemzeme.core.ui.component.button.CloseButton
 import com.roman.zemzeme.core.ui.component.sheet.ZemzemeBottomSheet
+import com.roman.zemzeme.features.file.FileUtils
+import com.roman.zemzeme.features.sharing.ApkSharingHelper
 import com.roman.zemzeme.net.TorMode
 import com.roman.zemzeme.net.TorPreferenceManager
 import com.roman.zemzeme.net.ArtiTorManager
@@ -47,10 +50,24 @@ import com.roman.zemzeme.p2p.P2PTransport
 import com.roman.zemzeme.p2p.P2PNodeStatus
 import android.content.Intent
 import android.provider.Settings
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricPrompt
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import com.roman.zemzeme.onboarding.NetworkStatus
 import com.roman.zemzeme.onboarding.NetworkStatusManager
+import com.roman.zemzeme.security.AppLockManager
+import com.roman.zemzeme.security.AppLockPreferenceManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * All possible states for the Network transport toggles (P2P, Nostr).
@@ -102,6 +119,9 @@ private enum class BleMeshToggleState(
         }
     }
 }
+
+/** Steps used in the app-lock setup / disable flow inside AboutSheet */
+private enum class AppLockSetupStep { NONE, SET_PIN, CONFIRM_PIN, VERIFY_DISABLE }
 
 /**
  * Feature row for displaying app capabilities
@@ -164,7 +184,7 @@ private fun ThemeChip(
         onClick = onClick,
         shape = RoundedCornerShape(10.dp),
         color = if (selected) {
-            if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
+            colorScheme.primary
         } else {
             colorScheme.surfaceVariant.copy(alpha = 0.5f)
         }
@@ -250,11 +270,66 @@ private fun SettingsToggleRow(
             enabled = enabled,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,
-                checkedTrackColor = if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D),
+                checkedTrackColor = colorScheme.primary,
                 uncheckedThumbColor = Color.White,
                 uncheckedTrackColor = colorScheme.surfaceVariant
             )
         )
+    }
+}
+
+/**
+ * Clickable action row with icon, title, and subtitle (no switch).
+ * Used for action buttons like "Share via System".
+ */
+@Composable
+private fun SettingsActionRow(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    val colorScheme = MaterialTheme.colorScheme
+
+    Surface(
+        onClick = onClick,
+        enabled = enabled,
+        color = Color.Transparent
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (enabled) colorScheme.primary else colorScheme.onSurface.copy(alpha = 0.3f),
+                modifier = Modifier.size(22.dp)
+            )
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = if (enabled) colorScheme.onSurface else colorScheme.onSurface.copy(alpha = 0.4f)
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colorScheme.onSurface.copy(alpha = if (enabled) 0.6f else 0.3f),
+                    lineHeight = 16.sp
+                )
+            }
+        }
     }
 }
 
@@ -269,6 +344,8 @@ fun AboutSheet(
     onDismiss: () -> Unit,
     isBluetoothEnabled: Boolean = true,
     onShowDebug: (() -> Unit)? = null,
+    nickname: String = "",
+    onNicknameChange: ((String) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -299,9 +376,6 @@ fun AboutSheet(
     val isDark = colorScheme.background.red + colorScheme.background.green + colorScheme.background.blue < 1.5f
 
     // Hoist shared state to avoid duplicate collection in multiple LazyColumn items
-    LaunchedEffect(Unit) { PoWPreferenceManager.init(context) }
-    val powEnabled by PoWPreferenceManager.powEnabled.collectAsState()
-    val powDifficulty by PoWPreferenceManager.powDifficulty.collectAsState()
     var backgroundEnabled by remember { mutableStateOf(com.roman.zemzeme.service.MeshServicePreferences.isBackgroundEnabled(true)) }
     val torMode by TorPreferenceManager.modeFlow.collectAsState()
     val torProvider = remember { ArtiTorManager.getInstance() }
@@ -356,7 +430,7 @@ fun AboutSheet(
                             Text(
                                 text = stringResource(R.string.app_name),
                                 style = TextStyle(
-                                    fontFamily = FontFamily.Monospace,
+                                    fontFamily = NunitoFontFamily,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 28.sp,
                                     letterSpacing = 1.sp
@@ -368,16 +442,45 @@ fun AboutSheet(
                             Text(
                                 text = stringResource(R.string.version_prefix, versionName ?: ""),
                                 fontSize = 13.sp,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 color = colorScheme.onBackground.copy(alpha = 0.5f)
                             )
                             Text(
                                 text = stringResource(R.string.about_tagline),
                                 fontSize = 13.sp,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 color = colorScheme.onBackground.copy(alpha = 0.6f),
                                 modifier = Modifier.padding(top = 4.dp)
                             )
+                        }
+                    }
+
+                    // Username Section
+                    if (onNicknameChange != null) {
+                        item(key = "username") {
+                            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                                Text(
+                                    text = stringResource(R.string.section_username),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = colorScheme.onBackground.copy(alpha = 0.5f),
+                                    letterSpacing = 0.5.sp,
+                                    modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+                                )
+                                Surface(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    color = colorScheme.surface,
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    NicknameEditor(
+                                        value = nickname,
+                                        onValueChange = { newValue ->
+                                            val filtered = newValue.filter { it in 'a'..'z' || it in '0'..'9' }.take(15)
+                                            onNicknameChange(filtered)
+                                        },
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                                    )
+                                }
+                            }
                         }
                     }
 
@@ -429,7 +532,7 @@ fun AboutSheet(
                     item(key = "appearance") {
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
-                                text = "THEME",
+                                text = stringResource(R.string.section_theme),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = colorScheme.onBackground.copy(alpha = 0.5f),
                                 letterSpacing = 0.5.sp,
@@ -470,11 +573,291 @@ fun AboutSheet(
                         }
                     }
 
+                    // Security Section
+                    item(key = "security") {
+                        val activity = LocalContext.current as? FragmentActivity
+                        var appLockEnabled by remember {
+                            mutableStateOf(AppLockPreferenceManager.isEnabled())
+                        }
+                        var setupStep by remember { mutableStateOf(AppLockSetupStep.NONE) }
+                        var pinInput by remember { mutableStateOf("") }
+                        var newPinFirst by remember { mutableStateOf("") }
+                        var pinError by remember { mutableStateOf<String?>(null) }
+
+                        // Pre-fetch strings for use inside non-Composable lambdas
+                        val errTooShort = stringResource(R.string.app_lock_pin_min_length)
+                        val errMismatch = stringResource(R.string.app_lock_pin_mismatch)
+                        val errWrongPin = stringResource(R.string.app_lock_wrong_pin)
+                        val bioTitle = stringResource(R.string.app_lock_biometric_title)
+                        val bioSubtitle = stringResource(R.string.app_lock_biometric_subtitle)
+                        val setPinLabel = stringResource(R.string.app_lock_set_pin)
+
+                        // Biometric availability
+                        val biometricManager = remember { BiometricManager.from(context) }
+                        val canUseBiometric = remember {
+                            biometricManager.canAuthenticate(BIOMETRIC_STRONG or BIOMETRIC_WEAK) ==
+                                    BiometricManager.BIOMETRIC_SUCCESS
+                        }
+
+                        // Fire biometric prompt as first step when enabling lock
+                        fun launchBiometricForSetup() {
+                            val act = activity ?: run { setupStep = AppLockSetupStep.SET_PIN; return }
+                            val executor = ContextCompat.getMainExecutor(context)
+                            val callback = object : BiometricPrompt.AuthenticationCallback() {
+                                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                                    setupStep = AppLockSetupStep.SET_PIN
+                                }
+                                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                                    // Includes "Use PIN instead" negative button tap
+                                    setupStep = AppLockSetupStep.SET_PIN
+                                }
+                                override fun onAuthenticationFailed() { /* wrong finger — prompt stays open */ }
+                            }
+                            val prompt = BiometricPrompt(act, executor, callback)
+                            val info = BiometricPrompt.PromptInfo.Builder()
+                                .setTitle(bioTitle)
+                                .setSubtitle(bioSubtitle)
+                                .setNegativeButtonText(setPinLabel)
+                                .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK)
+                                .build()
+                            prompt.authenticate(info)
+                        }
+
+                        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                            Text(
+                                text = stringResource(R.string.app_lock_security_section),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = colorScheme.onBackground.copy(alpha = 0.5f),
+                                letterSpacing = 0.5.sp,
+                                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+                            )
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = colorScheme.surface,
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                SettingsToggleRow(
+                                    icon = Icons.Filled.Lock,
+                                    title = stringResource(R.string.app_lock_title),
+                                    subtitle = if (appLockEnabled)
+                                        if (canUseBiometric) stringResource(R.string.app_lock_subtitle_on)
+                                        else stringResource(R.string.app_lock_subtitle_pin)
+                                    else
+                                        stringResource(R.string.app_lock_subtitle_off),
+                                    checked = appLockEnabled,
+                                    onCheckedChange = { wantEnabled ->
+                                        pinInput = ""
+                                        pinError = null
+                                        if (wantEnabled) {
+                                            if (canUseBiometric && activity != null) {
+                                                launchBiometricForSetup()
+                                            } else {
+                                                setupStep = AppLockSetupStep.SET_PIN
+                                            }
+                                        } else {
+                                            setupStep = AppLockSetupStep.VERIFY_DISABLE
+                                        }
+                                    }
+                                )
+                            }
+                        }
+
+                        // ── SET_PIN dialog ──────────────────────────────────────
+                        if (setupStep == AppLockSetupStep.SET_PIN) {
+                            AlertDialog(
+                                onDismissRequest = { setupStep = AppLockSetupStep.NONE },
+                                title = { Text(stringResource(R.string.app_lock_set_pin)) },
+                                text = {
+                                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        OutlinedTextField(
+                                            value = pinInput,
+                                            onValueChange = {
+                                                if (it.length <= 6 && it.all { c -> c.isDigit() })
+                                                    pinInput = it
+                                            },
+                                            keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Number,
+                                                imeAction = ImeAction.Done
+                                            ),
+                                            visualTransformation = PasswordVisualTransformation(),
+                                            label = { Text(stringResource(R.string.app_lock_set_pin)) },
+                                            placeholder = { Text(stringResource(R.string.placeholder_6_digits)) },
+                                            isError = pinError != null,
+                                            supportingText = pinError?.let {
+                                                { Text(it, color = MaterialTheme.colorScheme.error) }
+                                            }
+                                        )
+                                    }
+                                },
+                                confirmButton = {
+                                    TextButton(onClick = {
+                                        if (pinInput.length != 6) {
+                                            pinError = errTooShort
+                                        } else {
+                                            newPinFirst = pinInput
+                                            pinInput = ""
+                                            pinError = null
+                                            setupStep = AppLockSetupStep.CONFIRM_PIN
+                                        }
+                                    }) { Text(stringResource(android.R.string.ok)) }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { setupStep = AppLockSetupStep.NONE }) {
+                                        Text(stringResource(R.string.cancel))
+                                    }
+                                }
+                            )
+                        }
+
+                        // ── CONFIRM_PIN dialog ───────────────────────────────────
+                        if (setupStep == AppLockSetupStep.CONFIRM_PIN) {
+                            AlertDialog(
+                                onDismissRequest = { setupStep = AppLockSetupStep.NONE },
+                                title = { Text(stringResource(R.string.app_lock_confirm_pin)) },
+                                text = {
+                                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        OutlinedTextField(
+                                            value = pinInput,
+                                            onValueChange = {
+                                                if (it.length <= 6 && it.all { c -> c.isDigit() })
+                                                    pinInput = it
+                                            },
+                                            keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Number,
+                                                imeAction = ImeAction.Done
+                                            ),
+                                            visualTransformation = PasswordVisualTransformation(),
+                                            label = { Text(stringResource(R.string.app_lock_confirm_pin)) },
+                                            isError = pinError != null,
+                                            supportingText = pinError?.let {
+                                                { Text(it, color = MaterialTheme.colorScheme.error) }
+                                            }
+                                        )
+                                    }
+                                },
+                                confirmButton = {
+                                    TextButton(onClick = {
+                                        if (pinInput == newPinFirst) {
+                                            AppLockPreferenceManager.savePin(pinInput)
+                                            AppLockPreferenceManager.setEnabled(true)
+                                            appLockEnabled = true
+                                            setupStep = AppLockSetupStep.NONE
+                                        } else {
+                                            pinError = errMismatch
+                                            pinInput = ""
+                                        }
+                                    }) { Text(stringResource(android.R.string.ok)) }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { setupStep = AppLockSetupStep.NONE }) {
+                                        Text(stringResource(R.string.cancel))
+                                    }
+                                }
+                            )
+                        }
+
+                        // ── VERIFY_DISABLE dialog ────────────────────────────────
+                        if (setupStep == AppLockSetupStep.VERIFY_DISABLE) {
+                            AlertDialog(
+                                onDismissRequest = { setupStep = AppLockSetupStep.NONE },
+                                title = { Text(stringResource(R.string.app_lock_disable_title)) },
+                                text = {
+                                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        Text(stringResource(R.string.app_lock_disable_msg))
+                                        OutlinedTextField(
+                                            value = pinInput,
+                                            onValueChange = {
+                                                if (it.length <= 6 && it.all { c -> c.isDigit() })
+                                                    pinInput = it
+                                            },
+                                            keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Number,
+                                                imeAction = ImeAction.Done
+                                            ),
+                                            visualTransformation = PasswordVisualTransformation(),
+                                            label = { Text(stringResource(R.string.app_lock_enter_pin)) },
+                                            isError = pinError != null,
+                                            supportingText = pinError?.let {
+                                                { Text(it, color = MaterialTheme.colorScheme.error) }
+                                            }
+                                        )
+                                        if (canUseBiometric && activity != null) {
+                                            TextButton(onClick = {
+                                                val executor =
+                                                    ContextCompat.getMainExecutor(context)
+                                                val callback =
+                                                    object : BiometricPrompt.AuthenticationCallback() {
+                                                        override fun onAuthenticationSucceeded(
+                                                            result: BiometricPrompt.AuthenticationResult
+                                                        ) {
+                                                            AppLockPreferenceManager.setEnabled(false)
+                                                            AppLockPreferenceManager.clearPin()
+                                                            AppLockManager.unlock()
+                                                            appLockEnabled = false
+                                                            setupStep = AppLockSetupStep.NONE
+                                                        }
+
+                                                        override fun onAuthenticationError(
+                                                            errorCode: Int,
+                                                            errString: CharSequence
+                                                        ) { /* stay in dialog */ }
+
+                                                        override fun onAuthenticationFailed() {}
+                                                    }
+                                                val prompt = BiometricPrompt(
+                                                    activity,
+                                                    executor,
+                                                    callback
+                                                )
+                                                val info =
+                                                    BiometricPrompt.PromptInfo.Builder()
+                                                        .setTitle(context.getString(R.string.app_lock_disable_title))
+                                                        .setNegativeButtonText(context.getString(R.string.app_lock_use_pin))
+                                                        .setAllowedAuthenticators(
+                                                            BIOMETRIC_STRONG or BIOMETRIC_WEAK
+                                                        )
+                                                        .build()
+                                                prompt.authenticate(info)
+                                            }) {
+                                                Icon(
+                                                    Icons.Filled.Security,
+                                                    contentDescription = null,
+                                                    modifier = Modifier.size(16.dp)
+                                                )
+                                                Spacer(modifier = Modifier.width(4.dp))
+                                                Text(stringResource(R.string.app_lock_biometric_title))
+                                            }
+                                        }
+                                    }
+                                },
+                                confirmButton = {
+                                    TextButton(onClick = {
+                                        if (AppLockPreferenceManager.verifyPin(pinInput)) {
+                                            AppLockPreferenceManager.setEnabled(false)
+                                            AppLockPreferenceManager.clearPin()
+                                            AppLockManager.unlock()
+                                            appLockEnabled = false
+                                            setupStep = AppLockSetupStep.NONE
+                                        } else {
+                                            pinError = errWrongPin
+                                            pinInput = ""
+                                        }
+                                    }) { Text(stringResource(android.R.string.ok)) }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { setupStep = AppLockSetupStep.NONE }) {
+                                        Text(stringResource(R.string.cancel))
+                                    }
+                                }
+                            )
+                        }
+                    }
+
                     // Settings Section - Unified Card with Toggles
                     item(key = "settings") {
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
-                                text = "SETTINGS",
+                                text = stringResource(R.string.section_settings),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = colorScheme.onBackground.copy(alpha = 0.5f),
                                 letterSpacing = 0.5.sp,
@@ -507,20 +890,6 @@ fun AboutSheet(
                                         modifier = Modifier.padding(start = 56.dp),
                                         color = colorScheme.outline.copy(alpha = 0.12f)
                                     )
-                                    
-                                    // Proof of Work Toggle
-                                    SettingsToggleRow(
-                                        icon = Icons.Filled.Speed,
-                                        title = stringResource(R.string.about_pow),
-                                        subtitle = stringResource(R.string.about_pow_tip),
-                                        checked = powEnabled,
-                                        onCheckedChange = { PoWPreferenceManager.setPowEnabled(it) }
-                                    )
-
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(start = 56.dp),
-                                        color = colorScheme.outline.copy(alpha = 0.12f)
-                                    )
 
                                     // BLE Mesh Toggle
                                     val bleToggleState = remember(bleEnabled, isBluetoothEnabled) {
@@ -532,7 +901,7 @@ fun AboutSheet(
 
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Bluetooth,
-                                        title = "BLE Mesh",
+                                        title = stringResource(R.string.setting_ble_mesh),
                                         subtitle = stringResource(bleToggleState.subtitleResId),
                                         subtitleColor = bleToggleState.subtitleColor,
                                         checked = bleToggleState.isChecked,
@@ -553,7 +922,7 @@ fun AboutSheet(
                                                 }
                                                 android.widget.Toast.makeText(
                                                     context,
-                                                    if (enabled) "BLE Mesh enabled" else "BLE Mesh disabled",
+                                                    if (enabled) context.getString(R.string.toast_ble_mesh_enabled) else context.getString(R.string.toast_ble_mesh_disabled),
                                                     android.widget.Toast.LENGTH_SHORT
                                                 ).show()
                                             }
@@ -600,14 +969,138 @@ fun AboutSheet(
                         }
                     }
 
+                    // Refresh Icon & Name
+                    item(key = "icon_switch") {
+                        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                            Text(
+                                text = stringResource(R.string.icon_switch_section).uppercase(),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = colorScheme.onBackground.copy(alpha = 0.5f),
+                                letterSpacing = 0.5.sp,
+                                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+                            )
+                        }
+                        var pendingSwitch by remember {
+                            mutableStateOf<com.roman.zemzeme.iconswitch.IconSwitcher.SwitchResult?>(null)
+                        }
+
+                        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = colorScheme.surface,
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            pendingSwitch = com.roman.zemzeme.iconswitch.IconSwitcher.pickNext(context)
+                                        }
+                                        .padding(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Refresh,
+                                        contentDescription = stringResource(R.string.icon_switch_title),
+                                        tint = colorScheme.primary,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = stringResource(R.string.icon_switch_title),
+                                            style = MaterialTheme.typography.bodyLarge.copy(
+                                                fontFamily = NunitoFontFamily,
+                                                fontWeight = FontWeight.SemiBold
+                                            ),
+                                            color = colorScheme.onSurface
+                                        )
+                                        Text(
+                                            text = stringResource(R.string.icon_switch_subtitle),
+                                            style = MaterialTheme.typography.bodySmall.copy(
+                                                fontFamily = NunitoFontFamily
+                                            ),
+                                            color = colorScheme.onSurface.copy(alpha = 0.6f)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        if (pendingSwitch != null) {
+                            val result = pendingSwitch!!
+                            val iconResId = if (result.index == 1) {
+                                R.mipmap.ic_launcher
+                            } else {
+                                context.resources.getIdentifier(
+                                    "ic_icon_${result.index}", "mipmap", context.packageName
+                                )
+                            }
+                            AlertDialog(
+                                onDismissRequest = { pendingSwitch = null },
+                                icon = if (iconResId != 0) {
+                                    {
+                                        val drawable = androidx.core.content.ContextCompat.getDrawable(context, iconResId)
+                                        if (drawable != null) {
+                                            val bitmap = android.graphics.Bitmap.createBitmap(128, 128, android.graphics.Bitmap.Config.ARGB_8888)
+                                            val canvas = android.graphics.Canvas(bitmap)
+                                            drawable.setBounds(0, 0, 128, 128)
+                                            drawable.draw(canvas)
+                                            androidx.compose.foundation.Image(
+                                                bitmap = bitmap.asImageBitmap(),
+                                                contentDescription = result.name,
+                                                modifier = Modifier.size(64.dp)
+                                            )
+                                        }
+                                    }
+                                } else null,
+                                title = {
+                                    Text(
+                                        text = result.name,
+                                        style = MaterialTheme.typography.headlineSmall.copy(
+                                            fontFamily = NunitoFontFamily,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    )
+                                },
+                                text = {
+                                    Text(
+                                        text = stringResource(R.string.icon_switch_confirm),
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            fontFamily = NunitoFontFamily
+                                        )
+                                    )
+                                },
+                                confirmButton = {
+                                    TextButton(onClick = {
+                                        com.roman.zemzeme.iconswitch.IconSwitcher.applySwitch(context, result.index)
+                                        pendingSwitch = null
+                                        android.widget.Toast.makeText(
+                                            context,
+                                            context.getString(R.string.icon_switch_toast),
+                                            android.widget.Toast.LENGTH_SHORT
+                                        ).show()
+                                    }) {
+                                        Text(stringResource(R.string.icon_switch_apply))
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { pendingSwitch = null }) {
+                                        Text(stringResource(android.R.string.cancel))
+                                    }
+                                }
+                            )
+                        }
+                    }
+
                     // NETWORK section — Tor, P2P, Nostr
                     item(key = "network_settings") {
-                        val torP2PUnsupportedMessage = "P2P over Tor is not supported. Tor was disabled."
+                        val torP2PUnsupportedMessage = context.getString(R.string.toast_p2p_tor_disabled)
                         var showNetworkRequiredDialog by remember { mutableStateOf(false) }
 
                         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                             Text(
-                                text = "NETWORK",
+                                text = stringResource(R.string.section_network),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = colorScheme.onBackground.copy(alpha = 0.5f),
                                 letterSpacing = 0.5.sp,
@@ -683,7 +1176,7 @@ fun AboutSheet(
 
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Wifi,
-                                        title = "P2P Network",
+                                        title = stringResource(R.string.setting_p2p_network),
                                         subtitle = stringResource(p2pToggleState.subtitleResId),
                                         subtitleColor = p2pToggleState.subtitleColor,
                                         checked = p2pEnabled,
@@ -751,7 +1244,7 @@ fun AboutSheet(
 
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Cloud,
-                                        title = "Nostr Relays",
+                                        title = stringResource(R.string.setting_nostr_relays),
                                         subtitle = stringResource(nostrToggleState.subtitleResId),
                                         subtitleColor = nostrToggleState.subtitleColor,
                                         checked = nostrEnabled,
@@ -780,7 +1273,7 @@ fun AboutSheet(
                                                     }
                                                 }
                                             }
-                                            android.widget.Toast.makeText(context, if (enabled) "Nostr enabled" else "Nostr disabled", android.widget.Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, if (enabled) context.getString(R.string.toast_nostr_enabled) else context.getString(R.string.toast_nostr_disabled), android.widget.Toast.LENGTH_SHORT).show()
                                         },
                                         statusIndicator = if (nostrEnabled) {
                                             {
@@ -806,7 +1299,7 @@ fun AboutSheet(
                                     // Tor Toggle — routes Nostr traffic through Tor (indented as sub-option)
                                     SettingsToggleRow(
                                         icon = Icons.Filled.Security,
-                                        title = "  Tor (Nostr)",
+                                        title = stringResource(R.string.setting_tor_nostr),
                                         subtitle = stringResource(R.string.about_tor_route),
                                         checked = torMode == TorMode.ON,
                                         onCheckedChange = { enabled ->
@@ -815,7 +1308,7 @@ fun AboutSheet(
                                                     TorPreferenceManager.set(context, TorMode.OFF)
                                                     android.widget.Toast.makeText(
                                                         context,
-                                                        "Tor with P2P is not supported. Disable P2P first.",
+                                                        context.getString(R.string.toast_tor_p2p_unsupported),
                                                         android.widget.Toast.LENGTH_SHORT
                                                     ).show()
                                                     return@SettingsToggleRow
@@ -851,7 +1344,7 @@ fun AboutSheet(
                                 Text(
                                     text = stringResource(R.string.tor_not_available_in_this_build),
                                     fontSize = 12.sp,
-                                    fontFamily = FontFamily.Monospace,
+                                    fontFamily = NunitoFontFamily,
                                     color = colorScheme.onBackground.copy(alpha = 0.5f),
                                     modifier = Modifier.padding(start = 16.dp, top = 8.dp)
                                 )
@@ -867,69 +1360,6 @@ fun AboutSheet(
                                         }
                                     }
                                 )
-                            }
-                        }
-                    }
-
-                    // PoW Difficulty Slider (when enabled)
-                    item(key = "pow_slider") {
-                        if (powEnabled) {
-                            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                                Surface(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    color = colorScheme.surface,
-                                    shape = RoundedCornerShape(16.dp)
-                                ) {
-                                    Column(
-                                        modifier = Modifier.padding(16.dp),
-                                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                                    ) {
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.SpaceBetween,
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Text(
-                                                text = "Difficulty",
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                fontWeight = FontWeight.Medium,
-                                                color = colorScheme.onSurface
-                                            )
-                                            Text(
-                                                text = "$powDifficulty bits • ${NostrProofOfWork.estimateMiningTime(powDifficulty)}",
-                                                style = MaterialTheme.typography.bodySmall,
-                                                fontFamily = FontFamily.Monospace,
-                                                color = colorScheme.onSurface.copy(alpha = 0.6f)
-                                            )
-                                        }
-                                        
-                                        Slider(
-                                            value = powDifficulty.toFloat(),
-                                            onValueChange = { PoWPreferenceManager.setPowDifficulty(it.toInt()) },
-                                            valueRange = 0f..32f,
-                                            steps = 31,
-                                            colors = SliderDefaults.colors(
-                                                thumbColor = if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D),
-                                                activeTrackColor = if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D)
-                                            )
-                                        )
-                                        
-                                        Text(
-                                            text = when {
-                                                powDifficulty == 0 -> stringResource(R.string.about_pow_desc_none)
-                                                powDifficulty <= 8 -> stringResource(R.string.about_pow_desc_very_low)
-                                                powDifficulty <= 12 -> stringResource(R.string.about_pow_desc_low)
-                                                powDifficulty <= 16 -> stringResource(R.string.about_pow_desc_medium)
-                                                powDifficulty <= 20 -> stringResource(R.string.about_pow_desc_high)
-                                                powDifficulty <= 24 -> stringResource(R.string.about_pow_desc_very_high)
-                                                else -> stringResource(R.string.about_pow_desc_extreme)
-                                            },
-                                            fontSize = 12.sp,
-                                            fontFamily = FontFamily.Monospace,
-                                            color = colorScheme.onSurface.copy(alpha = 0.5f)
-                                        )
-                                    }
-                                }
                             }
                         }
                     }
@@ -968,7 +1398,7 @@ fun AboutSheet(
                                             Text(
                                                 text = torStatus.lastLogLine.take(120),
                                                 fontSize = 11.sp,
-                                                fontFamily = FontFamily.Monospace,
+                                                fontFamily = NunitoFontFamily,
                                                 color = colorScheme.onSurface.copy(alpha = 0.5f),
                                                 maxLines = 2
                                             )
@@ -979,40 +1409,62 @@ fun AboutSheet(
                         }
                     }
 
-                    // Emergency Warning
-                    item(key = "warning") {
-                        Surface(
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .fillMaxWidth(),
-                            color = colorScheme.error.copy(alpha = 0.1f),
-                            shape = RoundedCornerShape(16.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(16.dp),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                verticalAlignment = Alignment.Top
+                    item(key = "share_app") {
+                        val shareScope = rememberCoroutineScope()
+
+                        val apkSizeBytes = remember { ApkSharingHelper.getApkSizeBytes(context) }
+                        val apkSizeText = remember(apkSizeBytes) { FileUtils.formatFileSize(apkSizeBytes) }
+
+                        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                            Text(
+                                text = stringResource(R.string.about_share_app_header),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = colorScheme.onBackground.copy(alpha = 0.5f),
+                                letterSpacing = 0.5.sp,
+                                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+                            )
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = colorScheme.surface,
+                                shape = RoundedCornerShape(16.dp)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Warning,
-                                    contentDescription = null,
-                                    tint = colorScheme.error,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                    Text(
-                                        text = stringResource(R.string.about_emergency_title),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = colorScheme.error
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.about_emergency_tip),
-                                        fontSize = 13.sp,
-                                        color = colorScheme.onSurface.copy(alpha = 0.7f)
+                                Column {
+                                    SettingsActionRow(
+                                        icon = Icons.Filled.Share,
+                                        title = stringResource(R.string.about_share_system_title),
+                                        subtitle = stringResource(R.string.about_share_system_desc, apkSizeText),
+                                        onClick = {
+                                            shareScope.launch(Dispatchers.IO) {
+                                                val intent = ApkSharingHelper.createShareIntent(context)
+                                                withContext(Dispatchers.Main) {
+                                                    if (intent != null) {
+                                                        context.startActivity(
+                                                            android.content.Intent.createChooser(
+                                                                intent,
+                                                                context.getString(R.string.about_share_chooser_title, context.getString(R.string.app_name))
+                                                            )
+                                                        )
+                                                    } else {
+                                                        android.widget.Toast.makeText(
+                                                            context,
+                                                            context.getString(R.string.about_share_failed),
+                                                            android.widget.Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                }
+                                            }
+                                        }
                                     )
                                 }
                             }
+
+                            Text(
+                                text = stringResource(R.string.about_share_helper_text),
+                                fontSize = 12.sp,
+                                fontFamily = NunitoFontFamily,
+                                color = colorScheme.onBackground.copy(alpha = 0.5f),
+                                modifier = Modifier.padding(start = 16.dp, top = 8.dp)
+                            )
                         }
                     }
 
@@ -1030,7 +1482,7 @@ fun AboutSheet(
                                     Text(
                                         text = stringResource(R.string.about_debug_settings),
                                         fontSize = 13.sp,
-                                        fontFamily = FontFamily.Monospace,
+                                        fontFamily = NunitoFontFamily,
                                         color = colorScheme.primary
                                     )
                                 }
@@ -1038,7 +1490,7 @@ fun AboutSheet(
                             Text(
                                 text = stringResource(R.string.about_footer),
                                 fontSize = 12.sp,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = NunitoFontFamily,
                                 color = colorScheme.onSurface.copy(alpha = 0.4f)
                             )
                             Spacer(modifier = Modifier.height(20.dp))
@@ -1105,7 +1557,7 @@ fun PasswordPromptDialog(
                         onValueChange = onPasswordChange,
                         label = { Text(stringResource(R.string.pwd_label), style = MaterialTheme.typography.bodyMedium) },
                         textStyle = MaterialTheme.typography.bodyMedium.copy(
-                            fontFamily = FontFamily.Monospace
+                            fontFamily = NunitoFontFamily
                         ),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = colorScheme.primary,

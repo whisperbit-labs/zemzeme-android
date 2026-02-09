@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -110,7 +111,7 @@ fun LinkPreviewPill(
                 // Title - matches iOS styling
                 Text(
                     text = displayTitle,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = BASE_FONT_SIZE.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = textColor,
@@ -121,7 +122,7 @@ fun LinkPreviewPill(
                 // Host - matches iOS styling
                 Text(
                     text = displayHost,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 11.sp,
                     color = textColor.copy(alpha = 0.6f),
                     maxLines = 1,

@@ -2,21 +2,27 @@ package com.roman.zemzeme.ui
 
 import android.util.Log
 import com.roman.zemzeme.mesh.BluetoothMeshService
+import com.roman.zemzeme.model.DeliveryStatus
 import com.roman.zemzeme.model.ZemzemeFilePacket
 import com.roman.zemzeme.model.ZemzemeMessage
 import com.roman.zemzeme.model.ZemzemeMessageType
+import com.roman.zemzeme.nostr.NostrTransport
+import com.roman.zemzeme.p2p.P2PAliasRegistry
+import com.roman.zemzeme.p2p.P2PTransport
 import java.util.Date
 import java.security.MessageDigest
 
 /**
- * Handles media file sending operations (voice notes, images, generic files)
- * Separated from ChatViewModel for better separation of concerns
+ * Handles media file sending operations (voice notes, images, generic files).
+ * Routes to BLE mesh, P2P, or Nostr depending on the target peer ID prefix.
  */
 class MediaSendingManager(
     private val state: ChatState,
     private val messageManager: MessageManager,
     private val channelManager: ChannelManager,
-    private val getMeshService: () -> BluetoothMeshService
+    private val getMeshService: () -> BluetoothMeshService,
+    private val getP2PTransport: (() -> P2PTransport)? = null,
+    private val getNostrTransport: (() -> NostrTransport)? = null
 ) {
     // Helper to get current mesh service (may change after panic clear)
     private val meshService: BluetoothMeshService
@@ -166,7 +172,8 @@ class MediaSendingManager(
     }
 
     /**
-     * Send a file privately (encrypted)
+     * Send a file privately (encrypted).
+     * Routes to P2P, Nostr, or BLE mesh depending on the [toPeerID] prefix.
      */
     private fun sendPrivateFile(
         toPeerID: String,
@@ -174,6 +181,79 @@ class MediaSendingManager(
         filePath: String,
         messageType: ZemzemeMessageType
     ) {
+        // ── P2P path ─────────────────────────────────────────────────────────
+        if (toPeerID.startsWith("p2p:")) {
+            val p2pTransport = getP2PTransport?.invoke() ?: run {
+                Log.e(TAG, "❌ P2P transport unavailable for P2P media send to $toPeerID")
+                return
+            }
+            val rawPeer = toPeerID.removePrefix("p2p:")
+            val messageID = java.util.UUID.randomUUID().toString().uppercase()
+            val recipientNickname = P2PAliasRegistry.getDisplayName(toPeerID)
+            val myPeerID = try { meshService.myPeerID } catch (_: Exception) { "unknown" }
+
+            Log.d(TAG, "📤 P2P FILE_TRANSFER (private): name='${filePacket.fileName}', to=$toPeerID msgId=${messageID.take(8)}…")
+
+            val msg = ZemzemeMessage(
+                id = messageID,
+                sender = state.getNicknameValue() ?: "me",
+                content = filePath,
+                type = messageType,
+                timestamp = Date(),
+                isRelay = false,
+                isPrivate = true,
+                recipientNickname = recipientNickname,
+                senderPeerID = myPeerID
+            )
+            messageManager.addPrivateMessage(toPeerID, msg)
+            messageManager.updateMessageDeliveryStatus(msg.id, DeliveryStatus.PartiallyDelivered(0, 100))
+
+            p2pTransport.sendMediaAsync(
+                rawPeerID = rawPeer,
+                filePacket = filePacket,
+                channelOrNull = null,
+                messageID = messageID,
+                senderNickname = state.getNicknameValue() ?: "Zemzeme"
+            ) { success ->
+                if (success) {
+                    messageManager.updateMessageDeliveryStatus(
+                        msg.id, DeliveryStatus.Delivered(to = toPeerID, at = Date())
+                    )
+                }
+            }
+            return
+        }
+
+        // ── Nostr path ───────────────────────────────────────────────────────
+        if (toPeerID.startsWith("nostr_") || toPeerID.startsWith("nostr:")) {
+            val nostrTransport = getNostrTransport?.invoke() ?: run {
+                Log.e(TAG, "❌ Nostr transport unavailable for Nostr media send to $toPeerID")
+                return
+            }
+            val messageID = java.util.UUID.randomUUID().toString().uppercase()
+            val myPeerID = try { meshService.myPeerID } catch (_: Exception) { "unknown" }
+
+            Log.d(TAG, "📤 Nostr FILE_TRANSFER (private): name='${filePacket.fileName}', to=$toPeerID msgId=${messageID.take(8)}…")
+
+            val msg = ZemzemeMessage(
+                id = messageID,
+                sender = state.getNicknameValue() ?: "me",
+                content = filePath,
+                type = messageType,
+                timestamp = Date(),
+                isRelay = false,
+                isPrivate = true,
+                recipientNickname = null,
+                senderPeerID = myPeerID
+            )
+            messageManager.addPrivateMessage(toPeerID, msg)
+            messageManager.updateMessageDeliveryStatus(msg.id, DeliveryStatus.PartiallyDelivered(0, 100))
+
+            nostrTransport.sendMediaMessage(filePacket, toPeerID, "", messageID)
+            return
+        }
+
+        // ── BLE mesh path (existing) ──────────────────────────────────────────
         val payload = filePacket.encode()
         if (payload == null) {
             Log.e(TAG, "❌ Failed to encode file packet for private send")
@@ -187,7 +267,7 @@ class MediaSendingManager(
         Log.d(TAG, "📤 FILE_TRANSFER send (private): name='${filePacket.fileName}', size=${filePacket.fileSize}, mime='${filePacket.mimeType}', sha256=$contentHash, to=${toPeerID.take(8)} transferId=${transferId.take(16)}…")
 
         val msg = ZemzemeMessage(
-            id = java.util.UUID.randomUUID().toString().uppercase(), // Generate unique ID for each message
+            id = java.util.UUID.randomUUID().toString().uppercase(),
             sender = state.getNicknameValue() ?: "me",
             content = filePath,
             type = messageType,
@@ -197,20 +277,20 @@ class MediaSendingManager(
             recipientNickname = try { meshService.getPeerNicknames()[toPeerID] } catch (_: Exception) { null },
             senderPeerID = meshService.myPeerID
         )
-        
+
         messageManager.addPrivateMessage(toPeerID, msg)
-        
+
         synchronized(transferMessageMap) {
             transferMessageMap[transferId] = msg.id
             messageTransferMap[msg.id] = transferId
         }
-        
+
         // Seed progress so delivery icons render for media
         messageManager.updateMessageDeliveryStatus(
             msg.id,
-            com.roman.zemzeme.model.DeliveryStatus.PartiallyDelivered(0, 100)
+            DeliveryStatus.PartiallyDelivered(0, 100)
         )
-        
+
         Log.d(TAG, "📤 Calling meshService.sendFilePrivate to $toPeerID")
         meshService.sendFilePrivate(toPeerID, filePacket)
         Log.d(TAG, "✅ File send completed successfully")
@@ -265,6 +345,20 @@ class MediaSendingManager(
             com.roman.zemzeme.model.DeliveryStatus.PartiallyDelivered(0, 100)
         )
         
+        // Also publish via P2P topic if P2P is running (reaches P2P-only subscribers)
+        val p2pTransport = getP2PTransport?.invoke()
+        if (p2pTransport != null && p2pTransport.isRunning() && !channelOrNull.isNullOrBlank()) {
+            val topicMessageID = java.util.UUID.randomUUID().toString().uppercase()
+            p2pTransport.sendMediaAsync(
+                rawPeerID = "",  // unused for channel sends
+                filePacket = filePacket,
+                channelOrNull = channelOrNull,
+                messageID = topicMessageID,
+                senderNickname = state.getNicknameValue() ?: "Zemzeme"
+            )
+            Log.d(TAG, "📤 Also publishing media to P2P topic $channelOrNull")
+        }
+
         Log.d(TAG, "📤 Calling meshService.sendFileBroadcast")
         meshService.sendFileBroadcast(filePacket)
         Log.d(TAG, "✅ File broadcast completed successfully")

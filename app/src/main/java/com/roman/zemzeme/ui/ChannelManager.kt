@@ -7,6 +7,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import com.roman.zemzeme.model.ZemzemeMessage
+import com.roman.zemzeme.util.DebugLogger
 import java.util.*
 
 /**
@@ -81,6 +82,15 @@ class ChannelManager(
             state.setChannelMessages(updatedChannelMessages)
         }
         
+        DebugLogger.log(
+            action = "GROUP_OPEN",
+            srcName = null,
+            srcId = myPeerID,
+            destName = channelTag,
+            destId = channelTag,
+            protocol = "BLE_MESH",
+            content = if (password != null) "[password-protected]" else "[open]"
+        )
         switchToChannel(channelTag)
         saveChannelData()
         return true

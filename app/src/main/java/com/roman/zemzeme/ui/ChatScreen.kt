@@ -118,11 +118,8 @@ fun ChatScreen(viewModel: ChatViewModel, isBluetoothEnabled: Boolean = true, onB
         }
     }
 
-    // Determine whether to show media buttons (only hide in geohash location chats)
-    val showMediaButtons = when {
-        currentChannel != null -> true
-        else -> selectedLocationChannel !is com.roman.zemzeme.geohash.ChannelID.Location
-    }
+    // Show media buttons in all channel contexts (mesh, named channels, and geohash location channels)
+    val showMediaButtons = true
 
     // Use WindowInsets to handle keyboard properly
     Box(
@@ -130,7 +127,7 @@ fun ChatScreen(viewModel: ChatViewModel, isBluetoothEnabled: Boolean = true, onB
             .fillMaxSize()
             .background(colorScheme.background) // Extend background to fill entire screen including status bar
     ) {
-        val headerHeight = 64.dp
+        val headerHeight = 82.dp
 
         // Main content area that responds to keyboard/window insets
         Column(
@@ -384,6 +381,7 @@ fun ChatScreen(viewModel: ChatViewModel, isBluetoothEnabled: Boolean = true, onB
         onSecurityVerificationSheetDismiss = viewModel::hideSecurityVerificationSheet,
         showMeshPeerListSheet = showMeshPeerListSheet,
         onMeshPeerListDismiss = viewModel::hideMeshPeerList,
+        onBackToHome = onBackToHome,
     )
 }
 
@@ -726,6 +724,7 @@ private fun ChatDialogs(
     onSecurityVerificationSheetDismiss: () -> Unit,
     showMeshPeerListSheet: Boolean,
     onMeshPeerListDismiss: () -> Unit,
+    onBackToHome: () -> Unit = {},
 ) {
     val privateChatSheetPeer by viewModel.privateChatSheetPeer.collectAsStateWithLifecycle()
 
@@ -741,13 +740,19 @@ private fun ChatDialogs(
 
     // About sheet
     var showDebugSheet by remember { mutableStateOf(false) }
+    val debugUiEnabled by com.roman.zemzeme.ui.debug.DebugSettingsManager
+        .getInstance().debugUiEnabled.collectAsState()
+    val showDebugAccess = debugUiEnabled || BuildConfig.DEBUG
+    val currentNickname by viewModel.nickname.collectAsStateWithLifecycle()
     AboutSheet(
         isPresented = showAppInfo,
         onDismiss = onAppInfoDismiss,
         isBluetoothEnabled = isBluetoothEnabled,
-        onShowDebug = if (BuildConfig.DEBUG) ({ showDebugSheet = true }) else null
+        onShowDebug = if (showDebugAccess) ({ showDebugSheet = true }) else null,
+        nickname = currentNickname,
+        onNicknameChange = { viewModel.setNickname(it) }
     )
-    if (BuildConfig.DEBUG && showDebugSheet) {
+    if (showDebugAccess && showDebugSheet) {
         com.roman.zemzeme.ui.debug.DebugSettingsSheet(
             isPresented = showDebugSheet,
             onDismiss = { showDebugSheet = false },
@@ -812,13 +817,33 @@ private fun ChatDialogs(
     }
 
     if (privateChatSheetPeer != null) {
+        // Full-screen loading overlay to hide mesh timeline while PrivateChatSheet animates in
+        val cs = MaterialTheme.colorScheme
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(cs.background)
+                .zIndex(10f),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                color = cs.primary,
+                modifier = Modifier.size(36.dp),
+                strokeWidth = 3.dp
+            )
+        }
+
         PrivateChatSheet(
             isPresented = true,
             peerID = privateChatSheetPeer!!,
             viewModel = viewModel,
             onDismiss = {
+                val goHome = viewModel.consumeEnteredViaContact()
                 viewModel.hidePrivateChatSheet()
                 viewModel.endPrivateChat()
+                if (goHome) {
+                    onBackToHome()
+                }
             }
         )
     }

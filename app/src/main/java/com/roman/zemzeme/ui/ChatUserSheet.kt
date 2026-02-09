@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,7 +20,7 @@ import com.roman.zemzeme.core.ui.component.sheet.ZemzemeBottomSheet
 import com.roman.zemzeme.model.ZemzemeMessage
 
 /**
- * User Action Sheet for selecting actions on a specific user (slap, hug, block)
+ * User Action Sheet for selecting actions on a specific user (copy message, block)
  * Design language matches LocationChannelsSheet.kt for consistency
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,8 +39,6 @@ fun ChatUserSheet(
     // iOS system colors (matches LocationChannelsSheet exactly)
     val colorScheme = MaterialTheme.colorScheme
     val isDark = colorScheme.background.red + colorScheme.background.green + colorScheme.background.blue < 1.5f
-    val standardGreen = if (isDark) Color(0xFF00F5FF) else Color(0xFF248A3D) // iOS green
-    val standardBlue = Color(0xFF007AFF) // iOS blue
     val standardRed = Color(0xFFFF3B30) // iOS red
     val standardGrey = if (isDark) Color(0xFF8E8E93) else Color(0xFF6D6D70) // iOS grey
     
@@ -58,7 +57,7 @@ fun ChatUserSheet(
                 Text(
                     text = stringResource(R.string.at_nickname, targetNickname),
                     fontSize = 18.sp,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -66,7 +65,7 @@ fun ChatUserSheet(
                 Text(
                     text = if (selectedMessage != null) stringResource(R.string.choose_action_message_or_user) else stringResource(R.string.choose_action_user),
                     fontSize = 12.sp,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
                 
@@ -92,34 +91,6 @@ fun ChatUserSheet(
                     
                     // Only show user actions for other users' messages or when no message is selected
                     if (selectedMessage?.sender != viewModel.nickname.value) {
-                        // Slap action
-                        item {
-                            UserActionRow(
-                                title = stringResource(R.string.action_slap_title, targetNickname),
-                                subtitle = stringResource(R.string.action_slap_subtitle),
-                                titleColor = standardBlue,
-                                onClick = {
-                                    // Send slap command
-                                    viewModel.sendMessage("/slap $targetNickname")
-                                    onDismiss()
-                                }
-                            )
-                        }
-                        
-                        // Hug action  
-                        item {
-                            UserActionRow(
-                                title = stringResource(R.string.action_hug_title, targetNickname),
-                                subtitle = stringResource(R.string.action_hug_subtitle),
-                                titleColor = standardGreen,
-                                onClick = {
-                                    // Send hug command
-                                    viewModel.sendMessage("/hug $targetNickname")
-                                    onDismiss()
-                                }
-                            )
-                        }
-                        
                         // Block action
                         item {
                             UserActionRow(
@@ -155,7 +126,7 @@ fun ChatUserSheet(
                     Text(
                         text = stringResource(R.string.cancel_lower),
                         fontSize = BASE_FONT_SIZE.sp,
-                        fontFamily = FontFamily.Monospace
+                        fontFamily = NunitoFontFamily
                     )
                 }
             }
@@ -186,7 +157,7 @@ private fun UserActionRow(
             Text(
                 text = title,
                 fontSize = BASE_FONT_SIZE.sp,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontWeight = FontWeight.Medium,
                 color = titleColor
             )
@@ -194,7 +165,7 @@ private fun UserActionRow(
             Text(
                 text = subtitle,
                 fontSize = 12.sp,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
         }

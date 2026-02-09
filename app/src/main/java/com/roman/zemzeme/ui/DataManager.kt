@@ -303,6 +303,46 @@ class DataManager(private val context: Context) {
         prefs.edit().remove("group_nick_$geohash").apply()
     }
 
+    fun clearAllGroups() {
+        val editor = prefs.edit()
+        prefs.all.keys.filter { it.startsWith("group_nick_") }.forEach { editor.remove(it) }
+        editor.remove("custom_groups")
+        editor.remove("geographic_groups")
+        editor.apply()
+    }
+
+    // MARK: - Contacts Management
+
+    fun saveContacts(contacts: Set<String>) {
+        prefs.edit().putStringSet("contacts", contacts).apply()
+    }
+
+    fun loadContacts(): Set<String> {
+        return prefs.getStringSet("contacts", emptySet()) ?: emptySet()
+    }
+
+    fun removeContact(peerID: String) {
+        val contacts = loadContacts().toMutableSet()
+        contacts.remove(peerID)
+        saveContacts(contacts)
+        prefs.edit().remove("contact_nick_$peerID").apply()
+    }
+
+    fun saveContactNickname(peerID: String, nickname: String) {
+        prefs.edit().putString("contact_nick_$peerID", nickname).apply()
+    }
+
+    fun loadContactNicknames(): Map<String, String> {
+        val result = mutableMapOf<String, String>()
+        prefs.all.forEach { (key, value) ->
+            if (key.startsWith("contact_nick_") && value is String) {
+                val peerID = key.removePrefix("contact_nick_")
+                result[peerID] = value
+            }
+        }
+        return result
+    }
+
     // MARK: - Emergency Clear
 
     fun clearAllData() {

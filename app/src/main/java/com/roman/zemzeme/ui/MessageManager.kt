@@ -24,6 +24,17 @@ class MessageManager(private val state: ChatState) {
         state.setMessages(currentMessages)
         // Reflect into process-wide store so snapshot replacements don't drop local outgoing messages
         try { com.roman.zemzeme.services.AppStateStore.addPublicMessage(message) } catch (_: Exception) { }
+
+        // Update unread mesh count if not currently viewing mesh chat
+        val isOnChat = state.isOnChatScreen.value
+        val viewingMesh = isOnChat && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Mesh
+        if (!viewingMesh && message.sender != state.getNicknameValue()) {
+            state.setUnreadMeshCount(state.getUnreadMeshCountValue() + 1)
+        }
+    }
+
+    fun clearMeshUnreadCount() {
+        state.setUnreadMeshCount(0)
     }
 
     // Log a system message into the main chat (visible to user)
@@ -57,10 +68,11 @@ class MessageManager(private val state: ChatState) {
         // Reflect into process-wide store
         try { com.roman.zemzeme.services.AppStateStore.addChannelMessage(channel, message) } catch (_: Exception) { }
         
-        // Update unread count if not currently viewing this channel
+        // Update unread count if not currently viewing this channel on the chat screen
         // Consider both classic channels (state.currentChannel) and geohash location channel selection
-        val viewingClassicChannel = state.getCurrentChannelValue() == channel
-        val viewingGeohashChannel = try {
+        val isOnChat = state.isOnChatScreen.value
+        val viewingClassicChannel = isOnChat && state.getCurrentChannelValue() == channel
+        val viewingGeohashChannel = isOnChat && try {
             if (channel.startsWith("geo:")) {
                 val geo = channel.removePrefix("geo:")
                 val selected = state.selectedLocationChannel.value

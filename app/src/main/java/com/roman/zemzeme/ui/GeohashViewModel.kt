@@ -166,34 +166,33 @@ class GeohashViewModel(
                 }
             }
             
-            // Watch for P2P node to become RUNNING and subscribe to current channel
+            // Watch for P2P node to become RUNNING and subscribe ALL groups
             // This fixes the startup race condition where channel is restored before P2P is ready
             p2pNodeStatusJob = viewModelScope.launch {
                 p2pTransport.p2pRepository.nodeStatus.collect { status ->
-                    if (status == P2PNodeStatus.RUNNING) {
+                    if (status == P2PNodeStatus.RUNNING && p2pConfig.p2pEnabled) {
+                        // Collect all group geohashes (custom + geographic)
+                        val allGroups = mutableSetOf<String>()
+                        allGroups.addAll(state.getCustomGroupsValue())
+                        allGroups.addAll(state.getGeographicGroupsValue())
+                        // Also include the current location channel if any
                         val currentChannel = state.selectedLocationChannel.value
-                        if (currentChannel is com.roman.zemzeme.geohash.ChannelID.Location && p2pConfig.p2pEnabled) {
-                            val geohash = currentChannel.channel.geohash
-                            val topicName = p2pMainTopicName(geohash)
-                            val metaTopicName = p2pMetaTopicName(geohash)
+                        if (currentChannel is com.roman.zemzeme.geohash.ChannelID.Location) {
+                            allGroups.add(currentChannel.channel.geohash)
+                        }
+
+                        Log.d(TAG, "P2P node ready - subscribing to ${allGroups.size} groups: $allGroups")
+                        for (geohash in allGroups) {
                             try {
+                                val topicName = p2pMainTopicName(geohash)
                                 if (!p2pTopicsRepository.isSubscribed(topicName)) {
-                                    Log.d(TAG, "P2P node ready - subscribing to current channel: $topicName")
                                     p2pTopicsRepository.subscribeTopic(topicName)
-                                }
-                                if (!p2pTopicsRepository.isSubscribed(metaTopicName)) {
-                                    Log.d(TAG, "P2P node ready - subscribing to meta topic: $metaTopicName")
-                                    p2pTopicsRepository.subscribeTopic(metaTopicName)
                                 }
                                 p2pTopicsRepository.discoverTopicPeers(topicName)
                                 p2pTopicsRepository.startContinuousRefresh(topicName)
-                                p2pTopicsRepository.discoverTopicPeers(metaTopicName)
-                                p2pTopicsRepository.startContinuousRefresh(metaTopicName)
-                                
-                                // Removed immediate boot-time broadcast as it often fires before peers are found
-                                // Presence is handled when mesh peers transition from 0 -> connected
+                                Log.d(TAG, "Subscribed to P2P topic for group: $geohash")
                             } catch (e: Exception) {
-                                Log.w(TAG, "Failed late P2P subscription: ${e.message}")
+                                Log.w(TAG, "Failed P2P subscription for $geohash: ${e.message}")
                             }
                         }
                     }
@@ -208,12 +207,10 @@ class GeohashViewModel(
                     if (currentChannel is com.roman.zemzeme.geohash.ChannelID.Location) {
                         val geohash = currentChannel.channel.geohash
                         val topicName = p2pMainTopicName(geohash)
-                        val metaTopicName = p2pMetaTopicName(geohash)
 
                         val mainPeers = topicStates[topicName]?.peers ?: emptyList()
-                        val metaPeers = topicStates[metaTopicName]?.peers ?: emptyList()
                         val myPeerID = p2pTransport.getMyPeerID()?.trim()
-                        val normalizedPeers = (mainPeers + metaPeers)
+                        val normalizedPeers = mainPeers
                             .asSequence()
                             .map { it.trim() }
                             .filter { it.isNotBlank() }
@@ -249,7 +246,7 @@ class GeohashViewModel(
                         // Announce presence once when connectivity becomes active.
                         if (previousCount == 0 && currentCount > 0) {
                             val myNickname = state.getNicknameValue() ?: "anon"
-                            p2pTopicsRepository.broadcastPresence(metaTopicName, myNickname)
+                            p2pTopicsRepository.broadcastPresence(topicName, myNickname)
                         }
                     }
                 }
@@ -417,6 +414,92 @@ class GeohashViewModel(
         }
     }
 
+    fun sendGeohashMedia(
+        filePath: String,
+        mimeType: String,
+        msgType: com.roman.zemzeme.model.ZemzemeMessageType,
+        channel: com.roman.zemzeme.geohash.GeohashChannel,
+        myPeerID: String,
+        nickname: String?
+    ) {
+        viewModelScope.launch {
+            try {
+                val file = java.io.File(filePath)
+                if (!file.exists()) {
+                    Log.e(TAG, "sendGeohashMedia: file not found: $filePath")
+                    return@launch
+                }
+                val messageID = java.util.UUID.randomUUID().toString().uppercase()
+
+                // Show locally immediately
+                val localMsg = com.roman.zemzeme.model.ZemzemeMessage(
+                    id = messageID,
+                    sender = nickname ?: myPeerID,
+                    content = filePath,
+                    type = msgType,
+                    timestamp = java.util.Date(),
+                    isRelay = false,
+                    senderPeerID = myPeerID,
+                    channel = "#${channel.geohash}"
+                )
+                withContext(Dispatchers.Main) {
+                    messageManager.addChannelMessage("geo:${channel.geohash}", localMsg)
+                }
+
+                // Encode as ZemzemeFilePacket TLV
+                val filePacket = com.roman.zemzeme.model.ZemzemeFilePacket(
+                    fileName = file.name,
+                    fileSize = file.length(),
+                    mimeType = mimeType,
+                    content = file.readBytes()
+                )
+                val fileBytes = filePacket.encode() ?: run {
+                    Log.e(TAG, "sendGeohashMedia: failed to encode file packet")
+                    return@launch
+                }
+
+                // Embed as bitchat1: base64url in Nostr ephemeral event content
+                val b64 = android.util.Base64.encodeToString(
+                    fileBytes, android.util.Base64.URL_SAFE or android.util.Base64.NO_WRAP
+                )
+                val eventContent = "bitchat1:$b64"
+
+                // Try P2P topic first (primary transport for geohash channels)
+                var sentViaP2P = false
+                if (p2pConfig.p2pEnabled &&
+                    p2pTransport.p2pRepository.nodeStatus.value == P2PNodeStatus.RUNNING) {
+                    try {
+                        val topicName = p2pMainTopicName(channel.geohash)
+                        p2pTopicsRepository.publishToTopic(topicName, eventContent, nickname)
+                        Log.d(TAG, "📤 Published geohash media via P2P topic: ${file.name} (${fileBytes.size} bytes)")
+                        sentViaP2P = true
+                    } catch (e: Exception) {
+                        Log.w(TAG, "P2P topic media publish failed, trying Nostr: ${e.message}")
+                    }
+                }
+
+                // Send via Nostr (as primary or fallback)
+                if (p2pConfig.nostrEnabled) {
+                    val identity = NostrIdentityBridge.deriveIdentity(
+                        forGeohash = channel.geohash,
+                        context = getApplication()
+                    )
+                    val teleported = state.isTeleported.value
+                    val event = NostrProtocol.createEphemeralGeohashEvent(
+                        eventContent, channel.geohash, identity, nickname, teleported
+                    )
+                    val relayManager = NostrRelayManager.getInstance(getApplication())
+                    relayManager.sendEventToGeohash(event, channel.geohash, includeDefaults = false, nRelays = 5)
+                    if (!sentViaP2P) Log.d(TAG, "📤 Sent geohash media via Nostr only: ${file.name}")
+                } else if (!sentViaP2P) {
+                    Log.w(TAG, "sendGeohashMedia: no transport available")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "sendGeohashMedia failed: ${e.message}")
+            }
+        }
+    }
+
     fun beginGeohashSampling(geohashes: List<String>) {
         if (geohashes.isEmpty()) return
         Log.d(TAG, "🌍 Beginning geohash sampling for ${geohashes.size} geohashes")
@@ -506,10 +589,8 @@ class GeohashViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 val geohash = channel.channel.geohash
                 val topicName = p2pMainTopicName(geohash)
-                val metaTopicName = p2pMetaTopicName(geohash)
                 Log.d(TAG, "Manual P2P refresh triggered for: $topicName")
                 p2pTopicsRepository.discoverTopicPeers(topicName)
-                p2pTopicsRepository.discoverTopicPeers(metaTopicName)
             }
         } else {
             Log.d(TAG, "🔄 Manual P2P refresh skipped - P2P not enabled or no location channel")
@@ -570,11 +651,11 @@ class GeohashViewModel(
             p2pConfig.p2pEnabled &&
             p2pTransport.p2pRepository.nodeStatus.value == P2PNodeStatus.RUNNING) {
             val geohash = channel.channel.geohash
-            val metaTopicName = p2pMetaTopicName(geohash)
+            val topicName = p2pMainTopicName(geohash)
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    p2pTopicsRepository.broadcastPresence(metaTopicName, nickname, force)
-                    Log.d(TAG, "Broadcast P2P presence to $metaTopicName: $nickname")
+                    p2pTopicsRepository.broadcastPresence(topicName, nickname, force)
+                    Log.d(TAG, "Broadcast P2P presence to $topicName: $nickname")
                 } catch (e: Exception) {
                     Log.w(TAG, "Failed to broadcast P2P presence: ${e.message}")
                 }
@@ -628,6 +709,7 @@ class GeohashViewModel(
                 repo.setCurrentGeohash(null)
                 notificationManager.setCurrentGeohash(null)
                 notificationManager.clearMeshMentionNotifications()
+                try { messageManager.clearMeshUnreadCount() } catch (_: Exception) { }
                 repo.refreshGeohashPeople()
             }
             is com.roman.zemzeme.geohash.ChannelID.Location -> {
@@ -676,32 +758,25 @@ class GeohashViewModel(
                     }
                     
                     // Subscribe via P2P topic (if enabled and running)
-                    if (p2pConfig.p2pEnabled && 
+                    if (p2pConfig.p2pEnabled &&
                         p2pTransport.p2pRepository.nodeStatus.value == P2PNodeStatus.RUNNING) {
                         try {
                             val topicName = p2pMainTopicName(geohash)
-                            val metaTopicName = p2pMetaTopicName(geohash)
                             p2pTopicsRepository.subscribeTopic(topicName)
                             Log.d(TAG, "Subscribed to P2P topic: $topicName")
-                            p2pTopicsRepository.subscribeTopic(metaTopicName)
-                            Log.d(TAG, "Subscribed to P2P meta topic: $metaTopicName")
-                            
+
                             // CRITICAL: Trigger DHT discovery to find and connect to peers
                             p2pTopicsRepository.discoverTopicPeers(topicName)
                             Log.d(TAG, "Started P2P peer discovery for: $topicName")
-                            p2pTopicsRepository.discoverTopicPeers(metaTopicName)
-                            Log.d(TAG, "Started P2P peer discovery for: $metaTopicName")
-                            
+
                             // CRITICAL: Start continuous 5-second refresh loop
                             p2pTopicsRepository.startContinuousRefresh(topicName)
                             Log.d(TAG, "Started continuous P2P refresh for: $topicName")
-                            p2pTopicsRepository.startContinuousRefresh(metaTopicName)
-                            Log.d(TAG, "Started continuous P2P refresh for: $metaTopicName")
-                            
+
                             // BROADCAST PRESENCE: Announce ourselves to existing peers
                             val myNickname = state.getNicknameValue() ?: "anon"
-                            p2pTopicsRepository.broadcastPresence(metaTopicName, myNickname)
-                            Log.d(TAG, "Broadcast P2P presence to: $metaTopicName")
+                            p2pTopicsRepository.broadcastPresence(topicName, myNickname)
+                            Log.d(TAG, "Broadcast P2P presence to: $topicName")
                         } catch (e: Exception) {
                             Log.w(TAG, "Failed to subscribe/discover P2P topic: ${e.message}")
                         }
@@ -808,17 +883,13 @@ class GeohashViewModel(
 
                 if (p2pTopicsRepository.shouldRespondToPresence(peerID)) {
                     val myNickname = state.getNicknameValue() ?: "anon"
-                    val topicName = p2pMetaTopicName(geohash)
+                    val topicName = p2pMainTopicName(geohash)
                     viewModelScope.launch(Dispatchers.IO) {
                         delay(500 + kotlin.random.Random.nextLong(500))
                         p2pTopicsRepository.broadcastPresence(topicName, myNickname)
                     }
                 }
                 Log.d(TAG, "Received P2P presence from $sender in geo:$geohash")
-                return
-            }
-
-            if (isMeta) {
                 return
             }
 
@@ -878,6 +949,37 @@ class GeohashViewModel(
         val participantId = "p2p:$rawPeerID"
         val displayName = resolveP2PDisplayName(rawPeerID, participantId)
         val messageId = buildP2PMessageId(rawPeerID, timestamp, rawContent)
+
+        // Handle media transfer embedded as bitchat1:<base64url>
+        if (rawContent.startsWith("bitchat1:")) {
+            val b64 = rawContent.removePrefix("bitchat1:")
+            val fileBytes = try {
+                val padded = b64.replace("-", "+").replace("_", "/")
+                    .let { it + "=".repeat((4 - it.length % 4) % 4) }
+                android.util.Base64.decode(padded, android.util.Base64.DEFAULT)
+            } catch (_: Exception) { null }
+            val filePacket = fileBytes?.let { com.roman.zemzeme.model.ZemzemeFilePacket.decode(it) }
+            if (filePacket != null) {
+                val savedPath = com.roman.zemzeme.features.file.FileUtils.saveIncomingFile(getApplication(), filePacket)
+                val msgType = com.roman.zemzeme.features.file.FileUtils.messageTypeForMime(filePacket.mimeType)
+                Log.d(TAG, "📥 Received P2P geohash media from $displayName: ${filePacket.fileName}")
+                val mediaMsg = com.roman.zemzeme.model.ZemzemeMessage(
+                    id = messageId,
+                    sender = displayName,
+                    content = savedPath,
+                    type = msgType,
+                    timestamp = Date(timestamp),
+                    isRelay = false,
+                    senderPeerID = "p2p:$rawPeerID",
+                    channel = "#$geohash"
+                )
+                withContext(Dispatchers.Main) { messageManager.addChannelMessage("geo:$geohash", mediaMsg) }
+                repo.updateParticipant(geohash, participantId, Date(timestamp))
+            } else {
+                Log.w(TAG, "Failed to decode P2P geohash media from $displayName")
+            }
+            return
+        }
 
         Log.d(TAG, "Received P2P geohash message from $displayName in geo:$geohash")
 

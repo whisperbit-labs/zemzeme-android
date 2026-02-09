@@ -18,6 +18,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.roman.zemzeme.R
@@ -61,7 +62,7 @@ fun AudioMessageItem(
         var headerLayout by remember { mutableStateOf<TextLayoutResult?>(null) }
         Text(
             text = headerText,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             color = colorScheme.onSurface,
             modifier = Modifier.pointerInput(message.id) {
                 detectTapGestures(onTap = { pos ->
@@ -72,7 +73,7 @@ fun AudioMessageItem(
                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         onNicknameClick.invoke(ann.first().item)
                     }
-                }, onLongPress = { onMessageLongPress?.invoke(message) })
+                })
             },
             onTextLayout = { headerLayout = it }
         )

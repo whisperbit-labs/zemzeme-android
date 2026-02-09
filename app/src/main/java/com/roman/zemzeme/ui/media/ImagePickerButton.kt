@@ -5,15 +5,17 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +28,6 @@ import androidx.core.content.FileProvider
 import com.roman.zemzeme.features.media.ImageUtils
 import java.io.File
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagePickerButton(
     modifier: Modifier = Modifier,
@@ -34,6 +35,7 @@ fun ImagePickerButton(
 ) {
     val context = LocalContext.current
     var capturedImagePath by remember { mutableStateOf<String?>(null) }
+    var showChooser by remember { mutableStateOf(false) }
     
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -86,19 +88,34 @@ fun ImagePickerButton(
         }
     }
 
-    Box(
-        modifier = modifier
-            .size(32.dp)
-            .combinedClickable(
-                onClick = { imagePicker.launch("image/*") },
-                onLongClick = {
+    if (showChooser) {
+        AlertDialog(
+            onDismissRequest = { showChooser = false },
+            title = { Text(stringResource(com.roman.zemzeme.R.string.pick_image)) },
+            text = null,
+            confirmButton = {
+                TextButton(onClick = {
+                    showChooser = false
+                    imagePicker.launch("image/*")
+                }) { Text(stringResource(com.roman.zemzeme.R.string.action_gallery)) }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showChooser = false
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         startCameraCapture()
                     } else {
                         permissionLauncher.launch(Manifest.permission.CAMERA)
                     }
-                }
-            ),
+                }) { Text(stringResource(com.roman.zemzeme.R.string.action_camera)) }
+            }
+        )
+    }
+
+    Box(
+        modifier = modifier
+            .size(32.dp)
+            .clickable { showChooser = true },
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -108,6 +125,4 @@ fun ImagePickerButton(
             modifier = Modifier.size(20.dp)
         )
     }
-
-    // No custom preview: native camera UI handles confirmation
 }

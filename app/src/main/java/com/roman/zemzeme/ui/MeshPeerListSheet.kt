@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -177,24 +178,44 @@ fun MeshPeerListSheet(
                 // TopBar (animated)
                 ZemzemeSheetTopBar(
                     title = {
-                        ZemzemeSheetTitle(text = stringResource(id = R.string.your_network))
-                    },
-                    backgroundAlpha = topBarAlpha,
-                    actions = {
-                        if (selectedLocationChannel !is ChannelID.Location) {
-                            IconButton(
-                                onClick = onShowVerification,
-                                modifier = Modifier.size(24.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.QrCode,
-                                    contentDescription = stringResource(R.string.verify_title),
-                                    tint = colorScheme.onSurface.copy(alpha = 0.8f),
-                                    modifier = Modifier.size(18.dp)
-                                )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            ZemzemeSheetTitle(text = stringResource(id = R.string.your_network))
+
+                            // Transport badges next to title (only for location channels)
+                            if (selectedLocationChannel is ChannelID.Location) {
+                                val context = androidx.compose.ui.platform.LocalContext.current
+                                val transportConfig = remember { com.roman.zemzeme.p2p.P2PConfig(context) }
+                                val transportToggles by remember(transportConfig) {
+                                    com.roman.zemzeme.p2p.P2PConfig.transportTogglesFlow
+                                }.collectAsStateWithLifecycle()
+                                val p2pTopicStates by viewModel.p2pTopicStates.collectAsStateWithLifecycle()
+                                val nostrRelayMgr = remember { com.roman.zemzeme.nostr.NostrRelayManager.getInstance(context) }
+                                val nostrUp by nostrRelayMgr.isConnected.collectAsStateWithLifecycle()
+                                val geohash = (selectedLocationChannel as ChannelID.Location).channel.geohash
+                                val p2pUp = transportToggles.p2pEnabled && (p2pTopicStates[geohash]?.peers?.size ?: 0) > 0
+
+                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    if (transportToggles.p2pEnabled) {
+                                        val c = if (p2pUp) Color(0xFF4CAF50) else Color.Gray
+                                        Surface(shape = RoundedCornerShape(4.dp), color = c.copy(alpha = 0.2f)) {
+                                            Text("P2P", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, fontWeight = FontWeight.Bold), color = c, modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp))
+                                        }
+                                    }
+                                    if (transportToggles.nostrEnabled) {
+                                        val c = if (nostrUp) Color(0xFF9C27B0) else Color.Gray
+                                        Surface(shape = RoundedCornerShape(4.dp), color = c.copy(alpha = 0.2f)) {
+                                            Text("Nostr", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, fontWeight = FontWeight.Bold), color = c, modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp))
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
+                    backgroundAlpha = topBarAlpha,
+                    actions = {},
                     onClose = onDismiss,
                 )
             }
@@ -236,18 +257,10 @@ private fun ChannelRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Unread badge
-                if (unreadCount > 0) {
-                    UnreadBadge(
-                        count = unreadCount,
-                        colorScheme = colorScheme
-                    )
-                }
-                
                 Text(
                     text = channel,
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         fontSize = BASE_FONT_SIZE.sp
                     ),
                     color = if (isSelected) colorScheme.primary else colorScheme.onSurface,
@@ -298,7 +311,7 @@ fun PeopleSection(
             Text(
                 text = stringResource(id = R.string.no_one_connected),
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = NunitoFontFamily,
                     fontSize = 12.sp
                 ),
                 color = colorScheme.onSurface.copy(alpha = 0.5f),
@@ -631,31 +644,49 @@ private fun PeerItem(
                 }
 
                 // Display name with iOS-style color and hashtag suffix support
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Base name with peer-specific color
-                    Text(
-                        text = baseName,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontFamily = FontFamily.Monospace,
-                            fontSize = BASE_FONT_SIZE.sp,
-                            fontWeight = if (isMe) FontWeight.Bold else FontWeight.Normal
-                        ),
-                        color = baseColor,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    // Hashtag suffix in lighter shade (iOS-style)
-                    if (suffix.isNotEmpty()) {
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // Base name with peer-specific color
                         Text(
-                            text = suffix,
+                            text = baseName,
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                fontFamily = FontFamily.Monospace,
-                                fontSize = BASE_FONT_SIZE.sp
+                                fontFamily = NunitoFontFamily,
+                                fontSize = BASE_FONT_SIZE.sp,
+                                fontWeight = if (isMe) FontWeight.Bold else FontWeight.Normal
                             ),
-                            color = baseColor.copy(alpha = 0.6f)
+                            color = baseColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
+
+                        // Hashtag suffix in lighter shade (iOS-style)
+                        if (suffix.isNotEmpty()) {
+                            Text(
+                                text = suffix,
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    fontFamily = NunitoFontFamily,
+                                    fontSize = BASE_FONT_SIZE.sp
+                                ),
+                                color = baseColor.copy(alpha = 0.6f)
+                            )
+                        }
                     }
+
+                    // Connection info indicator (below peer name)
+                    val isP2PPeer = peerID.startsWith("p2p:")
+                    val isNostrPeer = peerID.startsWith("nostr_") || peerID.startsWith("nostr:")
+                    val peerConnInfo = remember(peerID, isP2PPeer) {
+                        if (isP2PPeer) viewModel.getP2PConnectionInfo(peerID) else null
+                    }
+                    com.roman.zemzeme.ui.connectioninfo.ConnectionIndicatorFactory.PeerIndicator(
+                        data = com.roman.zemzeme.ui.connectioninfo.ConnectionDisplayData.PeerConnection(
+                            isConnected = isDirect || isP2PPeer || showNostrGlobe,
+                            isP2P = isP2PPeer,
+                            isNostr = isNostrPeer || showNostrGlobe,
+                            isDirect = isDirect,
+                            connectionInfo = peerConnInfo
+                        )
+                    )
                 }
             }
 
@@ -669,23 +700,6 @@ private fun PeerItem(
                 )
             }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Favorite star with proper filled/outlined states
-                IconButton(
-                    onClick = onToggleFavorite,
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.Star,
-                        contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
-                        modifier = Modifier.size(16.dp),
-                        tint = if (isFavorite) Color(0xFFFFD700) else Color(0xFF4CAF50)
-                    )
-                }
-            }
         }
     }
 }
@@ -715,7 +729,7 @@ private fun UnreadBadge(
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Monospace
+                    fontFamily = NunitoFontFamily
                 ),
                 color = Color.Black // Black text on yellow background
             )
@@ -808,8 +822,24 @@ fun PrivateChatSheet(
     val isNostrPeer = peerID.startsWith("nostr_") || peerID.startsWith("nostr:")
     val isP2PPeer = peerID.startsWith("p2p:")
 
+    // P2P connection status - poll periodically so UI updates when peer connects/disconnects
+    var p2pConnected by remember { mutableStateOf(false) }
+    if (isP2PPeer) {
+        LaunchedEffect(peerID) {
+            while (true) {
+                p2pConnected = viewModel.isP2PPeerConnected(peerID)
+                kotlinx.coroutines.delay(2000)
+            }
+        }
+    }
+
+    // Fetch P2P connection info reactively based on connection status
+    val connectionInfo = remember(peerID, isP2PPeer, p2pConnected) {
+        if (isP2PPeer && p2pConnected) viewModel.getP2PConnectionInfo(peerID) else null
+    }
+
     val messages = privateChats[peerID] ?: emptyList()
-    
+
     // Compute display name and title text reactively
     // Re-compute when messages change (to pick up sender nicknames from incoming messages)
     val displayName = peerNicknames[peerID] ?: peerID.take(12)
@@ -842,15 +872,15 @@ fun PrivateChatSheet(
                 peerNicknames[peerID] ?: peerID.take(12)
             }
         }
-        
+
         baseName
     }
 
     // (messages already defined above for titleText computation)
     val isDirect = peerDirectMap[peerID] == true
-    val isConnected = connectedPeers.contains(peerID) || isDirect
+    val isConnected = if (isP2PPeer) p2pConnected else connectedPeers.contains(peerID) || isDirect
     val sessionState = peerSessionStates[peerID]
-    val showDmMediaButtons = !isNostrPeer && !isP2PPeer && sessionState == "established"
+    val showDmMediaButtons = isP2PPeer || isNostrPeer || sessionState == "established"
     val fingerprint = peerFingerprints[peerID]
     val isFavorite = remember(favoritePeers, fingerprint) {
         if (fingerprint != null) favoritePeers.contains(fingerprint) else viewModel.isFavorite(peerID)
@@ -887,6 +917,8 @@ fun PrivateChatSheet(
                     // Messages list
                     var forceScrollToBottom by remember { mutableStateOf(false) }
                     var isScrolledUp by remember { mutableStateOf(false) }
+                    var showMessageActionSheet by remember { mutableStateOf(false) }
+                    var selectedMessageForAction by remember { mutableStateOf<com.roman.zemzeme.model.ZemzemeMessage?>(null) }
 
                     MessagesList(
                         messages = messages,
@@ -896,10 +928,26 @@ fun PrivateChatSheet(
                         forceScrollToBottom = forceScrollToBottom,
                         onScrolledUpChanged = { isUp -> isScrolledUp = isUp },
                         onNicknameClick = { /* handle mention */ },
-                        onMessageLongPress = { /* handle long press */ },
+                        onMessageLongPress = { message ->
+                            selectedMessageForAction = message
+                            showMessageActionSheet = true
+                        },
                         onCancelTransfer = { msg -> viewModel.cancelMediaSend(msg.id) },
                         onImageClick = { _, _, _ -> /* handle image click */ }
                     )
+
+                    if (showMessageActionSheet) {
+                        val senderName = selectedMessageForAction?.sender?.let {
+                            com.roman.zemzeme.ui.splitSuffix(it).first
+                        } ?: titleText
+                        ChatUserSheet(
+                            isPresented = true,
+                            onDismiss = { showMessageActionSheet = false },
+                            targetNickname = senderName,
+                            selectedMessage = selectedMessageForAction,
+                            viewModel = viewModel
+                        )
+                    }
 
                     HorizontalDivider(color = colorScheme.outline.copy(alpha = 0.3f))
 
@@ -952,88 +1000,88 @@ fun PrivateChatSheet(
                 ZemzemeSheetCenterTopBar(
                     onClose = onDismiss,
                     title = {
-                        // Center content: connection status + name + encryption
-                        Row(
+                        // Center content: connection status + name + encryption + connection indicator
+                        Column(
                             modifier = Modifier.align(Alignment.Center),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            when {
-                                isP2PPeer -> {
-                                    Icon(
-                                        imageVector = Icons.Filled.Wifi,
-                                        contentDescription = "P2P connection",
-                                        modifier = Modifier.size(14.dp),
-                                        tint = Color(0xFF4CAF50) // Green for P2P
-                                    )
-                                    ProtocolBadge(text = "P2P", color = Color(0xFF4CAF50))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                val p2pColor = if (isConnected) Color(0xFF4CAF50) else Color(0xFFFF9500)
+                                when {
+                                    isP2PPeer -> {
+                                        Icon(
+                                            imageVector = if (isConnected) Icons.Filled.Wifi else Icons.Filled.WifiOff,
+                                            contentDescription = stringResource(R.string.cd_p2p_connection),
+                                            modifier = Modifier.size(14.dp),
+                                            tint = p2pColor
+                                        )
+                                        ProtocolBadge(text = "P2P", color = p2pColor)
+                                    }
+                                    isNostrPeer -> {
+                                        Icon(
+                                            imageVector = Icons.Filled.Public,
+                                            contentDescription = stringResource(R.string.cd_nostr_reachable),
+                                            modifier = Modifier.size(14.dp),
+                                            tint = Color(0xFF9C27B0)
+                                        )
+                                        ProtocolBadge(text = "NOS", color = Color(0xFF9C27B0))
+                                    }
+                                    isConnected -> {
+                                        // BLE Mesh / Local
+                                        Icon(
+                                            imageVector = Icons.Filled.Route,
+                                            contentDescription = stringResource(R.string.cd_ready_for_handshake),
+                                            modifier = Modifier.size(14.dp),
+                                            tint = colorScheme.onSurface.copy(alpha = 0.6f)
+                                        )
+                                    }
                                 }
-                                isNostrPeer -> {
-                                    Icon(
-                                        imageVector = Icons.Filled.Public,
-                                        contentDescription = stringResource(R.string.cd_nostr_reachable),
-                                        modifier = Modifier.size(14.dp),
-                                        tint = Color(0xFF9C27B0)
-                                    )
-                                    ProtocolBadge(text = "NOS", color = Color(0xFF9C27B0))
-                                }
-                                isConnected -> {
-                                    // BLE Mesh / Local
-                                    Icon(
-                                        imageVector = Icons.Filled.Route,
-                                        contentDescription = stringResource(R.string.cd_ready_for_handshake),
-                                        modifier = Modifier.size(14.dp),
-                                        tint = colorScheme.onSurface.copy(alpha = 0.6f)
-                                    )
-                                }
-                            }
 
-                            Text(
-                                text = titleText,
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = FontFamily.Monospace
-                                ),
-                                color = when {
-                                    isP2PPeer -> Color(0xFF4CAF50) // Green for P2P
-                                    isNostrPeer -> Color(0xFFFF9500) // Orange for Nostr
-                                    else -> colorScheme.onSurface
-                                }
-                            )
-
-                            if (isVerified) {
-                                Icon(
-                                    imageVector = Icons.Filled.VerifiedUser,
-                                    contentDescription = "Verified",
-                                    modifier = Modifier.size(16.dp),
-                                    tint = Color(0xFF4CAF50)
+                                Text(
+                                    text = titleText,
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = NunitoFontFamily
+                                    ),
+                                    color = when {
+                                        isP2PPeer -> p2pColor
+                                        isNostrPeer -> Color(0xFFFF9500) // Orange for Nostr
+                                        else -> colorScheme.onSurface
+                                    }
                                 )
+
+                                if (isVerified) {
+                                    Icon(
+                                        imageVector = Icons.Filled.VerifiedUser,
+                                        contentDescription = stringResource(R.string.cd_verified),
+                                        modifier = Modifier.size(16.dp),
+                                        tint = Color(0xFF4CAF50)
+                                    )
+                                }
                             }
+
+                            // Connection info indicator (below peer name)
+                            com.roman.zemzeme.ui.connectioninfo.ConnectionIndicatorFactory.PeerIndicator(
+                                data = com.roman.zemzeme.ui.connectioninfo.ConnectionDisplayData.PeerConnection(
+                                    isConnected = isConnected,
+                                    isP2P = isP2PPeer,
+                                    isNostr = isNostrPeer,
+                                    isDirect = isDirect,
+                                    connectionInfo = connectionInfo
+                                )
+                            )
                         }
                     },
                     actions = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Only show Noise session icon for mesh peers (not Nostr or P2P)
-                            if (!isNostrPeer && !isP2PPeer) {
-                                com.roman.zemzeme.ui.NoiseSessionIcon(
-                                    sessionState = sessionState,
-                                    modifier = Modifier.size(14.dp)
-                                )
-                            }
-
-                            IconButton(
-                                onClick = { viewModel.toggleFavorite(peerID) },
-                                modifier = Modifier.size(28.dp)
-                            ) {
-                                Icon(
-                                    imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.Star,
-                                    contentDescription = if (isFavorite) stringResource(R.string.cd_remove_favorite) else stringResource(R.string.cd_add_favorite),
-                                    modifier = Modifier.size(16.dp),
-                                    tint = if (isFavorite) Color(0xFFFFD700) else colorScheme.onSurface.copy(alpha = 0.6f)
-                                )
-                            }
+                        // Only show Noise session icon for mesh peers (not Nostr or P2P)
+                        if (!isNostrPeer && !isP2PPeer) {
+                            com.roman.zemzeme.ui.NoiseSessionIcon(
+                                sessionState = sessionState,
+                                modifier = Modifier.size(14.dp)
+                            )
                         }
                     }
                 )

@@ -16,9 +16,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.roman.zemzeme.R
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 
 @Composable
 fun VoiceNotePlayer(
@@ -95,7 +98,7 @@ fun VoiceNotePlayer(
         FilledTonalIconButton(onClick = { if (controlsEnabled) isPlaying = !isPlaying }, enabled = controlsEnabled, modifier = Modifier.size(28.dp)) {
             Icon(
                 imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                contentDescription = if (isPlaying) "Pause" else "Play"
+                contentDescription = stringResource(if (isPlaying) R.string.cd_pause_voice else R.string.cd_play_voice)
             )
         }
         val progressBarColor = progressColor ?: MaterialTheme.colorScheme.primary
@@ -110,7 +113,7 @@ fun VoiceNotePlayer(
             onSeek = seekTo
         )
         val durText = if (durationMs > 0) String.format("%02d:%02d", (durationMs / 1000) / 60, (durationMs / 1000) % 60) else "--:--"
-        Text(text = durText, fontFamily = FontFamily.Monospace, fontSize = 12.sp)
+        Text(text = durText, fontFamily = NunitoFontFamily, fontSize = 12.sp)
     }
 }
 

@@ -22,6 +22,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -69,7 +70,7 @@ class SlashCommandVisualTransformation : VisualTransformation {
                 withStyle(
                     style = SpanStyle(
                         color = Color(0xFF00FF7F), // Bright green
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         fontWeight = FontWeight.Medium,
                         background = Color(0xFF2D2D2D) // Dark gray background
                     )
@@ -113,7 +114,7 @@ class MentionVisualTransformation : VisualTransformation {
                 withStyle(
                     style = SpanStyle(
                         color = Color(0xFFFF9500), // Orange
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         fontWeight = FontWeight.SemiBold
                     )
                 ) {
@@ -199,7 +200,7 @@ fun MessageInput(
                 enabled = enabled,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     color = if (enabled) colorScheme.primary else colorScheme.onSurface.copy(alpha = 0.3f),
-                    fontFamily = FontFamily.Monospace
+                    fontFamily = NunitoFontFamily
                 ),
                 cursorBrush = SolidColor(if (isRecording) Color.Transparent else colorScheme.primary),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
@@ -222,7 +223,7 @@ fun MessageInput(
                 Text(
                     text = stringResource(R.string.type_a_message_placeholder),
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        fontFamily = FontFamily.Monospace
+                        fontFamily = NunitoFontFamily
                     ),
                     color = colorScheme.onSurface.copy(alpha = 0.5f), // Muted grey
                     modifier = Modifier.fillMaxWidth()
@@ -245,7 +246,7 @@ fun MessageInput(
                     val maxSs = maxSecs % 60
                     Text(
                         text = String.format("%02d:%02d / %02d:%02d", mm, ss, maxMm, maxSs),
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = NunitoFontFamily,
                         color = colorScheme.primary,
                         fontSize = (BASE_FONT_SIZE - 4).sp
                     )
@@ -258,7 +259,7 @@ fun MessageInput(
         // Voice and image buttons when no text (only visible in Mesh chat)
         if (value.text.isEmpty() && showMediaButtons && enabled) {
             // Hold-to-record microphone
-            val bg = if (colorScheme.background == Color.Black) Color(0xFF00FF00).copy(alpha = 0.75f) else Color(0xFF008000).copy(alpha = 0.75f)
+            val bg = colorScheme.primary.copy(alpha = 0.75f)
 
             // Ensure latest values are used when finishing recording
             val latestSelectedPeer = rememberUpdatedState(selectedPrivatePeer)
@@ -334,10 +335,8 @@ fun MessageInput(
                             } else if (selectedPrivatePeer != null || currentChannel != null) {
                                 // Orange for both private messages and channels when enabled
                                 Color(0xFFFF9500).copy(alpha = 0.75f)
-                            } else if (colorScheme.background == Color.Black) {
-                                Color(0xFF00FF00).copy(alpha = 0.75f) // Bright green for dark theme
                             } else {
-                                Color(0xFF008000).copy(alpha = 0.75f) // Dark green for light theme
+                                colorScheme.primary.copy(alpha = 0.75f)
                             },
                             shape = CircleShape
                         ),
@@ -353,10 +352,8 @@ fun MessageInput(
                         } else if (selectedPrivatePeer != null || currentChannel != null) {
                             // Black arrow on orange for both private and channel modes
                             Color.Black
-                        } else if (colorScheme.background == Color.Black) {
-                            Color.Black // Black arrow on bright green in dark theme
                         } else {
-                            Color.White // White arrow on dark green in light theme
+                            colorScheme.onPrimary
                         }
                     )
                 }
@@ -417,7 +414,7 @@ fun CommandSuggestionItem(
         Text(
             text = allCommands.joinToString(", "),
             style = MaterialTheme.typography.bodySmall.copy(
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontWeight = FontWeight.Medium
             ),
             color = colorScheme.primary,
@@ -429,7 +426,7 @@ fun CommandSuggestionItem(
             Text(
                 text = syntax,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    fontFamily = FontFamily.Monospace
+                    fontFamily = NunitoFontFamily
                 ),
                 color = colorScheme.onSurface.copy(alpha = 0.8f),
                 fontSize = (BASE_FONT_SIZE - 5).sp
@@ -440,7 +437,7 @@ fun CommandSuggestionItem(
         Text(
             text = suggestion.description,
             style = MaterialTheme.typography.bodySmall.copy(
-                fontFamily = FontFamily.Monospace
+                fontFamily = NunitoFontFamily
             ),
             color = colorScheme.onSurface.copy(alpha = 0.7f),
             fontSize = (BASE_FONT_SIZE - 5).sp,
@@ -491,7 +488,7 @@ fun MentionSuggestionItem(
         Text(
             text = stringResource(R.string.mention_suggestion_at, suggestion),
             style = MaterialTheme.typography.bodySmall.copy(
-                fontFamily = FontFamily.Monospace,
+                fontFamily = NunitoFontFamily,
                 fontWeight = FontWeight.SemiBold
             ),
             color = Color(0xFFFF9500), // Orange like mentions
@@ -503,7 +500,7 @@ fun MentionSuggestionItem(
         Text(
             text = stringResource(R.string.mention),
             style = MaterialTheme.typography.bodySmall.copy(
-                fontFamily = FontFamily.Monospace
+                fontFamily = NunitoFontFamily
             ),
             color = colorScheme.onSurface.copy(alpha = 0.7f),
             fontSize = (BASE_FONT_SIZE - 5).sp

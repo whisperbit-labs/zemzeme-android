@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -110,7 +111,7 @@ fun MessageWithMatrixAnimation(
         Text(
             text = annotatedText,
             modifier = modifier,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = NunitoFontFamily,
             softWrap = true
         )
     }
@@ -224,7 +225,7 @@ private fun AnimatedMessageDisplay(
     Text(
         text = annotatedText,
         modifier = modifier,
-        fontFamily = FontFamily.Monospace,
+        fontFamily = NunitoFontFamily,
         softWrap = true,
         overflow = androidx.compose.ui.text.style.TextOverflow.Visible,
         style = androidx.compose.ui.text.TextStyle(

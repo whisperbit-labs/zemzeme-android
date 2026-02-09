@@ -19,6 +19,7 @@ import com.roman.zemzeme.protocol.ZemzemePacket
 
 
 import kotlinx.coroutines.launch
+import com.roman.zemzeme.util.DebugLogger
 import com.roman.zemzeme.util.NotificationIntervalManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,15 +51,20 @@ class ChatViewModel(
 
     companion object {
         private const val TAG = "ChatViewModel"
+        // Go P2P library has max 10 topic slots. 1 topic per group.
+        const val MAX_P2P_GROUPS = 10
     }
 
     fun sendVoiceNote(toPeerIDOrNull: String?, channelOrNull: String?, filePath: String) {
         val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
         if (toPeerIDOrNull != null && targetPeer == null) return
 
-        if (targetPeer == null && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Location) {
-            Log.w(TAG, "Blocked voice note send in geohash location chat (BLE media-only policy)")
-            return
+        if (targetPeer == null) {
+            val loc = state.selectedLocationChannel.value
+            if (loc is com.roman.zemzeme.geohash.ChannelID.Location) {
+                geohashViewModel.sendGeohashMedia(filePath, "audio/mp4", com.roman.zemzeme.model.ZemzemeMessageType.Audio, loc.channel, meshService.myPeerID, state.getNicknameValue())
+                return
+            }
         }
 
         mediaSendingManager.sendVoiceNote(targetPeer, channelOrNull, filePath)
@@ -68,9 +74,19 @@ class ChatViewModel(
         val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
         if (toPeerIDOrNull != null && targetPeer == null) return
 
-        if (targetPeer == null && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Location) {
-            Log.w(TAG, "Blocked file send in geohash location chat (BLE media-only policy)")
-            return
+        if (targetPeer == null) {
+            val loc = state.selectedLocationChannel.value
+            if (loc is com.roman.zemzeme.geohash.ChannelID.Location) {
+                val file = java.io.File(filePath)
+                val mimeType = try { com.roman.zemzeme.features.file.FileUtils.getMimeTypeFromExtension(file.name) } catch (_: Exception) { "application/octet-stream" }
+                val msgType = when {
+                    mimeType.startsWith("image/") -> com.roman.zemzeme.model.ZemzemeMessageType.Image
+                    mimeType.startsWith("audio/") -> com.roman.zemzeme.model.ZemzemeMessageType.Audio
+                    else -> com.roman.zemzeme.model.ZemzemeMessageType.File
+                }
+                geohashViewModel.sendGeohashMedia(filePath, mimeType, msgType, loc.channel, meshService.myPeerID, state.getNicknameValue())
+                return
+            }
         }
 
         mediaSendingManager.sendFileNote(targetPeer, channelOrNull, filePath)
@@ -80,9 +96,12 @@ class ChatViewModel(
         val targetPeer = resolveMediaRecipientForSend(toPeerIDOrNull)
         if (toPeerIDOrNull != null && targetPeer == null) return
 
-        if (targetPeer == null && state.selectedLocationChannel.value is com.roman.zemzeme.geohash.ChannelID.Location) {
-            Log.w(TAG, "Blocked image send in geohash location chat (BLE media-only policy)")
-            return
+        if (targetPeer == null) {
+            val loc = state.selectedLocationChannel.value
+            if (loc is com.roman.zemzeme.geohash.ChannelID.Location) {
+                geohashViewModel.sendGeohashMedia(filePath, "image/jpeg", com.roman.zemzeme.model.ZemzemeMessageType.Image, loc.channel, meshService.myPeerID, state.getNicknameValue())
+                return
+            }
         }
 
         mediaSendingManager.sendImageNote(targetPeer, channelOrNull, filePath)
@@ -91,13 +110,12 @@ class ChatViewModel(
     private fun resolveMediaRecipientForSend(toPeerIDOrNull: String?): String? {
         if (toPeerIDOrNull == null) return null
 
-        if (toPeerIDOrNull.startsWith("nostr_") || toPeerIDOrNull.startsWith("nostr:")) {
-            Log.w(TAG, "Blocked media send for Nostr DM target: ${toPeerIDOrNull.take(16)}…")
-            return null
-        }
-        if (toPeerIDOrNull.startsWith("p2p:")) {
-            Log.w(TAG, "Blocked media send for P2P DM target: ${toPeerIDOrNull.take(16)}…")
-            return null
+        // P2P and Nostr DMs are routed by MediaSendingManager — pass through as-is.
+        if (toPeerIDOrNull.startsWith("p2p:") ||
+            toPeerIDOrNull.startsWith("nostr_") ||
+            toPeerIDOrNull.startsWith("nostr:")
+        ) {
+            return toPeerIDOrNull
         }
 
         val canonicalPeerID = try {
@@ -113,6 +131,7 @@ class ChatViewModel(
             toPeerIDOrNull
         }
 
+        // BLE session guard only applies to BLE-addressed peers.
         if (!meshService.hasEstablishedSession(canonicalPeerID)) {
             Log.w(TAG, "Blocked media send: no established BLE session for ${canonicalPeerID.take(16)}…")
             return null
@@ -176,8 +195,15 @@ class ChatViewModel(
     )
     val verifiedFingerprints = verificationHandler.verifiedFingerprints
 
-    // Media file sending manager
-    private val mediaSendingManager = MediaSendingManager(state, messageManager, channelManager) { meshService }
+    // Media file sending manager — routes to P2P / Nostr / BLE based on peer prefix.
+    private val mediaSendingManager = MediaSendingManager(
+        state = state,
+        messageManager = messageManager,
+        channelManager = channelManager,
+        getMeshService = { meshService },
+        getP2PTransport = { com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication()) },
+        getNostrTransport = { com.roman.zemzeme.nostr.NostrTransport.getInstance(getApplication()) }
+    )
     
     // Delegate handler for mesh callbacks
     private val meshDelegateHandler = MeshDelegateHandler(
@@ -189,7 +215,8 @@ class ChatViewModel(
         coroutineScope = viewModelScope,
         onHapticFeedback = { ChatViewModelUtils.triggerHapticFeedback(application.applicationContext) },
         getMyPeerID = { meshService.myPeerID },
-        getMeshService = { meshService }
+        getMeshService = { meshService },
+        onContactAdd = { peerID -> addContactIfNeeded(peerID) }
     )
     
     // New Geohash architecture ViewModel (replaces God object service usage in UI path)
@@ -248,7 +275,9 @@ class ChatViewModel(
     val customGroups: StateFlow<Set<String>> = state.customGroups
     val geographicGroups: StateFlow<Set<String>> = state.geographicGroups
     val groupNicknames: StateFlow<Map<String, String>> = state.groupNicknames
-    
+    val unreadMeshCount: StateFlow<Int> = state.unreadMeshCount
+    val contacts: StateFlow<Set<String>> = state.contacts
+
     // P2P topic states for connection status UI (delegated from geohashViewModel)
     val p2pTopicStates: StateFlow<Map<String, com.roman.zemzeme.p2p.TopicState>> get() = geohashViewModel.p2pTopicStates
 
@@ -330,10 +359,22 @@ class ChatViewModel(
         dataManager.loadBlockedUsers()
         dataManager.loadGeohashBlockedUsers()
 
-        // Load custom groups, geographic groups, and nicknames
+        // Load custom groups, geographic groups, nicknames, and contacts
         state.setCustomGroups(dataManager.loadCustomGroups())
         state.setGeographicGroups(dataManager.loadGeographicGroups())
         state.setGroupNicknames(dataManager.loadAllGroupNicknames())
+        state.setContacts(dataManager.loadContacts())
+        // Restore saved contact nicknames into peerNicknames so they show on HomeScreen
+        val savedContactNicks = dataManager.loadContactNicknames()
+        if (savedContactNicks.isNotEmpty()) {
+            val currentNicks = state.peerNicknames.value.toMutableMap()
+            savedContactNicks.forEach { (peerID, nick) ->
+                if (peerID !in currentNicks) {
+                    currentNicks[peerID] = nick
+                }
+            }
+            state.setPeerNicknames(currentNicks)
+        }
 
         // Log all favorites at startup
         dataManager.logAllFavorites()
@@ -382,6 +423,27 @@ class ChatViewModel(
                 if (incomingMessage.type == com.roman.zemzeme.p2p.P2PTransport.P2PMessageType.DIRECT_MESSAGE) {
                     val senderPeerID = "p2p:${incomingMessage.senderPeerID}"
 
+                    // ── Incoming media ────────────────────────────────────────
+                    if (incomingMessage.fileBytes != null) {
+                        val resolvedName = incomingMessage.senderNickname?.takeIf { it.isNotBlank() }
+                            ?: com.roman.zemzeme.p2p.P2PAliasRegistry.getDisplayName(senderPeerID)
+                            ?: "p2p:${incomingMessage.senderPeerID.take(8)}…"
+                        val normalizedTs = normalizeP2PTimestamp(incomingMessage.timestamp)
+                        val msg = com.roman.zemzeme.features.media.MediaReceiveHandler.handle(
+                            context = getApplication(),
+                            fileBytes = incomingMessage.fileBytes,
+                            senderKey = senderPeerID,
+                            senderNickname = resolvedName,
+                            timestamp = java.util.Date(normalizedTs)
+                        )
+                        if (msg != null) {
+                            privateChatManager.handleIncomingPrivateMessage(msg)
+                            addContactIfNeeded(senderPeerID)
+                            Log.d("ChatViewModel", "Received P2P media from $senderPeerID ($resolvedName): ${incomingMessage.contentType}")
+                        }
+                        return@setMessageCallback
+                    }
+
                     if (handleIncomingP2PFavoriteNotification(senderPeerID, incomingMessage.content)) {
                         return@setMessageCallback
                     }
@@ -411,6 +473,7 @@ class ChatViewModel(
                     )
                     // Add to private chat
                     privateChatManager.handleIncomingPrivateMessage(message)
+                    addContactIfNeeded(senderPeerID)
                     Log.d("ChatViewModel", "Received P2P DM from $senderPeerID ($displayName): ${incomingMessage.content.take(30)}...")
                 }
             }
@@ -720,21 +783,44 @@ class ChatViewModel(
             // Send private message
             val recipientNickname = meshService.getPeerNicknames()[selectedPeer]
             privateChatManager.sendPrivateMessage(
-                content, 
-                selectedPeer, 
+                content,
+                selectedPeer,
                 recipientNickname,
                 state.getNicknameValue(),
                 meshService.myPeerID
             ) { messageContent, peerID, recipientNicknameParam, messageId ->
+                DebugLogger.log(
+                    action = "SEND",
+                    msgId = messageId,
+                    srcName = state.getNicknameValue(),
+                    srcId = meshService.myPeerID,
+                    destName = recipientNicknameParam,
+                    destId = peerID,
+                    protocol = "PRIVATE",
+                    content = messageContent
+                )
                 // Route via MessageRouter (mesh when connected+established, else Nostr)
                 val router = com.roman.zemzeme.services.MessageRouter.getInstance(getApplication(), meshService)
                 router.sendPrivate(messageContent, peerID, recipientNicknameParam, messageId)
             }
+            // Auto-add as contact when sending a private message
+            addContactIfNeeded(selectedPeer)
         } else {
             // Check if we're in a location channel
             val selectedLocationChannel = state.selectedLocationChannel.value
             if (selectedLocationChannel is com.roman.zemzeme.geohash.ChannelID.Location) {
                 // Send to geohash channel via Nostr ephemeral event
+                val geoMsgId = java.util.UUID.randomUUID().toString().uppercase()
+                DebugLogger.log(
+                    action = "SEND",
+                    msgId = geoMsgId,
+                    srcName = state.getNicknameValue(),
+                    srcId = meshService.myPeerID,
+                    destName = selectedLocationChannel.channel.geohash,
+                    destId = "geo:${selectedLocationChannel.channel.geohash}",
+                    protocol = "NOSTR_GEOHASH",
+                    content = content
+                )
                 geohashViewModel.sendGeohashMessage(content, selectedLocationChannel.channel, meshService.myPeerID, state.getNicknameValue())
             } else {
                 // Send public/channel message via mesh
@@ -749,6 +835,16 @@ class ChatViewModel(
                 )
 
                 if (currentChannelValue != null) {
+                    DebugLogger.log(
+                        action = "SEND",
+                        msgId = message.id,
+                        srcName = state.getNicknameValue(),
+                        srcId = meshService.myPeerID,
+                        destName = currentChannelValue,
+                        destId = currentChannelValue,
+                        protocol = "BLE_MESH",
+                        content = content
+                    )
                     channelManager.addChannelMessage(currentChannelValue, message, meshService.myPeerID)
 
                     // Check if encrypted channel
@@ -772,6 +868,16 @@ class ChatViewModel(
                     }
                 } else {
                     messageManager.addMessage(message)
+                    DebugLogger.log(
+                        action = "SEND",
+                        msgId = message.id,
+                        srcName = state.getNicknameValue(),
+                        srcId = meshService.myPeerID,
+                        destName = "broadcast",
+                        destId = "all",
+                        protocol = "BLE_MESH",
+                        content = content
+                    )
                     meshService.sendMessage(content, mentions, null)
                 }
             }
@@ -914,8 +1020,11 @@ class ChatViewModel(
             }
         }
 
-        val nicknames = meshService.getPeerNicknames()
-        state.setPeerNicknames(nicknames)
+        val meshNicknames = meshService.getPeerNicknames()
+        // Merge mesh nicknames on top of existing map (preserves saved contact nicknames)
+        val mergedNicknames = state.peerNicknames.value.toMutableMap()
+        mergedNicknames.putAll(meshNicknames)
+        state.setPeerNicknames(mergedNicknames)
 
         val rssiValues = meshService.getPeerRSSI()
         state.setPeerRSSI(rssiValues)
@@ -1116,11 +1225,17 @@ class ChatViewModel(
     
     fun panicClearAllData() {
         Log.w(TAG, "🚨 PANIC MODE ACTIVATED - Clearing all sensitive data")
-        
+
         // Clear all UI managers
         messageManager.clearAllMessages()
         channelManager.clearAllChannels()
         privateChatManager.clearAllPrivateChats()
+
+        // Clear all custom and geographic groups and contacts (keep nearby Mesh + location channel)
+        state.setCustomGroups(emptySet())
+        state.setGeographicGroups(emptySet())
+        state.setContacts(emptySet())
+
         dataManager.clearAllData()
 
         // Clear process-wide in-memory message store
@@ -1322,6 +1437,32 @@ class ChatViewModel(
         // Note: Don't call showPrivateChatSheet here - the caller or LaunchedEffect handles that
     }
 
+    /**
+     * Get detailed P2P connection info for a peer (on-demand, not polled).
+     * Returns null for non-P2P peers or if not connected.
+     */
+    fun getP2PConnectionInfo(peerID: String): com.roman.zemzeme.p2p.PeerConnectionInfo? {
+        if (!peerID.startsWith("p2p:")) return null
+        val rawPeerID = peerID.removePrefix("p2p:")
+        return try {
+            val p2pTransport = com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication())
+            p2pTransport.p2pRepository.getConnectionInfo(rawPeerID)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun isP2PPeerConnected(peerID: String): Boolean {
+        if (!peerID.startsWith("p2p:")) return false
+        val rawPeerID = peerID.removePrefix("p2p:")
+        return try {
+            val p2pTransport = com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication())
+            p2pTransport.p2pRepository.isConnected(rawPeerID)
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     fun selectLocationChannel(channel: com.roman.zemzeme.geohash.ChannelID) {
         geohashViewModel.selectLocationChannel(channel)
     }
@@ -1347,6 +1488,7 @@ class ChatViewModel(
         dataManager.saveCustomGroups(groups)
         state.setCustomGroups(groups)
         state.setGroupNicknames(dataManager.loadAllGroupNicknames())
+        subscribeP2PTopics(geohash)
         return geohash
     }
 
@@ -1357,6 +1499,7 @@ class ChatViewModel(
         dataManager.saveCustomGroups(groups)
         state.setCustomGroups(groups)
         state.setGroupNicknames(dataManager.loadAllGroupNicknames())
+        subscribeP2PTopics(geohash)
     }
 
     fun renameGroup(geohash: String, newNickname: String) {
@@ -1368,6 +1511,8 @@ class ChatViewModel(
         dataManager.removeCustomGroup(geohash)
         state.setCustomGroups(dataManager.loadCustomGroups())
         state.setGroupNicknames(dataManager.loadAllGroupNicknames())
+        // Unsubscribe P2P topics to free Go-side topic slots (max 10)
+        unsubscribeP2PTopics(geohash)
     }
 
     fun addGeographicGroup(geohash: String, nickname: String) {
@@ -1377,23 +1522,70 @@ class ChatViewModel(
         dataManager.saveGeographicGroups(groups)
         state.setGeographicGroups(groups)
         state.setGroupNicknames(dataManager.loadAllGroupNicknames())
+        subscribeP2PTopics(geohash)
     }
 
     fun removeGeographicGroup(geohash: String) {
         dataManager.removeGeographicGroup(geohash)
         state.setGeographicGroups(dataManager.loadGeographicGroups())
         state.setGroupNicknames(dataManager.loadAllGroupNicknames())
+        // Unsubscribe P2P topics to free Go-side topic slots (max 10)
+        unsubscribeP2PTopics(geohash)
+    }
+
+    private fun subscribeP2PTopics(geohash: String) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            try {
+                val p2pRepo = com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication()).p2pRepository
+                if (p2pRepo.nodeStatus.value != com.roman.zemzeme.p2p.P2PNodeStatus.RUNNING) return@launch
+                val config = com.roman.zemzeme.p2p.P2PConfig(getApplication())
+                if (!config.p2pEnabled) return@launch
+                val repo = com.roman.zemzeme.p2p.P2PTopicsRepository.getInstance(getApplication(), p2pRepo)
+                repo.subscribeTopic(geohash)
+                repo.discoverTopicPeers(geohash)
+                repo.startContinuousRefresh(geohash)
+                android.util.Log.d("ChatViewModel", "Subscribed P2P topics for new group: $geohash")
+            } catch (e: Exception) {
+                android.util.Log.w("ChatViewModel", "Failed to subscribe P2P topics: ${e.message}")
+            }
+        }
+    }
+
+    private fun unsubscribeP2PTopics(geohash: String) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            try {
+                val repo = com.roman.zemzeme.p2p.P2PTopicsRepository.getInstance(
+                    getApplication(),
+                    com.roman.zemzeme.p2p.P2PTransport.getInstance(getApplication()).p2pRepository
+                )
+                repo.unsubscribeTopic(geohash)
+                android.util.Log.d("ChatViewModel", "Unsubscribed P2P topics for deleted group: $geohash")
+            } catch (e: Exception) {
+                android.util.Log.w("ChatViewModel", "Failed to unsubscribe P2P topics: ${e.message}")
+            }
+        }
+    }
+
+    fun setOnChatScreen(onChatScreen: Boolean) {
+        state.setIsOnChatScreen(onChatScreen)
+        // Clean up private chat state when leaving the chat screen
+        if (!onChatScreen && state.getPrivateChatSheetPeerValue() != null) {
+            endPrivateChat()
+        }
     }
 
     fun navigateToMesh() {
+        state.setUnreadMeshCount(0)
         selectLocationChannel(com.roman.zemzeme.geohash.ChannelID.Mesh)
     }
 
     fun navigateToLocationChannel(channelID: com.roman.zemzeme.geohash.ChannelID.Location) {
+        messageManager.clearChannelUnreadCount("geo:${channelID.channel.geohash}")
         selectLocationChannel(channelID)
     }
 
     fun navigateToGeohashGroup(geohash: String) {
+        messageManager.clearChannelUnreadCount("geo:$geohash")
         val level = when (geohash.length) {
             8 -> com.roman.zemzeme.geohash.GeohashChannelLevel.BUILDING
             7 -> com.roman.zemzeme.geohash.GeohashChannelLevel.BLOCK
@@ -1440,6 +1632,46 @@ class ChatViewModel(
         val unread = state.getUnreadPrivateMessagesValue().toMutableSet()
         unread.remove(peerID)
         state.setUnreadPrivateMessages(unread)
+    }
+
+    // MARK: - Contacts Management
+
+    fun addContactIfNeeded(peerID: String) {
+        val current = state.getContactsValue()
+        if (peerID !in current) {
+            val updated = current + peerID
+            state.setContacts(updated)
+            dataManager.saveContacts(updated)
+        }
+        // Always update the stored nickname with the latest known name
+        val displayName = state.peerNicknames.value[peerID]
+            ?: meshService.getPeerNicknames()[peerID]
+            ?: state.getPrivateChatsValue()[peerID]?.lastOrNull { it.senderPeerID == peerID }?.sender
+        if (displayName != null && !displayName.startsWith("p2p:") && displayName != peerID) {
+            dataManager.saveContactNickname(peerID, displayName)
+        }
+    }
+
+    fun removeContact(peerID: String) {
+        val current = state.getContactsValue().toMutableSet()
+        current.remove(peerID)
+        state.setContacts(current)
+        dataManager.saveContacts(current)
+        deletePrivateChat(peerID)
+    }
+
+    private var enteredViaContact = false
+
+    fun consumeEnteredViaContact(): Boolean {
+        val was = enteredViaContact
+        enteredViaContact = false
+        return was
+    }
+
+    fun navigateToContact(peerID: String) {
+        enteredViaContact = true
+        navigateToMesh()
+        showPrivateChatSheet(peerID)
     }
 
     // MARK: - Navigation Management

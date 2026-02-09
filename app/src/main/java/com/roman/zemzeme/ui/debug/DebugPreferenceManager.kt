@@ -21,6 +21,7 @@ object DebugPreferenceManager {
     private const val KEY_GCS_MAX_BYTES = "gcs_max_filter_bytes"
     private const val KEY_GCS_FPR = "gcs_filter_fpr_percent"
     private const val KEY_P2P_LOG_COMPONENT = "p2p_log_component"
+    private const val KEY_DEBUG_UI = "debug_ui_enabled"
     // Removed: persistent notification toggle is now governed by MeshServicePreferences.isBackgroundEnabled
 
     private lateinit var prefs: SharedPreferences
@@ -108,6 +109,13 @@ object DebugPreferenceManager {
 
     fun setP2pLogComponent(value: String) {
         if (ready()) prefs.edit().putString(KEY_P2P_LOG_COMPONENT, value).apply()
+    }
+
+    fun getDebugUiEnabled(default: Boolean = false): Boolean =
+        if (ready()) prefs.getBoolean(KEY_DEBUG_UI, default) else default
+
+    fun setDebugUiEnabled(value: Boolean) {
+        if (ready()) prefs.edit().putBoolean(KEY_DEBUG_UI, value).apply()
     }
 
     // No longer storing persistent notification in debug prefs.
