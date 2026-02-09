@@ -2,8 +2,12 @@ package com.roman.zemzeme.nostr
 
 import android.content.Context
 import android.util.Log
+import com.roman.zemzeme.mesh.FragmentManager
 import com.roman.zemzeme.model.ReadReceipt
 import com.roman.zemzeme.model.NoisePayloadType
+import com.roman.zemzeme.model.ZemzemeFilePacket
+import com.roman.zemzeme.protocol.MessageType
+import com.roman.zemzeme.protocol.ZemzemePacket
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -291,6 +295,207 @@ class NostrTransport(
         }
     }
     
+    // ── Media sending ────────────────────────────────────────────────────────
+
+    /**
+     * Send a [ZemzemeFilePacket] to a Nostr DM recipient.
+     *
+     * Files smaller than [NostrEmbeddedZemzeme.NOSTR_INLINE_FILE_THRESHOLD] bytes are wrapped
+     * in a single Gift Wrap. Larger files are split into FRAGMENT packets via
+     * [FragmentManager], each sent as its own Gift Wrap.
+     */
+    fun sendMediaMessage(
+        filePacket: ZemzemeFilePacket,
+        to: String,
+        recipientNickname: String,
+        messageID: String
+    ) {
+        transportScope.launch {
+            sendMediaMessageAwait(filePacket, to, recipientNickname, messageID)
+                .onFailure { e ->
+                    Log.e(TAG, "Failed to send media via Nostr: ${e.message}")
+                }
+        }
+    }
+
+    suspend fun sendMediaMessageAwait(
+        filePacket: ZemzemeFilePacket,
+        to: String,
+        recipientNickname: String,
+        messageID: String
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            if (!NostrRelayManager.isEnabled) {
+                throw IllegalStateException("Nostr transport is disabled")
+            }
+
+            val relayManager = NostrRelayManager.getInstance(context)
+            if (!relayManager.isConnected.value) {
+                throw IllegalStateException("No connected Nostr relays")
+            }
+
+            val recipientNostrPubkey = resolveNostrPublicKey(to)
+                ?: throw IllegalStateException("No Nostr public key found for peerID: $to")
+
+            val senderIdentity = NostrIdentityBridge.getCurrentNostrIdentity(context)
+                ?: throw IllegalStateException("No Nostr identity available")
+
+            val recipientHex = run {
+                val (hrp, data) = Bech32.decode(recipientNostrPubkey)
+                if (hrp != "npub") throw IllegalStateException("Recipient key is not npub (hrp=$hrp)")
+                data.joinToString("") { "%02x".format(it) }
+            }
+
+            val recipientPeerIDForEmbed =
+                com.roman.zemzeme.favorites.FavoritesPersistenceService.shared
+                    .findPeerIDForNostrPubkey(recipientNostrPubkey)
+                    ?: throw IllegalStateException(
+                        "No peerID stored for recipient npub: ${recipientNostrPubkey.take(16)}..."
+                    )
+
+            val fileBytes = filePacket.encode()
+                ?: throw IllegalStateException("Failed to encode ZemzemeFilePacket")
+
+            Log.d(TAG, "NostrTransport: sending media ${filePacket.fileName} (${fileBytes.size} bytes) to ${recipientHex.take(8)}...")
+
+            if (fileBytes.size < NostrEmbeddedZemzeme.NOSTR_INLINE_FILE_THRESHOLD) {
+                // ── Single Gift Wrap ─────────────────────────────────────────
+                val embedded = NostrEmbeddedZemzeme.encodeFileTransferForNostr(
+                    fileBytes, messageID, recipientPeerIDForEmbed, senderPeerID
+                ) ?: throw IllegalStateException("Failed to embed file transfer packet")
+
+                val giftWraps = NostrProtocol.createPrivateMessage(
+                    content = embedded,
+                    recipientPubkey = recipientHex,
+                    senderIdentity = senderIdentity
+                )
+                giftWraps.forEach { event ->
+                    Log.i(TAG, "NostrTransport: sending media giftWrap id=${event.id.take(16)}...")
+                    relayManager.sendEvent(event)
+                }
+            } else {
+                // ── Fragmented: one Gift Wrap per FRAGMENT packet ────────────
+                val payload = ByteArray(1 + fileBytes.size)
+                payload[0] = NoisePayloadType.FILE_TRANSFER.value.toByte()
+                System.arraycopy(fileBytes, 0, payload, 1, fileBytes.size)
+
+                // Use the 4-param convenience constructor so the private hexStringToByteArray
+                // inside ZemzemePacket handles the 8-byte senderID encoding correctly.
+                val fullPacket = ZemzemePacket(
+                    type = MessageType.NOISE_ENCRYPTED.value,
+                    ttl = com.roman.zemzeme.util.AppConstants.MESSAGE_TTL_HOPS,
+                    senderID = senderPeerID,
+                    payload = payload
+                )
+
+                val fragments = FragmentManager().createFragments(fullPacket)
+                Log.d(TAG, "NostrTransport: fragmented into ${fragments.size} FRAGMENT packets")
+
+                for (fragment in fragments) {
+                    val embedded = NostrEmbeddedZemzeme.encodePacketForNostr(fragment)
+                        ?: continue
+                    val giftWraps = NostrProtocol.createPrivateMessage(
+                        content = embedded,
+                        recipientPubkey = recipientHex,
+                        senderIdentity = senderIdentity
+                    )
+                    giftWraps.forEach { event ->
+                        Log.i(TAG, "NostrTransport: sending fragment giftWrap id=${event.id.take(16)}...")
+                        relayManager.sendEvent(event)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Geohash-identity variant of [sendMediaMessage].
+     * Uses the per-geohash derived identity as sender instead of the main account identity.
+     */
+    fun sendMediaMessageGeohash(
+        filePacket: ZemzemeFilePacket,
+        toRecipientHex: String,
+        messageID: String,
+        sourceGeohash: String? = null
+    ) {
+        val geohash = sourceGeohash ?: run {
+            val selected = try {
+                com.roman.zemzeme.geohash.LocationChannelManager.getInstance(context).selectedChannel.value
+            } catch (_: Exception) { null }
+            if (selected !is com.roman.zemzeme.geohash.ChannelID.Location) {
+                Log.w(TAG, "NostrTransport: cannot send geohash media - not in a location channel")
+                return
+            }
+            selected.channel.geohash
+        }
+
+        val fromIdentity = try {
+            NostrIdentityBridge.deriveIdentity(geohash, context)
+        } catch (e: Exception) {
+            Log.e(TAG, "NostrTransport: cannot derive geohash identity for $geohash: ${e.message}")
+            return
+        }
+
+        transportScope.launch {
+            try {
+                val relayManager = NostrRelayManager.getInstance(context)
+                if (!relayManager.isConnected.value) return@launch
+
+                val fileBytes = filePacket.encode() ?: run {
+                    Log.e(TAG, "NostrTransport: failed to encode file for geohash media send")
+                    return@launch
+                }
+
+                Log.d(TAG, "GeoDM: send media ${filePacket.fileName} (${fileBytes.size} bytes) to ${toRecipientHex.take(8)}...")
+
+                if (fileBytes.size < NostrEmbeddedZemzeme.NOSTR_INLINE_FILE_THRESHOLD) {
+                    val embedded = NostrEmbeddedZemzeme.encodeFileTransferForNostrNoRecipient(
+                        fileBytes, messageID, senderPeerID
+                    ) ?: return@launch
+
+                    val giftWraps = NostrProtocol.createPrivateMessage(
+                        content = embedded,
+                        recipientPubkey = toRecipientHex,
+                        senderIdentity = fromIdentity
+                    )
+                    giftWraps.forEach { event ->
+                        NostrRelayManager.registerPendingGiftWrap(event.id)
+                        relayManager.sendEvent(event)
+                    }
+                } else {
+                    val payload = ByteArray(1 + fileBytes.size)
+                    payload[0] = NoisePayloadType.FILE_TRANSFER.value.toByte()
+                    System.arraycopy(fileBytes, 0, payload, 1, fileBytes.size)
+
+                    val fullPacket = ZemzemePacket(
+                        type = MessageType.NOISE_ENCRYPTED.value,
+                        ttl = com.roman.zemzeme.util.AppConstants.MESSAGE_TTL_HOPS,
+                        senderID = senderPeerID,
+                        payload = payload
+                    )
+
+                    val fragments = FragmentManager().createFragments(fullPacket)
+                    for (fragment in fragments) {
+                        val embedded = NostrEmbeddedZemzeme.encodePacketForNostr(fragment) ?: continue
+                        val giftWraps = NostrProtocol.createPrivateMessage(
+                            content = embedded,
+                            recipientPubkey = toRecipientHex,
+                            senderIdentity = fromIdentity
+                        )
+                        giftWraps.forEach { event ->
+                            NostrRelayManager.registerPendingGiftWrap(event.id)
+                            relayManager.sendEvent(event)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to send geohash media message: ${e.message}")
+            }
+        }
+    }
+
+    // ── End media sending ────────────────────────────────────────────────────
+
     fun sendDeliveryAck(messageID: String, to: String) {
         transportScope.launch {
             sendDeliveryAckAwait(messageID, to)
