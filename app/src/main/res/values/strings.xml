@@ -56,15 +56,15 @@
   <string name="notification_geohash_summary_title_mentions">Zemzeme - %1$d mentions</string>
   <string name="notification_geohash_summary_title">Zemzeme - location chats</string>
   <string name="notification_geohash_summary_text">%1$d messages from %2$d locations</string>
-  <string name="notification_mesh_mention_title_singular">Mentioned in Mesh Chat</string>
-  <string name="notification_mesh_mention_title_plural">%1$d mentions in Mesh Chat</string>
+  <string name="notification_mesh_mention_title_singular">Mentioned in Bluetooth Chat</string>
+  <string name="notification_mesh_mention_title_plural">%1$d mentions in Bluetooth Chat</string>
   <string name="notification_more_locations">and %1$d more locations</string>
   <string name="notification_and_more">and %1$d more</string>
 
   <!-- Mesh Service Foreground Notification -->
-  <string name="mesh_service_channel_name">Mesh Background Service</string>
+  <string name="mesh_service_channel_name">Bluetooth Background Service</string>
   <string name="mesh_service_channel_desc">Keeps the Bluetooth mesh running in the background</string>
-    <string name="mesh_service_notification_content">Mesh running — %1$d peers</string>
+    <string name="mesh_service_notification_content">Bluetooth running — %1$d peers</string>
 
   <!-- Favorites accessibility -->
   <string name="cd_add_favorite">Add to favorites</string>
@@ -88,10 +88,10 @@
   <string name="cd_encrypted">End-to-end encrypted</string>
   <string name="cd_handshake_failed">Handshake failed</string>
   <string name="cd_settings">Settings</string>
-  <string name="cd_refresh_account">Refresh account</string>
-  <string name="refresh_account_title">Refresh Account?</string>
+  <string name="cd_refresh_account">Destroy account</string>
+  <string name="refresh_account_title">Destroy Account?</string>
   <string name="refresh_account_message">This will delete all messages and generate a new identity. This cannot be undone.</string>
-  <string name="refresh_account_confirm">Refresh</string>
+  <string name="refresh_account_confirm">Destroy</string>
 
   <!-- File viewer dialog -->
   <string name="file_viewer_title">📎 File Received</string>
@@ -110,7 +110,7 @@
 
   <!-- About sheet -->
   <string name="about_tagline">Surveillance-free messaging under all circumstances, end-to-end encrypted</string>
-  <string name="about_offline_mesh_title">Offline Mesh Chat</string>
+  <string name="about_offline_mesh_title">Offline Bluetooth Chat</string>
   <string name="about_offline_mesh_desc">Communicate directly via Bluetooth LE without internet or servers. Messages relay through nearby devices to extend range.</string>
   <string name="about_online_geohash_title">Online Geohash Channels</string>
   <string name="about_online_geohash_desc">Connect with people in your area using geohash-based channels. Extend the mesh using public internet relays.</string>
@@ -174,7 +174,7 @@
   <string name="ble_setting_dialog_msg">Bluetooth is turned off. Enable it to use BLE Mesh.</string>
   <string name="ble_setting_dialog_btn">Open Bluetooth Settings</string>
   <string name="ble_banner_enable_btn">Enable</string>
-  <string name="ble_banner_mesh_disabled">BLE Mesh is disabled</string>
+  <string name="ble_banner_mesh_disabled">Bluetooth is disabled</string>
 
   <!-- Network connectivity -->
   <string name="network_setting_off_subtitle">No internet — check your connection</string>
@@ -209,7 +209,7 @@
   <string name="cd_proof_of_work">Proof of Work</string>
   <string name="pow_mining_ellipsis">mining...</string>
   <string name="pow_label_format">pow: %1$dbit</string>
-  <string name="cd_offline_mesh_chat">Offline Mesh Chat</string>
+  <string name="cd_offline_mesh_chat">Offline Bluetooth Chat</string>
   <string name="cd_online_geohash_channels">Online Geohash Channels</string>
   <string name="cd_end_to_end_encryption">End-to-End Encryption</string>
   <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
@@ -249,7 +249,7 @@
   <string name="teleport">teleport</string>
   <string name="disable_location_services">disable location services</string>
   <string name="enable_location_services">enable location services</string>
-  <string name="mesh_label">mesh</string>
+  <string name="mesh_label">bluetooth</string>
   <string name="location_level_block">block</string>
   <string name="location_level_neighborhood">neighborhood</string>
   <string name="location_level_city">city</string>
@@ -392,6 +392,15 @@
   <string name="privacy_bullets">• no tracking or data collection\n• Bluetooth mesh chats are fully offline\n• Geohash chats use the internet</string>
   <string name="permissions_header">permissions</string>
   <string name="grant_permissions">Grant Permissions</string>
+  <string name="continue_button">Continue</string>
+  <string name="perm_required_label">Required</string>
+  <string name="perm_recommended_label">Recommended</string>
+  <string name="perm_info_dialog_ok">OK</string>
+  <string name="perm_benefit_nearby_devices">Bluetooth permissions allow Zemzeme to discover and communicate with other users nearby through a mesh network. This enables fully offline, peer-to-peer messaging without any internet connection.</string>
+  <string name="perm_benefit_location">Android requires location permission to scan for Bluetooth devices nearby. Zemzeme does NOT track or store your location.</string>
+  <string name="perm_benefit_background_location">Background location allows Zemzeme to discover nearby users even when the app is in the background. Without this, the mesh network only works while the app is open on screen.</string>
+  <string name="perm_benefit_notifications">Notifications let you know when you receive a private message or when new activity happens in your channels, even when the app is in the background.</string>
+  <string name="perm_benefit_battery_optimization">Disabling battery optimization ensures Zemzeme runs reliably in the background, maintaining mesh network connections. Without this, Android may kill the app to save battery, disconnecting you from the mesh.</string>
   <string name="location_tracking_warning">Zemzeme does NOT track your location</string>
   <string name="at_symbol">@</string>
   <string name="app_brand">Zemzeme/</string>
@@ -461,6 +470,29 @@
   <string name="perm_type_battery_optimization">Battery Optimization</string>
   <string name="perm_type_other">Other</string>
 
+  <!-- App Lock -->
+  <string name="app_lock_title">App Lock</string>
+  <string name="app_lock_subtitle_off">Off</string>
+  <string name="app_lock_subtitle_on">Biometric + PIN</string>
+  <string name="app_lock_security_section">SECURITY</string>
+  <string name="app_lock_enter_pin">Enter PIN</string>
+  <string name="app_lock_set_pin">Set PIN</string>
+  <string name="app_lock_confirm_pin">Confirm PIN</string>
+  <string name="app_lock_biometric_title">Unlock Zemzeme</string>
+  <string name="app_lock_biometric_subtitle">Touch sensor to unlock</string>
+  <string name="app_lock_use_pin">Use PIN</string>
+  <string name="app_lock_wrong_pin">Wrong PIN</string>
+  <string name="app_lock_too_many_attempts">%1$d attempt(s) remaining</string>
+  <string name="app_lock_cooldown">Try again in %1$d seconds</string>
+  <string name="app_lock_pin_mismatch">PINs do not match</string>
+  <string name="app_lock_pin_min_length">PIN must be 4–6 digits</string>
+  <string name="app_lock_disable_title">Disable App Lock</string>
+  <string name="app_lock_disable_msg">Verify your identity to disable app lock</string>
+  <string name="app_lock_protect_title">Protect Your Chats</string>
+  <string name="app_lock_protect_desc">A 6-digit PIN locks the app. Use biometrics for instant access.</string>
+  <string name="app_lock_enable">Enable App Lock</string>
+  <string name="app_lock_not_now">Not Now</string>
+
   <!-- Password prompt dialog -->
   <string name="pwd_prompt_title">Enter Channel Password</string>
   <string name="pwd_prompt_message">Channel %1$s is password protected. Enter the password to join.</string>
@@ -479,5 +511,303 @@
     <item quantity="one">1 person</item>
     <item quantity="other">%d people</item>
   </plurals>
+
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">Communication in this group is based entirely on Bluetooth. Nearby devices relay messages between people — no internet connection is needed.</string>
+    <string name="mesh_intro_close">Close</string>
+    <string name="mesh_intro_dont_show">Don\'t show again</string>
+
+    <!-- Share App section -->
+    <string name="about_share_app_header">SHARE APP</string>
+    <string name="about_share_system_title">Share App</string>
+    <string name="about_share_system_desc">Send APK via Bluetooth, Nearby Share, or Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">Failed to prepare APK for sharing</string>
+    <string name="about_share_chooser_title">Share %1$s APK</string>
+    <string name="about_share_helper_text">Use Google Quick Share to send (enable in phone Settings). After transfer, the APK will be in the Downloads folder on the receiving device.</string>
+
+    <!-- Icon switch -->
+    <string name="icon_switch_title">Refresh App Icon &amp; Name</string>
+    <string name="icon_switch_section">Customization</string>
+    <string name="icon_switch_subtitle">change the app icon and name on your launcher</string>
+    <string name="icon_switch_confirm">Change the app icon and name to this?</string>
+    <string name="icon_switch_apply">Apply</string>
+    <string name="icon_switch_toast">App icon and name changed!</string>
+
+    <!-- Dynamic app names (100 variants) -->
+    <string name="app_name_1">Zemzeme</string>
+    <string name="app_name_2">NetChat</string>
+    <string name="app_name_3">TalkBox</string>
+    <string name="app_name_4">MsgHub</string>
+    <string name="app_name_5">BuzzTalk</string>
+    <string name="app_name_6">PingMe</string>
+    <string name="app_name_7">ChatNow</string>
+    <string name="app_name_8">QuickMsg</string>
+    <string name="app_name_9">TalkLine</string>
+    <string name="app_name_10">MsgWave</string>
+    <string name="app_name_11">ChatZone</string>
+    <string name="app_name_12">HiTalk</string>
+    <string name="app_name_13">TxtFlow</string>
+    <string name="app_name_14">ConnectMe</string>
+    <string name="app_name_15">ChatBolt</string>
+    <string name="app_name_16">MsgPulse</string>
+    <string name="app_name_17">TalkSnap</string>
+    <string name="app_name_18">ChatLink</string>
+    <string name="app_name_19">FlowChat</string>
+    <string name="app_name_20">PingTalk</string>
+    <string name="app_name_21">MsgDash</string>
+    <string name="app_name_22">ChatVibe</string>
+    <string name="app_name_23">TalkSync</string>
+    <string name="app_name_24">MsgNest</string>
+    <string name="app_name_25">ChatBee</string>
+    <string name="app_name_26">QuickTalk</string>
+    <string name="app_name_27">MsgLoop</string>
+    <string name="app_name_28">ChatGrid</string>
+    <string name="app_name_29">TalkNet</string>
+    <string name="app_name_30">MsgDrop</string>
+    <string name="app_name_31">ChatPing</string>
+    <string name="app_name_32">TalkWave</string>
+    <string name="app_name_33">MsgBlip</string>
+    <string name="app_name_34">ChatRush</string>
+    <string name="app_name_35">TalkMesh</string>
+    <string name="app_name_36">MsgLink</string>
+    <string name="app_name_37">ChatSpark</string>
+    <string name="app_name_38">TalkZap</string>
+    <string name="app_name_39">MsgBuzz</string>
+    <string name="app_name_40">ChatDrift</string>
+    <string name="app_name_41">TalkPad</string>
+    <string name="app_name_42">MsgVault</string>
+    <string name="app_name_43">ChatOrb</string>
+    <string name="app_name_44">TalkDeck</string>
+    <string name="app_name_45">MsgBeam</string>
+    <string name="app_name_46">ChatNode</string>
+    <string name="app_name_47">TalkBase</string>
+    <string name="app_name_48">MsgCore</string>
+    <string name="app_name_49">ChatFlux</string>
+    <string name="app_name_50">TalkEdge</string>
+    <string name="app_name_51">MsgRing</string>
+    <string name="app_name_52">ChatPlex</string>
+    <string name="app_name_53">TalkStar</string>
+    <string name="app_name_54">MsgHive</string>
+    <string name="app_name_55">ChatBit</string>
+    <string name="app_name_56">TalkNote</string>
+    <string name="app_name_57">MsgPort</string>
+    <string name="app_name_58">ChatWeave</string>
+    <string name="app_name_59">TalkCast</string>
+    <string name="app_name_60">MsgPeer</string>
+    <string name="app_name_61">ChatBridge</string>
+    <string name="app_name_62">TalkFusion</string>
+    <string name="app_name_63">MsgSwift</string>
+    <string name="app_name_64">ChatPulsar</string>
+    <string name="app_name_65">TalkRelay</string>
+    <string name="app_name_66">MsgHop</string>
+    <string name="app_name_67">ChatTrace</string>
+    <string name="app_name_68">TalkPath</string>
+    <string name="app_name_69">MsgRoute</string>
+    <string name="app_name_70">ChatAxis</string>
+    <string name="app_name_71">TalkGo</string>
+    <string name="app_name_72">MsgLift</string>
+    <string name="app_name_73">ChatDot</string>
+    <string name="app_name_74">TalkAir</string>
+    <string name="app_name_75">MsgWire</string>
+    <string name="app_name_76">ChatJet</string>
+    <string name="app_name_77">TalkBit</string>
+    <string name="app_name_78">MsgNova</string>
+    <string name="app_name_79">ChatRipple</string>
+    <string name="app_name_80">TalkMint</string>
+    <string name="app_name_81">MsgCloud</string>
+    <string name="app_name_82">ChatBreeze</string>
+    <string name="app_name_83">TalkEcho</string>
+    <string name="app_name_84">MsgWarp</string>
+    <string name="app_name_85">ChatStream</string>
+    <string name="app_name_86">TalkQuick</string>
+    <string name="app_name_87">MsgBolt</string>
+    <string name="app_name_88">ChatSphere</string>
+    <string name="app_name_89">TalkSpace</string>
+    <string name="app_name_90">MsgTap</string>
+    <string name="app_name_91">ChatFlash</string>
+    <string name="app_name_92">TalkBlaze</string>
+    <string name="app_name_93">MsgGlow</string>
+    <string name="app_name_94">ChatPulse</string>
+    <string name="app_name_95">TalkVolt</string>
+    <string name="app_name_96">MsgSnap</string>
+    <string name="app_name_97">ChatDial</string>
+    <string name="app_name_98">TalkRush</string>
+    <string name="app_name_99">MsgZone</string>
+    <string name="app_name_100">ChatWave</string>
+
+    <!-- Hardcoded strings extracted for localization -->
+
+    <!-- Dialog titles and actions -->
+    <string name="dialog_delete_chat">Delete chat</string>
+    <string name="dialog_delete_group">Delete group</string>
+    <string name="dialog_delete_confirm_body">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
+    <string name="action_delete">Delete</string>
+    <string name="dialog_clear_chat">Clear chat</string>
+    <string name="dialog_clear_confirm_body">Are you sure you want to clear all messages in \"%1$s\"?</string>
+    <string name="action_clear">Clear</string>
+    <string name="dialog_title_create_group">Create New Group</string>
+    <string name="label_group_name">Group name</string>
+    <string name="action_create">Create</string>
+    <string name="dialog_title_join_group">Join Group</string>
+    <string name="label_group_id">Group ID</string>
+    <string name="label_nickname_optional">Nickname (optional)</string>
+    <string name="dialog_title_rename_group">Rename Group</string>
+    <string name="action_rename">Rename</string>
+
+    <!-- Settings titles -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P Network</string>
+    <string name="setting_nostr_relays">Nostr Relays</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast messages -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh enabled</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh disabled</string>
+    <string name="toast_nostr_enabled">Nostr enabled</string>
+    <string name="toast_nostr_disabled">Nostr disabled</string>
+    <string name="toast_tor_p2p_unsupported">Tor with P2P is not supported. Disable P2P first.</string>
+    <string name="toast_p2p_tor_disabled">P2P over Tor is not supported. Tor was disabled.</string>
+
+    <!-- Image picker -->
+    <string name="action_gallery">Gallery</string>
+    <string name="action_camera">Camera</string>
+
+    <!-- Accessibility content descriptions -->
+    <string name="cd_refresh_p2p">Refresh P2P connection</string>
+    <string name="cd_direct_bluetooth">Direct Bluetooth</string>
+    <string name="cd_routed">Routed</string>
+    <string name="cd_p2p_connection">P2P connection</string>
+    <string name="cd_teleported_user">Teleported user</string>
+    <string name="cd_user">User</string>
+    <string name="cd_backspace">backspace</string>
+    <string name="cd_verified">Verified</string>
+    <string name="cd_add_node">Add node</string>
+    <string name="cd_remove">Remove</string>
+    <string name="action_enable_location">Enable Location</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">Scan QR</string>
+    <string name="fab_choose_city">Choose city</string>
+    <string name="fab_join_group">Join group</string>
+    <string name="fab_create_group">Create group</string>
+
+    <!-- Section headers -->
+    <string name="section_nearby">Nearby</string>
+    <string name="section_geographic_groups">Geographic Groups</string>
+    <string name="section_my_groups">My Groups</string>
+    <string name="section_contacts">Contacts</string>
+
+    <!-- Group ID label -->
+    <string name="label_group_id_fmt">Group ID: %1$s</string>
+
+    <!-- PIN placeholder -->
+    <string name="placeholder_6_digits">6 digits</string>
+
+    <!-- P2P Settings -->
+    <string name="p2p_settings_header">SETTINGS</string>
+    <string name="p2p_enable">Enable P2P</string>
+    <string name="p2p_enable_desc">Connect directly to other Zemzeme peers</string>
+    <string name="p2p_use_default_nodes">Use Default Nodes</string>
+    <string name="p2p_default_nodes_desc">Connect to public IPFS bootstrap nodes</string>
+    <string name="p2p_custom_nodes_header">CUSTOM BOOTSTRAP NODES</string>
+    <string name="p2p_no_custom_nodes">No custom nodes configured. Tap + to add.</string>
+    <string name="p2p_add_bootstrap_node">Add Bootstrap Node</string>
+    <string name="p2p_enter_multiaddr">Enter multiaddr for the bootstrap node:</string>
+    <string name="p2p_recovering">Recovering…</string>
+    <string name="p2p_recover_connection">Recover Connection</string>
+    <string name="action_add">Add</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_direct_messages">Direct Messages</string>
+    <string name="notification_channel_dm_desc">Notifications for private messages from other users</string>
+    <string name="notification_channel_geohash_chats">Geohash Chats</string>
+    <string name="notification_channel_geohash_desc">Notifications for mentions and messages in geohash location channels</string>
+
+    <!-- Debug: mesh topology -->
+    <string name="debug_mesh_topology">mesh topology</string>
+    <string name="debug_no_gossip">no gossip yet</string>
+
+    <!-- Debug: self-update -->
+    <string name="debug_self_update">self-update (dev)</string>
+    <string name="debug_current_version_fmt">Current version: %1$s</string>
+    <string name="debug_download_updates_desc">Download and install updates from GitHub releases</string>
+    <string name="update_status_ready">Ready</string>
+    <string name="update_status_checking">Checking for updates…</string>
+    <string name="update_status_available">Update available: %1$s</string>
+    <string name="update_status_downloading">Downloading: %1$d%%</string>
+    <string name="update_status_ready_install">Ready to install: %1$s</string>
+    <string name="update_status_installing">Installing…</string>
+    <string name="update_status_success">Update installed! Restart app.</string>
+    <string name="update_status_pending_action">Waiting for user confirmation…</string>
+    <string name="update_status_error">Error: %1$s</string>
+    <string name="update_grant_install_permission">Grant Install Permission</string>
+    <string name="update_install">Install Update</string>
+    <string name="update_check">Check for Updates</string>
+    <string name="debug_test_update_dialog">Test Update Dialog</string>
+
+    <!-- Debug: bandwidth graphs -->
+    <string name="debug_overall">Overall</string>
+    <string name="debug_per_device">Per Device</string>
+    <string name="debug_per_peer">Per Peer</string>
+    <string name="debug_incoming">Incoming</string>
+    <string name="debug_outgoing">Outgoing</string>
+
+    <!-- Debug: console -->
+    <string name="debug_refreshing">Refreshing…</string>
+    <string name="debug_refresh">Refresh</string>
+    <string name="debug_clear_logs">Clear Logs</string>
+    <string name="debug_preparing_export">Preparing export…</string>
+    <string name="debug_share_logs">Share Logs</string>
+
+    <!-- Section headers -->
+    <string name="section_username">USERNAME</string>
+    <string name="section_theme">THEME</string>
+    <string name="section_settings">SETTINGS</string>
+    <string name="section_network">NETWORK</string>
+    <string name="section_status">STATUS</string>
+
+    <!-- App lock PIN-only subtitle -->
+    <string name="app_lock_subtitle_pin">PIN</string>
+
+    <!-- P2P status strings -->
+    <string name="p2p_networking_title">P2P Networking</string>
+    <string name="p2p_status_no_peers">No Peers</string>
+    <string name="p2p_status_connected">Connected</string>
+    <string name="p2p_status_connecting">Connecting…</string>
+    <string name="p2p_status_disconnected">Disconnected</string>
+    <string name="p2p_status_error">Error</string>
+    <string name="p2p_peers_connected_fmt">%1$d peers connected</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Active nodes: %1$d</string>
+
+    <!-- Location notes presenter -->
+    <string name="location_acquiring_title">Acquiring Location</string>
+    <string name="location_acquiring_desc">Please wait while your location is being determined</string>
+    <string name="location_unavailable_title">Location Unavailable</string>
+    <string name="location_permission_required_notes">Location permission is required for notes</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">Searching peers…</string>
+    <string name="connection_connecting_peers">Connecting to peers…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d peer connected</item>
+        <item quantity="other">%1$d peers connected</item>
+    </plurals>
+    <string name="connection_no_new_messages">Connected - no new messages</string>
+    <string name="connection_error">Connection error</string>
+    <string name="connection_direct">Direct</string>
+    <string name="connection_connected">Connected</string>
+    <string name="connection_not_connected">Not connected</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (no info)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE direct</string>
+    <string name="debug_p2p_searching">P2P: searching peers…</string>
+    <string name="debug_p2p_connecting">P2P: connecting to peers…</string>
+    <string name="debug_nostr_no_messages">Nostr connected - no new messages</string>
+    <string name="debug_connection_failed">connection failed</string>
+    <string name="debug_error_fmt">error: %1$s</string>
 
 </resources>

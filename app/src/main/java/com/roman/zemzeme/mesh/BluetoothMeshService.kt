@@ -241,19 +241,7 @@ class BluetoothMeshService(private val context: Context) {
         return p2pTransport.isRunning() || status == com.roman.zemzeme.p2p.P2PNodeStatus.STARTING
     }
 
-    private fun normalizeMutuallyExclusiveTransportToggles(
-        toggles: P2PConfig.TransportToggles,
-        preferP2PWhenConflict: Boolean = true
-    ): P2PConfig.TransportToggles {
-        if (toggles.p2pEnabled && toggles.nostrEnabled) {
-            return if (preferP2PWhenConflict) {
-                toggles.copy(nostrEnabled = false)
-            } else {
-                toggles.copy(p2pEnabled = false)
-            }
-        }
-        return toggles
-    }
+    // P2P and Nostr can both be enabled simultaneously.
 
     private fun publishTransportRuntimeStateLocked(isApplying: Boolean) {
         val relayConnected = runCatching {
@@ -291,10 +279,7 @@ class BluetoothMeshService(private val context: Context) {
         target: P2PConfig.TransportToggles,
         sendBleLeaveOnDisable: Boolean
     ) {
-        val normalizedTarget = normalizeMutuallyExclusiveTransportToggles(target, preferP2PWhenConflict = true)
-        if (normalizedTarget != target) {
-            Log.w(TAG, "P2P and Nostr cannot be enabled together; forcing Nostr off")
-        }
+        val normalizedTarget = target
 
         if (normalizedTarget.p2pEnabled && com.roman.zemzeme.net.TorPreferenceManager.get(context) == com.roman.zemzeme.net.TorMode.ON) {
             com.roman.zemzeme.net.TorPreferenceManager.set(context, com.roman.zemzeme.net.TorMode.OFF)
@@ -654,7 +639,7 @@ class BluetoothMeshService(private val context: Context) {
                             if (peer.isNotEmpty()) com.roman.zemzeme.services.AppStateStore.addPrivateMessage(peer, message)
                         }
                         message.channel != null -> {
-                            com.roman.zemzeme.services.AppStateStore.addChannelMessage(message.channel!!, message)
+                            com.roman.zemzeme.services.AppStateStore.addChannelMessage(message.channel, message)
                         }
                         else -> {
                             com.roman.zemzeme.services.AppStateStore.addPublicMessage(message)
@@ -885,10 +870,7 @@ class BluetoothMeshService(private val context: Context) {
             return
         }
 
-        val configuredToggles = normalizeMutuallyExclusiveTransportToggles(
-            p2pConfig.getTransportToggles(),
-            preferP2PWhenConflict = true
-        )
+        val configuredToggles = p2pConfig.getTransportToggles()
         desiredTransportToggles = configuredToggles
 
         serviceScope.launch {
@@ -942,10 +924,7 @@ class BluetoothMeshService(private val context: Context) {
             return Result.failure(IllegalStateException("Service terminated"))
         }
 
-        desiredTransportToggles = normalizeMutuallyExclusiveTransportToggles(
-            settings,
-            preferP2PWhenConflict = true
-        )
+        desiredTransportToggles = settings
         return applyPendingTransportSettings(sendBleLeaveOnDisable = true)
     }
 
@@ -963,11 +942,7 @@ class BluetoothMeshService(private val context: Context) {
             return Result.failure(IllegalStateException("Service terminated"))
         }
 
-        val target = if (enabled) {
-            desiredTransportToggles.copy(p2pEnabled = true, nostrEnabled = false)
-        } else {
-            desiredTransportToggles.copy(p2pEnabled = false)
-        }
+        val target = desiredTransportToggles.copy(p2pEnabled = enabled)
         return applyTransportSettings(target)
     }
 
@@ -976,11 +951,7 @@ class BluetoothMeshService(private val context: Context) {
             return Result.failure(IllegalStateException("Service terminated"))
         }
 
-        val target = if (enabled) {
-            desiredTransportToggles.copy(nostrEnabled = true, p2pEnabled = false)
-        } else {
-            desiredTransportToggles.copy(nostrEnabled = false)
-        }
+        val target = desiredTransportToggles.copy(nostrEnabled = enabled)
         return applyTransportSettings(target)
     }
     

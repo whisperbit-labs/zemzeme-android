@@ -124,7 +124,7 @@ class PacketProcessor(private val myPeerID: String) {
         val peerID = routed.peerID ?: "unknown"
 
         // Basic validation and security checks
-        if (!delegate?.validatePacketSecurity(packet, peerID)!!) {
+        if (delegate?.validatePacketSecurity(packet, peerID) != true) {
             Log.i(TAG, "Packet failed security validation from ${formatPeerForLog(peerID)}")
             return
         }

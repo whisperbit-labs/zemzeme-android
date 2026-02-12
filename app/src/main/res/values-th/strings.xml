@@ -60,7 +60,7 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d การกล่าวถึง</string>
     <string name="notification_geohash_summary_title">Zemzeme – แชทตามตำแหน่ง</string>
     <string name="notification_geohash_summary_text">%1$d ข้อความจาก %2$d พื้นที่</string>
-    <string name="notification_mesh_mention_title_singular">ถูกกล่าวถึงในแชทเมช</string>
+    <string name="notification_mesh_mention_title_singular">ถูกกล่าวถึงในแชท Bluetooth</string>
     <string name="notification_mesh_mention_title_plural">ถูกกล่าวถึง %1$d ครั้งในแชทเมช</string>
     <string name="notification_more_locations">และอีก %1$d พื้นที่</string>
     <string name="notification_and_more">และอีก %1$d</string>
@@ -97,7 +97,7 @@
 
     <!-- แผ่นข้อมูลเกี่ยวกับ -->
     <string name="about_tagline">การส่งข้อความปลอดการสอดแนมในทุกสถานการณ์ เข้ารหัสแบบต้นทางถึงปลายทาง</string>
-    <string name="about_offline_mesh_title">แชทเมชออฟไลน์</string>
+    <string name="about_offline_mesh_title">แชทบลูทูธออฟไลน์</string>
     <string name="about_offline_mesh_desc">สื่อสารโดยตรงผ่าน Bluetooth LE โดยไม่ใช้อินเทอร์เน็ตหรือเซิร์ฟเวอร์ ข้อความจะถูกส่งต่อผ่านอุปกรณ์ใกล้เคียงเพื่อขยายระยะ</string>
     <string name="about_online_geohash_title">ช่อง geohash ออนไลน์</string>
     <string name="about_online_geohash_desc">เชื่อมต่อกับผู้คนใกล้คุณผ่านช่องที่อ้างอิง geohash ขยายเมชผ่านรีเลย์อินเทอร์เน็ตสาธารณะ</string>
@@ -173,9 +173,9 @@
     <!-- รูปภาพ &amp; ไฟล์ -->
     <string name="image_page_of">รูปภาพ %1$d จาก %2$d</string>
     <string name="image_unavailable">ไม่สามารถใช้รูปภาพได้</string>
-    <string name="image_saved_to_downloads">บันทึกรูปภาพไว้ใน "ดาวน์โหลด" แล้ว</string>
+    <string name="image_saved_to_downloads">บันทึกรูปภาพไว้ใน \"ดาวน์โหลด\" แล้ว</string>
     <string name="image_save_failed">ไม่สามารถบันทึกรูปภาพได้</string>
-    <string name="toast_image_saved">บันทึกรูปภาพไว้ใน "ดาวน์โหลด" แล้ว</string>
+    <string name="toast_image_saved">บันทึกรูปภาพไว้ใน \"ดาวน์โหลด\" แล้ว</string>
     <string name="toast_failed_to_save_image">ไม่สามารถบันทึกรูปภาพได้</string>
     <string name="pick_file">เลือกไฟล์</string>
     <string name="file_unavailable">[ไม่สามารถใช้ไฟล์ได้]</string>
@@ -208,7 +208,7 @@
     <string name="teleport">เทเลพอร์ต</string>
     <string name="disable_location_services">ปิดบริการตำแหน่ง</string>
     <string name="enable_location_services">เปิดบริการตำแหน่ง</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">บล็อก</string>
     <string name="location_level_neighborhood">ละแวกใกล้เคียง</string>
     <string name="location_level_city">เมือง</string>
@@ -343,52 +343,52 @@
         <item quantity="one">และอีก %d</item>
         <item quantity="other">และอีก %d</item>
     </plurals>
-
     <plurals name="people_count">
         <item quantity="one">1 คน</item>
         <item quantity="other">%d คน</item>
     </plurals>
 
-    <string name="mesh_service_notification_content">Mesh กำลังทำงาน — %1$d เพื่อน</string>
+    <string name="mesh_service_notification_content">Bluetooth กำลังทำงาน — %1$d เพื่อน</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+    <!-- ตรวจสอบ / ลายนิ้วมือ -->
+    <string name="verify_title">ตรวจสอบ</string>
+    <string name="verify_my_qr_title">สแกนเพื่อยืนยันตัวฉัน</string>
+    <string name="verify_scan_prompt_friend">สแกน QR ของคนอื่น</string>
+    <string name="verify_scan_someone">สแกน QR ของคนอื่น</string>
+    <string name="verify_show_my_qr">แสดง QR ของฉัน</string>
+    <string name="verify_remove">ลบการตรวจสอบ</string>
+    <string name="verify_qr_unavailable">QR ไม่พร้อมใช้งาน</string>
+    <string name="verify_camera_permission">ต้องมีสิทธิ์กล้องเพื่อสแกน QR โค้ด</string>
+    <string name="verify_request_camera">เปิดกล้อง</string>
+    <string name="verify_paste_label">วาง URL การตรวจสอบ</string>
+    <string name="verify_validate">ตรวจสอบ</string>
+    <string name="verify_scanned">ขอการตรวจสอบแล้ว</string>
+    <string name="security_verification_title">การตรวจสอบความปลอดภัย</string>
+    <string name="fingerprint_their">ลายนิ้วมือของเขา</string>
+    <string name="fingerprint_yours">ลายนิ้วมือของคุณ</string>
+    <string name="fingerprint_pending">การจับมือรอดำเนินการ</string>
+    <string name="fingerprint_no_peer">เปิดแชทส่วนตัวเพื่อดูลายนิ้วมือ</string>
+    <string name="fingerprint_status_verified">เข้ารหัส &amp; ตรวจสอบแล้ว</string>
+    <string name="fingerprint_status_encrypted">เข้ารหัสแล้ว</string>
+    <string name="fingerprint_status_handshaking">กำลังจับมือ</string>
+    <string name="fingerprint_status_failed">การจับมือล้มเหลว</string>
+    <string name="fingerprint_status_uninitialized">ไม่ได้เข้ารหัส</string>
+    <string name="fingerprint_verified_label">ตรวจสอบแล้ว</string>
+    <string name="fingerprint_verified_message">คุณได้ตรวจสอบตัวตนของบุคคลนี้แล้ว</string>
+    <string name="fingerprint_not_verified_label">ยังไม่ได้ตรวจสอบ</string>
+    <string name="fingerprint_not_verified_message_fmt">เปรียบเทียบลายนิ้วมือเหล่านี้กับ %1$s ผ่านช่องทางที่ปลอดภัย</string>
+    <string name="fingerprint_mark_verified">ทำเครื่องหมายว่าตรวจสอบแล้ว</string>
+    <string name="fingerprint_start_handshake">เริ่มจับมือ</string>
+    <string name="fingerprint_copy">คัดลอก</string>
+    <string name="verify_mutual_match_title">การตรวจสอบร่วมกัน</string>
+    <string name="verify_mutual_match_body">คุณและ %1$s ได้ตรวจสอบกันแล้ว</string>
+    <string name="verify_mutual_system_message">การตรวจสอบร่วมกับ %1$s</string>
+    <string name="verify_success_title">ตรวจสอบแล้ว</string>
+    <string name="verify_success_body">คุณได้ตรวจสอบ %1$s แล้ว</string>
+    <string name="verify_success_system_message">ตรวจสอบ %1$s แล้ว</string>
 
     <!-- บริการ Mesh เบื้องหลัง -->
-    <string name="mesh_service_channel_name">บริการ Mesh เบื้องหลัง</string>
+    <string name="mesh_service_channel_name">บริการ Bluetooth เบื้องหลัง</string>
     <string name="mesh_service_channel_desc">คงการทำงานของ Bluetooth mesh ในเบื้องหลัง</string>
 
     <!-- การช่วยสำหรับการเข้าถึง -->
@@ -411,26 +411,27 @@
     <string name="ble_setting_dialog_btn">เปิดการตั้งค่า Bluetooth</string>
     <string name="ble_banner_enable_btn">เปิดใช้งาน</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh ถูกปิดใช้งาน</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
+
+    <!-- การเชื่อมต่อเครือข่าย -->
+    <string name="network_setting_off_subtitle">ไม่มีอินเทอร์เน็ต — ตรวจสอบการเชื่อมต่อ</string>
+    <string name="network_not_available">ไม่มีการเชื่อมต่ออินเทอร์เน็ต</string>
+    <string name="network_transports_off_hint">เปิดใช้ P2P หรือ Nostr</string>
+    <string name="network_no_internet">เชื่อมต่อแล้วแต่ไม่พบอินเทอร์เน็ต</string>
+    <string name="network_setting_dialog_title">ต้องการอินเทอร์เน็ต</string>
+    <string name="network_setting_dialog_msg">ต้องมีการเชื่อมต่ออินเทอร์เน็ตสำหรับ P2P และ Nostr</string>
+    <string name="network_setting_dialog_btn">การตั้งค่าการเชื่อมต่อ</string>
+    <string name="network_banner_disconnected">ไม่มีอินเทอร์เน็ต — ตรวจสอบการตั้งค่าการเชื่อมต่อ</string>
+    <string name="network_banner_airplane_mode">โหมดเครื่องบินเปิดอยู่</string>
+    <string name="network_airplane_mode">โหมดเครื่องบินเปิดอยู่</string>
+    <string name="network_banner_no_internet">เชื่อมต่อแล้วแต่ไม่มีอินเทอร์เน็ต — ตรวจสอบการเชื่อมต่อ</string>
+    <string name="network_banner_transports_disabled">ไม่มีการขนส่งเครือข่าย — เปิดใช้ P2P หรือ Nostr ในการตั้งค่า</string>
+    <string name="network_banner_settings_btn">การตั้งค่า</string>
 
     <!-- ตำแหน่งเบื้องหลัง -->
     <string name="background_location_required_title">แนะนำตำแหน่งเบื้องหลัง</string>
     <string name="background_location_required_subtitle">ไม่บังคับ ช่วยให้ mesh เชื่อถือได้มากขึ้น</string>
     <string name="background_location_explanation">Android แนะนำให้ใช้ตำแหน่งเบื้องหลังเพื่อให้ Zemzeme สแกนหาอุปกรณ์ใกล้เคียงได้แม้แอปจะไม่เปิดอยู่ ช่วยให้ mesh ยังทำงานหลังรีบูต</string>
-    <string name="background_location_settings_tip">เมื่อการตั้งค่าเปิด ให้เลือก "อนุญาตตลอดเวลา"</string>
+    <string name="background_location_settings_tip">เมื่อการตั้งค่าเปิด ให้เลือก \"อนุญาตตลอดเวลา\"</string>
     <string name="background_location_needs_for">Zemzeme ใช้ตำแหน่งเบื้องหลังสำหรับ:</string>
     <string name="background_location_needs_bullets">- สแกนอุปกรณ์ใกล้เคียงขณะที่แอปปิดอยู่\n- เชื่อมต่อใหม่หลังรีบูต\n- คงให้ mesh ทำงานเบื้องหลัง</string>
     <string name="background_location_privacy_note">เราไม่เก็บหรือบันทึกตำแหน่งของคุณเลย ความเป็นส่วนตัวของคุณปลอดภัย</string>
@@ -493,4 +494,226 @@
     <!-- ดีบัก -->
     <string name="debug_rssi_fmt">RSSI: %1$s</string>
     <string name="debug_question_mark">?</string>
+
+    <!-- ล็อกแอป -->
+    <string name="app_lock_title">ล็อกแอป</string>
+    <string name="app_lock_subtitle_off">ปิด</string>
+    <string name="app_lock_subtitle_on">ไบโอเมตริก + PIN</string>
+    <string name="app_lock_security_section">ความปลอดภัย</string>
+    <string name="app_lock_enter_pin">ป้อน PIN</string>
+    <string name="app_lock_set_pin">ตั้ง PIN</string>
+    <string name="app_lock_confirm_pin">ยืนยัน PIN</string>
+    <string name="app_lock_biometric_title">ปลดล็อก Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">ใช้ไบโอเมตริกเพื่อปลดล็อก</string>
+    <string name="app_lock_use_pin">ใช้ PIN</string>
+    <string name="app_lock_wrong_pin">PIN ไม่ถูกต้อง</string>
+    <string name="app_lock_too_many_attempts">พยายามมากเกินไป ลองอีกครั้งใน %1$d วินาที</string>
+    <string name="app_lock_cooldown">เหลืออีก %1$d วินาที</string>
+    <string name="app_lock_pin_mismatch">PIN ไม่ตรงกัน</string>
+    <string name="app_lock_pin_min_length">PIN ต้องมีอย่างน้อย 4 หลัก</string>
+    <string name="app_lock_disable_title">ปิดการล็อกแอป</string>
+    <string name="app_lock_disable_msg">ยืนยันตัวตนเพื่อปิดการล็อกแอป</string>
+    <string name="app_lock_protect_title">ปกป้องแชทของคุณ</string>
+    <string name="app_lock_protect_desc">PIN 6 หลักจะล็อกแอป ใช้ไบโอเมตริกเพื่อเข้าถึงทันที</string>
+    <string name="app_lock_enable">เปิดการล็อกแอป</string>
+    <string name="app_lock_not_now">ไม่ใช่ตอนนี้</string>
+
+    <!-- สตริงใหม่ -->
+    <string name="continue_button">ดำเนินการต่อ</string>
+    <string name="perm_required_label">จำเป็น</string>
+    <string name="perm_recommended_label">แนะนำ</string>
+    <string name="perm_info_dialog_ok">ตกลง</string>
+    <string name="perm_benefit_nearby_devices">สิทธิ์ Bluetooth ช่วยให้ Zemzeme ค้นหาและสื่อสารกับผู้ใช้อื่นใกล้เคียงผ่านเครือข่ายเมช ทำให้สามารถส่งข้อความแบบเพียร์ทูเพียร์โดยไม่ต้องใช้อินเทอร์เน็ต</string>
+    <string name="perm_benefit_location">Android ต้องใช้สิทธิ์ตำแหน่งเพื่อสแกนหาอุปกรณ์ Bluetooth ใกล้เคียง Zemzeme ไม่ติดตามหรือเก็บตำแหน่งของคุณ</string>
+    <string name="perm_benefit_background_location">ตำแหน่งเบื้องหลังช่วยให้ Zemzeme ค้นหาผู้ใช้ใกล้เคียงแม้แอปอยู่เบื้องหลัง หากไม่มี เครือข่ายเมชจะทำงานเฉพาะเมื่อแอปเปิดอยู่บนหน้าจอ</string>
+    <string name="perm_benefit_notifications">การแจ้งเตือนจะแจ้งให้คุณทราบเมื่อคุณได้รับข้อความส่วนตัวหรือเมื่อมีกิจกรรมใหม่ในช่อง แม้แอปจะอยู่เบื้องหลัง</string>
+    <string name="perm_benefit_battery_optimization">การปิดการเพิ่มประสิทธิภาพแบตเตอรี่ช่วยให้ Zemzeme ทำงานเบื้องหลังอย่างเชื่อถือได้และคงการเชื่อมต่อเมช หากไม่ปิด Android อาจปิดแอปเพื่อประหยัดแบตเตอรี่</string>
+
+    <!-- แนะนำเมช -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">การสื่อสารในกลุ่มนี้อาศัย Bluetooth ทั้งหมด อุปกรณ์ใกล้เคียงส่งต่อข้อความระหว่างผู้คน — ไม่ต้องใช้อินเทอร์เน็ต</string>
+    <string name="mesh_intro_close">ปิด</string>
+    <string name="mesh_intro_dont_show">ไม่ต้องแสดงอีก</string>
+
+    <!-- แชร์แอป -->
+    <string name="about_share_app_header">แชร์แอป</string>
+    <string name="about_share_system_title">แชร์แอป</string>
+    <string name="about_share_system_desc">ส่ง APK ผ่าน Bluetooth, Nearby Share หรือ Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">ไม่สามารถเตรียม APK เพื่อแชร์ได้</string>
+    <string name="about_share_chooser_title">แชร์ %1$s APK</string>
+    <string name="about_share_helper_text">ใช้ Google Quick Share เพื่อส่ง (เปิดในการตั้งค่าโทรศัพท์) หลังจากโอน APK จะอยู่ในโฟลเดอร์ Downloads บนอุปกรณ์ผู้รับ</string>
+
+    <!-- สวิตช์ไอคอน -->
+    <string name="icon_switch_title">รีเฟรชไอคอน &amp; ชื่อแอป</string>
+    <string name="icon_switch_section">การปรับแต่ง</string>
+    <string name="icon_switch_subtitle">เปลี่ยนไอคอนและชื่อแอปบนหน้าจอหลัก</string>
+    <string name="icon_switch_confirm">เปลี่ยนไอคอนและชื่อแอปเป็นนี้?</string>
+    <string name="icon_switch_apply">นำไปใช้</string>
+    <string name="icon_switch_toast">เปลี่ยนไอคอนและชื่อแอปแล้ว!</string>
+
+    <!-- กล่องโต้ตอบ -->
+    <string name="dialog_delete_chat">ลบแชท</string>
+    <string name="dialog_delete_group">ลบกลุ่ม</string>
+    <string name="dialog_delete_confirm_body">คุณแน่ใจหรือไม่ว่าต้องการลบ \"%1$s\"? ไม่สามารถย้อนกลับได้</string>
+    <string name="action_delete">ลบ</string>
+    <string name="dialog_clear_chat">ล้างแชท</string>
+    <string name="dialog_clear_confirm_body">คุณแน่ใจหรือไม่ว่าต้องการล้างข้อความทั้งหมดใน \"%1$s\"?</string>
+    <string name="action_clear">ล้าง</string>
+    <string name="dialog_title_create_group">สร้างกลุ่มใหม่</string>
+    <string name="label_group_name">ชื่อกลุ่ม</string>
+    <string name="action_create">สร้าง</string>
+    <string name="dialog_title_join_group">เข้าร่วมกลุ่ม</string>
+    <string name="label_group_id">รหัสกลุ่ม</string>
+    <string name="label_nickname_optional">ชื่อเล่น (ไม่บังคับ)</string>
+    <string name="dialog_title_rename_group">เปลี่ยนชื่อกลุ่ม</string>
+    <string name="action_rename">เปลี่ยนชื่อ</string>
+
+    <!-- การตั้งค่า -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">เครือข่าย P2P</string>
+    <string name="setting_nostr_relays">Nostr Relays</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast -->
+    <string name="toast_ble_mesh_enabled">เปิด BLE Mesh แล้ว</string>
+    <string name="toast_ble_mesh_disabled">ปิด BLE Mesh แล้ว</string>
+    <string name="toast_nostr_enabled">เปิด Nostr แล้ว</string>
+    <string name="toast_nostr_disabled">ปิด Nostr แล้ว</string>
+    <string name="toast_tor_p2p_unsupported">Tor กับ P2P ไม่รองรับ ปิด P2P ก่อน</string>
+    <string name="toast_p2p_tor_disabled">P2P ผ่าน Tor ไม่รองรับ Tor ถูกปิดแล้ว</string>
+
+    <!-- เลือกรูปภาพ -->
+    <string name="action_gallery">แกลเลอรี</string>
+    <string name="action_camera">กล้อง</string>
+
+    <!-- การช่วยสำหรับการเข้าถึง -->
+    <string name="cd_refresh_p2p">รีเฟรชการเชื่อมต่อ P2P</string>
+    <string name="cd_direct_bluetooth">Bluetooth โดยตรง</string>
+    <string name="cd_routed">กำหนดเส้นทาง</string>
+    <string name="cd_p2p_connection">การเชื่อมต่อ P2P</string>
+    <string name="cd_teleported_user">ผู้ใช้ที่เทเลพอร์ต</string>
+    <string name="cd_user">ผู้ใช้</string>
+    <string name="cd_backspace">ลบ</string>
+    <string name="cd_verified">ตรวจสอบแล้ว</string>
+    <string name="cd_add_node">เพิ่มโหนด</string>
+    <string name="cd_remove">ลบ</string>
+    <string name="action_enable_location">เปิดตำแหน่ง</string>
+
+    <!-- รหัสกลุ่ม -->
+    <string name="label_group_id_fmt">รหัสกลุ่ม: %1$s</string>
+
+    <!-- PIN -->
+    <string name="placeholder_6_digits">6 หลัก</string>
+
+    <!-- P2P -->
+    <string name="p2p_settings_header">การตั้งค่า</string>
+    <string name="p2p_enable">เปิด P2P</string>
+    <string name="p2p_enable_desc">เชื่อมต่อโดยตรงกับเพียร์ Zemzeme อื่น ๆ</string>
+    <string name="p2p_use_default_nodes">ใช้โหนดเริ่มต้น</string>
+    <string name="p2p_default_nodes_desc">เชื่อมต่อกับโหนด bootstrap IPFS สาธารณะ</string>
+    <string name="p2p_custom_nodes_header">โหนด BOOTSTRAP ที่กำหนดเอง</string>
+    <string name="p2p_no_custom_nodes">ไม่มีโหนดที่กำหนดเอง แตะ + เพื่อเพิ่ม</string>
+    <string name="p2p_add_bootstrap_node">เพิ่มโหนด Bootstrap</string>
+    <string name="p2p_enter_multiaddr">ป้อน multiaddr สำหรับโหนด bootstrap:</string>
+    <string name="p2p_recovering">กำลังกู้คืน…</string>
+    <string name="p2p_recover_connection">กู้คืนการเชื่อมต่อ</string>
+    <string name="action_add">เพิ่ม</string>
+
+    <!-- ช่องแจ้งเตือน -->
+    <string name="notification_channel_direct_messages">ข้อความตรง</string>
+    <string name="notification_channel_dm_desc">การแจ้งเตือนสำหรับข้อความส่วนตัวจากผู้ใช้อื่น</string>
+    <string name="notification_channel_geohash_chats">แชท Geohash</string>
+    <string name="notification_channel_geohash_desc">การแจ้งเตือนสำหรับการกล่าวถึงและข้อความในช่อง geohash</string>
+
+    <!-- ดีบัก: mesh topology -->
+    <string name="debug_mesh_topology">mesh topology</string>
+    <string name="debug_no_gossip">ยังไม่มี gossip</string>
+
+    <!-- ดีบัก: อัปเดตตัวเอง -->
+    <string name="debug_self_update">อัปเดตตัวเอง (dev)</string>
+    <string name="debug_current_version_fmt">เวอร์ชันปัจจุบัน: %1$s</string>
+    <string name="debug_download_updates_desc">ดาวน์โหลดและติดตั้งอัปเดตจาก GitHub releases</string>
+    <string name="update_status_ready">พร้อม</string>
+    <string name="update_status_checking">กำลังตรวจสอบอัปเดต…</string>
+    <string name="update_status_available">อัปเดตพร้อมใช้งาน: %1$s</string>
+    <string name="update_status_downloading">กำลังดาวน์โหลด: %1$d%%</string>
+    <string name="update_status_ready_install">พร้อมติดตั้ง: %1$s</string>
+    <string name="update_status_installing">กำลังติดตั้ง…</string>
+    <string name="update_status_success">ติดตั้งอัปเดตแล้ว! รีสตาร์ทแอป</string>
+    <string name="update_status_pending_action">รอการยืนยันจากผู้ใช้…</string>
+    <string name="update_status_error">ข้อผิดพลาด: %1$s</string>
+    <string name="update_grant_install_permission">ให้สิทธิ์ติดตั้ง</string>
+    <string name="update_install">ติดตั้งอัปเดต</string>
+    <string name="update_check">ตรวจสอบอัปเดต</string>
+    <string name="debug_test_update_dialog">ทดสอบกล่องโต้ตอบอัปเดต</string>
+
+    <!-- ดีบัก: แบนด์วิดท์ -->
+    <string name="debug_overall">ทั้งหมด</string>
+    <string name="debug_per_device">ต่ออุปกรณ์</string>
+    <string name="debug_per_peer">ต่อเพียร์</string>
+    <string name="debug_incoming">ขาเข้า</string>
+    <string name="debug_outgoing">ขาออก</string>
+
+    <!-- ดีบัก: คอนโซล -->
+    <string name="debug_refreshing">กำลังรีเฟรช…</string>
+    <string name="debug_refresh">รีเฟรช</string>
+    <string name="debug_clear_logs">ล้างบันทึก</string>
+    <string name="debug_preparing_export">กำลังเตรียมส่งออก…</string>
+    <string name="debug_share_logs">แชร์บันทึก</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">สแกน QR</string>
+    <string name="fab_choose_city">เลือกเมือง</string>
+    <string name="fab_join_group">เข้าร่วมกลุ่ม</string>
+    <string name="fab_create_group">สร้างกลุ่ม</string>
+    <!-- Section headers -->
+    <string name="section_nearby">ใกล้เคียง</string>
+    <string name="section_geographic_groups">กลุ่มภูมิศาสตร์</string>
+    <string name="section_my_groups">กลุ่มของฉัน</string>
+    <string name="section_contacts">รายชื่อติดต่อ</string>
+
+    <!-- New translated strings -->
+    <string name="section_username">ชื่อผู้ใช้</string>
+    <string name="section_theme">ธีม</string>
+    <string name="section_settings">การตั้งค่า</string>
+    <string name="section_network">เครือข่าย</string>
+    <string name="section_status">สถานะ</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">เครือข่าย P2P</string>
+    <string name="p2p_status_no_peers">ไม่มีเพียร์</string>
+    <string name="p2p_status_connected">เชื่อมต่อแล้ว</string>
+    <string name="p2p_status_connecting">กำลังเชื่อมต่อ…</string>
+    <string name="p2p_status_disconnected">ตัดการเชื่อมต่อแล้ว</string>
+    <string name="p2p_status_error">ข้อผิดพลาด</string>
+    <string name="p2p_peers_connected_fmt">เชื่อมต่อ %1$d เพียร์</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">โหนดที่ใช้งาน: %1$d</string>
+    <string name="location_acquiring_title">กำลังหาตำแหน่ง</string>
+    <string name="location_acquiring_desc">กรุณารอขณะกำลังระบุตำแหน่งของคุณ</string>
+    <string name="location_unavailable_title">ไม่สามารถใช้ตำแหน่งได้</string>
+    <string name="location_permission_required_notes">จำเป็นต้องมีสิทธิ์ตำแหน่งสำหรับบันทึก</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">กำลังค้นหาเพียร์…</string>
+    <string name="connection_connecting_peers">กำลังเชื่อมต่อกับเพียร์…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">เชื่อมต่อ %1$d เพียร์</item>
+        <item quantity="other">เชื่อมต่อ %1$d เพียร์</item>
+    </plurals>
+    <string name="connection_no_new_messages">เชื่อมต่อแล้ว – ไม่มีข้อความใหม่</string>
+    <string name="connection_error">ข้อผิดพลาดการเชื่อมต่อ</string>
+    <string name="connection_direct">โดยตรง</string>
+    <string name="connection_connected">เชื่อมต่อแล้ว</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (ไม่มีข้อมูล)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE โดยตรง</string>
+    <string name="debug_p2p_searching">P2P: กำลังค้นหาเพียร์…</string>
+    <string name="debug_p2p_connecting">P2P: กำลังเชื่อมต่อกับเพียร์…</string>
+    <string name="debug_nostr_no_messages">Nostr เชื่อมต่อแล้ว – ไม่มีข้อความใหม่</string>
+    <string name="debug_connection_failed">การเชื่อมต่อล้มเหลว</string>
+    <string name="debug_error_fmt">ข้อผิดพลาด: %1$s</string>
+
 </resources>

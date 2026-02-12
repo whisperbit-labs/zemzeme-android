@@ -40,7 +40,7 @@
     <string name="notification_summary_more">ve %1$d daha</string>
     <string name="notification_messages_from_people">%2$d kişiden %1$d mesaj</string>
     <string name="notification_more_conversations">ve %1$d sohbet daha</string>
-    <string name="notification_active_peers_title">👥 yakında Zemzeme user’lar!</string>
+    <string name="notification_active_peers_title">👥 yakında zemzeme kullanıcıları!</string>
     <string name="notification_active_peers_one">Yakında 1 kişi</string>
     <string name="notification_active_peers_many">Yakında %1$d kişi</string>
     <string name="notification_new_messages">Yeni mesajlar</string>
@@ -54,10 +54,15 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d bahsetme</string>
     <string name="notification_geohash_summary_title">Zemzeme – konum sohbetleri</string>
     <string name="notification_geohash_summary_text">%2$d konumdan %1$d mesaj</string>
-    <string name="notification_mesh_mention_title_singular">Mesh sohbette bahsedildi</string>
+    <string name="notification_mesh_mention_title_singular">Bluetooth sohbette bahsedildi</string>
     <string name="notification_mesh_mention_title_plural">Mesh sohbette %1$d bahsetme</string>
     <string name="notification_more_locations">ve %1$d konum daha</string>
     <string name="notification_and_more">ve %1$d daha</string>
+
+    <!-- Mesh Service -->
+    <string name="mesh_service_channel_name">Arka Plan Bluetooth Hizmeti</string>
+    <string name="mesh_service_channel_desc">Bluetooth mesh\'i arka planda çalışır durumda tutar</string>
+    <string name="mesh_service_notification_content">Bluetooth çalışıyor — %1$d eş</string>
 
     <string name="cd_add_favorite">Sık kullanılanlara ekle</string>
     <string name="cd_remove_favorite">Sık kullanılandan kaldır</string>
@@ -69,6 +74,7 @@
     <string name="cd_nostr_reachable">Nostr üzerinden ulaşılabilir</string>
     <string name="cd_unread_private_messages">Okunmamış özel mesaj</string>
     <string name="cd_toggle_bookmark">Yer imini değiştir</string>
+    <string name="cd_location_notes">Konum notları</string>
     <string name="cd_teleported">Teleport edildi</string>
     <string name="cd_tor_status">Tor durumu</string>
     <string name="cd_connected_peers">Bağlı eşler</string>
@@ -77,6 +83,11 @@
     <string name="cd_handshake_in_progress">El sıkışma sürüyor</string>
     <string name="cd_encrypted">Uçtan uca şifreli</string>
     <string name="cd_handshake_failed">El sıkışma başarısız</string>
+    <string name="cd_settings">Ayarlar</string>
+    <string name="cd_refresh_account">Hesabı yok et</string>
+    <string name="refresh_account_title">Hesap yok edilsin mi?</string>
+    <string name="refresh_account_message">Bu işlem tüm mesajları silecek ve yeni bir kimlik oluşturacak. Bu geri alınamaz.</string>
+    <string name="refresh_account_confirm">Yok et</string>
 
     <string name="file_viewer_title">📎 Dosya alındı</string>
     <string name="file_viewer_name">📄 %1$s</string>
@@ -85,12 +96,18 @@
     <string name="file_viewer_open_save">📂 Aç / Kaydet</string>
     <string name="close_with_emoji">❌ Kapat</string>
     <string name="pick_image">Görsel seç</string>
+    <string name="cd_save_current_image">Geçerli resmi kaydet</string>
+    <string name="cd_close">Kapat</string>
+    <string name="toast_image_saved">Resim İndirilenler\'e kaydedildi</string>
+    <string name="toast_failed_to_save_image">Resim kaydedilemedi</string>
+    <string name="cd_image_index_of">Resim %1$d / %2$d</string>
+    <string name="cd_pick_file">Dosya seç</string>
 
     <string name="about_tagline">Tüm koşullarda gözetimden uzak mesajlaşma, uçtan uca şifreli</string>
-    <string name="about_offline_mesh_title">Çevrimdışı Mesh Sohbeti</string>
+    <string name="about_offline_mesh_title">Çevrimdışı Bluetooth Sohbeti</string>
     <string name="about_offline_mesh_desc">İnternet/ sunucu olmadan doğrudan Bluetooth LE ile iletişim kur. Mesajlar yakındaki cihazlarca aktarılır.</string>
     <string name="about_online_geohash_title">Çevrimiçi Geohash Kanalları</string>
-    <string name="about_online_geohash_desc">Geohash tabanlı kanallarla yakınındaki insanlarla bağlantı kur. Herkese açık internet röleleriyle mesh’i genişlet.</string>
+    <string name="about_online_geohash_desc">Geohash tabanlı kanallarla yakınındaki insanlarla bağlantı kur. Herkese açık internet röleleriyle mesh\'i genişlet.</string>
     <string name="about_e2e_title">Uçtan Uca Şifreleme</string>
     <string name="about_e2e_desc">Özel mesajlar şifrelidir. Kanal mesajları herkese açıktır.</string>
     <string name="about_appearance">görünüm</string>
@@ -100,7 +117,7 @@
     <string name="about_pow">proof of work</string>
     <string name="about_pow_off">pow kapalı</string>
     <string name="about_pow_on">pow açık</string>
-    <string name="about_pow_tip">geohash mesajlarına spam’e karşı proof of work ekle.</string>
+    <string name="about_pow_tip">geohash mesajlarına spam\'e karşı proof of work ekle.</string>
     <string name="about_pow_difficulty">zorluk: %1$d bit (~%2$s)</string>
     <string name="about_pow_difficulty_attempts">%1$d zorluğu ~%2$s hash denemesi gerektirir</string>
     <string name="about_pow_desc_none">proof of work gerekmez</string>
@@ -119,8 +136,9 @@
     <string name="about_emergency_title">Acil veri silme</string>
     <string name="about_emergency_tip">İpucu: tüm verileri silmek için uygulama başlığına üç kez dokun (mesajlar, anahtarlar, ayarlar).</string>
     <string name="about_debug_settings">Hata ayıklama ayarları</string>
-    <string name="about_footer">Open Source • Privacy First • Merkezsiz</string>
+    <string name="about_footer">Açık Kaynak • Gizlilik Önce • Merkezsiz</string>
     <string name="close_plain">Kapat</string>
+    <string name="cd_privacy_protected">Gizlilik korunuyor</string>
     <string name="cancel_lower">iptal</string>
 
     <string name="cd_warning">Uyarı</string>
@@ -137,6 +155,35 @@
     <string name="cd_remove_bookmark">Yer imini kaldır</string>
     <string name="cd_teleport">Teleport</string>
     <string name="cd_selected">Seçildi</string>
+    <string name="notification_action_quit_bitchat">Zemzeme\'dan Çık</string>
+    <string name="about_background_title">arka planda çalıştır</string>
+    <string name="about_background_desc">uygulama kapalıyken mesh\'i aktif tut (ön plan hizmeti)</string>
+    <string name="about_p2p_subtitle">p2p üzerinden doğrudan eşler arası bağlantılar</string>
+    <string name="about_nostr_subtitle">İnternet aktarıcısı üzerinden mesajlaşma</string>
+    <string name="about_ble_subtitle">Bluetooth yakınlık mesh\'i</string>
+    <string name="ble_setting_off_subtitle">Bluetooth kapalı — BLE Mesh kullanmak için açın</string>
+    <string name="ble_banner_off">Bluetooth kapalı — BLE Mesh kullanılamıyor</string>
+    <string name="ble_setting_dialog_title">Bluetooth Gerekli</string>
+    <string name="ble_setting_dialog_msg">Bluetooth kapalı. BLE Mesh kullanmak için açın.</string>
+    <string name="ble_setting_dialog_btn">Bluetooth Ayarlarını Aç</string>
+    <string name="ble_banner_enable_btn">Etkinleştir</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh devre dışı</string>
+
+    <!-- Network connectivity -->
+    <string name="network_setting_off_subtitle">İnternet yok — bağlantınızı kontrol edin</string>
+    <string name="network_not_available">İnternet bağlantısı yok</string>
+    <string name="network_transports_off_hint">P2P veya Nostr\'u etkinleştirin</string>
+    <string name="network_no_internet">Bağlı ama internet algılanamadı</string>
+    <string name="network_setting_dialog_title">İnternet Gerekli</string>
+    <string name="network_setting_dialog_msg">P2P ve Nostr aktarımları için internet bağlantısı gerekir.</string>
+    <string name="network_setting_dialog_btn">Bağlantı Ayarları</string>
+    <string name="network_banner_disconnected">İnternet yok — bağlantı ayarlarını kontrol edin</string>
+    <string name="network_banner_airplane_mode">Uçak modu açık</string>
+    <string name="network_airplane_mode">Uçak modu açık</string>
+    <string name="network_banner_no_internet">Bağlı ama internet yok — bağlantınızı kontrol edin</string>
+    <string name="network_banner_transports_disabled">Ağ aktarımı yok — ayarlarda P2P veya Nostr\'u etkinleştirin</string>
+    <string name="network_banner_settings_btn">Ayarlar</string>
+
     <string name="cd_leave_channel">Kanaldan ayrıl</string>
     <string name="cd_reachable_via_nostr">Nostr üzerinden erişilebilir</string>
     <string name="cd_offline_favorite">Favori (çevrimdışı)</string>
@@ -150,9 +197,15 @@
     <string name="cd_link">Bağlantı</string>
     <string name="cd_pick_media">Medya seç</string>
     <string name="cd_record_voice">Ses notu kaydet</string>
+    <string name="cd_mining_pow">PoW madencilik</string>
+    <string name="cd_pow_enabled">PoW etkin</string>
+    <string name="cd_proof_of_work">İş kanıtı</string>
+    <string name="pow_mining_ellipsis">madencilik...</string>
+    <string name="pow_label_format">pow: %1$dbit</string>
     <string name="cd_offline_mesh_chat">Çevrimdışı Mesh Sohbeti</string>
     <string name="cd_online_geohash_channels">Çevrimiçi Geohash Kanalları</string>
     <string name="cd_end_to_end_encryption">Uçtan uca şifreleme</string>
+    <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
 
     <string name="image_page_of">Görsel %1$d / %2$d</string>
     <string name="image_unavailable">Görsel kullanılamıyor</string>
@@ -177,7 +230,6 @@
     <string name="location_channels_desc">yakındaki insanlarla geohash kanallarıyla sohbet et. yalnızca kabaca geohash paylaşılır, kesin gps asla değil. gizliliğin için ekran görüntüsü alma ve paylaşma.</string>
     <string name="grant_location_permission">konum izni ver</string>
     <string name="location_permission_denied">konum izni reddedildi. konum kanalları için ayarlardan etkinleştir.</string>
-    <string name="open_settings">Ayarları aç</string>
     <string name="location_permission_granted">\u2713 konum izni verildi</string>
     <string name="checking_permissions">izinler kontrol ediliyor…</string>
     <string name="finding_nearby_channels">yakın kanallar aranıyor…</string>
@@ -187,16 +239,32 @@
     <string name="teleport">teleport</string>
     <string name="disable_location_services">konum servislerini kapat</string>
     <string name="enable_location_services">konum servislerini aç</string>
-    <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">blok</string>
     <string name="location_level_neighborhood">mahalle</string>
     <string name="location_level_city">şehir</string>
     <string name="location_level_province">eyalet</string>
     <string name="location_level_region">bölge</string>
 
+    <!-- Location notes -->
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d not</item>
+        <item quantity="other">#%1$s ± 1 • %2$d not</item>
+    </plurals>
+    <string name="location_notes_description">Diğer ziyaretçilerin bulabilmesi için bu konuma kısa kalıcı notlar ekleyin.</string>
+    <string name="location_notes_relays_unavailable">coğrafi röleler kullanılamıyor; notlar duraklatıldı</string>
+    <string name="location_notes_no_relays_title">yakınlarda coğrafi röle yok</string>
+    <string name="location_notes_no_relays_desc">notlar coğrafi rölelere bağlıdır. bağlantıyı kontrol edip tekrar deneyin.</string>
+    <string name="loading_location_notes">notlar yükleniyor…</string>
+    <string name="location_notes_empty_title">henüz not yok</string>
+    <string name="location_notes_empty_desc">bu yer için ilk notu ekleyen siz olun.</string>
+    <string name="dismiss">kapat</string>
+    <string name="location_notes_input_placeholder">bu yer için bir not ekleyin</string>
+
     <string name="debug_tools">hata ayıklama araçları</string>
+    <string name="debug_tools_desc">tanılama ve kontrol için geliştirici araçları</string>
     <string name="debug_verbose_logging">ayrıntılı günlük</string>
+    <string name="debug_verbose_hint">eş katılımları/ayrılmaları, bağlantı yönünü, paket yönlendirme ve röleleri kaydeder</string>
     <string name="debug_bluetooth_roles">Bluetooth rolleri</string>
     <string name="debug_gatt_server">GATT sunucu</string>
     <string name="debug_connections_fmt">bağlantı: %1$d / %2$d</string>
@@ -207,6 +275,7 @@
     <string name="debug_max_overall">maks toplam</string>
     <string name="debug_packet_relay">paket rölesi</string>
     <string name="debug_since_start_fmt">başlangıçtan beri: %1$d</string>
+    <string name="debug_roles_hint">rolleri aç/kapat ve devre dışı bırakıldığında tüm bağlantıları kapat</string>
     <string name="debug_sync_settings">senk. ayarları</string>
     <string name="debug_max_packets_per_sync_fmt">senk. başına maks paket: %1$d</string>
     <string name="debug_max_gcs_filter_size_fmt">maks GCS filtre boyutu: %1$d bayt (128–1024)</string>
@@ -222,24 +291,71 @@
     <string name="debug_relays_window_fmt">son 10 sn: %1$d • 1 dk: %2$d • 15 dk: %3$d</string>
     <string name="debug_derived_p_fmt">türetilen P: %1$s • tahm. maks öge: %2$s</string>
     <string name="debug_direct_suffix"> • doğrudan</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
     <string name="debug_question_mark">?</string>
     <string name="debug_role_server">sunucu olarak (barındırıyoruz)</string>
     <string name="debug_role_client">istemci olarak (bağlanıyoruz)</string>
+
+    <!-- Verify -->
+    <string name="verify_title">doğrulama</string>
+    <string name="verify_my_qr_title">doğrulamak için tarayın</string>
+    <string name="verify_scan_prompt_friend">başkasının QR\'ını tarayın</string>
+    <string name="verify_scan_someone">başkasının QR\'ını tarayın</string>
+    <string name="verify_show_my_qr">QR\'ımı göster</string>
+    <string name="verify_remove">doğrulamayı kaldır</string>
+    <string name="verify_qr_unavailable">QR kullanılamıyor</string>
+    <string name="verify_camera_permission">QR kodlarını taramak için kamera izni gereklidir</string>
+    <string name="verify_request_camera">kamerayı etkinleştir</string>
+    <string name="verify_paste_label">doğrulama URL\'si yapıştır</string>
+    <string name="verify_validate">doğrula</string>
+    <string name="verify_scanned">doğrulama istendi</string>
+    <string name="security_verification_title">güvenlik doğrulaması</string>
+    <string name="fingerprint_their">onların parmak izi</string>
+    <string name="fingerprint_yours">sizin parmak iziniz</string>
+    <string name="fingerprint_pending">el sıkışma bekleniyor</string>
+    <string name="fingerprint_no_peer">parmak izlerini görmek için özel sohbet açın</string>
+    <string name="fingerprint_status_verified">şifreli &amp; doğrulanmış</string>
+    <string name="fingerprint_status_encrypted">şifreli</string>
+    <string name="fingerprint_status_handshaking">el sıkışma</string>
+    <string name="fingerprint_status_failed">el sıkışma başarısız</string>
+    <string name="fingerprint_status_uninitialized">şifrelenmemiş</string>
+    <string name="fingerprint_verified_label">doğrulanmış</string>
+    <string name="fingerprint_verified_message">bu kişinin kimliğini doğruladınız.</string>
+    <string name="fingerprint_not_verified_label">doğrulanmamış</string>
+    <string name="fingerprint_not_verified_message_fmt">bu parmak izlerini %1$s ile güvenli bir kanal üzerinden karşılaştırın.</string>
+    <string name="fingerprint_mark_verified">doğrulanmış olarak işaretle</string>
+    <string name="fingerprint_start_handshake">el sıkışma başlat</string>
+    <string name="fingerprint_copy">kopyala</string>
+    <string name="verify_mutual_match_title">Karşılıklı doğrulama</string>
+    <string name="verify_mutual_match_body">Siz ve %1$s birbirinizi doğruladınız</string>
+    <string name="verify_mutual_system_message">%1$s ile karşılıklı doğrulama</string>
+    <string name="verify_success_title">Doğrulandı</string>
+    <string name="verify_success_body">%1$s kişisini doğruladınız</string>
+    <string name="verify_success_system_message">%1$s doğrulandı</string>
 
     <string name="location_services_required">Konum servisleri gerekli</string>
     <string name="privacy_first">Önce gizlilik</string>
     <string name="location_explanation">Zemzeme KONUMUNU takip etmez.\n\nBluetooth tarama ve Geohash sohbet için konum servisleri gerekir.</string>
     <string name="location_needs_for">Zemzeme konum servislerini şunlar için kullanır:</string>
     <string name="location_needs_bullets">• Bluetooth cihaz tarama\n• Mesh ağında yakın kullanıcıları bulma\n• Geohash sohbet özelliği\n• Takip veya konum toplama yok</string>
+    <string name="background_location_required_title">Arka Plan Konumu Önerilir</string>
+    <string name="background_location_required_subtitle">isteğe bağlı, mesh güvenilirliğini artırır</string>
+    <string name="background_location_explanation">Android, Zemzeme\'nın uygulama açık olmadığında yakındaki cihazları tarayabilmesi için arka plan konumunu önerir. Bu, yeniden başlatmanın ardından mesh\'i canlı tutar.</string>
+    <string name="background_location_settings_tip">Ayarlar açıldığında, "Her zaman izin ver"i seçin.</string>
+    <string name="background_location_needs_for">Zemzeme, arka plan konumunu şunlar için kullanır:</string>
+    <string name="background_location_needs_bullets">- uygulama kapalıyken yakındaki cihazları tara\n- yeniden başlatmanın ardından yeniden bağlan\n- mesh\'i arka planda çalışır tut</string>
+    <string name="background_location_privacy_note">Konumunuzu asla toplamıyor veya saklamıyoruz. Gizliliğiniz güvende.</string>
+    <string name="grant_background_location">Arka Plan Konumuna İzin Ver</string>
+    <string name="skip_background_location">Arka plan konumu olmadan devam et</string>
     <string name="open_location_settings">Konum ayarlarını aç</string>
     <string name="check_again">Tekrar kontrol et</string>
     <string name="location_services_unavailable">Konum servisleri kullanılamıyor</string>
     <string name="location_unavailable_explanation">Bu cihazda konum servisleri yok. Bu olağandışıdır.\n\nBluetooth taramasının düzgün çalışması (Android gereksinimi) için gerekir. Aksi halde yakın kullanıcılar bulunamaz.</string>
     <string name="checking_location_services">Konum servisleri kontrol ediliyor…</string>
     <string name="bluetooth_required">Bluetooth gerekli</string>
-    <string name="bluetooth_needs_for">Zemzeme Bluetooth’u şunlar için kullanır:</string>
+    <string name="bluetooth_needs_for">Zemzeme Bluetooth\'u şunlar için kullanır:</string>
     <string name="bluetooth_needs_bullets">• Yakın kullanıcıları bulma\n• Mesh bağlantıları kurma\n• Mesaj gönderme/alma\n• İnternetsiz çalışma</string>
-    <string name="enable_bluetooth">Bluetooth’u aç</string>
+    <string name="enable_bluetooth">Bluetooth\'u aç</string>
     <string name="bluetooth_not_supported">Bluetooth desteklenmiyor</string>
     <string name="bluetooth_unsupported_explanation">Bu cihaz Bluetooth Low Energy (BLE) desteklemiyor, Zemzeme için gereklidir.\n\nBLE, internetsiz yakın cihazlarla iletişim ve mesh için gereklidir.</string>
     <string name="checking_bluetooth_status">Bluetooth durumu kontrol ediliyor…</string>
@@ -258,10 +374,20 @@
     <string name="warning_emoji">⚠️</string>
     <string name="setup_not_complete">Kurulum tamamlanmadı</string>
     <string name="try_again">Yeniden dene</string>
+    <string name="open_settings">Ayarları aç</string>
     <string name="privacy_protected">Gizliliğin korunuyor</string>
     <string name="privacy_bullets">• takip veya veri toplama yok\n• Bluetooth mesh sohbet çevrimdışı\n• geohash sohbet internete ihtiyaç duyar</string>
     <string name="permissions_header">izinler</string>
     <string name="grant_permissions">İzin ver</string>
+    <string name="continue_button">Devam</string>
+    <string name="perm_required_label">Gerekli</string>
+    <string name="perm_recommended_label">Önerilen</string>
+    <string name="perm_info_dialog_ok">Tamam</string>
+    <string name="perm_benefit_nearby_devices">Bluetooth izinleri, Zemzeme\'nın mesh ağı üzerinden yakınlardaki diğer kullanıcıları keşfetmesini ve iletişim kurmasını sağlar. Bu, internet bağlantısı olmadan tamamen çevrimdışı eşler arası mesajlaşmayı mümkün kılar.</string>
+    <string name="perm_benefit_location">Android, yakındaki Bluetooth cihazları taramak için konum izni gerektirir. Zemzeme konumunuzu takip ETMEZ veya kaydetmez.</string>
+    <string name="perm_benefit_background_location">Arka plan konumu, uygulama arka plandayken bile Zemzeme\'nın yakındaki kullanıcıları bulmasını sağlar. Bu olmadan mesh ağı yalnızca uygulama ekranda açıkken çalışır.</string>
+    <string name="perm_benefit_notifications">Bildirimler, uygulama arka plandayken bile özel mesaj aldığınızda veya kanallarınızda yeni etkinlik olduğunda sizi haberdar eder.</string>
+    <string name="perm_benefit_battery_optimization">Pil optimizasyonunu devre dışı bırakmak, Zemzeme\'nın arka planda güvenilir şekilde çalışmasını ve mesh ağı bağlantılarını korumasını sağlar. Bu olmadan Android, pil tasarrufu için uygulamayı kapatarak sizi mesh\'ten ayırabilir.</string>
     <string name="location_tracking_warning">Zemzeme konumunu takip etmez</string>
     <string name="at_symbol">@</string>
     <string name="app_brand">Zemzeme/</string>
@@ -308,142 +434,250 @@
     <string name="cd_pause_voice">Duraklat</string>
 
     <string name="perm_nearby_devices_desc">Bluetooth ile Zemzeme kullanıcılarını bulmak için gereklidir</string>
-    <string name="perm_nearby_devices_system">Zemzeme’in yakın cihazlara bağlanmasına izin ver</string>
+    <string name="perm_nearby_devices_system">Zemzeme\'in yakın cihazlara bağlanmasına izin ver</string>
     <string name="perm_location_desc">Android gereği Bluetooth ile yakın kullanıcıları bulmak için gerekli</string>
     <string name="perm_location_system">yakın cihazları taramak için gereklidir</string>
+    <string name="perm_background_location_desc">Uygulama arka plandayken yakındaki cihazları taramak için önerilir</string>
+    <string name="perm_background_location_system">Arka plan konumu erişimine izin ver</string>
     <string name="perm_notifications_desc">özel mesajlarda bildirim al</string>
-    <string name="perm_notifications_system">Zemzeme’in bildirim göndermesine izin ver</string>
-    <string name="perm_battery_desc">arka planda güvenilir çalışmak ve mesh’i korumak için pil optimizasyonunu kapat</string>
+    <string name="perm_notifications_system">Zemzeme\'in bildirim göndermesine izin ver</string>
+    <string name="perm_battery_desc">arka planda güvenilir çalışmak ve mesh\'i korumak için pil optimizasyonunu kapat</string>
     <string name="perm_battery_system">pil kısıtlaması olmadan çalışmaya izin ver</string>
 
     <string name="perm_type_nearby_devices">Yakın cihazlar</string>
     <string name="perm_type_precise_location">Hassas konum</string>
+    <string name="perm_type_background_location">Arka Plan Konumu</string>
     <string name="perm_type_microphone">Mikrofon</string>
     <string name="perm_type_notifications">Bildirimler</string>
     <string name="perm_type_battery_optimization">Pil optimizasyonu</string>
     <string name="perm_type_other">Diğer</string>
 
+    <!-- App Lock -->
+    <string name="app_lock_title">Uygulama Kilidi</string>
+    <string name="app_lock_subtitle_off">Kapalı</string>
+    <string name="app_lock_subtitle_on">Biyometrik + PIN</string>
+    <string name="app_lock_security_section">GÜVENLİK</string>
+    <string name="app_lock_enter_pin">PIN Girin</string>
+    <string name="app_lock_set_pin">PIN Ayarla</string>
+    <string name="app_lock_confirm_pin">PIN\'i Onayla</string>
+    <string name="app_lock_biometric_title">Zemzeme\'yi Aç</string>
+    <string name="app_lock_biometric_subtitle">Açmak için sensöre dokunun</string>
+    <string name="app_lock_use_pin">PIN Kullan</string>
+    <string name="app_lock_wrong_pin">Yanlış PIN</string>
+    <string name="app_lock_too_many_attempts">%1$d deneme kaldı</string>
+    <string name="app_lock_cooldown">%1$d saniye sonra tekrar deneyin</string>
+    <string name="app_lock_pin_mismatch">PIN\'ler eşleşmiyor</string>
+    <string name="app_lock_pin_min_length">PIN 4–6 haneli olmalıdır</string>
+    <string name="app_lock_disable_title">Uygulama Kilidini Devre Dışı Bırak</string>
+    <string name="app_lock_disable_msg">Kilidi devre dışı bırakmak için kimliğinizi doğrulayın</string>
+    <string name="app_lock_protect_title">Sohbetlerinizi Koruyun</string>
+    <string name="app_lock_protect_desc">6 haneli PIN uygulamayı kilitler. Anında erişim için biyometrik kullanın.</string>
+    <string name="app_lock_enable">Uygulama Kilidini Etkinleştir</string>
+    <string name="app_lock_not_now">Şimdi Değil</string>
+
+    <!-- Password prompt dialog -->
     <string name="pwd_prompt_title">Kanal parolasını gir</string>
     <string name="pwd_prompt_message">%1$s kanalı parolalıdır. Katılmak için parola gir.</string>
     <string name="pwd_label">Parola</string>
     <string name="join">Katıl</string>
     <string name="cancel">İptal</string>
+    <string name="tor_not_available_in_this_build">Tor bu derlemede mevcut değil</string>
+
+    <plurals name="notification_and_more">
+        <item quantity="one">ve %d daha</item>
+        <item quantity="other">ve %d daha</item>
+    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1 kişi</item>
         <item quantity="other">%d kişi</item>
     </plurals>
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d not</item>
-    <item quantity="other">#%1$s ± 1 • %2$d not</item>
-  </plurals>
-  <string name="location_notes_description">Diğer ziyaretçilerin bulabilmesi için bu konuma kısa kalıcı notlar ekleyin.</string>
-  <string name="location_notes_relays_unavailable">coğrafi röleler kullanılamıyor; notlar duraklatıldı</string>
-  <string name="location_notes_no_relays_title">yakınlarda coğrafi röle yok</string>
-  <string name="location_notes_no_relays_desc">notlar coğrafi rölelere bağlıdır. bağlantıyı kontrol edip tekrar deneyin.</string>
-  <string name="loading_location_notes">notlar yükleniyor…</string>
-  <string name="location_notes_empty_title">henüz not yok</string>
-  <string name="location_notes_empty_desc">bu yer için ilk notu ekleyen siz olun.</string>
-  <string name="dismiss">kapat</string>
-  <string name="location_notes_input_placeholder">bu yer için bir not ekleyin</string>
-    <string name="mesh_service_notification_content">Mesh çalışıyor — %1$d eş</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">%1$s kişisini doğruladınız</string>
-  <string name="verify_success_system_message">%1$s doğrulandı</string>
+    <!-- Mesh intro -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">Bu gruptaki iletişim tamamen Bluetooth\'a dayalıdır. Yakındaki cihazlar insanlar arasında mesajları iletir — internet bağlantısı gerekmez.</string>
+    <string name="mesh_intro_close">Kapat</string>
+    <string name="mesh_intro_dont_show">Bir daha gösterme</string>
 
-  <!-- Eksik anahtarlar -->
-  <string name="mesh_service_channel_name">Arka Plan Mesh Hizmeti</string>
-  <string name="mesh_service_channel_desc">Bluetooth mesh\'i arka planda çalışır durumda tutar</string>
-  <string name="cd_settings">Ayarlar</string>
-  <string name="cd_location_notes">Konum notları</string>
-  <string name="notification_action_quit_bitchat">Zemzeme\'dan Çık</string>
-  <string name="about_background_title">arka planda çalıştır</string>
-  <string name="about_background_desc">uygulama kapalıyken mesh\'i aktif tut (ön plan hizmeti)</string>
-  <string name="about_p2p_subtitle">p2p üzerinden doğrudan eşler arası bağlantılar</string>
-  <string name="about_nostr_subtitle">İnternet aktarıcısı üzerinden mesajlaşma</string>
-  <string name="about_ble_subtitle">Bluetooth yakınlık mesh\'i</string>
-    <string name="ble_setting_off_subtitle">Bluetooth kapalı — BLE Mesh kullanmak için açın</string>
-    <string name="ble_banner_off">Bluetooth kapalı — BLE Mesh kullanılamıyor</string>
-    <string name="ble_setting_dialog_title">Bluetooth Gerekli</string>
-    <string name="ble_setting_dialog_msg">Bluetooth kapalı. BLE Mesh kullanmak için açın.</string>
-    <string name="ble_setting_dialog_btn">Bluetooth Ayarlarını Aç</string>
-    <string name="ble_banner_enable_btn">Etkinleştir</string>
-    <string name="ble_banner_mesh_disabled">BLE Mesh devre dışı</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">Arka Plan Konumu Önerilir</string>
-  <string name="background_location_required_subtitle">isteğe bağlı, mesh güvenilirliğini artırır</string>
-  <string name="background_location_explanation">Android, Zemzeme\'nın uygulama açık olmadığında yakındaki cihazları tarayabilmesi için arka plan konumunu önerir. Bu, yeniden başlatmanın ardından mesh\'i canlı tutar.</string>
-  <string name="background_location_settings_tip">Ayarlar açıldığında, "Her zaman izin ver"i seçin.</string>
-  <string name="background_location_needs_for">Zemzeme, arka plan konumunu şunlar için kullanır:</string>
-  <string name="background_location_needs_bullets">- uygulama kapalıyken yakındaki cihazları tara\n- yeniden başlatmanın ardından yeniden bağlan\n- mesh\'i arka planda çalışır tut</string>
-  <string name="background_location_privacy_note">Konumunuzu asla toplamıyor veya saklamıyoruz. Gizliliğiniz güvende.</string>
-  <string name="grant_background_location">Arka Plan Konumuna İzin Ver</string>
-  <string name="skip_background_location">Arka plan konumu olmadan devam et</string>
-  <string name="perm_background_location_desc">Uygulama arka plandayken yakındaki cihazları taramak için önerilir</string>
-  <string name="perm_background_location_system">Arka plan konumu erişimine izin ver</string>
-  <string name="perm_type_background_location">Arka Plan Konumu</string>
-  <string name="tor_not_available_in_this_build">Tor bu derlemede mevcut değil</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <!-- Share App section -->
+    <string name="about_share_app_header">UYGULAMAYI PAYLAŞ</string>
+    <string name="about_share_system_title">Uygulamayı Paylaş</string>
+    <string name="about_share_system_desc">APK\'yı Bluetooth, Yakındaki Paylaşım veya Wi-Fi Direct ile gönder (%1$s)</string>
+    <string name="about_share_failed">APK paylaşıma hazırlanamadı</string>
+    <string name="about_share_chooser_title">%1$s APK Paylaş</string>
+    <string name="about_share_helper_text">Göndermek için Google Hızlı Paylaşım\'ı kullanın (telefon Ayarlarından etkinleştirin). Aktarımdan sonra APK, alan cihazdaki İndirilenler klasöründe olacaktır.</string>
 
-  <string name="cd_close">Kapat</string>
-  <string name="cd_image_index_of">Resim %1$d / %2$d</string>
-  <string name="cd_mining_pow">PoW madencilik</string>
-  <string name="cd_pick_file">Dosya seç</string>
-  <string name="cd_pow_enabled">PoW etkin</string>
-  <string name="cd_privacy_protected">Gizlilik korunuyor</string>
-  <string name="cd_proof_of_work">İş kanıtı</string>
-  <string name="cd_save_current_image">Geçerli resmi kaydet</string>
-  <string name="debug_roles_hint">rolleri aç/kapat ve devre dışı bırakıldığında tüm bağlantıları kapat</string>
-  <string name="debug_tools_desc">tanılama ve kontrol için geliştirici araçları</string>
-  <string name="debug_verbose_hint">eş katılımları/ayrılmaları, bağlantı yönünü, paket yönlendirme ve röleleri kaydeder</string>
-  <string name="pow_label_format">pow: %1$dbit</string>
-  <string name="pow_mining_ellipsis">madencilik...</string>
-  <string name="toast_failed_to_save_image">Resim kaydedilemedi</string>
-  <string name="toast_image_saved">Resim İndirilenler\'e kaydedildi</string>
+    <!-- Icon switch -->
+    <string name="icon_switch_title">Uygulama Simgesi ve Adını Yenile</string>
+    <string name="icon_switch_section">Kişiselleştirme</string>
+    <string name="icon_switch_subtitle">başlatıcıdaki uygulama simgesini ve adını değiştir</string>
+    <string name="icon_switch_confirm">Uygulama simgesi ve adı buna değiştirilsin mi?</string>
+    <string name="icon_switch_apply">Uygula</string>
+    <string name="icon_switch_toast">Uygulama simgesi ve adı değiştirildi!</string>
+
+    <!-- Dialog titles and actions -->
+    <string name="dialog_delete_chat">Sohbeti sil</string>
+    <string name="dialog_delete_group">Grubu sil</string>
+    <string name="dialog_delete_confirm_body">\"%1$s\" silinsin mi? Bu geri alınamaz.</string>
+    <string name="action_delete">Sil</string>
+    <string name="dialog_clear_chat">Sohbeti temizle</string>
+    <string name="dialog_clear_confirm_body">\"%1$s\" içindeki tüm mesajlar silinsin mi?</string>
+    <string name="action_clear">Temizle</string>
+    <string name="dialog_title_create_group">Yeni Grup Oluştur</string>
+    <string name="label_group_name">Grup adı</string>
+    <string name="action_create">Oluştur</string>
+    <string name="dialog_title_join_group">Gruba Katıl</string>
+    <string name="label_group_id">Grup kimliği</string>
+    <string name="label_nickname_optional">Takma ad (isteğe bağlı)</string>
+    <string name="dialog_title_rename_group">Grubu Yeniden Adlandır</string>
+    <string name="action_rename">Yeniden adlandır</string>
+
+    <!-- Settings titles -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P Ağ</string>
+    <string name="setting_nostr_relays">Nostr Röleleri</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast messages -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh etkinleştirildi</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh devre dışı bırakıldı</string>
+    <string name="toast_nostr_enabled">Nostr etkinleştirildi</string>
+    <string name="toast_nostr_disabled">Nostr devre dışı bırakıldı</string>
+    <string name="toast_tor_p2p_unsupported">Tor ile P2P desteklenmiyor. Önce P2P\'yi devre dışı bırakın.</string>
+    <string name="toast_p2p_tor_disabled">Tor üzerinden P2P desteklenmiyor. Tor devre dışı bırakıldı.</string>
+
+    <!-- Image picker -->
+    <string name="action_gallery">Galeri</string>
+    <string name="action_camera">Kamera</string>
+
+    <!-- Accessibility content descriptions -->
+    <string name="cd_refresh_p2p">P2P bağlantısını yenile</string>
+    <string name="cd_direct_bluetooth">Doğrudan Bluetooth</string>
+    <string name="cd_routed">Yönlendirilmiş</string>
+    <string name="cd_p2p_connection">P2P bağlantısı</string>
+    <string name="cd_teleported_user">Teleport edilmiş kullanıcı</string>
+    <string name="cd_user">Kullanıcı</string>
+    <string name="cd_backspace">geri al</string>
+    <string name="cd_verified">Doğrulanmış</string>
+    <string name="cd_add_node">Düğüm ekle</string>
+    <string name="cd_remove">Kaldır</string>
+    <string name="action_enable_location">Konumu Etkinleştir</string>
+
+    <!-- Group ID label -->
+    <string name="label_group_id_fmt">Grup kimliği: %1$s</string>
+
+    <!-- PIN placeholder -->
+    <string name="placeholder_6_digits">6 hane</string>
+
+    <!-- P2P Settings -->
+    <string name="p2p_settings_header">AYARLAR</string>
+    <string name="p2p_enable">P2P\'yi Etkinleştir</string>
+    <string name="p2p_enable_desc">Diğer Zemzeme eşlerine doğrudan bağlan</string>
+    <string name="p2p_use_default_nodes">Varsayılan Düğümleri Kullan</string>
+    <string name="p2p_default_nodes_desc">Genel IPFS önyükleme düğümlerine bağlan</string>
+    <string name="p2p_custom_nodes_header">ÖZEL ÖNYÜKLEME DÜĞÜMLERİ</string>
+    <string name="p2p_no_custom_nodes">Özel düğüm yapılandırılmadı. Eklemek için + düğmesine dokunun.</string>
+    <string name="p2p_add_bootstrap_node">Önyükleme Düğümü Ekle</string>
+    <string name="p2p_enter_multiaddr">Önyükleme düğümü için multiaddr girin:</string>
+    <string name="p2p_recovering">Kurtarılıyor…</string>
+    <string name="p2p_recover_connection">Bağlantıyı Kurtar</string>
+    <string name="action_add">Ekle</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_direct_messages">Özel Mesajlar</string>
+    <string name="notification_channel_dm_desc">Diğer kullanıcılardan gelen özel mesaj bildirimleri</string>
+    <string name="notification_channel_geohash_chats">Geohash Sohbetleri</string>
+    <string name="notification_channel_geohash_desc">Geohash konum kanallarındaki bahsetme ve mesaj bildirimleri</string>
+
+    <!-- Debug: mesh topology -->
+    <string name="debug_mesh_topology">mesh topolojisi</string>
+    <string name="debug_no_gossip">henüz gossip yok</string>
+
+    <!-- Debug: self-update -->
+    <string name="debug_self_update">kendi kendine güncelleme (dev)</string>
+    <string name="debug_current_version_fmt">Geçerli sürüm: %1$s</string>
+    <string name="debug_download_updates_desc">GitHub sürümlerinden güncelleme indir ve yükle</string>
+    <string name="update_status_ready">Hazır</string>
+    <string name="update_status_checking">Güncellemeler kontrol ediliyor…</string>
+    <string name="update_status_available">Güncelleme mevcut: %1$s</string>
+    <string name="update_status_downloading">İndiriliyor: %1$d%%</string>
+    <string name="update_status_ready_install">Yüklemeye hazır: %1$s</string>
+    <string name="update_status_installing">Yükleniyor…</string>
+    <string name="update_status_success">Güncelleme yüklendi! Uygulamayı yeniden başlatın.</string>
+    <string name="update_status_pending_action">Kullanıcı onayı bekleniyor…</string>
+    <string name="update_status_error">Hata: %1$s</string>
+    <string name="update_grant_install_permission">Yükleme İzni Ver</string>
+    <string name="update_install">Güncellemeyi Yükle</string>
+    <string name="update_check">Güncellemeleri Kontrol Et</string>
+    <string name="debug_test_update_dialog">Güncelleme Diyaloğunu Test Et</string>
+
+    <!-- Debug: bandwidth graphs -->
+    <string name="debug_overall">Genel</string>
+    <string name="debug_per_device">Cihaz Başına</string>
+    <string name="debug_per_peer">Eş Başına</string>
+    <string name="debug_incoming">Gelen</string>
+    <string name="debug_outgoing">Giden</string>
+
+    <!-- Debug: console -->
+    <string name="debug_refreshing">Yenileniyor…</string>
+    <string name="debug_refresh">Yenile</string>
+    <string name="debug_clear_logs">Günlükleri Temizle</string>
+    <string name="debug_preparing_export">Dışa aktarım hazırlanıyor…</string>
+    <string name="debug_share_logs">Günlükleri Paylaş</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">QR Tara</string>
+    <string name="fab_choose_city">Şehir seç</string>
+    <string name="fab_join_group">Gruba katıl</string>
+    <string name="fab_create_group">Grup oluştur</string>
+    <!-- Section headers -->
+    <string name="section_nearby">Yakındakiler</string>
+    <string name="section_geographic_groups">Coğrafi Gruplar</string>
+    <string name="section_my_groups">Gruplarım</string>
+    <string name="section_contacts">Kişiler</string>
+
+    <!-- New translated strings -->
+    <string name="section_username">KULLANICI ADI</string>
+    <string name="section_theme">TEMA</string>
+    <string name="section_settings">AYARLAR</string>
+    <string name="section_network">AĞ</string>
+    <string name="section_status">DURUM</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P Ağ</string>
+    <string name="p2p_status_no_peers">Eş Yok</string>
+    <string name="p2p_status_connected">Bağlı</string>
+    <string name="p2p_status_connecting">Bağlanıyor…</string>
+    <string name="p2p_status_disconnected">Bağlantı kesildi</string>
+    <string name="p2p_status_error">Hata</string>
+    <string name="p2p_peers_connected_fmt">%1$d eş bağlı</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Aktif düğümler: %1$d</string>
+    <string name="location_acquiring_title">Konum Alınıyor</string>
+    <string name="location_acquiring_desc">Konumunuz belirlenirken lütfen bekleyin</string>
+    <string name="location_unavailable_title">Konum Kullanılamıyor</string>
+    <string name="location_permission_required_notes">Notlar için konum izni gereklidir</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">Eşler aranıyor…</string>
+    <string name="connection_connecting_peers">Eşlere bağlanılıyor…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d eş bağlı</item>
+        <item quantity="other">%1$d eş bağlı</item>
+    </plurals>
+    <string name="connection_no_new_messages">Bağlı – yeni mesaj yok</string>
+    <string name="connection_error">Bağlantı hatası</string>
+    <string name="connection_direct">Doğrudan</string>
+    <string name="connection_connected">Bağlı</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (bilgi yok)</string>
+    <string name="debug_nostr_relay">Nostr rölesi</string>
+    <string name="debug_ble_direct">BLE doğrudan</string>
+    <string name="debug_p2p_searching">P2P: eşler aranıyor…</string>
+    <string name="debug_p2p_connecting">P2P: eşlere bağlanılıyor…</string>
+    <string name="debug_nostr_no_messages">Nostr bağlı – yeni mesaj yok</string>
+    <string name="debug_connection_failed">bağlantı başarısız</string>
+    <string name="debug_error_fmt">hata: %1$s</string>
+
 </resources>

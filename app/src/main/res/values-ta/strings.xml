@@ -57,12 +57,13 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme - %1$d குறிப்புகள்</string>
     <string name="notification_geohash_summary_title">Zemzeme - இருப்பிட அரட்டைகள்</string>
     <string name="notification_geohash_summary_text">%2$d இருப்பிடங்களிலிருந்து %1$d செய்திகள்</string>
-    <string name="notification_mesh_mention_title_singular">Mesh Chat-ல் குறிப்பிடப்பட்டது</string>
-    <string name="notification_mesh_mention_title_plural">Mesh Chat-ல் %1$d குறிப்புகள்</string>
+    <string name="notification_mesh_mention_title_singular">Bluetooth Chat-ல் குறிப்பிடப்பட்டது</string>
+    <string name="notification_mesh_mention_title_plural">Bluetooth Chat-ல் %1$d குறிப்புகள்</string>
     <string name="notification_more_locations">மேலும் %1$d இருப்பிடங்கள்</string>
+    <string name="notification_and_more">மேலும் %1$d</string>
 
     <!-- Mesh Service Foreground Notification -->
-    <string name="mesh_service_channel_name">Mesh பின்னணி சேவை</string>
+    <string name="mesh_service_channel_name">Bluetooth பின்னணி சேவை</string>
     <string name="mesh_service_channel_desc">பின்னணியில் Bluetooth mesh இயங்குவதை தொடர்கிறது</string>
 
     <!-- Favorites accessibility -->
@@ -105,7 +106,7 @@
 
     <!-- About sheet -->
     <string name="about_tagline">அனைத்து சூழ்நிலைகளிலும் கண்காணிப்பு-இல்லாத செய்தியிடல், முனைமுனை குறியாக்கம்</string>
-    <string name="about_offline_mesh_title">ஆஃப்லைன் Mesh அரட்டை</string>
+    <string name="about_offline_mesh_title">ஆஃப்லைன் Bluetooth அரட்டை</string>
     <string name="about_offline_mesh_desc">இணையம் அல்லது சர்வர்கள் இல்லாமல் Bluetooth LE மூலம் நேரடியாக தொடர்பு கொள்ளுங்கள். செய்திகள் வரம்பை நீட்டிக்க அருகிலுள்ள சாதனங்கள் வழியாக அனுப்பப்படுகின்றன.</string>
     <string name="about_online_geohash_title">ஆன்லைன் Geohash சேனல்கள்</string>
     <string name="about_online_geohash_desc">geohash அடிப்படையிலான சேனல்களைப் பயன்படுத்தி உங்கள் பகுதியிலுள்ள மக்களுடன் இணையுங்கள். பொது இணைய relayகளைப் பயன்படுத்தி meshஐ விரிவுபடுத்துங்கள்.</string>
@@ -170,20 +171,22 @@
     <string name="ble_setting_dialog_btn">Bluetooth அமைப்புகளைத் திறக்கவும்</string>
     <string name="ble_banner_enable_btn">இயக்கு</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh முடக்கப்பட்டுள்ளது</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
+
+    <!-- நெட்வொர்க் இணைப்பு -->
+    <string name="network_setting_off_subtitle">இணையம் இல்லை — இணைப்பை சரிபார்க்கவும்</string>
+    <string name="network_not_available">இணைய இணைப்பு இல்லை</string>
+    <string name="network_transports_off_hint">P2P அல்லது Nostr இயக்கவும்</string>
+    <string name="network_no_internet">இணைக்கப்பட்டது ஆனால் இணையம் கண்டறியப்படவில்லை</string>
+    <string name="network_setting_dialog_title">இணையம் தேவை</string>
+    <string name="network_setting_dialog_msg">P2P மற்றும் Nostr போக்குவரத்துக்கு இணைய இணைப்பு தேவை.</string>
+    <string name="network_setting_dialog_btn">இணைப்பு அமைப்புகள்</string>
+    <string name="network_banner_disconnected">இணையம் இல்லை — இணைப்பு அமைப்புகளை சரிபார்க்கவும்</string>
+    <string name="network_banner_airplane_mode">விமான பயன்முறை இயக்கப்பட்டுள்ளது</string>
+    <string name="network_airplane_mode">விமான பயன்முறை இயக்கப்பட்டுள்ளது</string>
+    <string name="network_banner_no_internet">இணைக்கப்பட்டது ஆனால் இணையம் இல்லை — இணைப்பை சரிபார்க்கவும்</string>
+    <string name="network_banner_transports_disabled">நெட்வொர்க் போக்குவரத்து இல்லை — அமைப்புகளில் P2P அல்லது Nostr இயக்கவும்</string>
+    <string name="network_banner_settings_btn">அமைப்புகள்</string>
+
     <string name="cd_leave_channel">சேனல் விட்டு வெளியேறு</string>
     <string name="cd_reachable_via_nostr">Nostr வழியாக அணுகக்கூடியது</string>
     <string name="cd_offline_favorite">ஆஃப்லைன் பிடித்தது</string>
@@ -239,7 +242,7 @@
     <string name="teleport">டெலிபோர்ட்</string>
     <string name="disable_location_services">இருப்பிட சேவைகளை முடக்கு</string>
     <string name="enable_location_services">இருப்பிட சேவைகளை இயக்கு</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">தொகுதி</string>
     <string name="location_level_neighborhood">சுற்றுப்புறம்</string>
     <string name="location_level_city">நகரம்</string>
@@ -291,6 +294,7 @@
     <string name="debug_clear">அழி</string>
     <string name="debug_relays_window_fmt">கடைசி 10வி: %1$d • 1நி: %2$d • 15நி: %3$d</string>
     <string name="debug_derived_p_fmt">வழிவந்த P: %1$s • மதிப்பீட்டு அதிகபட்ச உறுப்புகள்: %2$s</string>
+    <string name="debug_direct_suffix"> • direct</string>
     <string name="debug_role_server">சர்வராக (நாங்கள் host செய்கிறோம்)</string>
     <string name="debug_role_client">கிளையன்ட்டாக (நாங்கள் இணைக்கிறோம்)</string>
 
@@ -410,6 +414,29 @@
     <string name="perm_type_battery_optimization">பேட்டரி மேம்படுத்தல்</string>
     <string name="perm_type_other">மற்றவை</string>
 
+    <!-- App Lock -->
+    <string name="app_lock_title">ஆப் பூட்டு</string>
+    <string name="app_lock_subtitle_off">முடக்கப்பட்டது</string>
+    <string name="app_lock_subtitle_on">உயிர்அளவீடு + PIN</string>
+    <string name="app_lock_security_section">பாதுகாப்பு</string>
+    <string name="app_lock_enter_pin">PIN உள்ளிடவும்</string>
+    <string name="app_lock_set_pin">PIN அமைக்கவும்</string>
+    <string name="app_lock_confirm_pin">PIN உறுதிப்படுத்தவும்</string>
+    <string name="app_lock_biometric_title">Zemzeme திறக்கவும்</string>
+    <string name="app_lock_biometric_subtitle">திறக்க சென்சாரை தொடவும்</string>
+    <string name="app_lock_use_pin">PIN பயன்படுத்தவும்</string>
+    <string name="app_lock_wrong_pin">தவறான PIN</string>
+    <string name="app_lock_too_many_attempts">அதிக முயற்சிகள். %1$d விநாடிகளில் மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="app_lock_cooldown">%1$d விநாடிகள் மீதமுள்ளன</string>
+    <string name="app_lock_pin_mismatch">PIN பொருந்தவில்லை</string>
+    <string name="app_lock_pin_min_length">PIN 4–6 இலக்கங்களாக இருக்க வேண்டும்</string>
+    <string name="app_lock_disable_title">ஆப் பூட்டை முடக்கு</string>
+    <string name="app_lock_disable_msg">பூட்டை முடக்க உங்கள் அடையாளத்தை சரிபார்க்கவும்</string>
+    <string name="app_lock_protect_title">உங்கள் அரட்டைகளை பாதுகாக்கவும்</string>
+    <string name="app_lock_protect_desc">6 இலக்க PIN ஆப்-ஐ பூட்டுகிறது. உடனடி அணுகலுக்கு உயிர்அளவீடு பயன்படுத்தவும்.</string>
+    <string name="app_lock_enable">ஆப் பூட்டை இயக்கு</string>
+    <string name="app_lock_not_now">இப்போது வேண்டாம்</string>
+
     <!-- Password prompt dialog -->
     <string name="pwd_prompt_title">சேனல் கடவுச்சொல் உள்ளிடவும்</string>
     <string name="pwd_prompt_message">சேனல் %1$s கடவுச்சொல்லால் பாதுகாக்கப்பட்டுள்ளது. சேர கடவுச்சொல்லை உள்ளிடவும்.</string>
@@ -431,43 +458,243 @@
     <!-- Non-translatable symbols -->
     <string name="pow_label_format">pow: %1$dbit</string>
     <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
-    <string name="debug_direct_suffix"> • direct</string>
     <string name="debug_rssi_fmt">RSSI: %1$s</string>
     <string name="debug_question_mark">?</string>
-    <string name="mesh_service_notification_content">மெஷ் இயங்குகிறது — %1$d பியர்ஸ்</string>
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+    <string name="mesh_service_notification_content">Bluetooth இயங்குகிறது — %1$d பியர்ஸ்</string>
+
+    <!-- Verify / Fingerprint -->
+    <string name="verify_title">சரிபார்ப்பு</string>
+    <string name="verify_my_qr_title">என்னை சரிபார்க்க ஸ்கேன் செய்யுங்கள்</string>
+    <string name="verify_scan_prompt_friend">மற்றவரின் QR-ஐ ஸ்கேன் செய்யுங்கள்</string>
+    <string name="verify_scan_someone">மற்றவரின் QR-ஐ ஸ்கேன் செய்யுங்கள்</string>
+    <string name="verify_show_my_qr">எனது QR காட்டு</string>
+    <string name="verify_remove">சரிபார்ப்பை நீக்கு</string>
+    <string name="verify_qr_unavailable">QR கிடைக்கவில்லை</string>
+    <string name="verify_camera_permission">QR குறியீடுகளை ஸ்கேன் செய்ய கேமரா அனுமதி தேவை</string>
+    <string name="verify_request_camera">கேமராவை இயக்கு</string>
+    <string name="verify_paste_label">சரிபார்ப்பு URL-ஐ ஒட்டு</string>
+    <string name="verify_validate">சரிபார்</string>
+    <string name="verify_scanned">சரிபார்ப்பு கோரப்பட்டது</string>
+    <string name="security_verification_title">பாதுகாப்பு சரிபார்ப்பு</string>
+    <string name="fingerprint_their">அவர்களின் கைரேகை</string>
+    <string name="fingerprint_yours">உங்கள் கைரேகை</string>
+    <string name="fingerprint_pending">handshake நிலுவையில்</string>
+    <string name="fingerprint_no_peer">கைரேகைகளை பார்க்க தனிப்பட்ட அரட்டை திறக்கவும்</string>
+    <string name="fingerprint_status_verified">மறைகுறியாக்கப்பட்டது &amp; சரிபார்க்கப்பட்டது</string>
+    <string name="fingerprint_status_encrypted">மறைகுறியாக்கப்பட்டது</string>
+    <string name="fingerprint_status_handshaking">handshake நடைபெறுகிறது</string>
+    <string name="fingerprint_status_failed">handshake தோல்வியடைந்தது</string>
+    <string name="fingerprint_status_uninitialized">மறைகுறியாக்கப்படவில்லை</string>
+    <string name="fingerprint_verified_label">சரிபார்க்கப்பட்டது</string>
+    <string name="fingerprint_verified_message">இந்த நபரின் அடையாளத்தை நீங்கள் சரிபார்த்துள்ளீர்கள்.</string>
+    <string name="fingerprint_not_verified_label">சரிபார்க்கப்படவில்லை</string>
+    <string name="fingerprint_not_verified_message_fmt">இந்த கைரேகைகளை %1$s-உடன் பாதுகாப்பான சேனல் மூலம் ஒப்பிடுங்கள்.</string>
+    <string name="fingerprint_mark_verified">சரிபார்க்கப்பட்டதாக குறி</string>
+    <string name="fingerprint_start_handshake">handshake தொடங்கு</string>
+    <string name="fingerprint_copy">நகலெடு</string>
+    <string name="verify_mutual_match_title">பரஸ்பர சரிபார்ப்பு</string>
+    <string name="verify_mutual_match_body">நீங்களும் %1$s-ம் ஒருவரையொருவர் சரிபார்த்தீர்கள்</string>
+    <string name="verify_mutual_system_message">%1$s-உடன் பரஸ்பர சரிபார்ப்பு</string>
+    <string name="verify_success_title">சரிபார்க்கப்பட்டது</string>
+    <string name="verify_success_body">நீங்கள் %1$s-ஐ சரிபார்த்தீர்கள்</string>
+    <string name="verify_success_system_message">%1$s சரிபார்க்கப்பட்டது</string>
+
+    <!-- புதிய சரங்கள் -->
+    <string name="continue_button">தொடரவும்</string>
+    <string name="perm_required_label">தேவை</string>
+    <string name="perm_recommended_label">பரிந்துரைக்கப்பட்டது</string>
+    <string name="perm_info_dialog_ok">சரி</string>
+    <string name="perm_benefit_nearby_devices">Bluetooth அனுமதிகள் Zemzeme-ஐ mesh நெட்வொர்க் மூலம் அருகிலுள்ள பயனர்களை கண்டுபிடிக்கவும் தொடர்பு கொள்ளவும் அனுமதிக்கின்றன. இது இணைய இணைப்பு இல்லாமல் முழுமையான ஆஃப்லைன் பியர்-டு-பியர் செய்தியிடலை இயக்குகிறது.</string>
+    <string name="perm_benefit_location">Bluetooth சாதனங்களை ஸ்கேன் செய்ய Android-க்கு இருப்பிட அனுமதி தேவை. Zemzeme உங்கள் இருப்பிடத்தை கண்காணிக்காது அல்லது சேமிக்காது.</string>
+    <string name="perm_benefit_background_location">பின்னணி இருப்பிடம் பயன்பாடு பின்னணியில் இருக்கும்போது கூட அருகிலுள்ள பயனர்களை கண்டுபிடிக்க Zemzeme-ஐ அனுமதிக்கிறது. இது இல்லாமல், mesh நெட்வொர்க் பயன்பாடு திரையில் திறந்திருக்கும்போது மட்டுமே வேலை செய்யும்.</string>
+    <string name="perm_benefit_notifications">தனிப்பட்ட செய்தி அல்லது சேனல்களில் புதிய செயல்பாடு இருக்கும்போது அறிவிப்புகள் உங்களுக்கு தெரிவிக்கும், பயன்பாடு பின்னணியில் இருக்கும்போது கூட.</string>
+    <string name="perm_benefit_battery_optimization">பேட்டரி மேம்படுத்தலை முடக்குவது Zemzeme பின்னணியில் நம்பகமாக இயங்குவதையும் mesh நெட்வொர்க் இணைப்புகளை பராமரிப்பதையும் உறுதிசெய்கிறது. இது இல்லாமல், Android பேட்டரியை சேமிக்க பயன்பாட்டை நிறுத்தலாம்.</string>
+
+    <!-- Mesh அறிமுகம் -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">இந்த குழுவில் தொடர்பு முழுமையாக Bluetooth அடிப்படையிலானது. அருகிலுள்ள சாதனங்கள் மக்களிடையே செய்திகளை relay செய்கின்றன — இணைய இணைப்பு தேவையில்லை.</string>
+    <string name="mesh_intro_close">மூடு</string>
+    <string name="mesh_intro_dont_show">மீண்டும் காட்டாதே</string>
+
+    <!-- பயன்பாடு பகிர் -->
+    <string name="about_share_app_header">பயன்பாடு பகிர்</string>
+    <string name="about_share_system_title">பயன்பாடு பகிர்</string>
+    <string name="about_share_system_desc">Bluetooth, Nearby Share, அல்லது Wi-Fi Direct (%1$s) வழியாக APK அனுப்பு</string>
+    <string name="about_share_failed">பகிர APK தயாரிக்க தோல்வியடைந்தது</string>
+    <string name="about_share_chooser_title">%1$s APK பகிர்</string>
+    <string name="about_share_helper_text">அனுப்ப Google Quick Share பயன்படுத்தவும் (தொலைபேசி அமைப்புகளில் இயக்கவும்). பரிமாற்றத்திற்குப் பிறகு, APK பெறும் சாதனத்தின் Downloads கோப்புறையில் இருக்கும்.</string>
+
+    <!-- ஐகான் மாற்றம் -->
+    <string name="icon_switch_title">ஆப் ஐகான் &amp; பெயர் புதுப்பி</string>
+    <string name="icon_switch_section">தனிப்பயனாக்கம்</string>
+    <string name="icon_switch_subtitle">உங்கள் லாஞ்சரில் ஆப் ஐகான் மற்றும் பெயரை மாற்று</string>
+    <string name="icon_switch_confirm">ஆப் ஐகான் மற்றும் பெயரை இதற்கு மாற்றவா?</string>
+    <string name="icon_switch_apply">பயன்படுத்து</string>
+    <string name="icon_switch_toast">ஆப் ஐகான் மற்றும் பெயர் மாற்றப்பட்டது!</string>
+
+    <!-- உரையாடல் தலைப்புகள் மற்றும் செயல்கள் -->
+    <string name="dialog_delete_chat">அரட்டையை நீக்கு</string>
+    <string name="dialog_delete_group">குழுவை நீக்கு</string>
+    <string name="dialog_delete_confirm_body">\"%1$s\"-ஐ நீக்க விரும்புகிறீர்களா? இதை மீட்க முடியாது.</string>
+    <string name="action_delete">நீக்கு</string>
+    <string name="dialog_clear_chat">அரட்டையை அழி</string>
+    <string name="dialog_clear_confirm_body">\"%1$s\"-ல் உள்ள அனைத்து செய்திகளையும் அழிக்க விரும்புகிறீர்களா?</string>
+    <string name="action_clear">அழி</string>
+    <string name="dialog_title_create_group">புதிய குழு உருவாக்கு</string>
+    <string name="label_group_name">குழு பெயர்</string>
+    <string name="action_create">உருவாக்கு</string>
+    <string name="dialog_title_join_group">குழுவில் சேர</string>
+    <string name="label_group_id">குழு ID</string>
+    <string name="label_nickname_optional">புனைப்பெயர் (விருப்பத்தேர்வு)</string>
+    <string name="dialog_title_rename_group">குழுவின் பெயர் மாற்று</string>
+    <string name="action_rename">பெயர் மாற்று</string>
+
+    <!-- அமைப்புகள் -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P நெட்வொர்க்</string>
+    <string name="setting_nostr_relays">Nostr Relays</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast செய்திகள் -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh இயக்கப்பட்டது</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh முடக்கப்பட்டது</string>
+    <string name="toast_nostr_enabled">Nostr இயக்கப்பட்டது</string>
+    <string name="toast_nostr_disabled">Nostr முடக்கப்பட்டது</string>
+    <string name="toast_tor_p2p_unsupported">P2P-உடன் Tor ஆதரிக்கப்படவில்லை. முதலில் P2P-ஐ முடக்கவும்.</string>
+    <string name="toast_p2p_tor_disabled">Tor மூலம் P2P ஆதரிக்கப்படவில்லை. Tor முடக்கப்பட்டது.</string>
+
+    <!-- படம் தேர்ந்தெடு -->
+    <string name="action_gallery">கேலரி</string>
+    <string name="action_camera">கேமரா</string>
+
+    <!-- அணுகல்தன்மை -->
+    <string name="cd_refresh_p2p">P2P இணைப்பை புதுப்பி</string>
+    <string name="cd_direct_bluetooth">நேரடி Bluetooth</string>
+    <string name="cd_routed">திசைமாற்றப்பட்டது</string>
+    <string name="cd_p2p_connection">P2P இணைப்பு</string>
+    <string name="cd_teleported_user">டெலிபோர்ட் செய்யப்பட்ட பயனர்</string>
+    <string name="cd_user">பயனர்</string>
+    <string name="cd_backspace">பின்னோக்கி நீக்கு</string>
+    <string name="cd_verified">சரிபார்க்கப்பட்டது</string>
+    <string name="cd_add_node">நோட் சேர்</string>
+    <string name="cd_remove">நீக்கு</string>
+    <string name="action_enable_location">இருப்பிடத்தை இயக்கு</string>
+
+    <!-- குழு ID -->
+    <string name="label_group_id_fmt">குழு ID: %1$s</string>
+
+    <!-- PIN -->
+    <string name="placeholder_6_digits">6 இலக்கங்கள்</string>
+
+    <!-- P2P அமைப்புகள் -->
+    <string name="p2p_settings_header">அமைப்புகள்</string>
+    <string name="p2p_enable">P2P இயக்கு</string>
+    <string name="p2p_enable_desc">மற்ற Zemzeme peerகளுடன் நேரடியாக இணை</string>
+    <string name="p2p_use_default_nodes">இயல்புநிலை நோட்கள் பயன்படுத்து</string>
+    <string name="p2p_default_nodes_desc">பொது IPFS bootstrap நோட்களுடன் இணை</string>
+    <string name="p2p_custom_nodes_header">தனிப்பயன் BOOTSTRAP நோட்கள்</string>
+    <string name="p2p_no_custom_nodes">தனிப்பயன் நோட்கள் இல்லை. சேர்க்க + தட்டவும்.</string>
+    <string name="p2p_add_bootstrap_node">Bootstrap நோட் சேர்</string>
+    <string name="p2p_enter_multiaddr">Bootstrap நோட்டிற்கான multiaddr உள்ளிடவும்:</string>
+    <string name="p2p_recovering">மீட்டமைக்கிறது…</string>
+    <string name="p2p_recover_connection">இணைப்பை மீட்டமை</string>
+    <string name="action_add">சேர்</string>
+
+    <!-- அறிவிப்பு சேனல்கள் -->
+    <string name="notification_channel_direct_messages">நேரடி செய்திகள்</string>
+    <string name="notification_channel_dm_desc">பிற பயனர்களிடமிருந்து தனிப்பட்ட செய்திகளுக்கான அறிவிப்புகள்</string>
+    <string name="notification_channel_geohash_chats">Geohash அரட்டைகள்</string>
+    <string name="notification_channel_geohash_desc">geohash இருப்பிட சேனல்களில் குறிப்புகள் மற்றும் செய்திகளுக்கான அறிவிப்புகள்</string>
+
+    <!-- Debug: mesh topology -->
+    <string name="debug_mesh_topology">mesh topology</string>
+    <string name="debug_no_gossip">இன்னும் gossip இல்லை</string>
+
+    <!-- Debug: self-update -->
+    <string name="debug_self_update">self-update (dev)</string>
+    <string name="debug_current_version_fmt">தற்போதைய பதிப்பு: %1$s</string>
+    <string name="debug_download_updates_desc">GitHub releases-ல் இருந்து புதுப்பிப்புகளை பதிவிறக்கி நிறுவு</string>
+    <string name="update_status_ready">தயார்</string>
+    <string name="update_status_checking">புதுப்பிப்புகளை சரிபார்க்கிறது…</string>
+    <string name="update_status_available">புதுப்பிப்பு கிடைக்கிறது: %1$s</string>
+    <string name="update_status_downloading">பதிவிறக்குகிறது: %1$d%%</string>
+    <string name="update_status_ready_install">நிறுவ தயார்: %1$s</string>
+    <string name="update_status_installing">நிறுவுகிறது…</string>
+    <string name="update_status_success">புதுப்பிப்பு நிறுவப்பட்டது! பயன்பாட்டை மறுதொடக்கம் செய்யுங்கள்.</string>
+    <string name="update_status_pending_action">பயனர் உறுதிப்படுத்தலுக்கு காத்திருக்கிறது…</string>
+    <string name="update_status_error">பிழை: %1$s</string>
+    <string name="update_grant_install_permission">நிறுவல் அனுமதி வழங்கு</string>
+    <string name="update_install">புதுப்பிப்பை நிறுவு</string>
+    <string name="update_check">புதுப்பிப்புகளை சரிபார்</string>
+    <string name="debug_test_update_dialog">சோதனை புதுப்பிப்பு உரையாடல்</string>
+
+    <!-- Debug: bandwidth -->
+    <string name="debug_overall">ஒட்டுமொத்தம்</string>
+    <string name="debug_per_device">சாதனம் வாரியாக</string>
+    <string name="debug_per_peer">peer வாரியாக</string>
+    <string name="debug_incoming">உள்வரும்</string>
+    <string name="debug_outgoing">வெளிச்செல்லும்</string>
+
+    <!-- Debug: console -->
+    <string name="debug_refreshing">புதுப்பிக்கிறது…</string>
+    <string name="debug_refresh">புதுப்பி</string>
+    <string name="debug_clear_logs">பதிவுகளை அழி</string>
+    <string name="debug_preparing_export">ஏற்றுமதி தயாரிக்கிறது…</string>
+    <string name="debug_share_logs">பதிவுகளை பகிர்</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">QR ஸ்கேன்</string>
+    <string name="fab_choose_city">நகரத்தைத் தேர்ந்தெடு</string>
+    <string name="fab_join_group">குழுவில் சேர</string>
+    <string name="fab_create_group">குழு உருவாக்கு</string>
+    <!-- Section headers -->
+    <string name="section_nearby">அருகில்</string>
+    <string name="section_geographic_groups">புவியியல் குழுக்கள்</string>
+    <string name="section_my_groups">எனது குழுக்கள்</string>
+    <string name="section_contacts">தொடர்புகள்</string>
+
+    <!-- New translated strings -->
+    <string name="section_username">பயனர்பெயர்</string>
+    <string name="section_theme">கருப்பொருள்</string>
+    <string name="section_settings">அமைப்புகள்</string>
+    <string name="section_network">நெட்வொர்க்</string>
+    <string name="section_status">நிலை</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P நெட்வொர்க்கிங்</string>
+    <string name="p2p_status_no_peers">இணையர்கள் இல்லை</string>
+    <string name="p2p_status_connected">இணைக்கப்பட்டது</string>
+    <string name="p2p_status_connecting">இணைக்கிறது…</string>
+    <string name="p2p_status_disconnected">துண்டிக்கப்பட்டது</string>
+    <string name="p2p_status_error">பிழை</string>
+    <string name="p2p_peers_connected_fmt">%1$d இணையர்கள் இணைக்கப்பட்டனர்</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">செயலில் உள்ள முனைகள்: %1$d</string>
+    <string name="location_acquiring_title">இருப்பிடம் பெறுகிறது</string>
+    <string name="location_acquiring_desc">உங்கள் இருப்பிடம் கண்டறியப்படும் வரை காத்திருங்கள்</string>
+    <string name="location_unavailable_title">இருப்பிடம் கிடைக்கவில்லை</string>
+    <string name="location_permission_required_notes">குறிப்புகளுக்கு இருப்பிட அனுமதி தேவை</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">இணையர்களைத் தேடுகிறது…</string>
+    <string name="connection_connecting_peers">இணையர்களுடன் இணைக்கிறது…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d இணையர் இணைக்கப்பட்டார்</item>
+        <item quantity="other">%1$d இணையர்கள் இணைக்கப்பட்டனர்</item>
+    </plurals>
+    <string name="connection_no_new_messages">இணைக்கப்பட்டது – புதிய செய்திகள் இல்லை</string>
+    <string name="connection_error">இணைப்புப் பிழை</string>
+    <string name="connection_direct">நேரடி</string>
+    <string name="connection_connected">இணைக்கப்பட்டது</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (தகவல் இல்லை)</string>
+    <string name="debug_nostr_relay">Nostr ரிலே</string>
+    <string name="debug_ble_direct">BLE நேரடி</string>
+    <string name="debug_p2p_searching">P2P: இணையர்களைத் தேடுகிறது…</string>
+    <string name="debug_p2p_connecting">P2P: இணையர்களுடன் இணைக்கிறது…</string>
+    <string name="debug_nostr_no_messages">Nostr இணைக்கப்பட்டது – புதிய செய்திகள் இல்லை</string>
+    <string name="debug_connection_failed">இணைப்பு தோல்வி</string>
+    <string name="debug_error_fmt">பிழை: %1$s</string>
+
 </resources>

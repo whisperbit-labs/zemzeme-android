@@ -46,7 +46,7 @@
     <string name="notification_summary_more">그리고 %1$d개 더</string>
     <string name="notification_messages_from_people">%2$d명에게서 %1$d개의 메시지</string>
     <string name="notification_more_conversations">그리고 %1$d개의 대화 더</string>
-    <string name="notification_active_peers_title">👥 근처 Zemzeme user!</string>
+    <string name="notification_active_peers_title">👥 근처 Zemzeme 사용자!</string>
     <string name="notification_active_peers_one">근처 1명</string>
     <string name="notification_active_peers_many">근처 %1$d명</string>
     <string name="notification_new_messages">새 메시지</string>
@@ -60,8 +60,8 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d회 언급</string>
     <string name="notification_geohash_summary_title">Zemzeme – 위치 채팅</string>
     <string name="notification_geohash_summary_text">%2$d개의 장소에서 온 %1$d개의 메시지</string>
-    <string name="notification_mesh_mention_title_singular">메쉬 채팅에서 언급됨</string>
-    <string name="notification_mesh_mention_title_plural">메쉬 채팅에서 %1$d회 언급</string>
+    <string name="notification_mesh_mention_title_singular">Bluetooth 채팅에서 언급됨</string>
+    <string name="notification_mesh_mention_title_plural">Bluetooth 채팅에서 %1$d회 언급</string>
     <string name="notification_more_locations">그리고 %1$d개의 장소 더</string>
     <string name="notification_and_more">그리고 %1$d개 더</string>
 
@@ -97,7 +97,7 @@
 
     <!-- 정보 시트 -->
     <string name="about_tagline">모든 상황에서 감시 없는 메시징, 종단 간 암호화</string>
-    <string name="about_offline_mesh_title">오프라인 메쉬 채팅</string>
+    <string name="about_offline_mesh_title">오프라인 블루투스 채팅</string>
     <string name="about_offline_mesh_desc">인터넷이나 서버 없이 Bluetooth LE로 직접 소통합니다. 범위를 확장하기 위해 근처 기기를 통해 메시지가 중계됩니다.</string>
     <string name="about_online_geohash_title">온라인 geohash 채널</string>
     <string name="about_online_geohash_desc">geohash 기반 채널을 통해 주변 사람들과 연결하세요. 공용 인터넷 릴레이로 메쉬를 확장합니다.</string>
@@ -166,7 +166,7 @@
     <string name="cd_image_index_of">이미지 %1$d / %2$d</string>
     <string name="cd_privacy_protected">개인정보 보호됨</string>
     <string name="cd_record_voice">음성 메시지 녹음</string>
-    <string name="cd_offline_mesh_chat">오프라인 메쉬 채팅</string>
+    <string name="cd_offline_mesh_chat">오프라인 Bluetooth 채팅</string>
     <string name="cd_online_geohash_channels">온라인 geohash 채널</string>
     <string name="cd_end_to_end_encryption">종단간 암호화</string>
 
@@ -208,13 +208,28 @@
     <string name="teleport">텔레포트</string>
     <string name="disable_location_services">위치 서비스 비활성화</string>
     <string name="enable_location_services">위치 서비스 활성화</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">블록</string>
     <string name="location_level_neighborhood">이웃</string>
     <string name="location_level_city">도시</string>
     <string name="location_level_province">주/도</string>
     <string name="location_level_region">지역</string>
     <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
+
+    <!-- 위치 메모 -->
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d개의 노트</item>
+        <item quantity="other">#%1$s ± 1 • %2$d개의 노트</item>
+    </plurals>
+    <string name="location_notes_description">다른 방문자들이 볼 수 있도록 이 위치에 짧은 영구 노트를 추가하세요.</string>
+    <string name="location_notes_relays_unavailable">지오 릴레이를 사용할 수 없음; 노트 일시 중지됨</string>
+    <string name="location_notes_no_relays_title">주변에 지오 릴레이가 없음</string>
+    <string name="location_notes_no_relays_desc">노트는 지오 릴레이에 의존합니다. 연결을 확인하고 다시 시도하세요.</string>
+    <string name="loading_location_notes">노트 불러오는 중…</string>
+    <string name="location_notes_empty_title">아직 노트가 없습니다</string>
+    <string name="location_notes_empty_desc">이 장소에 첫 번째 노트를 추가해 보세요.</string>
+    <string name="dismiss">닫기</string>
+    <string name="location_notes_input_placeholder">이 장소에 노트 추가</string>
 
     <!-- 디버그 / 진단 -->
     <string name="debug_tools">디버그 도구</string>
@@ -247,8 +262,47 @@
     <string name="debug_relays_window_fmt">마지막 10초: %1$d • 1분: %2$d • 15분: %3$d</string>
     <string name="debug_derived_p_fmt">유도 P: %1$s • 예상 최대 요소: %2$s</string>
     <string name="debug_direct_suffix"> • 직접</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
     <string name="debug_role_server">서버로서 (우리가 호스트)</string>
     <string name="debug_role_client">클라이언트로서 (우리가 연결)</string>
+
+    <!-- 검증 -->
+    <string name="verify_title">검증</string>
+    <string name="verify_my_qr_title">스캔하여 나를 검증</string>
+    <string name="verify_scan_prompt_friend">다른 사람의 QR 스캔</string>
+    <string name="verify_scan_someone">다른 사람의 QR 스캔</string>
+    <string name="verify_show_my_qr">내 QR 코드 보기</string>
+    <string name="verify_remove">검증 제거</string>
+    <string name="verify_qr_unavailable">QR 사용 불가</string>
+    <string name="verify_camera_permission">QR 코드를 스캔하려면 카메라 권한이 필요합니다</string>
+    <string name="verify_request_camera">카메라 활성화</string>
+    <string name="verify_paste_label">검증 URL 붙여넣기</string>
+    <string name="verify_validate">검증</string>
+    <string name="verify_scanned">검증이 요청되었습니다</string>
+    <string name="security_verification_title">보안 검증</string>
+    <string name="fingerprint_their">상대방의 지문</string>
+    <string name="fingerprint_yours">내 지문</string>
+    <string name="fingerprint_pending">핸드셰이크 대기 중</string>
+    <string name="fingerprint_no_peer">지문을 보려면 개인 채팅을 여세요</string>
+    <string name="fingerprint_status_verified">암호화 &amp; 검증됨</string>
+    <string name="fingerprint_status_encrypted">암호화됨</string>
+    <string name="fingerprint_status_handshaking">핸드셰이크 중</string>
+    <string name="fingerprint_status_failed">핸드셰이크 실패</string>
+    <string name="fingerprint_status_uninitialized">암호화되지 않음</string>
+    <string name="fingerprint_verified_label">검증됨</string>
+    <string name="fingerprint_verified_message">이 사람의 신원을 검증했습니다.</string>
+    <string name="fingerprint_not_verified_label">검증되지 않음</string>
+    <string name="fingerprint_not_verified_message_fmt">안전한 채널을 통해 %1$s와 지문을 비교하세요.</string>
+    <string name="fingerprint_mark_verified">검증됨으로 표시</string>
+    <string name="fingerprint_start_handshake">핸드셰이크 시작</string>
+    <string name="fingerprint_copy">복사</string>
+    <string name="verify_mutual_match_title">상호 검증</string>
+    <string name="verify_mutual_match_body">당신과 %1$s이(가) 서로 검증했습니다</string>
+    <string name="verify_mutual_system_message">%1$s와(과) 상호 검증</string>
+    <string name="verify_success_title">검증됨</string>
+    <string name="verify_success_body">%1$s을(를) 검증했습니다</string>
+    <string name="verify_success_system_message">%1$s을(를) 검증했습니다</string>
 
     <!-- 온보딩 화면 -->
     <string name="location_services_required">위치 서비스 필요</string>
@@ -285,6 +339,15 @@
     <string name="privacy_bullets">• 추적 또는 데이터 수집 없음\n• 블루투스 메쉬 채팅은 완전 오프라인\n• geohash 채팅은 인터넷 사용</string>
     <string name="permissions_header">권한</string>
     <string name="grant_permissions">권한 허용</string>
+    <string name="continue_button">계속</string>
+    <string name="perm_required_label">필수</string>
+    <string name="perm_recommended_label">권장</string>
+    <string name="perm_info_dialog_ok">확인</string>
+    <string name="perm_benefit_nearby_devices">블루투스 권한을 통해 Zemzeme은 메쉬 네트워크를 통해 주변의 다른 사용자를 발견하고 통신할 수 있습니다. 인터넷 연결 없이 완전한 오프라인 P2P 메시징을 가능하게 합니다.</string>
+    <string name="perm_benefit_location">Android는 근처 블루투스 기기를 스캔하기 위해 위치 권한을 필요로 합니다. Zemzeme은 사용자의 위치를 추적하거나 저장하지 않습니다.</string>
+    <string name="perm_benefit_background_location">백그라운드 위치를 통해 앱이 백그라운드에 있을 때에도 근처 사용자를 발견할 수 있습니다. 이 권한이 없으면 메쉬 네트워크는 앱이 화면에 표시될 때만 작동합니다.</string>
+    <string name="perm_benefit_notifications">알림을 통해 앱이 백그라운드에 있을 때에도 개인 메시지나 채널의 새 활동을 알려줍니다.</string>
+    <string name="perm_benefit_battery_optimization">배터리 최적화를 비활성화하면 Zemzeme이 백그라운드에서 안정적으로 실행되어 메쉬 네트워크 연결을 유지합니다. 이 설정이 없으면 Android가 배터리 절약을 위해 앱을 종료하여 메쉬에서 연결이 끊길 수 있습니다.</string>
     <string name="location_tracking_warning">Zemzeme은 사용자의 위치를 추적하지 않습니다</string>
     <string name="geohash_people_header">사람들</string>
     <string name="nobody_around">주변에 아무도 없음 …</string>
@@ -331,82 +394,82 @@
     <string name="perm_type_battery_optimization">배터리 최적화</string>
     <string name="perm_type_other">기타</string>
 
+    <!-- 앱 잠금 -->
+    <string name="app_lock_title">앱 잠금</string>
+    <string name="app_lock_subtitle_off">꺼짐</string>
+    <string name="app_lock_subtitle_on">생체인증 + PIN</string>
+    <string name="app_lock_security_section">보안</string>
+    <string name="app_lock_enter_pin">PIN 입력</string>
+    <string name="app_lock_set_pin">PIN 설정</string>
+    <string name="app_lock_confirm_pin">PIN 확인</string>
+    <string name="app_lock_biometric_title">Zemzeme 잠금 해제</string>
+    <string name="app_lock_biometric_subtitle">센서를 터치하여 잠금 해제</string>
+    <string name="app_lock_use_pin">PIN 사용</string>
+    <string name="app_lock_wrong_pin">잘못된 PIN</string>
+    <string name="app_lock_too_many_attempts">남은 시도 횟수: %1$d회</string>
+    <string name="app_lock_cooldown">%1$d초 후에 다시 시도하세요</string>
+    <string name="app_lock_pin_mismatch">PIN이 일치하지 않습니다</string>
+    <string name="app_lock_pin_min_length">PIN은 4~6자리여야 합니다</string>
+    <string name="app_lock_disable_title">앱 잠금 비활성화</string>
+    <string name="app_lock_disable_msg">앱 잠금을 비활성화하려면 신원을 확인하세요</string>
+    <string name="app_lock_protect_title">채팅을 보호하세요</string>
+    <string name="app_lock_protect_desc">6자리 PIN으로 앱을 잠급니다. 생체인증으로 빠르게 접근할 수 있습니다.</string>
+    <string name="app_lock_enable">앱 잠금 활성화</string>
+    <string name="app_lock_not_now">나중에</string>
+
     <!-- 비밀번호 대화상자 -->
     <string name="pwd_prompt_title">채널 비밀번호 입력</string>
     <string name="pwd_prompt_message">채널 %1$s은 비밀번호로 보호됩니다. 참여하려면 비밀번호를 입력하세요.</string>
     <string name="pwd_label">비밀번호</string>
     <string name="join">참가</string>
     <string name="cancel">취소</string>
+    <string name="tor_not_available_in_this_build">이 빌드에서는 Tor를 사용할 수 없습니다</string>
 
     <!-- 복수형 -->
+    <plurals name="notification_and_more">
+        <item quantity="one">그리고 %d개 더</item>
+        <item quantity="other">그리고 %d개 더</item>
+    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1명</item>
         <item quantity="other">%d명</item>
     </plurals>
 
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d개의 노트</item>
-    <item quantity="other">#%1$s ± 1 • %2$d개의 노트</item>
-  </plurals>
-  <string name="location_notes_description">다른 방문자들이 볼 수 있도록 이 위치에 짧은 영구 노트를 추가하세요.</string>
-  <string name="location_notes_relays_unavailable">지오 릴레이를 사용할 수 없음; 노트 일시 중지됨</string>
-  <string name="location_notes_no_relays_title">주변에 지오 릴레이가 없음</string>
-  <string name="location_notes_no_relays_desc">노트는 지오 릴레이에 의존합니다. 연결을 확인하고 다시 시도하세요.</string>
-  <string name="loading_location_notes">노트 불러오는 중…</string>
-  <string name="location_notes_empty_title">아직 노트가 없습니다</string>
-  <string name="location_notes_empty_desc">이 장소에 첫 번째 노트를 추가해 보세요.</string>
-  <string name="dismiss">닫기</string>
-  <string name="location_notes_input_placeholder">이 장소에 노트 추가</string>
-    <string name="mesh_service_notification_content">메시 실행 중 — %1$d 피어</string>
+    <!-- Mesh 소개 -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">이 그룹의 통신은 전적으로 블루투스를 기반으로 합니다. 근처 기기가 사람들 사이에서 메시지를 중계합니다 — 인터넷 연결이 필요하지 않습니다.</string>
+    <string name="mesh_intro_close">닫기</string>
+    <string name="mesh_intro_dont_show">다시 표시하지 않기</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+    <!-- 앱 공유 -->
+    <string name="about_share_app_header">앱 공유</string>
+    <string name="about_share_system_title">앱 공유</string>
+    <string name="about_share_system_desc">Bluetooth, Nearby Share 또는 Wi-Fi Direct로 APK 전송 (%1$s)</string>
+    <string name="about_share_failed">공유를 위한 APK를 준비하지 못했습니다</string>
+    <string name="about_share_chooser_title">%1$s APK 공유</string>
+    <string name="about_share_helper_text">Google 빠른 공유로 전송하세요(휴대폰 설정에서 활성화). 전송 후 APK는 수신 기기의 Downloads 폴더에 저장됩니다.</string>
 
-  <!-- 누락된 키 -->
-  <string name="mesh_service_channel_name">메시 백그라운드 서비스</string>
-  <string name="mesh_service_channel_desc">Bluetooth 메시를 백그라운드에서 실행 유지</string>
-  <string name="cd_settings">설정</string>
-  <string name="cd_location_notes">위치 메모</string>
-  <string name="notification_action_quit_bitchat">Zemzeme 종료</string>
-  <string name="about_background_title">백그라운드에서 실행</string>
-  <string name="about_background_desc">앱이 닫혀 있어도 메시 활성 유지 (포그라운드 서비스)</string>
-  <string name="about_p2p_subtitle">p2p를 통한 직접 피어 연결</string>
-  <string name="about_nostr_subtitle">인터넷 릴레이 메시징</string>
-  <string name="about_ble_subtitle">Bluetooth 근접 메시</string>
+    <!-- 아이콘 전환 -->
+    <string name="icon_switch_title">앱 아이콘 &amp; 이름 변경</string>
+    <string name="icon_switch_section">사용자 지정</string>
+    <string name="icon_switch_subtitle">런처의 앱 아이콘과 이름을 변경</string>
+    <string name="icon_switch_confirm">앱 아이콘과 이름을 이것으로 변경하시겠습니까?</string>
+    <string name="icon_switch_apply">적용</string>
+    <string name="icon_switch_toast">앱 아이콘과 이름이 변경되었습니다!</string>
+
+    <!-- 서비스 &amp; 기타 -->
+    <string name="mesh_service_channel_name">Bluetooth 백그라운드 서비스</string>
+    <string name="mesh_service_channel_desc">Bluetooth 메시를 백그라운드에서 실행 유지</string>
+    <string name="mesh_service_notification_content">Bluetooth 실행 중 — %1$d 피어</string>
+    <string name="cd_settings">설정</string>
+    <string name="cd_location_notes">위치 메모</string>
+    <string name="notification_action_quit_bitchat">Zemzeme 종료</string>
+    <string name="about_background_title">백그라운드에서 실행</string>
+    <string name="about_background_desc">앱이 닫혀 있어도 메시 활성 유지 (포그라운드 서비스)</string>
+    <string name="about_p2p_subtitle">p2p를 통한 직접 피어 연결</string>
+    <string name="about_nostr_subtitle">인터넷 릴레이 메시징</string>
+    <string name="about_ble_subtitle">Bluetooth 근접 메시</string>
     <string name="ble_setting_off_subtitle">블루투스가 꺼져 있음 — BLE Mesh를 사용하려면 켜세요</string>
     <string name="ble_banner_off">블루투스가 꺼져 있음 — BLE Mesh 사용 불가</string>
     <string name="ble_setting_dialog_title">블루투스 필요</string>
@@ -414,58 +477,226 @@
     <string name="ble_setting_dialog_btn">블루투스 설정 열기</string>
     <string name="ble_banner_enable_btn">활성화</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh가 비활성화됨</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">백그라운드 위치 권장</string>
-  <string name="background_location_required_subtitle">선택 사항, 메시 안정성 향상</string>
-  <string name="background_location_explanation">Android에서는 Zemzeme가 앱이 열려 있지 않아도 근처 기기를 스캔할 수 있도록 백그라운드 위치를 권장합니다. 재부팅 후에도 메시를 유지합니다.</string>
-  <string name="background_location_settings_tip">설정이 열리면 "항상 허용"을 선택하세요.</string>
-  <string name="background_location_needs_for">Zemzeme는 다음을 위해 백그라운드 위치를 사용합니다:</string>
-  <string name="background_location_needs_bullets">- 앱이 닫혀 있을 때 근처 기기 스캔\n- 재부팅 후 재연결\n- 백그라운드에서 메시 유지</string>
-  <string name="background_location_privacy_note">위치 정보를 수집하거나 저장하지 않습니다. 개인 정보가 안전합니다.</string>
-  <string name="grant_background_location">백그라운드 위치 허용</string>
-  <string name="skip_background_location">백그라운드 위치 없이 계속</string>
-  <string name="dot">.</string>
-  <string name="warning_emoji">⚠️</string>
-  <string name="at_symbol">@</string>
-  <string name="app_brand">Zemzeme/</string>
-  <string name="channel_count_prefix"> · ⧉ </string>
-  <string name="mention_suggestion_at">@%1$s</string>
-  <string name="at_nickname">@%1$s</string>
-  <string name="hash_symbol">#</string>
-  <string name="underscore">_</string>
-  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
-  <string name="progress_filled">█</string>
-  <string name="progress_empty">░</string>
-  <string name="image_counter">%1$d / %2$d</string>
-  <string name="status_sending">○</string>
-  <string name="status_pending">○</string>
-  <string name="status_sent">✓</string>
-  <string name="status_delivered">✓✓</string>
-  <string name="status_failed">⚠</string>
-  <string name="status_read">✓</string>
-  <string name="notification_file_pdf">📄</string>
-  <string name="notification_file_zip">🗜️</string>
-  <string name="notification_file_doc">📄</string>
-  <string name="notification_file_xls">📊</string>
-  <string name="notification_file_ppt">📈</string>
-  <string name="notification_file_generic">📎</string>
-  <string name="perm_background_location_desc">앱이 백그라운드에 있는 동안 근처 기기를 스캔하는 데 권장</string>
-  <string name="perm_background_location_system">백그라운드 위치 액세스 허용</string>
-  <string name="perm_type_background_location">백그라운드 위치</string>
-  <string name="tor_not_available_in_this_build">이 빌드에서는 Tor를 사용할 수 없습니다</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
-  <string name="debug_question_mark">?</string>
+
+    <!-- 네트워크 연결 -->
+    <string name="network_setting_off_subtitle">인터넷 없음 — 연결을 확인하세요</string>
+    <string name="network_not_available">인터넷 연결이 없습니다</string>
+    <string name="network_transports_off_hint">P2P 또는 Nostr를 활성화하세요</string>
+    <string name="network_no_internet">연결됨, 인터넷 감지 안 됨</string>
+    <string name="network_setting_dialog_title">인터넷 필요</string>
+    <string name="network_setting_dialog_msg">P2P 및 Nostr 전송에는 인터넷 연결이 필요합니다.</string>
+    <string name="network_setting_dialog_btn">연결 설정</string>
+    <string name="network_banner_disconnected">인터넷 없음 — 연결 설정을 확인하세요</string>
+    <string name="network_banner_airplane_mode">비행기 모드가 켜져 있습니다</string>
+    <string name="network_airplane_mode">비행기 모드가 켜져 있습니다</string>
+    <string name="network_banner_no_internet">연결됨, 인터넷 없음 — 연결을 확인하세요</string>
+    <string name="network_banner_transports_disabled">네트워크 전송 없음 — 설정에서 P2P 또는 Nostr를 활성화하세요</string>
+    <string name="network_banner_settings_btn">설정</string>
+
+    <!-- 백그라운드 위치 -->
+    <string name="background_location_required_title">백그라운드 위치 권장</string>
+    <string name="background_location_required_subtitle">선택 사항, 메시 안정성 향상</string>
+    <string name="background_location_explanation">Android에서는 Zemzeme가 앱이 열려 있지 않아도 근처 기기를 스캔할 수 있도록 백그라운드 위치를 권장합니다. 재부팅 후에도 메시를 유지합니다.</string>
+    <string name="background_location_settings_tip">설정이 열리면 "항상 허용"을 선택하세요.</string>
+    <string name="background_location_needs_for">Zemzeme는 다음을 위해 백그라운드 위치를 사용합니다:</string>
+    <string name="background_location_needs_bullets">- 앱이 닫혀 있을 때 근처 기기 스캔\n- 재부팅 후 재연결\n- 백그라운드에서 메시 유지</string>
+    <string name="background_location_privacy_note">위치 정보를 수집하거나 저장하지 않습니다. 개인 정보가 안전합니다.</string>
+    <string name="grant_background_location">백그라운드 위치 허용</string>
+    <string name="skip_background_location">백그라운드 위치 없이 계속</string>
+    <string name="perm_background_location_desc">앱이 백그라운드에 있는 동안 근처 기기를 스캔하는 데 권장</string>
+    <string name="perm_background_location_system">백그라운드 위치 액세스 허용</string>
+    <string name="perm_type_background_location">백그라운드 위치</string>
+
+    <!-- 대화상자 제목 및 동작 -->
+    <string name="dialog_delete_chat">채팅 삭제</string>
+    <string name="dialog_delete_group">그룹 삭제</string>
+    <string name="dialog_delete_confirm_body">\"%1$s\"을(를) 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</string>
+    <string name="action_delete">삭제</string>
+    <string name="dialog_clear_chat">채팅 비우기</string>
+    <string name="dialog_clear_confirm_body">\"%1$s\"의 모든 메시지를 비우시겠습니까?</string>
+    <string name="action_clear">비우기</string>
+    <string name="dialog_title_create_group">새 그룹 만들기</string>
+    <string name="label_group_name">그룹 이름</string>
+    <string name="action_create">만들기</string>
+    <string name="dialog_title_join_group">그룹 참가</string>
+    <string name="label_group_id">그룹 ID</string>
+    <string name="label_nickname_optional">닉네임 (선택 사항)</string>
+    <string name="dialog_title_rename_group">그룹 이름 변경</string>
+    <string name="action_rename">이름 변경</string>
+
+    <!-- 설정 제목 -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P 네트워크</string>
+    <string name="setting_nostr_relays">Nostr 릴레이</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- 토스트 메시지 -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh 활성화됨</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh 비활성화됨</string>
+    <string name="toast_nostr_enabled">Nostr 활성화됨</string>
+    <string name="toast_nostr_disabled">Nostr 비활성화됨</string>
+    <string name="toast_tor_p2p_unsupported">Tor와 P2P 동시 사용은 지원되지 않습니다. 먼저 P2P를 비활성화하세요.</string>
+    <string name="toast_p2p_tor_disabled">P2P over Tor는 지원되지 않습니다. Tor가 비활성화되었습니다.</string>
+
+    <!-- 이미지 선택 -->
+    <string name="action_gallery">갤러리</string>
+    <string name="action_camera">카메라</string>
+
+    <!-- 접근성 콘텐츠 설명 -->
+    <string name="cd_refresh_p2p">P2P 연결 새로고침</string>
+    <string name="cd_direct_bluetooth">Bluetooth 직접 연결</string>
+    <string name="cd_routed">라우팅됨</string>
+    <string name="cd_p2p_connection">P2P 연결</string>
+    <string name="cd_teleported_user">텔레포트된 사용자</string>
+    <string name="cd_user">사용자</string>
+    <string name="cd_backspace">백스페이스</string>
+    <string name="cd_verified">검증됨</string>
+    <string name="cd_add_node">노드 추가</string>
+    <string name="cd_remove">제거</string>
+    <string name="action_enable_location">위치 활성화</string>
+
+    <!-- 그룹 ID 레이블 -->
+    <string name="label_group_id_fmt">그룹 ID: %1$s</string>
+
+    <!-- PIN 플레이스홀더 -->
+    <string name="placeholder_6_digits">6자리</string>
+
+    <!-- P2P 설정 -->
+    <string name="p2p_settings_header">설정</string>
+    <string name="p2p_enable">P2P 활성화</string>
+    <string name="p2p_enable_desc">다른 Zemzeme 피어에 직접 연결</string>
+    <string name="p2p_use_default_nodes">기본 노드 사용</string>
+    <string name="p2p_default_nodes_desc">공개 IPFS 부트스트랩 노드에 연결</string>
+    <string name="p2p_custom_nodes_header">사용자 지정 부트스트랩 노드</string>
+    <string name="p2p_no_custom_nodes">사용자 지정 노드가 없습니다. +를 눌러 추가하세요.</string>
+    <string name="p2p_add_bootstrap_node">부트스트랩 노드 추가</string>
+    <string name="p2p_enter_multiaddr">부트스트랩 노드의 multiaddr을 입력:</string>
+    <string name="p2p_recovering">복구 중…</string>
+    <string name="p2p_recover_connection">연결 복구</string>
+    <string name="action_add">추가</string>
+
+    <!-- 알림 채널 -->
+    <string name="notification_channel_direct_messages">다이렉트 메시지</string>
+    <string name="notification_channel_dm_desc">다른 사용자의 개인 메시지에 대한 알림</string>
+    <string name="notification_channel_geohash_chats">Geohash 채팅</string>
+    <string name="notification_channel_geohash_desc">geohash 위치 채널에서의 멘션 및 메시지에 대한 알림</string>
+
+    <!-- 디버그: 메쉬 토폴로지 -->
+    <string name="debug_mesh_topology">메쉬 토폴로지</string>
+    <string name="debug_no_gossip">가십 데이터 없음</string>
+
+    <!-- 디버그: 셀프 업데이트 -->
+    <string name="debug_self_update">셀프 업데이트 (dev)</string>
+    <string name="debug_current_version_fmt">현재 버전: %1$s</string>
+    <string name="debug_download_updates_desc">GitHub 릴리스에서 업데이트 다운로드 및 설치</string>
+    <string name="update_status_ready">준비됨</string>
+    <string name="update_status_checking">업데이트 확인 중…</string>
+    <string name="update_status_available">업데이트 가능: %1$s</string>
+    <string name="update_status_downloading">다운로드 중: %1$d%%</string>
+    <string name="update_status_ready_install">설치 준비됨: %1$s</string>
+    <string name="update_status_installing">설치 중…</string>
+    <string name="update_status_success">업데이트가 설치되었습니다! 앱을 다시 시작하세요.</string>
+    <string name="update_status_pending_action">사용자 확인 대기 중…</string>
+    <string name="update_status_error">오류: %1$s</string>
+    <string name="update_grant_install_permission">설치 권한 부여</string>
+    <string name="update_install">업데이트 설치</string>
+    <string name="update_check">업데이트 확인</string>
+    <string name="debug_test_update_dialog">업데이트 대화상자 테스트</string>
+
+    <!-- 디버그: 대역폭 그래프 -->
+    <string name="debug_overall">전체</string>
+    <string name="debug_per_device">장치별</string>
+    <string name="debug_per_peer">피어별</string>
+    <string name="debug_incoming">수신</string>
+    <string name="debug_outgoing">발신</string>
+
+    <!-- 디버그: 콘솔 -->
+    <string name="debug_refreshing">새로고침 중…</string>
+    <string name="debug_refresh">새로고침</string>
+    <string name="debug_clear_logs">로그 지우기</string>
+    <string name="debug_preparing_export">내보내기 준비 중…</string>
+    <string name="debug_share_logs">로그 공유</string>
+
+    <!-- 기술적 문자열 (번역 불필요) -->
+    <string name="dot">.</string>
+    <string name="warning_emoji">⚠️</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
+    <string name="mention_suggestion_at">@%1$s</string>
+    <string name="at_nickname">@%1$s</string>
+    <string name="hash_symbol">#</string>
+    <string name="underscore">_</string>
+    <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+    <string name="progress_filled">█</string>
+    <string name="progress_empty">░</string>
+    <string name="image_counter">%1$d / %2$d</string>
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+    <string name="notification_file_pdf">📄</string>
+    <string name="notification_file_zip">🗜️</string>
+    <string name="notification_file_doc">📄</string>
+    <string name="notification_file_xls">📊</string>
+    <string name="notification_file_ppt">📈</string>
+    <string name="notification_file_generic">📎</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">QR 스캔</string>
+    <string name="fab_choose_city">도시 선택</string>
+    <string name="fab_join_group">그룹 참여</string>
+    <string name="fab_create_group">그룹 만들기</string>
+    <!-- Section headers -->
+    <string name="section_nearby">근처</string>
+    <string name="section_geographic_groups">지리적 그룹</string>
+    <string name="section_my_groups">내 그룹</string>
+    <string name="section_contacts">연락처</string>
+
+    <!-- New translated strings -->
+    <string name="section_username">사용자 이름</string>
+    <string name="section_theme">테마</string>
+    <string name="section_settings">설정</string>
+    <string name="section_network">네트워크</string>
+    <string name="section_status">상태</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P 네트워킹</string>
+    <string name="p2p_status_no_peers">피어 없음</string>
+    <string name="p2p_status_connected">연결됨</string>
+    <string name="p2p_status_connecting">연결 중…</string>
+    <string name="p2p_status_disconnected">연결 끊김</string>
+    <string name="p2p_status_error">오류</string>
+    <string name="p2p_peers_connected_fmt">%1$d개의 피어 연결됨</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">활성 노드: %1$d</string>
+    <string name="location_acquiring_title">위치 확인 중</string>
+    <string name="location_acquiring_desc">위치를 확인하는 동안 잠시 기다려 주세요</string>
+    <string name="location_unavailable_title">위치 사용 불가</string>
+    <string name="location_permission_required_notes">노트 기능에는 위치 권한이 필요합니다</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">피어 검색 중…</string>
+    <string name="connection_connecting_peers">피어에 연결 중…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d개의 피어 연결됨</item>
+        <item quantity="other">%1$d개의 피어 연결됨</item>
+    </plurals>
+    <string name="connection_no_new_messages">연결됨 - 새 메시지 없음</string>
+    <string name="connection_error">연결 오류</string>
+    <string name="connection_direct">직접</string>
+    <string name="connection_connected">연결됨</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (정보 없음)</string>
+    <string name="debug_nostr_relay">Nostr 릴레이</string>
+    <string name="debug_ble_direct">BLE 직접</string>
+    <string name="debug_p2p_searching">P2P: 피어 검색 중…</string>
+    <string name="debug_p2p_connecting">P2P: 피어에 연결 중…</string>
+    <string name="debug_nostr_no_messages">Nostr 연결됨 - 새 메시지 없음</string>
+    <string name="debug_connection_failed">연결 실패</string>
+    <string name="debug_error_fmt">오류: %1$s</string>
+
 </resources>

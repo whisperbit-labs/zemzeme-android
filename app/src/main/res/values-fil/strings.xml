@@ -3,7 +3,7 @@
     <string name="app_name">Zemzeme</string>
 
     <!-- Mga dahilan ng permiso -->
-    <string name="permission_bluetooth_rationale">Kailangan ang permiso sa Bluetooth para sa direktang pag‑usap kahit walang internet.</string>
+    <string name="permission_bluetooth_rationale">Kailangan ang permiso sa Bluetooth para sa direktang pag-usap kahit walang internet.</string>
     <string name="permission_location_rationale">Kailangan ang permiso sa Lokasyon para mahanap ang mga kalapit na device gamit ang Bluetooth.</string>
     <string name="permission_notification_rationale">Kailangan ang permiso sa Abiso para ipaalam ang mga bagong mensahe.</string>
 
@@ -20,20 +20,20 @@
     <string name="channels">Mga Channel</string>
     <string name="online_users">Mga Online na User</string>
     <string name="no_one_connected">Walang nakakonekta</string>
-    <string name="emergency_clear_hint">I‑tap nang tatlong beses para burahin ang lahat ng data</string>
+    <string name="emergency_clear_hint">I-tap nang tatlong beses para burahin ang lahat ng data</string>
     <string name="your_network">Network</string>
 
-    <!-- Pag‑optimize ng baterya -->
-    <string name="battery_optimization_detected">Natukoy ang pag‑optimize ng baterya</string>
-    <string name="battery_optimization_disabled">Naka‑disable ang pag‑optimize ng baterya</string>
-    <string name="battery_optimization_not_required">Hindi kailangan ang pag‑optimize ng baterya</string>
-    <string name="battery_optimization_checking">Sinusuri ang pag‑optimize ng baterya</string>
-    <string name="battery_optimization_why_disable">Bakit i‑disable ang pag‑optimize?</string>
-    <string name="battery_optimization_explanation">Tumatakbo ang Zemzeme sa background upang mapanatili ang mesh na koneksyon sa mga kalapit na device. Maaaring maputol ito ng pag‑optimize ng baterya na nagdudulot ng pagkaantala o pagkawala ng mensahe.\n\nAng pag‑disable nito ay tinitiyak ang maaasahang peer‑to‑peer na pagmemensahe.</string>
-    <string name="battery_optimization_disable_button">I‑disable ang pag‑optimize</string>
+    <!-- Pag-optimize ng baterya -->
+    <string name="battery_optimization_detected">Natukoy ang pag-optimize ng baterya</string>
+    <string name="battery_optimization_disabled">Naka-disable ang pag-optimize ng baterya</string>
+    <string name="battery_optimization_not_required">Hindi kailangan ang pag-optimize ng baterya</string>
+    <string name="battery_optimization_checking">Sinusuri ang pag-optimize ng baterya</string>
+    <string name="battery_optimization_why_disable">Bakit i-disable ang pag-optimize?</string>
+    <string name="battery_optimization_explanation">Tumatakbo ang Zemzeme sa background upang mapanatili ang mesh na koneksyon sa mga kalapit na device. Maaaring maputol ito ng pag-optimize ng baterya na nagdudulot ng pagkaantala o pagkawala ng mensahe.\n\nAng pag-disable nito ay tinitiyak ang maaasahang peer-to-peer na pagmemensahe.</string>
+    <string name="battery_optimization_disable_button">I-disable ang pag-optimize</string>
     <string name="battery_optimization_note">Tandaan: Maaari itong baguhin sa Android Settings &gt; Apps &gt; Zemzeme &gt; Battery</string>
-    <string name="battery_optimization_not_supported_explanation">Hindi kailangan ng iyong device ng mga setting ng pag‑optimize ng baterya. Normal na gagana ang Zemzeme.</string>
-    <string name="battery_optimization_not_supported_message">Hindi kailangan ng iyong device ng mga setting ng pag‑optimize ng baterya. Normal na gagana ang Zemzeme.</string>
+    <string name="battery_optimization_not_supported_explanation">Hindi kailangan ng iyong device ng mga setting ng pag-optimize ng baterya. Normal na gagana ang Zemzeme.</string>
+    <string name="battery_optimization_not_supported_message">Hindi kailangan ng iyong device ng mga setting ng pag-optimize ng baterya. Normal na gagana ang Zemzeme.</string>
     <string name="battery_optimization_success_message">Maaasahang tatakbo ang Zemzeme sa background</string>
     <string name="battery_optimization_benefits">• Maaasahang paghatid ng mensahe\n• Pinananatili ang mesh na koneksyon\n• Background relay ng mensahe\n• Iwas putol ng koneksyon</string>
     <string name="battery_optimization_check_again">Suriin muli</string>
@@ -60,15 +60,15 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d banggit</string>
     <string name="notification_geohash_summary_title">Zemzeme – mga chat sa lokasyon</string>
     <string name="notification_geohash_summary_text">%1$d mensahe mula sa %2$d lokasyon</string>
-    <string name="notification_mesh_mention_title_singular">Nabanggit sa Mesh Chat</string>
-    <string name="notification_mesh_mention_title_plural">%1$d banggit sa Mesh Chat</string>
+    <string name="notification_mesh_mention_title_singular">Nabanggit sa Bluetooth Chat</string>
+    <string name="notification_mesh_mention_title_plural">%1$d banggit sa Bluetooth Chat</string>
     <string name="notification_more_locations">at %1$d pang lokasyon</string>
     <string name="notification_and_more">at %1$d pa</string>
 
     <!-- Paborito / Accessibility -->
     <string name="cd_add_favorite">Idagdag sa paborito</string>
     <string name="cd_remove_favorite">Alisin sa paborito</string>
-    <string name="cd_add_bookmark">Mag‑bookmark</string>
+    <string name="cd_add_bookmark">Mag-bookmark</string>
 
     <!-- Header at accessibility -->
     <string name="chat_back">bumalik</string>
@@ -76,14 +76,14 @@
     <string name="chat_leave">umalis</string>
     <string name="cd_nostr_reachable">Maabot sa Nostr</string>
     <string name="cd_unread_private_messages">Hindi nabasang pribadong mensahe</string>
-    <string name="cd_toggle_bookmark">I‑toggle ang bookmark</string>
+    <string name="cd_toggle_bookmark">I-toggle ang bookmark</string>
     <string name="cd_teleported">Naiteleport</string>
     <string name="cd_tor_status">Katayuan ng Tor</string>
     <string name="cd_connected_peers">Nakakonektang peers</string>
     <string name="cd_geohash_participants">Mga kalahok sa geohash</string>
     <string name="cd_ready_for_handshake">Handa para sa handshake</string>
     <string name="cd_handshake_in_progress">Isinasagawa ang handshake</string>
-    <string name="cd_encrypted">End‑to‑end naka‑encrypt</string>
+    <string name="cd_encrypted">End-to-end naka-encrypt</string>
     <string name="cd_handshake_failed">Bigo ang handshake</string>
 
     <!-- Dialog ng file -->
@@ -91,18 +91,18 @@
     <string name="file_viewer_name">📄 %1$s</string>
     <string name="file_viewer_size">📏 Laki: %1$s</string>
     <string name="file_viewer_type">🏷️ Uri: %1$s</string>
-    <string name="file_viewer_open_save">📂 Buksan / I‑save</string>
+    <string name="file_viewer_open_save">📂 Buksan / I-save</string>
     <string name="close_with_emoji">❌ Isara</string>
     <string name="pick_image">Pumili ng larawan</string>
 
     <!-- About sheet -->
     <string name="about_tagline">Pagmemensaheng malaya sa pagmamatyag sa lahat ng sitwasyon, naka-encrypt mula dulo hanggang dulo</string>
-    <string name="about_offline_mesh_title">Offline Mesh Chat</string>
-    <string name="about_offline_mesh_desc">Makipag‑usap direkta sa Bluetooth LE nang walang internet o server. Ang mga mensahe ay nire‑relay ng mga kalapit na device.</string>
+    <string name="about_offline_mesh_title">Offline Bluetooth Chat</string>
+    <string name="about_offline_mesh_desc">Makipag-usap direkta sa Bluetooth LE nang walang internet o server. Ang mga mensahe ay nire-relay ng mga kalapit na device.</string>
     <string name="about_online_geohash_title">Online na Geohash na mga Channel</string>
-    <string name="about_online_geohash_desc">Makipag‑ugnayan sa mga tao sa paligid gamit ang geohash‑based na mga channel. Palawakin ang mesh sa pampublikong internet relays.</string>
-    <string name="about_e2e_title">End‑to‑End Encryption</string>
-    <string name="about_e2e_desc">Ang mga pribadong mensahe ay naka‑encrypt. Ang mga mensahe sa channel ay publiko.</string>
+    <string name="about_online_geohash_desc">Makipag-ugnayan sa mga tao sa paligid gamit ang geohash-based na mga channel. Palawakin ang mesh sa pampublikong internet relays.</string>
+    <string name="about_e2e_title">End-to-End Encryption</string>
+    <string name="about_e2e_desc">Ang mga pribadong mensahe ay naka-encrypt. Ang mga mensahe sa channel ay publiko.</string>
     <string name="about_appearance">hitsura</string>
     <string name="about_system">system</string>
     <string name="about_light">light</string>
@@ -126,9 +126,9 @@
     <string name="about_tor_route">iruta ang internet sa Tor para sa mas mataas na privacy.</string>
     <string name="about_tor_status">katayuan ng Tor: %1$s, bootstrap %2$d%%</string>
     <string name="about_last">Huli: %1$s</string>
-    <string name="about_emergency_title">Emergency Data Deletion</string>
-    <string name="about_emergency_tip">Tip: i‑tap ang pamagat ng app nang 3 beses para burahin ang lahat ng data (mga mensahe, susi, setting).</string>
-    <string name="about_debug_settings">Debug Settings</string>
+    <string name="about_emergency_title">Emergency na Pagbura ng Data</string>
+    <string name="about_emergency_tip">Tip: i-tap ang pamagat ng app nang 3 beses para burahin ang lahat ng data (mga mensahe, susi, setting).</string>
+    <string name="about_debug_settings">Mga Setting ng Debug</string>
     <string name="about_footer">Open Source • Privacy First • Desentralisado</string>
     <string name="close_plain">Isara</string>
     <string name="cancel_lower">kanselahin</string>
@@ -138,9 +138,9 @@
     <string name="cd_location_services">Mga serbisyo sa lokasyon</string>
     <string name="cd_privacy">Privacy</string>
     <string name="cd_error">Error</string>
-    <string name="cd_battery_optimization">Pag‑optimize ng baterya</string>
+    <string name="cd_battery_optimization">Pag-optimize ng baterya</string>
     <string name="cd_benefits">Mga benepisyo</string>
-    <string name="cd_checking_battery_optimization">Sinusuri ang pag‑optimize</string>
+    <string name="cd_checking_battery_optimization">Sinusuri ang pag-optimize</string>
     <string name="cd_not_supported_battery_optimization">Hindi suportado</string>
     <string name="cd_bluetooth">Bluetooth</string>
     <string name="cd_unread_message">Hindi nabasang mensahe</string>
@@ -154,22 +154,34 @@
     <string name="cd_decrease_precision">Bawasan ang precision</string>
     <string name="cd_increase_precision">Dagdagan ang precision</string>
     <string name="cd_select_geohash">Piliin ang geohash</string>
-    <string name="cd_scroll_to_bottom">Mag‑scroll pababa</string>
+    <string name="cd_scroll_to_bottom">Mag-scroll pababa</string>
     <string name="cd_file">File</string>
     <string name="cd_image">Larawan</string>
     <string name="cd_cancel">Kanselahin</string>
     <string name="cd_link">Link</string>
     <string name="cd_pick_media">Pumili ng media</string>
-    <string name="cd_record_voice">Mag‑record ng voice note</string>
-    <string name="cd_offline_mesh_chat">Offline Mesh Chat</string>
+    <string name="cd_record_voice">Mag-record ng voice note</string>
+    <string name="cd_offline_mesh_chat">Offline Bluetooth Chat</string>
     <string name="cd_online_geohash_channels">Online na Geohash Channels</string>
-    <string name="cd_end_to_end_encryption">End‑to‑End Encryption</string>
+    <string name="cd_end_to_end_encryption">End-to-End Encryption</string>
+    <string name="cd_settings">Mga Setting</string>
+    <string name="cd_location_notes">Mga Tala sa Lokasyon</string>
+    <string name="cd_close">Isara</string>
+    <string name="cd_image_index_of">Larawan %1$d ng %2$d</string>
+    <string name="cd_mining_pow">Nag-mine ng PoW</string>
+    <string name="cd_pick_file">Pumili ng file</string>
+    <string name="cd_pow_enabled">Naka-enable ang PoW</string>
+    <string name="cd_privacy_protected">Protektado ang Privacy</string>
+    <string name="cd_proof_of_work">Proof of Work</string>
+    <string name="cd_save_current_image">I-save ang kasalukuyang larawan</string>
 
     <!-- Larawan / File -->
     <string name="image_page_of">Larawan %1$d ng %2$d</string>
     <string name="image_unavailable">Hindi available ang larawan</string>
-    <string name="image_saved_to_downloads">Na‑save ang larawan sa "Downloads"</string>
-    <string name="image_save_failed">Nabigo ang pag‑save ng larawan</string>
+    <string name="image_saved_to_downloads">Na-save ang larawan sa "Downloads"</string>
+    <string name="image_save_failed">Nabigo ang pag-save ng larawan</string>
+    <string name="toast_image_saved">Na-save ang larawan sa Downloads</string>
+    <string name="toast_failed_to_save_image">Hindi na-save ang larawan</string>
     <string name="pick_file">Pumili ng file</string>
     <string name="file_unavailable">[hindi available ang file]</string>
     <string name="unknown">hindi kilala</string>
@@ -188,21 +200,21 @@
 
     <!-- Location channels sheet -->
     <string name="location_channels_title">#mga channel sa lokasyon</string>
-    <string name="location_channels_desc">makipag‑usap sa mga tao sa paligid gamit ang mga geohash na channel. tanging malabong geohash ang ibinabahagi, hindi eksaktong gps. huwag mag‑screenshot o ibahagi ang screen na ito para sa privacy.</string>
+    <string name="location_channels_desc">makipag-usap sa mga tao sa paligid gamit ang mga geohash na channel. tanging malabong geohash ang ibinabahagi, hindi eksaktong gps. huwag mag-screenshot o ibahagi ang screen na ito para sa privacy.</string>
     <string name="grant_location_permission">payagan ang lokasyon</string>
-    <string name="location_permission_denied">tinanggihan ang permiso sa lokasyon. i‑enable sa settings para magamit ang mga channel sa lokasyon.</string>
+    <string name="location_permission_denied">tinanggihan ang permiso sa lokasyon. i-enable sa settings para magamit ang mga channel sa lokasyon.</string>
     <string name="open_settings">Buksan ang Settings</string>
     <string name="location_permission_granted">\u2713 pinayagan ang lokasyon</string>
-    <string name="checking_permissions">sini‑siyasat ang mga permiso…</string>
+    <string name="checking_permissions">sinusuri ang mga permiso…</string>
     <string name="finding_nearby_channels">naghahanap ng kalapit na channel…</string>
-    <string name="bookmarked">na‑bookmark</string>
+    <string name="bookmarked">na-bookmark</string>
     <string name="geohash_placeholder">geohash</string>
     <string name="invalid_geohash">maling geohash</string>
     <string name="teleport">teleport</string>
-    <string name="disable_location_services">i‑disable ang location services</string>
-    <string name="enable_location_services">i‑enable ang location services</string>
+    <string name="disable_location_services">i-disable ang location services</string>
+    <string name="enable_location_services">i-enable ang location services</string>
     <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">bloke</string>
     <string name="location_level_neighborhood">barangay</string>
     <string name="location_level_city">lungsod</string>
@@ -211,7 +223,9 @@
 
     <!-- Debug / Diagnostics -->
     <string name="debug_tools">mga kasangkapan sa debug</string>
-    <string name="debug_verbose_logging">masalitang pag‑log</string>
+    <string name="debug_tools_desc">mga utility ng developer para sa diagnostics at kontrol</string>
+    <string name="debug_verbose_logging">masalitang pag-log</string>
+    <string name="debug_verbose_hint">naglo-log ng pagsali/pag-alis ng peer, direksyon ng koneksyon, packet routing at relay</string>
     <string name="debug_bluetooth_roles">mga tungkulin sa Bluetooth</string>
     <string name="debug_gatt_server">GATT server</string>
     <string name="debug_connections_fmt">mga koneksyon: %1$d / %2$d</string>
@@ -222,6 +236,7 @@
     <string name="debug_max_overall">max kabuuan</string>
     <string name="debug_packet_relay">packet relay</string>
     <string name="debug_since_start_fmt">mula umpisa: %1$d</string>
+    <string name="debug_roles_hint">i-toggle ang mga papel at isara ang lahat ng koneksyon kapag naka-disable</string>
     <string name="debug_sync_settings">mga setting ng sync</string>
     <string name="debug_max_packets_per_sync_fmt">max packet bawat sync: %1$d</string>
     <string name="debug_max_gcs_filter_size_fmt">max laki ng GCS filter: %1$d bytes (128–1024)</string>
@@ -229,7 +244,7 @@
     <string name="debug_connected_devices">mga nakakonektang device</string>
     <string name="debug_our_device_id_fmt">ID ng aming device: %1$s</string>
     <string name="debug_none">wala</string>
-    <string name="debug_disconnect">i‑disconnect</string>
+    <string name="debug_disconnect">i-disconnect</string>
     <string name="debug_recent_scan_results">mga huling resulta ng scan</string>
     <string name="debug_connect">kumonekta</string>
     <string name="debug_debug_console">debug console</string>
@@ -238,11 +253,11 @@
     <string name="debug_derived_p_fmt">hinangong P: %1$s • tantyang max na elemento: %2$s</string>
     <string name="debug_direct_suffix"> • direkta</string>
     <string name="debug_question_mark">?</string>
-    <string name="debug_role_server">bilang server (kami ang nagho‑host)</string>
+    <string name="debug_role_server">bilang server (kami ang nagho-host)</string>
     <string name="debug_role_client">bilang client (kami ang kumokonekta)</string>
 
     <!-- Onboarding screens -->
-    <string name="location_services_required">Kailangang‑kailangan ang Location Services</string>
+    <string name="location_services_required">Kailangan ang Location Services</string>
     <string name="privacy_first">Privacy muna</string>
     <string name="location_explanation">HINDI sinusubaybayan ng Zemzeme ang iyong lokasyon.\n\nKailangan ang location services para sa Bluetooth scanning at Geohash chat.</string>
     <string name="location_needs_for">Kailangan ng Zemzeme ang location services para sa:</string>
@@ -255,21 +270,21 @@
     <string name="bluetooth_required">Kailangan ang Bluetooth</string>
     <string name="bluetooth_needs_for">Kailangan ng Zemzeme ang Bluetooth para sa:</string>
     <string name="bluetooth_needs_bullets">• Tuklasin ang mga kalapit na user\n• Gumawa ng mesh na koneksyon\n• Magpadala at tumanggap ng mensahe\n• Gumana kahit walang internet o server</string>
-    <string name="enable_bluetooth">I‑enable ang Bluetooth</string>
+    <string name="enable_bluetooth">I-enable ang Bluetooth</string>
     <string name="bluetooth_not_supported">Hindi suportado ang Bluetooth</string>
-    <string name="bluetooth_unsupported_explanation">Hindi sinusuportahan ng device na ito ang Bluetooth Low Energy (BLE) na kailangan para gumana ang Zemzeme.\n\nKailangan ang BLE para bumuo ng mesh at makipag‑ugnayan sa kalapit na device kahit walang internet.</string>
+    <string name="bluetooth_unsupported_explanation">Hindi sinusuportahan ng device na ito ang Bluetooth Low Energy (BLE) na kailangan para gumana ang Zemzeme.\n\nKailangan ang BLE para bumuo ng mesh at makipag-ugnayan sa kalapit na device kahit walang internet.</string>
     <string name="checking_bluetooth_status">Sinusuri ang status ng Bluetooth…</string>
-    <string name="battery_optimization_detected_title">natukoy ang pag‑optimize ng baterya</string>
-    <string name="battery_optimization_enabled_title">Naka‑enable ang pag‑optimize</string>
-    <string name="battery_optimization_explanation_short">kailangang tumakbo ang Zemzeme sa background para sa mesh; maaaring putulin ito ng pag‑optimize.</string>
-    <string name="benefits_of_disabling">Mga benepisyo ng pag‑disable</string>
+    <string name="battery_optimization_detected_title">natukoy ang pag-optimize ng baterya</string>
+    <string name="battery_optimization_enabled_title">Naka-enable ang pag-optimize</string>
+    <string name="battery_optimization_explanation_short">kailangang tumakbo ang Zemzeme sa background para sa mesh; maaaring putulin ito ng pag-optimize.</string>
+    <string name="benefits_of_disabling">Mga benepisyo ng pag-disable</string>
     <string name="battery_benefits_short">• maaasahang paghatid\n• panatilihin ang koneksyon\n• iwas putol</string>
-    <string name="disable_battery_optimization">I‑disable ang pag‑optimize</string>
-    <string name="battery_optimization_disabled_title">na‑disable ang pag‑optimize</string>
+    <string name="disable_battery_optimization">I-disable ang pag-optimize</string>
+    <string name="battery_optimization_disabled_title">na-disable ang pag-optimize</string>
     <string name="continue_btn">Magpatuloy</string>
-    <string name="initializing_mesh_network">Ine‑initialize ang mesh network</string>
+    <string name="initializing_mesh_network">Ine-initialize ang mesh network</string>
     <string name="dot">.</string>
-    <string name="setting_up_bluetooth">Ise‑set up ang Bluetooth mesh…</string>
+    <string name="setting_up_bluetooth">Ise-set up ang Bluetooth mesh…</string>
     <string name="should_take_seconds">Ilang segundo lang ito</string>
     <string name="warning_emoji">⚠️</string>
     <string name="setup_not_complete">Hindi kumpleto ang setup</string>
@@ -278,6 +293,15 @@
     <string name="privacy_bullets">• walang tracking o koleksiyon\n• offline ang mesh chat sa Bluetooth\n• gumagamit ng internet ang geohash chat</string>
     <string name="permissions_header">mga permiso</string>
     <string name="grant_permissions">Payagan</string>
+    <string name="continue_button">Magpatuloy</string>
+    <string name="perm_required_label">Kinakailangan</string>
+    <string name="perm_recommended_label">Inirerekomenda</string>
+    <string name="perm_info_dialog_ok">OK</string>
+    <string name="perm_benefit_nearby_devices">Ang mga permiso sa Bluetooth ay nagpapahintulot sa Zemzeme na matuklasan at makipag-ugnayan sa ibang user na malapit sa pamamagitan ng mesh network. Ito ay nagpapahintulot ng ganap na offline, peer-to-peer na pagmemensahe nang walang koneksyon sa internet.</string>
+    <string name="perm_benefit_location">Kinakailangan ng Android ang permiso sa lokasyon para mag-scan ng mga Bluetooth device na malapit. HINDI sinusubaybayan o iniimbak ng Zemzeme ang iyong lokasyon.</string>
+    <string name="perm_benefit_background_location">Ang background na lokasyon ay nagpapahintulot sa Zemzeme na matuklasan ang mga kalapit na user kahit nasa background ang app. Kung wala ito, ang mesh network ay gagana lang habang bukas ang app sa screen.</string>
+    <string name="perm_benefit_notifications">Inaabisuhan ka ng mga notification kapag may pribadong mensahe o bagong aktibidad sa iyong mga channel, kahit nasa background ang app.</string>
+    <string name="perm_benefit_battery_optimization">Ang pag-disable ng pag-optimize ng baterya ay tinitiyak na maaasahang tumatakbo ang Zemzeme sa background at pinapanatili ang mga koneksyon ng mesh network. Kung wala ito, maaaring patayin ng Android ang app para makatipid ng baterya at idiskonekta ka sa mesh.</string>
     <string name="location_tracking_warning">HINDI sinusubaybayan ng Zemzeme ang lokasyon mo</string>
     <string name="at_symbol">@</string>
     <string name="app_brand">Zemzeme/</string>
@@ -285,7 +309,7 @@
     <string name="geohash_people_header">TAO</string>
     <string name="nobody_around">walang tao sa paligid…</string>
     <string name="you_suffix"> (ikaw)</string>
-    <string name="pan_zoom_instruction">i‑pan at i‑zoom para pumili ng geohash</string>
+    <string name="pan_zoom_instruction">i-pan at i-zoom para pumili ng geohash</string>
     <string name="select">piliin</string>
     <string name="type_a_message_placeholder">magtype ng mensahe…</string>
     <string name="mention_suggestion_at">@%1$s</string>
@@ -323,17 +347,17 @@
     <string name="notification_file_generic">📎</string>
 
     <!-- Voice player a11y -->
-    <string name="cd_play_voice">I‑play</string>
-    <string name="cd_pause_voice">I‑pause</string>
+    <string name="cd_play_voice">I-play</string>
+    <string name="cd_pause_voice">I-pause</string>
 
     <!-- Mga paglalarawan ng permiso -->
     <string name="perm_nearby_devices_desc">Kailangan upang makakita ng mga Zemzeme user sa Bluetooth</string>
     <string name="perm_nearby_devices_system">Payagan ang Zemzeme na kumonekta sa kalapit na device</string>
     <string name="perm_location_desc">Kailangan ng Android para sa pagtuklas ng user sa Bluetooth</string>
-    <string name="perm_location_system">Kailangan ito ng Zemzeme para mag‑scan</string>
+    <string name="perm_location_system">Kailangan ito ng Zemzeme para mag-scan</string>
     <string name="perm_notifications_desc">Tumanggap ng abiso sa mga pribadong mensahe</string>
     <string name="perm_notifications_system">Payagan ang Zemzeme na magpadala ng abiso</string>
-    <string name="perm_battery_desc">I‑disable ang pag‑optimize upang tumakbo nang maaasahan at mapanatili ang mesh na koneksyon</string>
+    <string name="perm_battery_desc">I-disable ang pag-optimize upang tumakbo nang maaasahan at mapanatili ang mesh na koneksyon</string>
     <string name="perm_battery_system">Payagan ang Zemzeme na tumakbo nang walang limitasyong baterya</string>
 
     <!-- Mga uri ng permiso -->
@@ -341,8 +365,31 @@
     <string name="perm_type_precise_location">Eksaktong lokasyon</string>
     <string name="perm_type_microphone">Mikropono</string>
     <string name="perm_type_notifications">Mga abiso</string>
-    <string name="perm_type_battery_optimization">Pag‑optimize ng baterya</string>
+    <string name="perm_type_battery_optimization">Pag-optimize ng baterya</string>
     <string name="perm_type_other">Iba pa</string>
+
+    <!-- App Lock -->
+    <string name="app_lock_title">App Lock</string>
+    <string name="app_lock_subtitle_off">Naka-off</string>
+    <string name="app_lock_subtitle_on">Biometric + PIN</string>
+    <string name="app_lock_security_section">SEGURIDAD</string>
+    <string name="app_lock_enter_pin">Ilagay ang PIN</string>
+    <string name="app_lock_set_pin">Itakda ang PIN</string>
+    <string name="app_lock_confirm_pin">Kumpirmahin ang PIN</string>
+    <string name="app_lock_biometric_title">I-unlock ang Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">Gumamit ng biometric para i-unlock</string>
+    <string name="app_lock_use_pin">Gumamit ng PIN</string>
+    <string name="app_lock_wrong_pin">Maling PIN</string>
+    <string name="app_lock_too_many_attempts">Napakaraming pagtatangka. Subukang muli sa loob ng %1$d segundo.</string>
+    <string name="app_lock_cooldown">%1$d segundo na natitira</string>
+    <string name="app_lock_pin_mismatch">Hindi magkatugma ang mga PIN</string>
+    <string name="app_lock_pin_min_length">Ang PIN ay dapat may hindi bababa sa 4 na digit</string>
+    <string name="app_lock_disable_title">I-disable ang App Lock</string>
+    <string name="app_lock_disable_msg">I-verify ang iyong pagkakakilanlan para i-disable ang app lock</string>
+    <string name="app_lock_protect_title">Protektahan ang Iyong mga Chat</string>
+    <string name="app_lock_protect_desc">Isang 6-digit na PIN ang magla-lock ng app. Gumamit ng biometrics para sa agarang access.</string>
+    <string name="app_lock_enable">I-enable ang App Lock</string>
+    <string name="app_lock_not_now">Hindi Ngayon</string>
 
     <!-- Dialog ng password -->
     <string name="pwd_prompt_title">Ilagay ang password ng channel</string>
@@ -350,6 +397,7 @@
     <string name="pwd_label">Password</string>
     <string name="join">Sumali</string>
     <string name="cancel">Kanselahin</string>
+    <string name="tor_not_available_in_this_build">Hindi available ang Tor sa build na ito</string>
 
     <!-- Plurals -->
     <plurals name="notification_and_more">
@@ -362,62 +410,29 @@
         <item quantity="other">%d tao</item>
     </plurals>
 
-    <string name="mesh_service_notification_content">Tumatakbo ang Mesh — %1$d na peer</string>
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d tala</item>
+        <item quantity="other">#%1$s ± 1 • %2$d na tala</item>
+    </plurals>
+    <string name="location_notes_description">magdagdag ng maikling permanenteng tala sa lokasyong ito para mahanap ng iba pang bisita.</string>
+    <string name="location_notes_relays_unavailable">hindi available ang mga geo relay; naka-pause ang mga tala</string>
+    <string name="location_notes_no_relays_title">walang geo relay sa malapit</string>
+    <string name="location_notes_no_relays_desc">umaasa ang mga tala sa mga geo relay. suriin ang koneksyon at subukang muli.</string>
+    <string name="loading_location_notes">naglo-load ng mga tala…</string>
+    <string name="location_notes_empty_title">wala pang mga tala</string>
+    <string name="location_notes_empty_desc">maging una kang magdagdag ng tala para sa lugar na ito.</string>
+    <string name="dismiss">Isara</string>
+    <string name="location_notes_input_placeholder">magdagdag ng tala para sa lugar na ito</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
-
-  <string name="mesh_service_channel_name">Zemzeme Mesh Network</string>
-  <string name="mesh_service_channel_desc">Para sa mesh na komunikasyon ng Zemzeme</string>
-  <string name="cd_settings">Mga Setting</string>
-  <string name="cd_location_notes">Mga Tala sa Lokasyon</string>
-  <string name="cd_close">Isara</string>
-  <string name="cd_image_index_of">Larawan %1$d ng %2$d</string>
-  <string name="cd_mining_pow">Nag-mine ng PoW</string>
-  <string name="cd_pick_file">Pumili ng file</string>
-  <string name="cd_pow_enabled">Naka-enable ang PoW</string>
-  <string name="cd_privacy_protected">Protektado ang Privacy</string>
-  <string name="cd_proof_of_work">Proof of Work</string>
-  <string name="cd_save_current_image">I-save ang kasalukuyang larawan</string>
-  <string name="notification_action_quit_bitchat">Isara ang Zemzeme</string>
-  <string name="about_background_title">Background na Bluetooth</string>
-  <string name="about_background_desc">Para sa pinakamahusay na pagganap, payagan ang Zemzeme na mapanatili ang koneksyon sa Bluetooth habang tumatakbo sa background</string>
-  <string name="about_p2p_subtitle">Direktang peer-to-peer na pagmemensahe</string>
-  <string name="about_nostr_subtitle">Batay sa Nostr na protokol</string>
-  <string name="about_ble_subtitle">Bluetooth Low Energy mesh network</string>
+    <string name="mesh_service_notification_content">Tumatakbo ang Bluetooth — %1$d na peer</string>
+    <string name="mesh_service_channel_name">Serbisyo ng Bluetooth sa Background</string>
+    <string name="mesh_service_channel_desc">Pinapanatili ang Bluetooth mesh na tumatakbo sa background</string>
+    <string name="notification_action_quit_bitchat">Isara ang Zemzeme</string>
+    <string name="about_background_title">patakbuhin sa background</string>
+    <string name="about_background_desc">panatilihing aktibo ang mesh kapag nakasara ang app (foreground service)</string>
+    <string name="about_p2p_subtitle">Direktang peer-to-peer na koneksyon</string>
+    <string name="about_nostr_subtitle">Pagmemensahe sa pamamagitan ng internet relay</string>
+    <string name="about_ble_subtitle">Bluetooth proximity mesh</string>
     <string name="ble_setting_off_subtitle">Naka-off ang Bluetooth — i-on para gamitin ang BLE Mesh</string>
     <string name="ble_banner_off">Naka-off ang Bluetooth — hindi available ang BLE Mesh</string>
     <string name="ble_setting_dialog_title">Kailangan ang Bluetooth</string>
@@ -425,52 +440,261 @@
     <string name="ble_setting_dialog_btn">Buksan ang Bluetooth Settings</string>
     <string name="ble_banner_enable_btn">I-enable</string>
     <string name="ble_banner_mesh_disabled">Naka-disable ang BLE Mesh</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">Access sa Background na Lokasyon</string>
-  <string name="background_location_required_subtitle">Nangangailangan ang Zemzeme ng background na lokasyon upang mahanap ang mga taong malapit</string>
-  <string name="background_location_explanation">Ginagamit ng Zemzeme ang access sa background na lokasyon:</string>
-  <string name="background_location_settings_tip">Pumunta sa Mga Setting → Mga Pahintulot → Lokasyon → Palaging payagan</string>
-  <string name="background_location_needs_for">Kailangan ng Zemzeme ng background na lokasyon para sa:</string>
-  <string name="background_location_needs_bullets">• Kumonekta sa mga kalapit na gumagamit\n• Mapanatili ang Bluetooth mesh network\n• Lumahok sa mga channel batay sa lokasyon</string>
-  <string name="background_location_privacy_note">Ang iyong lokasyon ay hindi kailanman ipapadala sa server</string>
-  <string name="grant_background_location">Bigyan ng Pahintulot sa Background na Lokasyon</string>
-  <string name="skip_background_location">Laktawan</string>
-  <string name="perm_background_location_desc">Kinakailangan ang access sa background na lokasyon upang kumonekta sa mga kalapit na gumagamit</string>
-  <string name="perm_background_location_system">Palaging payagan</string>
-  <string name="perm_type_background_location">Background na Lokasyon</string>
-  <string name="tor_not_available_in_this_build">Hindi available ang Tor sa build na ito</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
-  <string name="debug_roles_hint">i-toggle ang mga papel at isara ang lahat ng koneksyon kapag naka-disable</string>
-  <string name="debug_tools_desc">mga utility ng developer para sa diagnostics at kontrol</string>
-  <string name="debug_verbose_hint">naglo-log ng pagsali/pag-alis ng peer, direksyon ng koneksyon, packet routing at relay</string>
-  <string name="pow_label_format">pow: %1$dbit</string>
-  <string name="pow_mining_ellipsis">nagmi-mine...</string>
-  <string name="toast_failed_to_save_image">Hindi na-save ang larawan</string>
-  <string name="toast_image_saved">Na-save ang larawan sa Downloads</string>
-  <string name="dismiss">Isara</string>
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d tala</item>
-    <item quantity="other">#%1$s ± 1 • %2$d na tala</item>
-  </plurals>
-  <string name="location_notes_description">Mga tala sa lokasyong ito</string>
-  <string name="location_notes_relays_unavailable">Hindi available ang mga relay</string>
-  <string name="location_notes_no_relays_title">Walang mga relay</string>
-  <string name="location_notes_no_relays_desc">Walang Nostr relay na naka-configure para sa mga tala ng lokasyon</string>
-  <string name="loading_location_notes">Naglo-load ng mga tala sa lokasyon…</string>
-  <string name="location_notes_empty_title">Walang mga tala</string>
-  <string name="location_notes_empty_desc">Wala pang naiwanang tala sa lugar na ito</string>
-  <string name="location_notes_input_placeholder">Magsulat ng tala dito…</string>
+
+    <!-- Network connectivity -->
+    <string name="network_setting_off_subtitle">Walang internet — suriin ang iyong koneksyon</string>
+    <string name="network_not_available">Walang koneksyon sa internet</string>
+    <string name="network_transports_off_hint">I-enable ang P2P o Nostr</string>
+    <string name="network_no_internet">Nakakonekta pero walang internet na natukoy</string>
+    <string name="network_setting_dialog_title">Kailangan ang Internet</string>
+    <string name="network_setting_dialog_msg">Kailangan ang koneksyon sa internet para sa P2P at Nostr na transport.</string>
+    <string name="network_setting_dialog_btn">Mga Setting ng Koneksyon</string>
+    <string name="network_banner_disconnected">Walang internet — suriin ang iyong mga setting ng koneksyon</string>
+    <string name="network_banner_airplane_mode">Naka-on ang airplane mode</string>
+    <string name="network_airplane_mode">Naka-on ang airplane mode</string>
+    <string name="network_banner_no_internet">Nakakonekta pero walang internet — suriin ang iyong koneksyon</string>
+    <string name="network_banner_transports_disabled">Walang network transport — i-enable ang P2P o Nostr sa settings</string>
+    <string name="network_banner_settings_btn">Mga Setting</string>
+
+    <string name="background_location_required_title">Inirerekomenda ang Background na Lokasyon</string>
+    <string name="background_location_required_subtitle">opsyonal, pinapabuti ang mesh reliability</string>
+    <string name="background_location_explanation">Inirerekomenda ng Android ang background na lokasyon para ma-scan ng Zemzeme ang mga kalapit na device kahit hindi bukas ang app. Pinapanatili nito ang mesh pagkatapos ng reboot.</string>
+    <string name="background_location_settings_tip">Kapag bumukas ang settings, piliin ang "Payagang palagi".</string>
+    <string name="background_location_needs_for">Ginagamit ng Zemzeme ang background na lokasyon para sa:</string>
+    <string name="background_location_needs_bullets">- mag-scan ng kalapit na device habang nakasara ang app\n- muling kumonekta pagkatapos ng reboot\n- panatilihing tumatakbo ang mesh sa background</string>
+    <string name="background_location_privacy_note">HINDI KAILANMAN namin kinokolekta o iniimbak ang iyong lokasyon. Ligtas ang iyong privacy.</string>
+    <string name="grant_background_location">Payagan ang Background na Lokasyon</string>
+    <string name="skip_background_location">Magpatuloy nang walang background na lokasyon</string>
+    <string name="perm_background_location_desc">Inirerekomenda para mag-scan ng kalapit na device habang nasa background ang app</string>
+    <string name="perm_background_location_system">Payagan ang access sa background na lokasyon</string>
+    <string name="perm_type_background_location">Background na Lokasyon</string>
+
+    <!-- Verification -->
+    <string name="verify_title">pag-verify</string>
+    <string name="verify_my_qr_title">i-scan para i-verify ako</string>
+    <string name="verify_scan_prompt_friend">i-scan ang QR ng iba</string>
+    <string name="verify_scan_someone">i-scan ang QR ng iba</string>
+    <string name="verify_show_my_qr">ipakita ang QR ko</string>
+    <string name="verify_remove">alisin ang verification</string>
+    <string name="verify_qr_unavailable">hindi available ang QR</string>
+    <string name="verify_camera_permission">kailangan ang permiso sa camera para mag-scan ng mga QR code</string>
+    <string name="verify_request_camera">i-enable ang camera</string>
+    <string name="verify_paste_label">i-paste ang verification url</string>
+    <string name="verify_validate">i-validate</string>
+    <string name="verify_scanned">hiniling ang verification</string>
+    <string name="security_verification_title">security verification</string>
+    <string name="fingerprint_their">kanilang fingerprint</string>
+    <string name="fingerprint_yours">iyong fingerprint</string>
+    <string name="fingerprint_pending">naghihintay ng handshake</string>
+    <string name="fingerprint_no_peer">magbukas ng pribadong chat para makita ang mga fingerprint</string>
+    <string name="fingerprint_status_verified">naka-encrypt &amp; na-verify</string>
+    <string name="fingerprint_status_encrypted">naka-encrypt</string>
+    <string name="fingerprint_status_handshaking">nagha-handshake</string>
+    <string name="fingerprint_status_failed">nabigo ang handshake</string>
+    <string name="fingerprint_status_uninitialized">hindi naka-encrypt</string>
+    <string name="fingerprint_verified_label">na-verify</string>
+    <string name="fingerprint_verified_message">na-verify mo na ang pagkakakilanlan ng taong ito.</string>
+    <string name="fingerprint_not_verified_label">hindi pa na-verify</string>
+    <string name="fingerprint_not_verified_message_fmt">ihambing ang mga fingerprint na ito kay %1$s gamit ang isang secure na channel.</string>
+    <string name="fingerprint_mark_verified">markahan bilang na-verify</string>
+    <string name="fingerprint_start_handshake">simulan ang handshake</string>
+    <string name="fingerprint_copy">kopyahin</string>
+    <string name="verify_mutual_match_title">Mutual na verification</string>
+    <string name="verify_mutual_match_body">Ikaw at si %1$s ay nag-verify sa isa\'t isa</string>
+    <string name="verify_mutual_system_message">mutual na verification kay %1$s</string>
+    <string name="verify_success_title">Na-verify</string>
+    <string name="verify_success_body">Na-verify mo si %1$s</string>
+    <string name="verify_success_system_message">na-verify si %1$s</string>
+
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="pow_label_format">pow: %1$dbit</string>
+    <string name="pow_mining_ellipsis">nagmi-mine...</string>
+
+    <!-- Mesh intro -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">Ang komunikasyon sa grupong ito ay ganap na batay sa Bluetooth. Nire-relay ng mga kalapit na device ang mga mensahe sa pagitan ng mga tao — hindi kailangan ng koneksyon sa internet.</string>
+    <string name="mesh_intro_close">Isara</string>
+    <string name="mesh_intro_dont_show">Huwag nang ipakita muli</string>
+
+    <!-- Share App -->
+    <string name="about_share_app_header">IBAHAGI ANG APP</string>
+    <string name="about_share_system_title">Ibahagi ang App</string>
+    <string name="about_share_system_desc">Ipadala ang APK sa pamamagitan ng Bluetooth, Nearby Share, o Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">Nabigong ihanda ang APK para ibahagi</string>
+    <string name="about_share_chooser_title">Ibahagi ang %1$s APK</string>
+    <string name="about_share_helper_text">Gumamit ng Google Quick Share para ipadala (i-enable sa Settings ng telepono). Pagkatapos ng transfer, makikita ang APK sa Downloads folder ng tumatanggap na device.</string>
+
+    <!-- Icon switch -->
+    <string name="icon_switch_title">Baguhin ang Icon &amp; Pangalan ng App</string>
+    <string name="icon_switch_section">Customization</string>
+    <string name="icon_switch_subtitle">baguhin ang icon at pangalan ng app sa iyong launcher</string>
+    <string name="icon_switch_confirm">Baguhin ang icon at pangalan ng app dito?</string>
+    <string name="icon_switch_apply">Ilapat</string>
+    <string name="icon_switch_toast">Nabago na ang icon at pangalan ng app!</string>
+
+    <!-- Dialog titles and actions -->
+    <string name="dialog_delete_chat">Burahin ang chat</string>
+    <string name="dialog_delete_group">Burahin ang grupo</string>
+    <string name="dialog_delete_confirm_body">Sigurado ka bang gusto mong burahin ang \"%1$s\"? Hindi na ito maaaring i-undo.</string>
+    <string name="action_delete">Burahin</string>
+    <string name="dialog_clear_chat">I-clear ang chat</string>
+    <string name="dialog_clear_confirm_body">Sigurado ka bang gusto mong burahin ang lahat ng mensahe sa \"%1$s\"?</string>
+    <string name="action_clear">I-clear</string>
+    <string name="dialog_title_create_group">Gumawa ng Bagong Grupo</string>
+    <string name="label_group_name">Pangalan ng grupo</string>
+    <string name="action_create">Gumawa</string>
+    <string name="dialog_title_join_group">Sumali sa Grupo</string>
+    <string name="label_group_id">ID ng Grupo</string>
+    <string name="label_nickname_optional">Palayaw (opsyonal)</string>
+    <string name="dialog_title_rename_group">Palitan ang Pangalan ng Grupo</string>
+    <string name="action_rename">Palitan ang Pangalan</string>
+
+    <!-- Settings titles -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P Network</string>
+    <string name="setting_nostr_relays">Nostr Relays</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast messages -->
+    <string name="toast_ble_mesh_enabled">Na-enable ang BLE Mesh</string>
+    <string name="toast_ble_mesh_disabled">Na-disable ang BLE Mesh</string>
+    <string name="toast_nostr_enabled">Na-enable ang Nostr</string>
+    <string name="toast_nostr_disabled">Na-disable ang Nostr</string>
+    <string name="toast_tor_p2p_unsupported">Hindi suportado ang Tor na may P2P. I-disable muna ang P2P.</string>
+    <string name="toast_p2p_tor_disabled">Hindi suportado ang P2P sa Tor. Na-disable ang Tor.</string>
+
+    <!-- Image picker -->
+    <string name="action_gallery">Gallery</string>
+    <string name="action_camera">Camera</string>
+
+    <!-- Accessibility content descriptions -->
+    <string name="cd_refresh_p2p">I-refresh ang P2P na koneksyon</string>
+    <string name="cd_direct_bluetooth">Direktang Bluetooth</string>
+    <string name="cd_routed">Nai-route</string>
+    <string name="cd_p2p_connection">P2P na koneksyon</string>
+    <string name="cd_teleported_user">Naiteleport na user</string>
+    <string name="cd_user">User</string>
+    <string name="cd_backspace">backspace</string>
+    <string name="cd_verified">Na-verify</string>
+    <string name="cd_add_node">Magdagdag ng node</string>
+    <string name="cd_remove">Alisin</string>
+    <string name="action_enable_location">I-enable ang Lokasyon</string>
+
+    <!-- Group ID label -->
+    <string name="label_group_id_fmt">ID ng Grupo: %1$s</string>
+
+    <!-- PIN placeholder -->
+    <string name="placeholder_6_digits">6 na digit</string>
+
+    <!-- P2P Settings -->
+    <string name="p2p_settings_header">MGA SETTING</string>
+    <string name="p2p_enable">I-enable ang P2P</string>
+    <string name="p2p_enable_desc">Direktang kumonekta sa ibang Zemzeme peer</string>
+    <string name="p2p_use_default_nodes">Gumamit ng Default na Nodes</string>
+    <string name="p2p_default_nodes_desc">Kumonekta sa mga pampublikong IPFS bootstrap nodes</string>
+    <string name="p2p_custom_nodes_header">MGA CUSTOM NA BOOTSTRAP NODES</string>
+    <string name="p2p_no_custom_nodes">Walang na-configure na custom nodes. I-tap ang + para magdagdag.</string>
+    <string name="p2p_add_bootstrap_node">Magdagdag ng Bootstrap Node</string>
+    <string name="p2p_enter_multiaddr">Ilagay ang multiaddr para sa bootstrap node:</string>
+    <string name="p2p_recovering">Nire-recover…</string>
+    <string name="p2p_recover_connection">I-recover ang Koneksyon</string>
+    <string name="action_add">Idagdag</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_direct_messages">Mga Direktang Mensahe</string>
+    <string name="notification_channel_dm_desc">Mga abiso para sa pribadong mensahe mula sa ibang user</string>
+    <string name="notification_channel_geohash_chats">Mga Geohash Chat</string>
+    <string name="notification_channel_geohash_desc">Mga abiso para sa mga banggit at mensahe sa mga geohash location channel</string>
+
+    <!-- Debug: mesh topology -->
+    <string name="debug_mesh_topology">mesh topology</string>
+    <string name="debug_no_gossip">wala pang gossip</string>
+
+    <!-- Debug: self-update -->
+    <string name="debug_self_update">self-update (dev)</string>
+    <string name="debug_current_version_fmt">Kasalukuyang bersyon: %1$s</string>
+    <string name="debug_download_updates_desc">I-download at i-install ang mga update mula sa GitHub releases</string>
+    <string name="update_status_ready">Handa</string>
+    <string name="update_status_checking">Sinusuri ang mga update…</string>
+    <string name="update_status_available">May available na update: %1$s</string>
+    <string name="update_status_downloading">Dina-download: %1$d%%</string>
+    <string name="update_status_ready_install">Handa nang i-install: %1$s</string>
+    <string name="update_status_installing">Ini-install…</string>
+    <string name="update_status_success">Na-install ang update! I-restart ang app.</string>
+    <string name="update_status_pending_action">Naghihintay ng kumpirmasyon ng user…</string>
+    <string name="update_status_error">Error: %1$s</string>
+    <string name="update_grant_install_permission">Payagan ang Pag-install</string>
+    <string name="update_install">I-install ang Update</string>
+    <string name="update_check">Suriin ang mga Update</string>
+    <string name="debug_test_update_dialog">I-test ang Update Dialog</string>
+
+    <!-- Debug: bandwidth graphs -->
+    <string name="debug_overall">Kabuuan</string>
+    <string name="debug_per_device">Bawat Device</string>
+    <string name="debug_per_peer">Bawat Peer</string>
+    <string name="debug_incoming">Papasok</string>
+    <string name="debug_outgoing">Papalabas</string>
+
+    <!-- Debug: console -->
+    <string name="debug_refreshing">Nire-refresh…</string>
+    <string name="debug_refresh">I-refresh</string>
+    <string name="debug_clear_logs">I-clear ang Logs</string>
+    <string name="debug_preparing_export">Inihahanda ang export…</string>
+    <string name="debug_share_logs">Ibahagi ang Logs</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">I-scan ang QR</string>
+    <string name="fab_choose_city">Pumili ng lungsod</string>
+    <string name="fab_join_group">Sumali sa grupo</string>
+    <string name="fab_create_group">Gumawa ng grupo</string>
+    <!-- Section headers -->
+    <string name="section_nearby">Malapit</string>
+    <string name="section_geographic_groups">Mga Grupong Heograpiko</string>
+    <string name="section_my_groups">Aking mga Grupo</string>
+    <string name="section_contacts">Mga Contact</string>
+
+    <!-- Mga bagong section header at P2P/lokasyon string -->
+    <string name="section_username">USERNAME</string>
+    <string name="section_theme">TEMA</string>
+    <string name="section_settings">MGA SETTING</string>
+    <string name="section_network">NETWORK</string>
+    <string name="section_status">KATAYUAN</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P Networking</string>
+    <string name="p2p_status_no_peers">Walang Peers</string>
+    <string name="p2p_status_connected">Nakakonekta</string>
+    <string name="p2p_status_connecting">Kumokonekta…</string>
+    <string name="p2p_status_disconnected">Nadiskonekta</string>
+    <string name="p2p_status_error">Error</string>
+    <string name="p2p_peers_connected_fmt">%1$d peers ang nakakonekta</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Mga aktibong node: %1$d</string>
+    <string name="location_acquiring_title">Kinukuha ang Lokasyon</string>
+    <string name="location_acquiring_desc">Mangyaring maghintay habang tinutukoy ang iyong lokasyon</string>
+    <string name="location_unavailable_title">Hindi Magagamit ang Lokasyon</string>
+    <string name="location_permission_required_notes">Kailangan ang permiso sa lokasyon para sa mga tala</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">Naghahanap ng mga peer…</string>
+    <string name="connection_connecting_peers">Kumokonekta sa mga peer…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d peer ang nakakonekta</item>
+        <item quantity="other">%1$d peers ang nakakonekta</item>
+    </plurals>
+    <string name="connection_no_new_messages">Nakakonekta - walang bagong mensahe</string>
+    <string name="connection_error">Error sa koneksyon</string>
+    <string name="connection_direct">Direkta</string>
+    <string name="connection_connected">Nakakonekta</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (walang impormasyon)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE direkta</string>
+    <string name="debug_p2p_searching">P2P: naghahanap ng mga peer…</string>
+    <string name="debug_p2p_connecting">P2P: kumokonekta sa mga peer…</string>
+    <string name="debug_nostr_no_messages">Nostr nakakonekta - walang bagong mensahe</string>
+    <string name="debug_connection_failed">nabigong kumonekta</string>
+    <string name="debug_error_fmt">error: %1$s</string>
+
 </resources>

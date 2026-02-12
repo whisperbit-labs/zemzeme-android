@@ -61,20 +61,15 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d אזכורים</string>
     <string name="notification_geohash_summary_title">Zemzeme – צ\'אטים מבוססי מיקום</string>
     <string name="notification_geohash_summary_text">%1$d הודעות מ-%2$d מיקומים</string>
-    <string name="notification_mesh_mention_title_singular">אזכור בצ\'אט mesh</string>
-    <string name="notification_mesh_mention_title_plural">%1$d אזכורים בצ\'אט mesh</string>
+    <string name="notification_mesh_mention_title_singular">אזכור בצ\'אט Bluetooth</string>
+    <string name="notification_mesh_mention_title_plural">%1$d אזכורים בצ\'אט Bluetooth</string>
     <string name="notification_more_locations">ועוד %1$d מיקומים</string>
-
-    <!-- מחרוזות קיבוץ התראות -->
-
-    <!-- תוכן התראה מוסתר (תכונת פרטיות) -->
+    <string name="notification_and_more">ועוד %1$d</string>
 
     <!-- נגישות מועדפים -->
     <string name="cd_add_favorite">הוסף למועדפים</string>
     <string name="cd_remove_favorite">הסר ממועדפים</string>
     <string name="cd_add_bookmark">הוסף סימניה</string>
-
-    <!-- מחוון סטטוס חיבור -->
 
     <!-- כותרת צ\'אט ונגישות -->
     <string name="chat_back">חזור</string>
@@ -92,8 +87,6 @@
     <string name="cd_encrypted">הצפנה מקצה לקצה</string>
     <string name="cd_handshake_failed">לחיצת היד נכשלה</string>
 
-    <!-- דיאלוג חיבור איטי (בקשה לא חסימתית לחיבור חלופי) -->
-
     <!-- דיאלוג תצוגת קובץ -->
     <string name="file_viewer_title">📎 קובץ התקבל</string>
     <string name="file_viewer_name">📄 %1$s</string>
@@ -105,7 +98,7 @@
 
     <!-- גליון אודות -->
     <string name="about_tagline">הודעות ללא מעקב בכל הנסיבות, מוצפנות מקצה לקצה</string>
-    <string name="about_offline_mesh_title">צ\'אט mesh לא מקוון</string>
+    <string name="about_offline_mesh_title">צ\'אט Bluetooth לא מקוון</string>
     <string name="about_offline_mesh_desc">תקשר ישירות דרך Bluetooth LE ללא אינטרנט או שרת. הודעות מועברות דרך מכשירים קרובים להגברת טווח.</string>
     <string name="about_online_geohash_title">ערוצי geohash מקוונים</string>
     <string name="about_online_geohash_desc">התחבר לאנשים באזור שלך דרך ערוצים מבוססי geohash. הרחב את ה-mesh דרך ממסרי אינטרנט ציבוריים.</string>
@@ -137,7 +130,7 @@
     <string name="about_emergency_title">ניקוי נתונים חירום</string>
     <string name="about_emergency_tip">טיפ: הקש שלוש פעמים על כותרת האפליקציה כדי למחוק את כל הנתונים השמורים — כולל הודעות, מפתחות והגדרות.</string>
     <string name="about_debug_settings">הגדרות ניפוי באגים</string>
-    <string name="about_footer">פרטיות בראש • מבוזר</string>
+    <string name="about_footer">קוד פתוח • פרטיות בראש • מבוזר</string>
     <string name="about_background_title">רץ ברקע</string>
     <string name="about_background_desc">שמור על רשת mesh פעילה כאשר סוגרים את האפליקציה (שירות חזיתי)</string>
     <string name="about_p2p_subtitle">חיבורים ישירים עמית לעמית דרך p2p</string>
@@ -150,20 +143,22 @@
     <string name="ble_setting_dialog_btn">פתח הגדרות Bluetooth</string>
     <string name="ble_banner_enable_btn">הפעל</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh מושבת</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
+
+    <!-- קישוריות רשת -->
+    <string name="network_setting_off_subtitle">אין אינטרנט — בדוק את החיבור שלך</string>
+    <string name="network_not_available">אין חיבור אינטרנט</string>
+    <string name="network_transports_off_hint">הפעל P2P או Nostr</string>
+    <string name="network_no_internet">מחובר אך לא זוהה אינטרנט</string>
+    <string name="network_setting_dialog_title">נדרש אינטרנט</string>
+    <string name="network_setting_dialog_msg">חיבור אינטרנט נדרש עבור העברות P2P ו-Nostr.</string>
+    <string name="network_setting_dialog_btn">הגדרות חיבור</string>
+    <string name="network_banner_disconnected">אין אינטרנט — בדוק את הגדרות החיבור</string>
+    <string name="network_banner_airplane_mode">מצב טיסה מופעל</string>
+    <string name="network_airplane_mode">מצב טיסה מופעל</string>
+    <string name="network_banner_no_internet">מחובר אך אין אינטרנט — בדוק את החיבור</string>
+    <string name="network_banner_transports_disabled">אין העברת רשת — הפעל P2P או Nostr בהגדרות</string>
+    <string name="network_banner_settings_btn">הגדרות</string>
+
     <string name="close_plain">סגור</string>
     <string name="cancel_lower">בטל</string>
 
@@ -203,18 +198,11 @@
     <string name="cd_mining_pow">כורה PoW</string>
     <string name="cd_pow_enabled">PoW מופעל</string>
     <string name="cd_proof_of_work">הוכחת עבודה</string>
-    <string name="cd_offline_mesh_chat">צ\'אט mesh לא מקוון</string>
+    <string name="cd_offline_mesh_chat">צ\'אט Bluetooth לא מקוון</string>
     <string name="cd_online_geohash_channels">ערוצי geohash מקוונים</string>
     <string name="cd_end_to_end_encryption">הצפנה מקצה לקצה</string>
     <string name="cd_location_notes">הערות מיקום</string>
-
-    <!-- נגישות: גליון העברת הודעה -->
-
-    <!-- נגישות: גליון הגדרות ניפוי באגים -->
-
-    <!-- נגישות: גליון הערות מיקום -->
-
-    <!-- נגישות: תנועה מופחתת -->
+    <string name="cd_settings">הגדרות</string>
 
     <!-- תמונות וקבצים -->
     <string name="image_page_of">תמונה %1$d מתוך %2$d</string>
@@ -236,8 +224,6 @@
     <string name="location_notes_no_relays_title">אין ממסרי geo בקרבת מקום</string>
     <string name="location_notes_no_relays_desc">הערות מסתמכות על ממסרי geo. בדוק את החיבור ונסה שוב.</string>
 
-    <!-- דיאלוג הסכמת פרטיות מיקום -->
-
     <!-- גליון פעולות משתמש -->
     <string name="choose_action_message_or_user">בחר פעולה להודעה או משתמש זה</string>
     <string name="choose_action_user">בחר פעולה למשתמש זה</string>
@@ -245,70 +231,15 @@
     <string name="action_copy_message_subtitle">העתק הודעה זו ללוח</string>
     <string name="action_slap_title">סטר ל-%1$s</string>
     <string name="action_slap_subtitle">שלח פעולת סטירה צוחקת</string>
+    <string name="action_hug_title">חבק את %1$s</string>
+    <string name="action_hug_subtitle">שלח הודעת חיבוק ידידותית</string>
     <string name="action_block_title">חסום %1$s</string>
     <string name="action_block_subtitle">חסום הודעות מכל הערוצים</string>
 
-    <!-- אישור מחיקת הודעה -->
-
-    <!-- העברת הודעות -->
-
-    <!-- גליון הגדרות ניפוי באגים -->
-    <string name="debug_verbose_logging">רישום מפורט</string>
-    <string name="debug_connected_devices">מכשירים מחוברים (%1$d)</string>
-
-    <!-- הערות מיקום (NoSTR) -->
-
-    <!-- הגדרות אולפן -->
-
-    <!-- הגדרות זהות Nostr -->
-
-    <!-- ממסרים -->
-
-    <!-- פקודות צ\'אט -->
-
-    <!-- הודעות מערכת -->
-
-    <!-- סטטוס אתחול Tor -->
-
-    <!-- פעולות התראה -->
-
-    <!-- קטגוריות ערוצי התראה -->
-
-    <!-- שירות קידמה -->
-
-    <!-- הסברי מיקום -->
-    <string name="location_explanation">Zemzeme לא עוקב אחר המיקום שלך.\n\nשירותי מיקום נדרשים לסריקת Bluetooth ולתכונת צ\'אט Geohash.</string>
-
-    <!-- הסברי Bluetooth -->
-
-    <!-- דפי רישיונות -->
-
-    <!-- כפתורי דילוג על שלבי הצטרפות -->
-
-    <!-- התקדמות העברת קבצים -->
-
-    <!-- שגיאות שליחת קבצים -->
-
-    <!-- סיומות זמן יחסי (קצר) -->
-
-
-    <!-- אישור דיוק גבוה -->
-
-    <!-- הסברי פרטיות מיקום -->
-
-    <!-- הודעות מערכת (בעבר קודדו ב-PrivateChatManager) -->
-
     <!-- שירות mesh ברקע -->
-    <string name="mesh_service_channel_name">שירות mesh ברקע</string>
+    <string name="mesh_service_channel_name">שירות Bluetooth ברקע</string>
     <string name="mesh_service_channel_desc">שומר על רשת Bluetooth mesh פעילה ברקע</string>
-    <string name="mesh_service_notification_content">Mesh פועל — %1$d עמיתים</string>
-
-    <!-- נגישות: הגדרות -->
-    <string name="cd_settings">הגדרות</string>
-
-    <!-- פעולות משתמש נוספות -->
-    <string name="action_hug_title">חבק את %1$s</string>
-    <string name="action_hug_subtitle">שלח הודעת חיבוק ידידותית</string>
+    <string name="mesh_service_notification_content">Bluetooth פועל — %1$d עמיתים</string>
 
     <!-- פעולת יציאה מהתראה -->
     <string name="notification_action_quit_bitchat">צא מ-Zemzeme</string>
@@ -330,7 +261,7 @@
     <string name="teleport">העבר מיקום</string>
     <string name="disable_location_services">השבת שירותי מיקום</string>
     <string name="enable_location_services">הפעל שירותי מיקום</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">בניין</string>
     <string name="location_level_neighborhood">שכונה</string>
     <string name="location_level_city">עיר</string>
@@ -348,31 +279,34 @@
     <!-- כלי ניפוי באגים -->
     <string name="debug_tools">כלי ניפוי באגים</string>
     <string name="debug_tools_desc">כלי מפתח לאבחון ובקרה</string>
+    <string name="debug_verbose_logging">רישום מפורט</string>
     <string name="debug_verbose_hint">רושם הצטרפות/עזיבת עמיתים, כיוון חיבור, ניתוב מנות וממסרים</string>
     <string name="debug_bluetooth_roles">תפקידי Bluetooth</string>
     <string name="debug_gatt_server">שרת GATT</string>
-    <string name="debug_connections_fmt">connections: %1$d / %2$d</string>
+    <string name="debug_connections_fmt">חיבורים: %1$d / %2$d</string>
     <string name="debug_max_server">מקסימום שרת</string>
     <string name="debug_gatt_client">לקוח GATT</string>
     <string name="debug_max_client">מקסימום לקוח</string>
-    <string name="debug_overall_connections_fmt">connections: %1$d / %2$d</string>
+    <string name="debug_overall_connections_fmt">חיבורים: %1$d / %2$d</string>
     <string name="debug_max_overall">מקסימום כולל</string>
     <string name="debug_packet_relay">ממסר מנות</string>
-    <string name="debug_since_start_fmt">since start: %1$d</string>
+    <string name="debug_since_start_fmt">מתחילת ההפעלה: %1$d</string>
     <string name="debug_roles_hint">הפעל/כבה תפקידים וסגור את כל החיבורים בעת כיבוי</string>
     <string name="debug_sync_settings">הגדרות סנכרון</string>
-    <string name="debug_max_packets_per_sync_fmt">max packets per sync: %1$d</string>
-    <string name="debug_max_gcs_filter_size_fmt">max GCS filter size: %1$d bytes (128–1024)</string>
-    <string name="debug_target_fpr_fmt">target FPR: %1$.2f%%</string>
-    <string name="debug_our_device_id_fmt">our device id: %1$s</string>
+    <string name="debug_max_packets_per_sync_fmt">מנות מקסימום לסנכרון: %1$d</string>
+    <string name="debug_max_gcs_filter_size_fmt">גודל מקסימום לפילטר GCS: %1$d בתים (128–1024)</string>
+    <string name="debug_target_fpr_fmt">יעד FPR: %1$.2f%%</string>
+    <string name="debug_connected_devices">מכשירים מחוברים</string>
+    <string name="debug_our_device_id_fmt">מזהה המכשיר שלנו: %1$s</string>
     <string name="debug_none">ללא</string>
     <string name="debug_disconnect">נתק</string>
     <string name="debug_recent_scan_results">תוצאות סריקה אחרונות</string>
     <string name="debug_connect">התחבר</string>
     <string name="debug_debug_console">קונסולת ניפוי באגים</string>
     <string name="debug_clear">נקה</string>
-    <string name="debug_relays_window_fmt">last 10s: %1$d • 1m: %2$d • 15m: %3$d</string>
-    <string name="debug_derived_p_fmt">derived P: %1$s • est. max elements: %2$s</string>
+    <string name="debug_relays_window_fmt">10ש אחרונות: %1$d • 1ד: %2$d • 15ד: %3$d</string>
+    <string name="debug_derived_p_fmt">P נגזר: %1$s • מקסימום אלמנטים משוער: %2$s</string>
+    <string name="debug_direct_suffix"> • ישיר</string>
     <string name="debug_role_server">כשרת (אנחנו מארחים)</string>
     <string name="debug_role_client">כלקוח (אנחנו מתחברים)</string>
 
@@ -413,9 +347,10 @@
     <string name="verify_success_body">אימתת את %1$s</string>
     <string name="verify_success_system_message">אומת %1$s</string>
 
-    <!-- מסכי הכנסה -->
+    <!-- מסכי הצטרפות -->
     <string name="location_services_required">שירותי מיקום נדרשים</string>
     <string name="privacy_first">פרטיות קודם כל</string>
+    <string name="location_explanation">Zemzeme לא עוקב אחר המיקום שלך.\n\nשירותי מיקום נדרשים לסריקת Bluetooth ולתכונת צ\'אט Geohash.</string>
     <string name="location_needs_for">Zemzeme צריך שירותי מיקום עבור:</string>
     <string name="location_needs_bullets">• סריקת מכשירי Bluetooth\n• גילוי משתמשים קרובים ברשת mesh\n• תכונת צ\'אט Geohash\n• ללא מעקב או איסוף מיקום</string>
     <string name="background_location_required_title">מיקום ברקע מומלץ</string>
@@ -464,7 +399,7 @@
     <string name="channel_count_prefix"> · ⧉ </string>
     <string name="geohash_people_header">אנשים</string>
     <string name="nobody_around">אף אחד בסביבה…</string>
-    <string name="you_suffix"> (you)</string>
+    <string name="you_suffix"> (אתה)</string>
     <string name="pan_zoom_instruction">הזז והתקרב כדי לבחור geohash</string>
     <string name="select">בחר</string>
     <string name="type_a_message_placeholder">כתוב הודעה…</string>
@@ -542,16 +477,242 @@
         <item quantity="other">%d אנשים</item>
     </plurals>
 
-  <string name="debug_direct_suffix"> • direct</string>
-  <string name="debug_question_mark">?</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
-  <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
-  <string name="pow_label_format">pow: %1$dbit</string>
-  <string name="status_sending">○</string>
-  <string name="status_pending">○</string>
-  <string name="status_sent">✓</string>
-  <string name="status_delivered">✓✓</string>
-  <string name="status_failed">⚠</string>
-  <string name="status_read">✓</string>
+    <string name="debug_question_mark">?</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
+    <string name="pow_label_format">pow: %1$dbit</string>
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+
+    <!-- נעילת אפליקציה -->
+    <string name="app_lock_title">נעילת אפליקציה</string>
+    <string name="app_lock_subtitle_off">כבוי</string>
+    <string name="app_lock_subtitle_on">ביומטרי + PIN</string>
+    <string name="app_lock_security_section">אבטחה</string>
+    <string name="app_lock_enter_pin">הזן PIN</string>
+    <string name="app_lock_set_pin">הגדר PIN</string>
+    <string name="app_lock_confirm_pin">אשר PIN</string>
+    <string name="app_lock_biometric_title">פתח את Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">גע בחיישן כדי לפתוח</string>
+    <string name="app_lock_use_pin">השתמש ב-PIN</string>
+    <string name="app_lock_wrong_pin">PIN שגוי</string>
+    <string name="app_lock_too_many_attempts">נותרו %1$d ניסיונות</string>
+    <string name="app_lock_cooldown">נסה שוב בעוד %1$d שניות</string>
+    <string name="app_lock_pin_mismatch">ה-PIN-ים אינם תואמים</string>
+    <string name="app_lock_pin_min_length">ה-PIN חייב להכיל 4–6 ספרות</string>
+    <string name="app_lock_disable_title">השבת נעילת אפליקציה</string>
+    <string name="app_lock_disable_msg">אמת את זהותך כדי להשבית את הנעילה</string>
+    <string name="app_lock_protect_title">הגן על הצ\'אטים שלך</string>
+    <string name="app_lock_protect_desc">PIN בן 6 ספרות נועל את האפליקציה. השתמש בביומטרי לגישה מיידית.</string>
+    <string name="app_lock_enable">הפעל נעילת אפליקציה</string>
+    <string name="app_lock_not_now">לא עכשיו</string>
+
+    <!-- שיתוף אפליקציה -->
+    <string name="about_share_app_header">שתף אפליקציה</string>
+    <string name="about_share_system_title">שתף אפליקציה</string>
+    <string name="about_share_system_desc">שלח APK דרך Bluetooth, שיתוף קרוב, או Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">הכנת ה-APK לשיתוף נכשלה</string>
+    <string name="about_share_chooser_title">שתף APK של %1$s</string>
+    <string name="about_share_helper_text">השתמש ב-Google Quick Share לשליחה (הפעל בהגדרות הטלפון). לאחר ההעברה, ה-APK יהיה בתיקיית ההורדות במכשיר המקבל.</string>
+
+    <!-- החלפת סמל -->
+    <string name="icon_switch_title">רענן סמל &amp; שם אפליקציה</string>
+    <string name="icon_switch_section">התאמה אישית</string>
+    <string name="icon_switch_subtitle">שנה את סמל ושם האפליקציה במשגר</string>
+    <string name="icon_switch_confirm">לשנות את סמל ושם האפליקציה לזה?</string>
+    <string name="icon_switch_apply">החל</string>
+    <string name="icon_switch_toast">סמל ושם האפליקציה שונו!</string>
+
+    <!-- מחיקת חשבון -->
+    <string name="cd_refresh_account">מחק חשבון</string>
+    <string name="refresh_account_title">למחוק חשבון?</string>
+    <string name="refresh_account_message">פעולה זו תמחק את כל ההודעות ותיצור זהות חדשה. אין אפשרות לבטל פעולה זו.</string>
+    <string name="refresh_account_confirm">מחק</string>
+
+    <!-- מבוא mesh -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">התקשורת בקבוצה זו מבוססת לחלוטין על Bluetooth. מכשירים קרובים מעבירים הודעות בין אנשים — אין צורך בחיבור אינטרנט.</string>
+    <string name="mesh_intro_close">סגור</string>
+    <string name="mesh_intro_dont_show">אל תציג שוב</string>
+
+    <!-- כותרות דיאלוגים ופעולות -->
+    <string name="dialog_delete_chat">מחק צ\'אט</string>
+    <string name="dialog_delete_group">מחק קבוצה</string>
+    <string name="dialog_delete_confirm_body">האם אתה בטוח שברצונך למחוק \"%1$s\"? לא ניתן לבטל פעולה זו.</string>
+    <string name="action_delete">מחק</string>
+    <string name="dialog_clear_chat">נקה צ\'אט</string>
+    <string name="dialog_clear_confirm_body">האם אתה בטוח שברצונך לנקות את כל ההודעות ב-\"%1$s\"?</string>
+    <string name="action_clear">נקה</string>
+    <string name="dialog_title_create_group">צור קבוצה חדשה</string>
+    <string name="label_group_name">שם קבוצה</string>
+    <string name="action_create">צור</string>
+    <string name="dialog_title_join_group">הצטרף לקבוצה</string>
+    <string name="label_group_id">מזהה קבוצה</string>
+    <string name="label_nickname_optional">כינוי (אופציונלי)</string>
+    <string name="dialog_title_rename_group">שנה שם קבוצה</string>
+    <string name="action_rename">שנה שם</string>
+
+    <!-- כותרות הגדרות -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">רשת P2P</string>
+    <string name="setting_nostr_relays">ממסרי Nostr</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- הודעות Toast -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh הופעל</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh הושבת</string>
+    <string name="toast_nostr_enabled">Nostr הופעל</string>
+    <string name="toast_nostr_disabled">Nostr הושבת</string>
+    <string name="toast_tor_p2p_unsupported">Tor עם P2P אינו נתמך. השבת P2P תחילה.</string>
+    <string name="toast_p2p_tor_disabled">P2P דרך Tor אינו נתמך. Tor הושבת.</string>
+
+    <!-- בחירת תמונה -->
+    <string name="action_gallery">גלריה</string>
+    <string name="action_camera">מצלמה</string>
+
+    <!-- תיאורי נגישות -->
+    <string name="cd_refresh_p2p">רענן חיבור P2P</string>
+    <string name="cd_direct_bluetooth">Bluetooth ישיר</string>
+    <string name="cd_routed">מנותב</string>
+    <string name="cd_p2p_connection">חיבור P2P</string>
+    <string name="cd_teleported_user">משתמש שהועבר</string>
+    <string name="cd_user">משתמש</string>
+    <string name="cd_backspace">מחיקה</string>
+    <string name="cd_verified">מאומת</string>
+    <string name="cd_add_node">הוסף צומת</string>
+    <string name="cd_remove">הסר</string>
+    <string name="action_enable_location">הפעל מיקום</string>
+
+    <!-- מזהה קבוצה -->
+    <string name="label_group_id_fmt">מזהה קבוצה: %1$s</string>
+
+    <!-- מציין מקום PIN -->
+    <string name="placeholder_6_digits">6 ספרות</string>
+
+    <!-- הגדרות P2P -->
+    <string name="p2p_settings_header">הגדרות</string>
+    <string name="p2p_enable">הפעל P2P</string>
+    <string name="p2p_enable_desc">התחבר ישירות לעמיתי Zemzeme אחרים</string>
+    <string name="p2p_use_default_nodes">השתמש בצמתים ברירת מחדל</string>
+    <string name="p2p_default_nodes_desc">התחבר לצמתי IPFS ציבוריים</string>
+    <string name="p2p_custom_nodes_header">צמתי אתחול מותאמים אישית</string>
+    <string name="p2p_no_custom_nodes">לא הוגדרו צמתים מותאמים אישית. הקש + כדי להוסיף.</string>
+    <string name="p2p_add_bootstrap_node">הוסף צומת אתחול</string>
+    <string name="p2p_enter_multiaddr">הזן multiaddr עבור צומת האתחול:</string>
+    <string name="p2p_recovering">משחזר…</string>
+    <string name="p2p_recover_connection">שחזר חיבור</string>
+    <string name="action_add">הוסף</string>
+
+    <!-- ערוצי התראות -->
+    <string name="notification_channel_direct_messages">הודעות ישירות</string>
+    <string name="notification_channel_dm_desc">התראות על הודעות פרטיות ממשתמשים אחרים</string>
+    <string name="notification_channel_geohash_chats">צ\'אטי Geohash</string>
+    <string name="notification_channel_geohash_desc">התראות על אזכורים והודעות בערוצי geohash</string>
+
+    <!-- ניפוי באגים: טופולוגיית mesh -->
+    <string name="debug_mesh_topology">טופולוגיית mesh</string>
+    <string name="debug_no_gossip">אין gossip עדיין</string>
+
+    <!-- ניפוי באגים: עדכון עצמי -->
+    <string name="debug_self_update">עדכון עצמי (מפתח)</string>
+    <string name="debug_current_version_fmt">גרסה נוכחית: %1$s</string>
+    <string name="debug_download_updates_desc">הורד והתקן עדכונים מ-GitHub releases</string>
+    <string name="update_status_ready">מוכן</string>
+    <string name="update_status_checking">בודק עדכונים…</string>
+    <string name="update_status_available">עדכון זמין: %1$s</string>
+    <string name="update_status_downloading">מוריד: %1$d%%</string>
+    <string name="update_status_ready_install">מוכן להתקנה: %1$s</string>
+    <string name="update_status_installing">מתקין…</string>
+    <string name="update_status_success">העדכון הותקן! הפעל מחדש את האפליקציה.</string>
+    <string name="update_status_pending_action">ממתין לאישור המשתמש…</string>
+    <string name="update_status_error">שגיאה: %1$s</string>
+    <string name="update_grant_install_permission">הענק הרשאת התקנה</string>
+    <string name="update_install">התקן עדכון</string>
+    <string name="update_check">בדוק עדכונים</string>
+    <string name="debug_test_update_dialog">בדוק דיאלוג עדכון</string>
+
+    <!-- ניפוי באגים: גרפי רוחב פס -->
+    <string name="debug_overall">כולל</string>
+    <string name="debug_per_device">לכל מכשיר</string>
+    <string name="debug_per_peer">לכל עמית</string>
+    <string name="debug_incoming">נכנס</string>
+    <string name="debug_outgoing">יוצא</string>
+
+    <!-- ניפוי באגים: קונסולה -->
+    <string name="debug_refreshing">מרענן…</string>
+    <string name="debug_refresh">רענן</string>
+    <string name="debug_clear_logs">נקה יומנים</string>
+    <string name="debug_preparing_export">מכין ייצוא…</string>
+    <string name="debug_share_logs">שתף יומנים</string>
+
+    <!-- הרשאות נוספות -->
+    <string name="continue_button">המשך</string>
+    <string name="perm_required_label">נדרש</string>
+    <string name="perm_recommended_label">מומלץ</string>
+    <string name="perm_info_dialog_ok">אישור</string>
+    <string name="perm_benefit_nearby_devices">הרשאות Bluetooth מאפשרות ל-Zemzeme לגלות ולתקשר עם משתמשים אחרים בקרבת מקום דרך רשת mesh. זה מאפשר העברת הודעות לא מקוונת לחלוטין, ישירות בין עמיתים ללא חיבור אינטרנט.</string>
+    <string name="perm_benefit_location">Android דורש הרשאת מיקום לסריקת מכשירי Bluetooth בקרבת מקום. Zemzeme לא עוקב אחר המיקום שלך ולא שומר אותו.</string>
+    <string name="perm_benefit_background_location">מיקום ברקע מאפשר ל-Zemzeme לגלות משתמשים קרובים גם כאשר האפליקציה ברקע. בלי זה, רשת ה-mesh עובדת רק כאשר האפליקציה פתוחה על המסך.</string>
+    <string name="perm_benefit_notifications">התראות מודיעות לך כאשר מגיעה הודעה פרטית או כאשר יש פעילות חדשה בערוצים שלך, גם כאשר האפליקציה ברקע.</string>
+    <string name="perm_benefit_battery_optimization">השבתת אופטימיזציית סוללה מבטיחה ש-Zemzeme פועל באמינות ברקע ושומר על חיבורי רשת mesh. בלי זה, Android עלול לסגור את האפליקציה כדי לחסוך סוללה ולנתק אותך מה-mesh.</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">סרוק QR</string>
+    <string name="fab_choose_city">בחר עיר</string>
+    <string name="fab_join_group">הצטרף לקבוצה</string>
+    <string name="fab_create_group">צור קבוצה</string>
+    <!-- Section headers -->
+    <string name="section_nearby">בקרבת מקום</string>
+    <string name="section_geographic_groups">קבוצות גיאוגרפיות</string>
+    <string name="section_my_groups">הקבוצות שלי</string>
+    <string name="section_contacts">אנשי קשר</string>
+
+    <!-- כותרות סעיפים חדשות ומחרוזות P2P/מיקום -->
+    <string name="section_username">שם משתמש</string>
+    <string name="section_theme">ערכת נושא</string>
+    <string name="section_settings">הגדרות</string>
+    <string name="section_network">רשת</string>
+    <string name="section_status">סטטוס</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">רשת P2P</string>
+    <string name="p2p_status_no_peers">אין עמיתים</string>
+    <string name="p2p_status_connected">מחובר</string>
+    <string name="p2p_status_connecting">מתחבר…</string>
+    <string name="p2p_status_disconnected">מנותק</string>
+    <string name="p2p_status_error">שגיאה</string>
+    <string name="p2p_peers_connected_fmt">%1$d עמיתים מחוברים</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">צמתים פעילים: %1$d</string>
+    <string name="location_acquiring_title">מאתר מיקום</string>
+    <string name="location_acquiring_desc">אנא המתן בזמן שהמיקום שלך נקבע</string>
+    <string name="location_unavailable_title">מיקום לא זמין</string>
+    <string name="location_permission_required_notes">נדרשת הרשאת מיקום עבור הערות</string>
+
+    <!-- מחוון חיבור -->
+    <string name="connection_searching_peers">מחפש עמיתים…</string>
+    <string name="connection_connecting_peers">מתחבר לעמיתים…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">עמית %1$d מחובר</item>
+        <item quantity="other">%1$d עמיתים מחוברים</item>
+    </plurals>
+    <string name="connection_no_new_messages">מחובר - אין הודעות חדשות</string>
+    <string name="connection_error">שגיאת חיבור</string>
+    <string name="connection_direct">ישיר</string>
+    <string name="connection_connected">מחובר</string>
+
+    <!-- מחוון חיבור ניפוי באגים -->
+    <string name="debug_p2p_no_info">P2P (אין מידע)</string>
+    <string name="debug_nostr_relay">ממסר Nostr</string>
+    <string name="debug_ble_direct">BLE ישיר</string>
+    <string name="debug_p2p_searching">P2P: מחפש עמיתים…</string>
+    <string name="debug_p2p_connecting">P2P: מתחבר לעמיתים…</string>
+    <string name="debug_nostr_no_messages">Nostr מחובר - אין הודעות חדשות</string>
+    <string name="debug_connection_failed">החיבור נכשל</string>
+    <string name="debug_error_fmt">שגיאה: %1$s</string>
 
 </resources>

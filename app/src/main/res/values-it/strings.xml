@@ -60,10 +60,15 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme - %1$d menzioni</string>
     <string name="notification_geohash_summary_title">Zemzeme - chat di posizione</string>
     <string name="notification_geohash_summary_text">%1$d messaggi da %2$d posizioni</string>
-    <string name="notification_mesh_mention_title_singular">Menzionato nella chat mesh</string>
-    <string name="notification_mesh_mention_title_plural">%1$d menzioni nella chat mesh</string>
+    <string name="notification_mesh_mention_title_singular">Menzionato nella chat Bluetooth</string>
+    <string name="notification_mesh_mention_title_plural">%1$d menzioni nella chat Bluetooth</string>
     <string name="notification_more_locations">e altre %1$d posizioni</string>
     <string name="notification_and_more">e altri %1$d</string>
+
+    <!-- Servizio mesh in primo piano -->
+    <string name="mesh_service_channel_name">Servizio Bluetooth in background</string>
+    <string name="mesh_service_channel_desc">Mantiene il mesh Bluetooth attivo in background</string>
+    <string name="mesh_service_notification_content">Bluetooth in esecuzione — %1$d peer</string>
 
     <!-- Accessibilità favoriti -->
     <string name="cd_add_favorite">Aggiungi ai preferiti</string>
@@ -77,6 +82,7 @@
     <string name="cd_nostr_reachable">Raggiungibile via Nostr</string>
     <string name="cd_unread_private_messages">Messaggi privati non letti</string>
     <string name="cd_toggle_bookmark">Attiva/disattiva segnalibro</string>
+    <string name="cd_location_notes">Note di posizione</string>
     <string name="cd_teleported">Teletrasportato</string>
     <string name="cd_tor_status">Stato Tor</string>
     <string name="cd_connected_peers">Peer connessi</string>
@@ -85,6 +91,11 @@
     <string name="cd_handshake_in_progress">Handshake in corso</string>
     <string name="cd_encrypted">Crittografia end-to-end</string>
     <string name="cd_handshake_failed">Handshake fallito</string>
+    <string name="cd_settings">Impostazioni</string>
+    <string name="cd_refresh_account">Elimina account</string>
+    <string name="refresh_account_title">Eliminare l\'account?</string>
+    <string name="refresh_account_message">Tutti i messaggi verranno eliminati e verrà generata una nuova identità. Questa azione non può essere annullata.</string>
+    <string name="refresh_account_confirm">Elimina</string>
 
     <!-- Finestra di visualizzazione file -->
     <string name="file_viewer_title">📎 File ricevuto</string>
@@ -94,10 +105,16 @@
     <string name="file_viewer_open_save">📂 Apri / Salva</string>
     <string name="close_with_emoji">❌ Chiudi</string>
     <string name="pick_image">Scegli immagine</string>
+    <string name="cd_save_current_image">Salva immagine corrente</string>
+    <string name="cd_close">Chiudi</string>
+    <string name="toast_image_saved">Immagine salvata in Download</string>
+    <string name="toast_failed_to_save_image">Impossibile salvare l\'immagine</string>
+    <string name="cd_image_index_of">Immagine %1$d di %2$d</string>
+    <string name="cd_pick_file">Scegli file</string>
 
     <!-- Schermata informazioni -->
     <string name="about_tagline">Messaggistica senza sorveglianza in tutte le circostanze, crittografata end-to-end</string>
-    <string name="about_offline_mesh_title">Chat mesh offline</string>
+    <string name="about_offline_mesh_title">Chat Bluetooth offline</string>
     <string name="about_offline_mesh_desc">Comunica direttamente tramite Bluetooth LE senza internet o server. I messaggi vengono inoltrati attraverso i dispositivi vicini per estendere la portata.</string>
     <string name="about_online_geohash_title">Canali geohash online</string>
     <string name="about_online_geohash_desc">Connettiti con persone nella tua area usando canali basati su geohash. Estendi la rete mesh usando relay internet pubblici.</string>
@@ -131,6 +148,7 @@
     <string name="about_debug_settings">Impostazioni di debug</string>
     <string name="about_footer">Open Source • Privacy First • Decentralizzato</string>
     <string name="close_plain">Chiudi</string>
+    <string name="cd_privacy_protected">Privacy protetta</string>
     <string name="cancel_lower">annulla</string>
 
     <!-- Descrizioni contenuto generiche -->
@@ -148,6 +166,35 @@
     <string name="cd_remove_bookmark">Rimuovi segnalibro</string>
     <string name="cd_teleport">Teletrasporta</string>
     <string name="cd_selected">Selezionato</string>
+    <string name="notification_action_quit_bitchat">Esci da Zemzeme</string>
+    <string name="about_background_title">esegui in background</string>
+    <string name="about_background_desc">mantieni il mesh attivo quando l\'app è chiusa (servizio in primo piano)</string>
+    <string name="about_p2p_subtitle">Connessioni dirette tra peer via p2p</string>
+    <string name="about_nostr_subtitle">Messaggistica tramite relay internet</string>
+    <string name="about_ble_subtitle">Mesh Bluetooth di prossimità</string>
+    <string name="ble_setting_off_subtitle">Bluetooth disattivato — attivalo per usare BLE Mesh</string>
+    <string name="ble_banner_off">Bluetooth disattivato — BLE Mesh non disponibile</string>
+    <string name="ble_setting_dialog_title">Bluetooth richiesto</string>
+    <string name="ble_setting_dialog_msg">Il Bluetooth è disattivato. Attivalo per usare BLE Mesh.</string>
+    <string name="ble_setting_dialog_btn">Apri impostazioni Bluetooth</string>
+    <string name="ble_banner_enable_btn">Attiva</string>
+    <string name="ble_banner_mesh_disabled">Bluetooth è disattivato</string>
+
+    <!-- Connettività di rete -->
+    <string name="network_setting_off_subtitle">Nessuna connessione internet — controlla la connessione</string>
+    <string name="network_not_available">Nessuna connessione internet</string>
+    <string name="network_transports_off_hint">Attiva P2P o Nostr</string>
+    <string name="network_no_internet">Connesso ma nessun internet rilevato</string>
+    <string name="network_setting_dialog_title">Internet richiesto</string>
+    <string name="network_setting_dialog_msg">Una connessione internet è necessaria per i trasporti P2P e Nostr.</string>
+    <string name="network_setting_dialog_btn">Impostazioni di connessione</string>
+    <string name="network_banner_disconnected">Nessun internet — controlla le impostazioni di connessione</string>
+    <string name="network_banner_airplane_mode">La modalità aereo è attiva</string>
+    <string name="network_banner_no_internet">Connesso ma senza internet — controlla la connessione</string>
+    <string name="network_banner_transports_disabled">Nessun trasporto di rete — attiva P2P o Nostr nelle impostazioni</string>
+    <string name="network_banner_settings_btn">Impostazioni</string>
+    <string name="network_airplane_mode">La modalità aereo è attiva</string>
+
     <string name="cd_leave_channel">Esci dal canale</string>
     <string name="cd_reachable_via_nostr">Raggiungibile via Nostr</string>
     <string name="cd_offline_favorite">Preferito offline</string>
@@ -159,24 +206,23 @@
     <string name="cd_image">Immagine</string>
     <string name="cd_cancel">Annulla</string>
     <string name="cd_link">Link</string>
-    <string name="cd_pick_media">Scegli media</string>
-    <string name="cd_pick_file">Scegli file</string>
-    <string name="cd_save_current_image">Salva immagine corrente</string>
-    <string name="cd_close">Chiudi</string>
-    <string name="cd_image_index_of">Immagine %1$d di %2$d</string>
-    <string name="cd_privacy_protected">Privacy protetta</string>
     <string name="cd_record_voice">Registra nota vocale</string>
-    <string name="cd_offline_mesh_chat">Chat mesh offline</string>
+    <string name="cd_pick_media">Scegli media</string>
+    <string name="cd_mining_pow">Mining PoW</string>
+    <string name="cd_pow_enabled">PoW abilitato</string>
+    <string name="cd_proof_of_work">Proof of Work</string>
+    <string name="pow_mining_ellipsis">mining…</string>
+    <string name="pow_label_format">pow: %1$dbit</string>
+    <string name="cd_offline_mesh_chat">Chat Bluetooth offline</string>
     <string name="cd_online_geohash_channels">Canali geohash online</string>
     <string name="cd_end_to_end_encryption">Crittografia end-to-end</string>
+    <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
 
     <!-- Immagini e file -->
     <string name="image_page_of">Immagine %1$d di %2$d</string>
     <string name="image_unavailable">Immagine non disponibile</string>
     <string name="image_saved_to_downloads">Immagine salvata in Download</string>
     <string name="image_save_failed">Impossibile salvare l\'immagine</string>
-    <string name="toast_image_saved">Immagine salvata in Download</string>
-    <string name="toast_failed_to_save_image">Impossibile salvare l\'immagine</string>
     <string name="pick_file">Scegli file</string>
     <string name="file_unavailable">[file non disponibile]</string>
     <string name="unknown">sconosciuto</string>
@@ -198,7 +244,6 @@
     <string name="location_channels_desc">chatta con persone vicino a te usando i canali geohash. viene condiviso solo un geohash approssimativo, mai la posizione GPS esatta. non fare screenshot o condividere questa schermata per proteggere la tua privacy.</string>
     <string name="grant_location_permission">concedi permesso di localizzazione</string>
     <string name="location_permission_denied">permesso di localizzazione negato. abilita nelle impostazioni per usare i canali di posizione.</string>
-    <string name="open_settings">Apri impostazioni</string>
     <string name="location_permission_granted">\u2713 permesso di localizzazione concesso</string>
     <string name="checking_permissions">controllo permessi…</string>
     <string name="finding_nearby_channels">ricerca canali vicini…</string>
@@ -208,13 +253,27 @@
     <string name="teleport">teletrasporta</string>
     <string name="disable_location_services">disattiva servizi di localizzazione</string>
     <string name="enable_location_services">attiva servizi di localizzazione</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">blocco</string>
     <string name="location_level_neighborhood">quartiere</string>
     <string name="location_level_city">città</string>
     <string name="location_level_province">provincia</string>
     <string name="location_level_region">regione</string>
-    <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
+
+    <!-- Note di posizione -->
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d nota</item>
+        <item quantity="other">#%1$s ± 1 • %2$d note</item>
+    </plurals>
+    <string name="location_notes_description">aggiungi brevi note permanenti a questo luogo per altri visitatori.</string>
+    <string name="location_notes_relays_unavailable">relay geolocalizzati non disponibili; note in pausa</string>
+    <string name="location_notes_no_relays_title">nessun relay geolocalizzato nelle vicinanze</string>
+    <string name="location_notes_no_relays_desc">le note dipendono dai relay geo. controlla la connessione e riprova.</string>
+    <string name="loading_location_notes">caricamento note…</string>
+    <string name="location_notes_empty_title">nessuna nota ancora</string>
+    <string name="location_notes_empty_desc">sii il primo ad aggiungerne una per questo posto.</string>
+    <string name="dismiss">chiudi</string>
+    <string name="location_notes_input_placeholder">aggiungi una nota per questo luogo</string>
 
     <!-- Debug / Diagnostica -->
     <string name="debug_tools">strumenti di debug</string>
@@ -241,12 +300,52 @@
     <string name="debug_none">nessuno</string>
     <string name="debug_disconnect">disconnetti</string>
     <string name="debug_recent_scan_results">risultati scansione recenti</string>
+
+    <!-- Verifica -->
+    <string name="verify_title">verifica</string>
+    <string name="verify_my_qr_title">scansiona per verificarmi</string>
+    <string name="verify_scan_prompt_friend">scansiona qr altrui</string>
+    <string name="verify_scan_someone">scansiona qr altrui</string>
+    <string name="verify_show_my_qr">mostra mio qr</string>
+    <string name="verify_remove">rimuovi verifica</string>
+    <string name="verify_qr_unavailable">qr non disponibile</string>
+    <string name="verify_camera_permission">permesso fotocamera necessario</string>
+    <string name="verify_request_camera">abilita fotocamera</string>
+    <string name="verify_paste_label">incolla url verifica</string>
+    <string name="verify_validate">convalida</string>
+    <string name="verify_scanned">verifica richiesta</string>
+    <string name="security_verification_title">verifica sicurezza</string>
+    <string name="fingerprint_their">loro impronta</string>
+    <string name="fingerprint_yours">tua impronta</string>
+    <string name="fingerprint_pending">handshake in corso</string>
+    <string name="fingerprint_no_peer">apri chat privata</string>
+    <string name="fingerprint_status_verified">criptato &amp; verificato</string>
+    <string name="fingerprint_status_encrypted">criptato</string>
+    <string name="fingerprint_status_handshaking">handshake</string>
+    <string name="fingerprint_status_failed">handshake fallito</string>
+    <string name="fingerprint_status_uninitialized">non criptato</string>
+    <string name="fingerprint_verified_label">verificato</string>
+    <string name="fingerprint_verified_message">hai verificato questa persona.</string>
+    <string name="fingerprint_not_verified_label">non verificato</string>
+    <string name="fingerprint_not_verified_message_fmt">confronta con %1$s via canale sicuro.</string>
+    <string name="fingerprint_mark_verified">segna verificato</string>
+    <string name="fingerprint_start_handshake">avvia handshake</string>
+    <string name="fingerprint_copy">copia</string>
+    <string name="verify_mutual_match_title">Verifica reciproca</string>
+    <string name="verify_mutual_match_body">Tu e %1$s vi siete verificati</string>
+    <string name="verify_mutual_system_message">verifica reciproca con %1$s</string>
+    <string name="verify_success_title">Verificato</string>
+    <string name="verify_success_body">Hai verificato %1$s</string>
+    <string name="verify_success_system_message">verificato %1$s</string>
+
     <string name="debug_connect">connetti</string>
     <string name="debug_debug_console">console di debug</string>
     <string name="debug_clear">cancella</string>
     <string name="debug_relays_window_fmt">ultimi 10s: %1$d • 1m: %2$d • 15m: %3$d</string>
     <string name="debug_derived_p_fmt">P derivato: %1$s • max elementi stimati: %2$s</string>
     <string name="debug_direct_suffix"> • diretto</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
     <string name="debug_role_server">come server (noi ospitiamo)</string>
     <string name="debug_role_client">come client (noi connettiamo)</string>
 
@@ -256,6 +355,15 @@
     <string name="location_explanation">Zemzeme NON traccia la tua posizione.\n\nI servizi di localizzazione sono necessari per la scansione Bluetooth e per la funzionalità di chat geohash.</string>
     <string name="location_needs_for">Zemzeme ha bisogno dei servizi di localizzazione per:</string>
     <string name="location_needs_bullets">• Scansione dispositivi Bluetooth\n• Scoprire utenti vicini nella rete mesh\n• Funzionalità chat geohash\n• Nessun tracciamento o raccolta di posizione</string>
+    <string name="background_location_required_title">Posizione in background consigliata</string>
+    <string name="background_location_required_subtitle">opzionale, migliora l\'affidabilità del mesh</string>
+    <string name="background_location_explanation">Android consiglia la posizione in background per consentire a Zemzeme di cercare dispositivi vicini quando l\'app non è aperta. Questo mantiene il mesh attivo dopo il riavvio.</string>
+    <string name="background_location_settings_tip">Quando si aprono le impostazioni, scegli "Consenti sempre".</string>
+    <string name="background_location_needs_for">Zemzeme usa la posizione in background per:</string>
+    <string name="background_location_needs_bullets">- cercare dispositivi vicini quando l\'app è chiusa\n- riconnettersi dopo il riavvio\n- mantenere il mesh attivo in background</string>
+    <string name="background_location_privacy_note">Non raccogliamo né archiviamo MAI la tua posizione. La tua privacy è al sicuro.</string>
+    <string name="grant_background_location">Consenti posizione in background</string>
+    <string name="skip_background_location">Continua senza posizione in background</string>
     <string name="open_location_settings">Apri impostazioni di localizzazione</string>
     <string name="check_again">Controlla di nuovo</string>
     <string name="location_services_unavailable">Servizi di localizzazione non disponibili</string>
@@ -277,81 +385,50 @@
     <string name="battery_optimization_disabled_title">ottimizzazione batteria disattivata</string>
     <string name="continue_btn">Continua</string>
     <string name="initializing_mesh_network">Inizializzazione rete mesh</string>
+    <string name="dot">.</string>
     <string name="setting_up_bluetooth">Configurazione rete mesh Bluetooth…</string>
     <string name="should_take_seconds">Dovrebbe richiedere solo pochi secondi</string>
+    <string name="warning_emoji">⚠️</string>
     <string name="setup_not_complete">Configurazione non completata</string>
     <string name="try_again">Riprova</string>
+    <string name="open_settings">Apri impostazioni</string>
     <string name="privacy_protected">La tua privacy è protetta</string>
     <string name="privacy_bullets">• nessun tracciamento o raccolta dati\n• le chat mesh Bluetooth sono completamente offline\n• le chat geohash usano internet</string>
     <string name="permissions_header">permessi</string>
     <string name="grant_permissions">Concedi permessi</string>
+    <string name="continue_button">Continua</string>
+    <string name="perm_required_label">Richiesto</string>
+    <string name="perm_recommended_label">Consigliato</string>
+    <string name="perm_info_dialog_ok">OK</string>
+    <string name="perm_benefit_nearby_devices">I permessi Bluetooth consentono a Zemzeme di scoprire e comunicare con altri utenti vicini tramite una rete mesh. Questo permette la messaggistica peer-to-peer completamente offline senza connessione internet.</string>
+    <string name="perm_benefit_location">Android richiede il permesso di localizzazione per cercare dispositivi Bluetooth nelle vicinanze. Zemzeme NON traccia né memorizza la tua posizione.</string>
+    <string name="perm_benefit_background_location">La posizione in background consente a Zemzeme di scoprire utenti vicini anche quando l\'app è in background. Senza questo, la rete mesh funziona solo quando l\'app è aperta sullo schermo.</string>
+    <string name="perm_benefit_notifications">Le notifiche ti informano quando ricevi un messaggio privato o quando c\'è nuova attività nei tuoi canali, anche quando l\'app è in background.</string>
+    <string name="perm_benefit_battery_optimization">Disattivare l\'ottimizzazione della batteria garantisce che Zemzeme funzioni in modo affidabile in background, mantenendo le connessioni di rete mesh. Senza questo, Android potrebbe chiudere l\'app per risparmiare batteria, disconnettendoti dal mesh.</string>
     <string name="location_tracking_warning">Zemzeme NON traccia la tua posizione</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
     <string name="geohash_people_header">PERSONE</string>
     <string name="nobody_around">nessuno nei dintorni…</string>
     <string name="you_suffix"> (tu)</string>
     <string name="pan_zoom_instruction">scorri e ingrandisci per selezionare un geohash</string>
     <string name="select">seleziona</string>
     <string name="type_a_message_placeholder">scrivi un messaggio…</string>
-    <string name="mention">menzione</string>
-    <string name="pow_time_estimate">(~%1$s)</string>
-    <string name="version_prefix">v%1$s</string>
-    <string name="image_star">image/*</string>
-    <string name="media_type_image">Immagine</string>
-    <string name="media_type_file">File</string>
-
-    <!-- Helper testo notifiche -->
-    <string name="notification_sent_image">📷 ha inviato un\'immagine</string>
-    <string name="notification_sent_voice">🎤 ha inviato un messaggio vocale</string>
-    <string name="notification_sent_file">📎 ha inviato un file</string>
-
-    <!-- Accessibilità lettore vocale -->
-    <string name="cd_play_voice">Riproduci</string>
-    <string name="cd_pause_voice">Pausa</string>
-    <string name="cd_mining_pow">Mining PoW</string>
-    <string name="cd_pow_enabled">PoW abilitato</string>
-    <string name="cd_proof_of_work">Proof of Work</string>
-    <string name="pow_mining_ellipsis">mining…</string>
-    <string name="pow_label_format">pow: %1$dbit</string>
-
-    <!-- Descrizioni permessi -->
-    <string name="perm_nearby_devices_desc">Necessario per scoprire utenti Zemzeme tramite Bluetooth</string>
-    <string name="perm_nearby_devices_system">Consenti a Zemzeme di connettersi a dispositivi vicini</string>
-    <string name="perm_location_desc">Richiesto da Android per scoprire utenti Zemzeme vicini tramite Bluetooth</string>
-    <string name="perm_location_system">Zemzeme ha bisogno di questo per cercare dispositivi vicini</string>
-    <string name="perm_notifications_desc">Ricevi notifiche quando ricevi messaggi privati</string>
-    <string name="perm_notifications_system">Consenti a Zemzeme di inviarti notifiche</string>
-    <string name="perm_battery_desc">Disattiva l\'ottimizzazione della batteria per garantire che Zemzeme funzioni in modo affidabile in background e mantenga le connessioni di rete mesh</string>
-    <string name="perm_battery_system">Consenti a Zemzeme di funzionare senza restrizioni della batteria</string>
-
-    <!-- Tipi di permessi -->
-    <string name="perm_type_nearby_devices">Dispositivi vicini</string>
-    <string name="perm_type_precise_location">Posizione precisa</string>
-    <string name="perm_type_microphone">Microfono</string>
-    <string name="perm_type_notifications">Notifiche</string>
-    <string name="perm_type_battery_optimization">Ottimizzazione batteria</string>
-    <string name="perm_type_other">Altro</string>
-
-    <!-- Dialogo richiesta password -->
-    <string name="pwd_prompt_title">Inserisci password del canale</string>
-    <string name="pwd_prompt_message">Il canale %1$s è protetto da password. Inserisci la password per entrare.</string>
-    <string name="pwd_label">Password</string>
-    <string name="join">Entra</string>
-    <string name="cancel">Annulla</string>
-
-    <!-- Simboli e stringhe speciali -->
-    <string name="at_symbol">@</string>
-    <string name="app_brand">Zemzeme/</string>
-    <string name="channel_count_prefix"> · ⧉ </string>
     <string name="mention_suggestion_at">@%1$s</string>
+    <string name="mention">menzione</string>
     <string name="image_counter">%1$d / %2$d</string>
+    <string name="pow_time_estimate">(~%1$s)</string>
     <string name="at_nickname">@%1$s</string>
+    <string name="version_prefix">v%1$s</string>
     <string name="hash_symbol">#</string>
     <string name="underscore">_</string>
     <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
     <string name="progress_filled">█</string>
     <string name="progress_empty">░</string>
-    <string name="dot">.</string>
-    <string name="warning_emoji">⚠️</string>
+    <string name="image_star">image/*</string>
+    <string name="media_type_image">Immagine</string>
+    <string name="media_type_file">File</string>
 
     <!-- Icone stato messaggio -->
     <string name="status_sending">○</string>
@@ -361,7 +438,10 @@
     <string name="status_failed">⚠</string>
     <string name="status_read">✓</string>
 
-    <!-- Helper file notifiche -->
+    <!-- Helper testo notifiche -->
+    <string name="notification_sent_image">📷 ha inviato un\'immagine</string>
+    <string name="notification_sent_voice">🎤 ha inviato un messaggio vocale</string>
+    <string name="notification_sent_file">📎 ha inviato un file</string>
     <string name="notification_file_pdf">📄</string>
     <string name="notification_file_zip">🗜️</string>
     <string name="notification_file_doc">📄</string>
@@ -369,111 +449,258 @@
     <string name="notification_file_ppt">📈</string>
     <string name="notification_file_generic">📎</string>
 
-    <!-- Debug aggiuntivo -->
-    <string name="debug_question_mark">?</string>
+    <!-- Accessibilità lettore vocale -->
+    <string name="cd_play_voice">Riproduci</string>
+    <string name="cd_pause_voice">Pausa</string>
+
+    <!-- Descrizioni permessi -->
+    <string name="perm_nearby_devices_desc">Necessario per scoprire utenti Zemzeme tramite Bluetooth</string>
+    <string name="perm_nearby_devices_system">Consenti a Zemzeme di connettersi a dispositivi vicini</string>
+    <string name="perm_location_desc">Richiesto da Android per scoprire utenti Zemzeme vicini tramite Bluetooth</string>
+    <string name="perm_location_system">Zemzeme ha bisogno di questo per cercare dispositivi vicini</string>
+    <string name="perm_background_location_desc">Consigliato per cercare dispositivi vicini mentre l\'app è in background</string>
+    <string name="perm_background_location_system">Consenti accesso alla posizione in background</string>
+    <string name="perm_notifications_desc">Ricevi notifiche quando ricevi messaggi privati</string>
+    <string name="perm_notifications_system">Consenti a Zemzeme di inviarti notifiche</string>
+    <string name="perm_battery_desc">Disattiva l\'ottimizzazione della batteria per garantire che Zemzeme funzioni in modo affidabile in background e mantenga le connessioni di rete mesh</string>
+    <string name="perm_battery_system">Consenti a Zemzeme di funzionare senza restrizioni della batteria</string>
+
+    <!-- Tipi di permessi -->
+    <string name="perm_type_nearby_devices">Dispositivi vicini</string>
+    <string name="perm_type_precise_location">Posizione precisa</string>
+    <string name="perm_type_background_location">Posizione in background</string>
+    <string name="perm_type_microphone">Microfono</string>
+    <string name="perm_type_notifications">Notifiche</string>
+    <string name="perm_type_battery_optimization">Ottimizzazione batteria</string>
+    <string name="perm_type_other">Altro</string>
+
+    <!-- Blocco app -->
+    <string name="app_lock_title">Blocco app</string>
+    <string name="app_lock_subtitle_off">Disattivo</string>
+    <string name="app_lock_subtitle_on">Biometrico + PIN</string>
+    <string name="app_lock_security_section">SICUREZZA</string>
+    <string name="app_lock_enter_pin">Inserisci PIN</string>
+    <string name="app_lock_set_pin">Imposta PIN</string>
+    <string name="app_lock_confirm_pin">Conferma PIN</string>
+    <string name="app_lock_biometric_title">Sblocca Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">Tocca il sensore per sbloccare</string>
+    <string name="app_lock_use_pin">Usa PIN</string>
+    <string name="app_lock_wrong_pin">PIN errato</string>
+    <string name="app_lock_too_many_attempts">%1$d tentativo/i rimanente/i</string>
+    <string name="app_lock_cooldown">Riprova tra %1$d secondi</string>
+    <string name="app_lock_pin_mismatch">I PIN non corrispondono</string>
+    <string name="app_lock_pin_min_length">Il PIN deve avere 4–6 cifre</string>
+    <string name="app_lock_disable_title">Disabilita blocco app</string>
+    <string name="app_lock_disable_msg">Verifica la tua identità per disabilitare il blocco</string>
+    <string name="app_lock_protect_title">Proteggi le tue chat</string>
+    <string name="app_lock_protect_desc">Un PIN a 6 cifre blocca l\'app. Usa la biometria per un accesso istantaneo.</string>
+    <string name="app_lock_enable">Attiva blocco app</string>
+    <string name="app_lock_not_now">Non ora</string>
+
+    <!-- Dialogo richiesta password -->
+    <string name="pwd_prompt_title">Inserisci password del canale</string>
+    <string name="pwd_prompt_message">Il canale %1$s è protetto da password. Inserisci la password per entrare.</string>
+    <string name="pwd_label">Password</string>
+    <string name="join">Entra</string>
+    <string name="cancel">Annulla</string>
+    <string name="tor_not_available_in_this_build">Tor non disponibile in questa versione</string>
 
     <!-- Plurali -->
+    <plurals name="notification_and_more">
+        <item quantity="one">e %d altro</item>
+        <item quantity="other">e %d altri</item>
+    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1 persona</item>
         <item quantity="other">%d persone</item>
     </plurals>
 
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d nota</item>
-    <item quantity="other">#%1$s ± 1 • %2$d note</item>
-  </plurals>
-  <string name="location_notes_description">aggiungi brevi note permanenti a questo luogo per altri visitatori.</string>
-  <string name="location_notes_relays_unavailable">relay geolocalizzati non disponibili; note in pausa</string>
-  <string name="location_notes_no_relays_title">nessun relay geolocalizzato nelle vicinanze</string>
-  <string name="location_notes_no_relays_desc">le note dipendono dai relay geo. controlla la connessione e riprova.</string>
-  <string name="loading_location_notes">caricamento note…</string>
-  <string name="location_notes_empty_title">nessuna nota ancora</string>
-  <string name="location_notes_empty_desc">sii il primo ad aggiungerne una per questo posto.</string>
-  <string name="dismiss">chiudi</string>
-  <string name="location_notes_input_placeholder">aggiungi una nota per questo luogo</string>
-    <string name="mesh_service_notification_content">Mesh in esecuzione — %1$d peer</string>
+    <!-- Introduzione mesh -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">La comunicazione in questo gruppo si basa interamente sul Bluetooth. I dispositivi vicini inoltrano i messaggi tra le persone — non è necessaria alcuna connessione internet.</string>
+    <string name="mesh_intro_close">Chiudi</string>
+    <string name="mesh_intro_dont_show">Non mostrare più</string>
 
-  <string name="verify_title">verifica</string>
-  <string name="verify_my_qr_title">scansiona per verificarmi</string>
-  <string name="verify_scan_prompt_friend">scansiona qr altrui</string>
-  <string name="verify_scan_someone">scansiona qr altrui</string>
-  <string name="verify_show_my_qr">mostra mio qr</string>
-  <string name="verify_remove">rimuovi verifica</string>
-  <string name="verify_qr_unavailable">qr non disponibile</string>
-  <string name="verify_camera_permission">permesso fotocamera necessario</string>
-  <string name="verify_request_camera">abilita fotocamera</string>
-  <string name="verify_paste_label">incolla url verifica</string>
-  <string name="verify_validate">convalida</string>
-  <string name="verify_scanned">verifica richiesta</string>
-  <string name="security_verification_title">verifica sicurezza</string>
-  <string name="fingerprint_their">loro impronta</string>
-  <string name="fingerprint_yours">tua impronta</string>
-  <string name="fingerprint_pending">handshake in corso</string>
-  <string name="fingerprint_no_peer">apri chat privata</string>
-  <string name="fingerprint_status_verified">criptato &amp; verificato</string>
-  <string name="fingerprint_status_encrypted">criptato</string>
-  <string name="fingerprint_status_handshaking">handshake</string>
-  <string name="fingerprint_status_failed">handshake fallito</string>
-  <string name="fingerprint_status_uninitialized">non criptato</string>
-  <string name="fingerprint_verified_label">verificato</string>
-  <string name="fingerprint_verified_message">hai verificato questa persona.</string>
-  <string name="fingerprint_not_verified_label">non verificato</string>
-  <string name="fingerprint_not_verified_message_fmt">confronta con %1$s via canale sicuro.</string>
-  <string name="fingerprint_mark_verified">segna verificato</string>
-  <string name="fingerprint_start_handshake">avvia handshake</string>
-  <string name="fingerprint_copy">copia</string>
-  <string name="verify_mutual_match_title">Verifica reciproca</string>
-  <string name="verify_mutual_match_body">Tu e %1$s vi siete verificati</string>
-  <string name="verify_mutual_system_message">verifica reciproca con %1$s</string>
-  <string name="verify_success_title">Verificato</string>
-  <string name="verify_success_body">Hai verificato %1$s</string>
-  <string name="verify_success_system_message">verificato %1$s</string>
+    <!-- Condividi app -->
+    <string name="about_share_app_header">CONDIVIDI APP</string>
+    <string name="about_share_system_title">Condividi app</string>
+    <string name="about_share_system_desc">Invia APK tramite Bluetooth, Nearby Share o Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">Impossibile preparare l\'APK per la condivisione</string>
+    <string name="about_share_chooser_title">Condividi APK %1$s</string>
+    <string name="about_share_helper_text">Usa Google Quick Share per inviare (abilitalo nelle Impostazioni del telefono). Dopo il trasferimento, l\'APK sarà nella cartella Download del dispositivo ricevente.</string>
 
-  <!-- Chiavi mancanti -->
-  <string name="mesh_service_channel_name">Servizio mesh in background</string>
-  <string name="mesh_service_channel_desc">Mantiene il mesh Bluetooth attivo in background</string>
-  <string name="cd_settings">Impostazioni</string>
-  <string name="cd_location_notes">Note di posizione</string>
-  <string name="notification_action_quit_bitchat">Esci da Zemzeme</string>
-  <string name="about_background_title">esegui in background</string>
-  <string name="about_background_desc">mantieni il mesh attivo quando l\'app è chiusa (servizio in primo piano)</string>
-  <string name="about_p2p_subtitle">Connessioni dirette tra peer via p2p</string>
-  <string name="about_nostr_subtitle">Messaggistica tramite relay internet</string>
-  <string name="about_ble_subtitle">Mesh Bluetooth di prossimità</string>
-    <string name="ble_setting_off_subtitle">Bluetooth disattivato — attivalo per usare BLE Mesh</string>
-    <string name="ble_banner_off">Bluetooth disattivato — BLE Mesh non disponibile</string>
-    <string name="ble_setting_dialog_title">Bluetooth richiesto</string>
-    <string name="ble_setting_dialog_msg">Il Bluetooth è disattivato. Attivalo per usare BLE Mesh.</string>
-    <string name="ble_setting_dialog_btn">Apri impostazioni Bluetooth</string>
-    <string name="ble_banner_enable_btn">Attiva</string>
-    <string name="ble_banner_mesh_disabled">BLE Mesh è disattivato</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">Posizione in background consigliata</string>
-  <string name="background_location_required_subtitle">opzionale, migliora l\'affidabilità del mesh</string>
-  <string name="background_location_explanation">Android consiglia la posizione in background per consentire a Zemzeme di cercare dispositivi vicini quando l\'app non è aperta. Questo mantiene il mesh attivo dopo il riavvio.</string>
-  <string name="background_location_settings_tip">Quando si aprono le impostazioni, scegli "Consenti sempre".</string>
-  <string name="background_location_needs_for">Zemzeme usa la posizione in background per:</string>
-  <string name="background_location_needs_bullets">- cercare dispositivi vicini quando l\'app è chiusa\n- riconnettersi dopo il riavvio\n- mantenere il mesh attivo in background</string>
-  <string name="background_location_privacy_note">Non raccogliamo né archiviamo MAI la tua posizione. La tua privacy è al sicuro.</string>
-  <string name="grant_background_location">Consenti posizione in background</string>
-  <string name="skip_background_location">Continua senza posizione in background</string>
-  <string name="perm_background_location_desc">Consigliato per cercare dispositivi vicini mentre l\'app è in background</string>
-  <string name="perm_background_location_system">Consenti accesso alla posizione in background</string>
-  <string name="perm_type_background_location">Posizione in background</string>
-  <string name="tor_not_available_in_this_build">Tor non disponibile in questa versione</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <!-- Cambio icona -->
+    <string name="icon_switch_title">Aggiorna icona &amp; nome dell\'app</string>
+    <string name="icon_switch_section">Personalizzazione</string>
+    <string name="icon_switch_subtitle">cambia l\'icona e il nome dell\'app sul launcher</string>
+    <string name="icon_switch_confirm">Cambiare l\'icona e il nome dell\'app con questo?</string>
+    <string name="icon_switch_apply">Applica</string>
+    <string name="icon_switch_toast">Icona e nome dell\'app cambiati!</string>
+
+    <!-- Dialoghi e azioni -->
+    <string name="dialog_delete_chat">Elimina chat</string>
+    <string name="dialog_delete_group">Elimina gruppo</string>
+    <string name="dialog_delete_confirm_body">Sei sicuro di voler eliminare \"%1$s\"? Questa azione non può essere annullata.</string>
+    <string name="action_delete">Elimina</string>
+    <string name="dialog_clear_chat">Cancella chat</string>
+    <string name="dialog_clear_confirm_body">Sei sicuro di voler cancellare tutti i messaggi in \"%1$s\"?</string>
+    <string name="action_clear">Cancella</string>
+    <string name="dialog_title_create_group">Crea nuovo gruppo</string>
+    <string name="label_group_name">Nome del gruppo</string>
+    <string name="action_create">Crea</string>
+    <string name="dialog_title_join_group">Unisciti al gruppo</string>
+    <string name="label_group_id">ID del gruppo</string>
+    <string name="label_nickname_optional">Nickname (opzionale)</string>
+    <string name="dialog_title_rename_group">Rinomina gruppo</string>
+    <string name="action_rename">Rinomina</string>
+
+    <!-- Titoli impostazioni -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">Rete P2P</string>
+    <string name="setting_nostr_relays">Relay Nostr</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Messaggi toast -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh attivato</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh disattivato</string>
+    <string name="toast_nostr_enabled">Nostr attivato</string>
+    <string name="toast_nostr_disabled">Nostr disattivato</string>
+    <string name="toast_tor_p2p_unsupported">Tor con P2P non è supportato. Disattiva prima P2P.</string>
+    <string name="toast_p2p_tor_disabled">P2P su Tor non è supportato. Tor è stato disattivato.</string>
+
+    <!-- Selettore immagine -->
+    <string name="action_gallery">Galleria</string>
+    <string name="action_camera">Fotocamera</string>
+
+    <!-- Accessibilità aggiuntiva -->
+    <string name="cd_refresh_p2p">Aggiorna connessione P2P</string>
+    <string name="cd_direct_bluetooth">Bluetooth diretto</string>
+    <string name="cd_routed">Instradato</string>
+    <string name="cd_p2p_connection">Connessione P2P</string>
+    <string name="cd_teleported_user">Utente teletrasportato</string>
+    <string name="cd_user">Utente</string>
+    <string name="cd_backspace">cancella</string>
+    <string name="cd_verified">Verificato</string>
+    <string name="cd_add_node">Aggiungi nodo</string>
+    <string name="cd_remove">Rimuovi</string>
+    <string name="action_enable_location">Attiva localizzazione</string>
+
+    <!-- ID gruppo -->
+    <string name="label_group_id_fmt">ID del gruppo: %1$s</string>
+
+    <!-- Placeholder PIN -->
+    <string name="placeholder_6_digits">6 cifre</string>
+
+    <!-- Impostazioni P2P -->
+    <string name="p2p_settings_header">IMPOSTAZIONI</string>
+    <string name="p2p_enable">Attiva P2P</string>
+    <string name="p2p_enable_desc">Connettiti direttamente ad altri peer Zemzeme</string>
+    <string name="p2p_use_default_nodes">Usa nodi predefiniti</string>
+    <string name="p2p_default_nodes_desc">Connettiti ai nodi bootstrap IPFS pubblici</string>
+    <string name="p2p_custom_nodes_header">NODI BOOTSTRAP PERSONALIZZATI</string>
+    <string name="p2p_no_custom_nodes">Nessun nodo personalizzato configurato. Tocca + per aggiungere.</string>
+    <string name="p2p_add_bootstrap_node">Aggiungi nodo bootstrap</string>
+    <string name="p2p_enter_multiaddr">Inserisci la multiaddr per il nodo bootstrap:</string>
+    <string name="p2p_recovering">Ripristino…</string>
+    <string name="p2p_recover_connection">Ripristina connessione</string>
+    <string name="action_add">Aggiungi</string>
+
+    <!-- Canali di notifica -->
+    <string name="notification_channel_direct_messages">Messaggi diretti</string>
+    <string name="notification_channel_dm_desc">Notifiche per messaggi privati da altri utenti</string>
+    <string name="notification_channel_geohash_chats">Chat Geohash</string>
+    <string name="notification_channel_geohash_desc">Notifiche per menzioni e messaggi nei canali di posizione geohash</string>
+
+    <!-- Debug: topologia mesh -->
+    <string name="debug_mesh_topology">topologia mesh</string>
+    <string name="debug_no_gossip">nessun gossip ancora</string>
+
+    <!-- Debug: aggiornamento automatico -->
+    <string name="debug_self_update">aggiornamento auto (dev)</string>
+    <string name="debug_current_version_fmt">Versione attuale: %1$s</string>
+    <string name="debug_download_updates_desc">Scarica e installa aggiornamenti dalle release di GitHub</string>
+    <string name="update_status_ready">Pronto</string>
+    <string name="update_status_checking">Ricerca aggiornamenti…</string>
+    <string name="update_status_available">Aggiornamento disponibile: %1$s</string>
+    <string name="update_status_downloading">Download: %1$d%%</string>
+    <string name="update_status_ready_install">Pronto per l\'installazione: %1$s</string>
+    <string name="update_status_installing">Installazione…</string>
+    <string name="update_status_success">Aggiornamento installato! Riavvia l\'app.</string>
+    <string name="update_status_pending_action">In attesa della conferma dell\'utente…</string>
+    <string name="update_status_error">Errore: %1$s</string>
+    <string name="update_grant_install_permission">Concedi permesso di installazione</string>
+    <string name="update_install">Installa aggiornamento</string>
+    <string name="update_check">Cerca aggiornamenti</string>
+    <string name="debug_test_update_dialog">Testa dialogo aggiornamento</string>
+
+    <!-- Debug: grafici larghezza di banda -->
+    <string name="debug_overall">Complessivo</string>
+    <string name="debug_per_device">Per dispositivo</string>
+    <string name="debug_per_peer">Per peer</string>
+    <string name="debug_incoming">In entrata</string>
+    <string name="debug_outgoing">In uscita</string>
+
+    <!-- Debug: console -->
+    <string name="debug_refreshing">Aggiornamento…</string>
+    <string name="debug_refresh">Aggiorna</string>
+    <string name="debug_clear_logs">Cancella log</string>
+    <string name="debug_preparing_export">Preparazione esportazione…</string>
+    <string name="debug_share_logs">Condividi log</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">Scansiona QR</string>
+    <string name="fab_choose_city">Scegli città</string>
+    <string name="fab_join_group">Unisciti al gruppo</string>
+    <string name="fab_create_group">Crea gruppo</string>
+    <!-- Section headers -->
+    <string name="section_nearby">Vicini</string>
+    <string name="section_geographic_groups">Gruppi geografici</string>
+    <string name="section_my_groups">I miei gruppi</string>
+    <string name="section_contacts">Contatti</string>
+
+    <!-- Sezioni e stato P2P -->
+    <string name="section_username">NOME UTENTE</string>
+    <string name="section_theme">TEMA</string>
+    <string name="section_settings">IMPOSTAZIONI</string>
+    <string name="section_network">RETE</string>
+    <string name="section_status">STATO</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">Rete P2P</string>
+    <string name="p2p_status_no_peers">Nessun peer</string>
+    <string name="p2p_status_connected">Connesso</string>
+    <string name="p2p_status_connecting">Connessione…</string>
+    <string name="p2p_status_disconnected">Disconnesso</string>
+    <string name="p2p_status_error">Errore</string>
+    <string name="p2p_peers_connected_fmt">%1$d peer connessi</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Nodi attivi: %1$d</string>
+    <string name="location_acquiring_title">Acquisizione posizione</string>
+    <string name="location_acquiring_desc">Attendere mentre la posizione viene determinata</string>
+    <string name="location_unavailable_title">Posizione non disponibile</string>
+    <string name="location_permission_required_notes">L\'autorizzazione alla posizione è necessaria per le note</string>
+
+    <!-- Indicatore di connessione -->
+    <string name="connection_searching_peers">Ricerca peer…</string>
+    <string name="connection_connecting_peers">Connessione ai peer…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d peer connesso</item>
+        <item quantity="other">%1$d peer connessi</item>
+    </plurals>
+    <string name="connection_no_new_messages">Connesso - nessun nuovo messaggio</string>
+    <string name="connection_error">Errore di connessione</string>
+    <string name="connection_direct">Diretto</string>
+    <string name="connection_connected">Connesso</string>
+
+    <!-- Indicatore di connessione debug -->
+    <string name="debug_p2p_no_info">P2P (nessuna info)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE diretto</string>
+    <string name="debug_p2p_searching">P2P: ricerca peer…</string>
+    <string name="debug_p2p_connecting">P2P: connessione ai peer…</string>
+    <string name="debug_nostr_no_messages">Nostr connesso - nessun nuovo messaggio</string>
+    <string name="debug_connection_failed">connessione fallita</string>
+    <string name="debug_error_fmt">errore: %1$s</string>
+
 </resources>

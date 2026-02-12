@@ -60,8 +60,8 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d penyebutan</string>
     <string name="notification_geohash_summary_title">Zemzeme – Chat lokasi</string>
     <string name="notification_geohash_summary_text">%1$d pesan dari %2$d lokasi</string>
-    <string name="notification_mesh_mention_title_singular">Disebut di Mesh Chat</string>
-    <string name="notification_mesh_mention_title_plural">%1$d penyebutan di Mesh Chat</string>
+    <string name="notification_mesh_mention_title_singular">Disebut di Bluetooth Chat</string>
+    <string name="notification_mesh_mention_title_plural">%1$d penyebutan di Bluetooth Chat</string>
     <string name="notification_more_locations">dan %1$d lokasi lagi</string>
     <string name="notification_and_more">dan %1$d lagi</string>
 
@@ -97,7 +97,7 @@
 
     <!-- Sheet tentang -->
     <string name="about_tagline">Pesan bebas pengawasan dalam semua keadaan, terenkripsi ujung ke ujung</string>
-    <string name="about_offline_mesh_title">Chat Mesh Offline</string>
+    <string name="about_offline_mesh_title">Chat Bluetooth Offline</string>
     <string name="about_offline_mesh_desc">Berkomunikasi langsung melalui Bluetooth LE tanpa Internet atau server. Pesan diteruskan melalui perangkat terdekat untuk memperluas jangkauan.</string>
     <string name="about_online_geohash_title">Channel Geohash Online</string>
     <string name="about_online_geohash_desc">Terhubung dengan orang-orang di area Anda melalui channel berbasis geohash. Perluas mesh melalui relay Internet publik.</string>
@@ -208,7 +208,7 @@
     <string name="teleport">teleportasi</string>
     <string name="disable_location_services">Nonaktifkan layanan lokasi</string>
     <string name="enable_location_services">Aktifkan layanan lokasi</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">Blok</string>
     <string name="location_level_neighborhood">Lingkungan</string>
     <string name="location_level_city">Kota</string>
@@ -285,6 +285,15 @@
     <string name="privacy_bullets">• tidak ada pelacakan atau pengumpulan data\n• Bluetooth mesh chat sepenuhnya offline\n• Geohash chat menggunakan Internet</string>
     <string name="permissions_header">Izin</string>
     <string name="grant_permissions">Berikan izin</string>
+    <string name="continue_button">Lanjut</string>
+    <string name="perm_required_label">Wajib</string>
+    <string name="perm_recommended_label">Disarankan</string>
+    <string name="perm_info_dialog_ok">OK</string>
+    <string name="perm_benefit_nearby_devices">Izin Bluetooth memungkinkan Zemzeme menemukan dan berkomunikasi dengan pengguna lain di sekitar melalui jaringan mesh. Ini memungkinkan pesan peer-to-peer sepenuhnya offline tanpa koneksi internet.</string>
+    <string name="perm_benefit_location">Android memerlukan izin lokasi untuk memindai perangkat Bluetooth di sekitar. Zemzeme TIDAK melacak atau menyimpan lokasi Anda.</string>
+    <string name="perm_benefit_background_location">Lokasi latar belakang memungkinkan Zemzeme menemukan pengguna terdekat meskipun aplikasi di latar belakang. Tanpa ini, jaringan mesh hanya berfungsi saat aplikasi terbuka di layar.</string>
+    <string name="perm_benefit_notifications">Notifikasi memberi tahu Anda saat menerima pesan pribadi atau saat ada aktivitas baru di channel Anda, meskipun aplikasi di latar belakang.</string>
+    <string name="perm_benefit_battery_optimization">Menonaktifkan optimalisasi baterai memastikan Zemzeme berjalan andal di latar belakang dan mempertahankan koneksi jaringan mesh. Tanpa ini, Android mungkin menghentikan aplikasi untuk menghemat baterai dan memutuskan Anda dari mesh.</string>
     <string name="location_tracking_warning">Zemzeme TIDAK melacak lokasi Anda</string>
     <string name="geohash_people_header">ORANG</string>
     <string name="nobody_around">tidak ada orang di sekitar …</string>
@@ -331,82 +340,111 @@
     <string name="perm_type_battery_optimization">Optimalisasi baterai</string>
     <string name="perm_type_other">Lainnya</string>
 
+    <!-- App Lock -->
+    <string name="app_lock_title">Kunci Aplikasi</string>
+    <string name="app_lock_subtitle_off">Nonaktif</string>
+    <string name="app_lock_subtitle_on">Biometrik + PIN</string>
+    <string name="app_lock_security_section">KEAMANAN</string>
+    <string name="app_lock_enter_pin">Masukkan PIN</string>
+    <string name="app_lock_set_pin">Atur PIN</string>
+    <string name="app_lock_confirm_pin">Konfirmasi PIN</string>
+    <string name="app_lock_biometric_title">Buka kunci Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">Gunakan biometrik untuk membuka kunci</string>
+    <string name="app_lock_use_pin">Gunakan PIN</string>
+    <string name="app_lock_wrong_pin">PIN salah</string>
+    <string name="app_lock_too_many_attempts">Terlalu banyak percobaan. Coba lagi dalam %1$d detik.</string>
+    <string name="app_lock_cooldown">%1$d detik tersisa</string>
+    <string name="app_lock_pin_mismatch">PIN tidak cocok</string>
+    <string name="app_lock_pin_min_length">PIN harus minimal 4 digit</string>
+    <string name="app_lock_disable_title">Nonaktifkan Kunci Aplikasi</string>
+    <string name="app_lock_disable_msg">Verifikasi identitas Anda untuk menonaktifkan kunci aplikasi</string>
+    <string name="app_lock_protect_title">Lindungi Chat Anda</string>
+    <string name="app_lock_protect_desc">PIN 6 digit mengunci aplikasi. Gunakan biometrik untuk akses cepat.</string>
+    <string name="app_lock_enable">Aktifkan Kunci Aplikasi</string>
+    <string name="app_lock_not_now">Nanti Saja</string>
+
     <!-- Dialog kata sandi -->
     <string name="pwd_prompt_title">Masukkan kata sandi channel</string>
     <string name="pwd_prompt_message">Channel %1$s dilindungi kata sandi. Masukkan kata sandi untuk bergabung.</string>
     <string name="pwd_label">Kata sandi</string>
     <string name="join">Bergabung</string>
     <string name="cancel">Batal</string>
+    <string name="tor_not_available_in_this_build">Tor tidak tersedia di build ini</string>
 
     <!-- Jamak -->
+    <plurals name="notification_and_more">
+        <item quantity="one">dan %d lagi</item>
+        <item quantity="other">dan %d lagi</item>
+    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1 orang</item>
         <item quantity="other">%d orang</item>
     </plurals>
 
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d catatan</item>
-    <item quantity="other">#%1$s ± 1 • %2$d catatan</item>
-  </plurals>
-  <string name="location_notes_description">tambahkan catatan singkat permanen ke lokasi ini agar pengunjung lain dapat menemukannya.</string>
-  <string name="location_notes_relays_unavailable">relay geo tidak tersedia; catatan dijeda</string>
-  <string name="location_notes_no_relays_title">tidak ada relay geo di sekitar</string>
-  <string name="location_notes_no_relays_desc">catatan bergantung pada relay geo. periksa koneksi lalu coba lagi.</string>
-  <string name="loading_location_notes">memuat catatan…</string>
-  <string name="location_notes_empty_title">belum ada catatan</string>
-  <string name="location_notes_empty_desc">jadilah yang pertama menambahkan catatan untuk tempat ini.</string>
-  <string name="dismiss">tutup</string>
-  <string name="location_notes_input_placeholder">tambahkan catatan untuk tempat ini</string>
-    <string name="mesh_service_notification_content">Mesh berjalan — %1$d peer</string>
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d catatan</item>
+        <item quantity="other">#%1$s ± 1 • %2$d catatan</item>
+    </plurals>
+    <string name="location_notes_description">tambahkan catatan singkat permanen ke lokasi ini agar pengunjung lain dapat menemukannya.</string>
+    <string name="location_notes_relays_unavailable">relay geo tidak tersedia; catatan dijeda</string>
+    <string name="location_notes_no_relays_title">tidak ada relay geo di sekitar</string>
+    <string name="location_notes_no_relays_desc">catatan bergantung pada relay geo. periksa koneksi lalu coba lagi.</string>
+    <string name="loading_location_notes">memuat catatan…</string>
+    <string name="location_notes_empty_title">belum ada catatan</string>
+    <string name="location_notes_empty_desc">jadilah yang pertama menambahkan catatan untuk tempat ini.</string>
+    <string name="dismiss">tutup</string>
+    <string name="location_notes_input_placeholder">tambahkan catatan untuk tempat ini</string>
+    <string name="mesh_service_notification_content">Bluetooth berjalan — %1$d peer</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+    <!-- Verifikasi -->
+    <string name="verify_title">verifikasi</string>
+    <string name="verify_my_qr_title">pindai untuk memverifikasi saya</string>
+    <string name="verify_scan_prompt_friend">pindai QR orang lain</string>
+    <string name="verify_scan_someone">pindai QR orang lain</string>
+    <string name="verify_show_my_qr">tampilkan QR saya</string>
+    <string name="verify_remove">hapus verifikasi</string>
+    <string name="verify_qr_unavailable">QR tidak tersedia</string>
+    <string name="verify_camera_permission">izin kamera diperlukan untuk memindai kode QR</string>
+    <string name="verify_request_camera">aktifkan kamera</string>
+    <string name="verify_paste_label">tempel URL verifikasi</string>
+    <string name="verify_validate">validasi</string>
+    <string name="verify_scanned">verifikasi diminta</string>
+    <string name="security_verification_title">verifikasi keamanan</string>
+    <string name="fingerprint_their">sidik jari mereka</string>
+    <string name="fingerprint_yours">sidik jari Anda</string>
+    <string name="fingerprint_pending">handshake tertunda</string>
+    <string name="fingerprint_no_peer">buka chat pribadi untuk melihat sidik jari</string>
+    <string name="fingerprint_status_verified">terenkripsi &amp; terverifikasi</string>
+    <string name="fingerprint_status_encrypted">terenkripsi</string>
+    <string name="fingerprint_status_handshaking">handshake berlangsung</string>
+    <string name="fingerprint_status_failed">handshake gagal</string>
+    <string name="fingerprint_status_uninitialized">tidak terenkripsi</string>
+    <string name="fingerprint_verified_label">terverifikasi</string>
+    <string name="fingerprint_verified_message">Anda telah memverifikasi identitas orang ini.</string>
+    <string name="fingerprint_not_verified_label">belum diverifikasi</string>
+    <string name="fingerprint_not_verified_message_fmt">bandingkan sidik jari ini dengan %1$s menggunakan saluran yang aman.</string>
+    <string name="fingerprint_mark_verified">tandai sebagai terverifikasi</string>
+    <string name="fingerprint_start_handshake">mulai handshake</string>
+    <string name="fingerprint_copy">salin</string>
+    <string name="verify_mutual_match_title">Verifikasi timbal balik</string>
+    <string name="verify_mutual_match_body">Anda dan %1$s telah saling memverifikasi</string>
+    <string name="verify_mutual_system_message">verifikasi timbal balik dengan %1$s</string>
+    <string name="verify_success_title">Terverifikasi</string>
+    <string name="verify_success_body">Anda memverifikasi %1$s</string>
+    <string name="verify_success_system_message">memverifikasi %1$s</string>
 
-  <!-- Kunci yang hilang -->
-  <string name="mesh_service_channel_name">Layanan mesh latar belakang</string>
-  <string name="mesh_service_channel_desc">Menjaga mesh Bluetooth tetap berjalan di latar belakang</string>
-  <string name="cd_settings">Pengaturan</string>
-  <string name="cd_location_notes">Catatan lokasi</string>
-  <string name="notification_action_quit_bitchat">Keluar dari Zemzeme</string>
-  <string name="about_background_title">jalankan di latar belakang</string>
-  <string name="about_background_desc">jaga mesh tetap aktif saat aplikasi ditutup (layanan foreground)</string>
-  <string name="about_p2p_subtitle">Koneksi langsung antar-peer via p2p</string>
-  <string name="about_nostr_subtitle">Pesan melalui relay internet</string>
-  <string name="about_ble_subtitle">Mesh kedekatan Bluetooth</string>
+    <!-- Kunci yang hilang -->
+    <string name="mesh_service_channel_name">Layanan mesh latar belakang</string>
+    <string name="mesh_service_channel_desc">Menjaga mesh Bluetooth tetap berjalan di latar belakang</string>
+    <string name="cd_settings">Pengaturan</string>
+    <string name="cd_location_notes">Catatan lokasi</string>
+    <string name="notification_action_quit_bitchat">Keluar dari Zemzeme</string>
+    <string name="about_background_title">jalankan di latar belakang</string>
+    <string name="about_background_desc">jaga mesh tetap aktif saat aplikasi ditutup (layanan foreground)</string>
+    <string name="about_p2p_subtitle">Koneksi langsung antar-peer via p2p</string>
+    <string name="about_nostr_subtitle">Pesan melalui relay internet</string>
+    <string name="about_ble_subtitle">Mesh kedekatan Bluetooth</string>
     <string name="ble_setting_off_subtitle">Bluetooth mati — aktifkan untuk menggunakan BLE Mesh</string>
     <string name="ble_banner_off">Bluetooth mati — BLE Mesh tidak tersedia</string>
     <string name="ble_setting_dialog_title">Bluetooth Diperlukan</string>
@@ -414,58 +452,249 @@
     <string name="ble_setting_dialog_btn">Buka Pengaturan Bluetooth</string>
     <string name="ble_banner_enable_btn">Aktifkan</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh dinonaktifkan</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">Lokasi Latar Belakang Direkomendasikan</string>
-  <string name="background_location_required_subtitle">opsional, meningkatkan keandalan mesh</string>
-  <string name="background_location_explanation">Android merekomendasikan lokasi latar belakang agar Zemzeme dapat mencari perangkat terdekat saat aplikasi tidak dibuka. Ini menjaga mesh tetap aktif setelah reboot.</string>
-  <string name="background_location_settings_tip">Saat pengaturan terbuka, pilih "Izinkan sepanjang waktu".</string>
-  <string name="background_location_needs_for">Zemzeme menggunakan lokasi latar belakang untuk:</string>
-  <string name="background_location_needs_bullets">- mencari perangkat terdekat saat aplikasi ditutup\n- menyambung kembali setelah reboot\n- menjaga mesh tetap berjalan di latar belakang</string>
-  <string name="background_location_privacy_note">Kami TIDAK PERNAH mengumpulkan atau menyimpan lokasi Anda. Privasi Anda aman.</string>
-  <string name="grant_background_location">Izinkan Lokasi Latar Belakang</string>
-  <string name="skip_background_location">Lanjut tanpa lokasi latar belakang</string>
-  <string name="dot">.</string>
-  <string name="warning_emoji">⚠️</string>
-  <string name="at_symbol">@</string>
-  <string name="app_brand">Zemzeme/</string>
-  <string name="channel_count_prefix"> · ⧉ </string>
-  <string name="mention_suggestion_at">@%1$s</string>
-  <string name="at_nickname">@%1$s</string>
-  <string name="hash_symbol">#</string>
-  <string name="underscore">_</string>
-  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
-  <string name="progress_filled">█</string>
-  <string name="progress_empty">░</string>
-  <string name="image_counter">%1$d / %2$d</string>
-  <string name="status_sending">○</string>
-  <string name="status_pending">○</string>
-  <string name="status_sent">✓</string>
-  <string name="status_delivered">✓✓</string>
-  <string name="status_failed">⚠</string>
-  <string name="status_read">✓</string>
-  <string name="notification_file_pdf">📄</string>
-  <string name="notification_file_zip">🗜️</string>
-  <string name="notification_file_doc">📄</string>
-  <string name="notification_file_xls">📊</string>
-  <string name="notification_file_ppt">📈</string>
-  <string name="notification_file_generic">📎</string>
-  <string name="perm_background_location_desc">Direkomendasikan untuk mencari perangkat terdekat saat aplikasi di latar belakang</string>
-  <string name="perm_background_location_system">Izinkan akses lokasi latar belakang</string>
-  <string name="perm_type_background_location">Lokasi Latar Belakang</string>
-  <string name="tor_not_available_in_this_build">Tor tidak tersedia di build ini</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
-  <string name="debug_question_mark">?</string>
+
+    <!-- Konektivitas jaringan -->
+    <string name="network_setting_off_subtitle">Tidak ada internet — periksa koneksi Anda</string>
+    <string name="network_not_available">Tidak ada koneksi internet</string>
+    <string name="network_transports_off_hint">Aktifkan P2P atau Nostr</string>
+    <string name="network_no_internet">Terhubung tetapi tidak ada internet terdeteksi</string>
+    <string name="network_setting_dialog_title">Internet Diperlukan</string>
+    <string name="network_setting_dialog_msg">Koneksi internet diperlukan untuk transport P2P dan Nostr.</string>
+    <string name="network_setting_dialog_btn">Pengaturan Koneksi</string>
+    <string name="network_banner_disconnected">Tidak ada internet — periksa pengaturan koneksi Anda</string>
+    <string name="network_banner_airplane_mode">Mode pesawat aktif</string>
+    <string name="network_airplane_mode">Mode pesawat aktif</string>
+    <string name="network_banner_no_internet">Terhubung tetapi tidak ada internet — periksa koneksi Anda</string>
+    <string name="network_banner_transports_disabled">Tidak ada transport jaringan — aktifkan P2P atau Nostr di pengaturan</string>
+    <string name="network_banner_settings_btn">Pengaturan</string>
+
+    <string name="background_location_required_title">Lokasi Latar Belakang Direkomendasikan</string>
+    <string name="background_location_required_subtitle">opsional, meningkatkan keandalan mesh</string>
+    <string name="background_location_explanation">Android merekomendasikan lokasi latar belakang agar Zemzeme dapat mencari perangkat terdekat saat aplikasi tidak dibuka. Ini menjaga mesh tetap aktif setelah reboot.</string>
+    <string name="background_location_settings_tip">Saat pengaturan terbuka, pilih "Izinkan sepanjang waktu".</string>
+    <string name="background_location_needs_for">Zemzeme menggunakan lokasi latar belakang untuk:</string>
+    <string name="background_location_needs_bullets">- mencari perangkat terdekat saat aplikasi ditutup\n- menyambung kembali setelah reboot\n- menjaga mesh tetap berjalan di latar belakang</string>
+    <string name="background_location_privacy_note">Kami TIDAK PERNAH mengumpulkan atau menyimpan lokasi Anda. Privasi Anda aman.</string>
+    <string name="grant_background_location">Izinkan Lokasi Latar Belakang</string>
+    <string name="skip_background_location">Lanjut tanpa lokasi latar belakang</string>
+    <string name="perm_background_location_desc">Direkomendasikan untuk mencari perangkat terdekat saat aplikasi di latar belakang</string>
+    <string name="perm_background_location_system">Izinkan akses lokasi latar belakang</string>
+    <string name="perm_type_background_location">Lokasi Latar Belakang</string>
+
+    <!-- Intro mesh -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">Komunikasi dalam grup ini sepenuhnya berbasis Bluetooth. Perangkat terdekat meneruskan pesan antar orang — tidak memerlukan koneksi internet.</string>
+    <string name="mesh_intro_close">Tutup</string>
+    <string name="mesh_intro_dont_show">Jangan tampilkan lagi</string>
+
+    <!-- Bagikan Aplikasi -->
+    <string name="about_share_app_header">BAGIKAN APLIKASI</string>
+    <string name="about_share_system_title">Bagikan Aplikasi</string>
+    <string name="about_share_system_desc">Kirim APK via Bluetooth, Nearby Share, atau Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">Gagal menyiapkan APK untuk dibagikan</string>
+    <string name="about_share_chooser_title">Bagikan APK %1$s</string>
+    <string name="about_share_helper_text">Gunakan Google Quick Share untuk mengirim (aktifkan di Pengaturan ponsel). Setelah transfer, APK akan berada di folder Downloads pada perangkat penerima.</string>
+
+    <!-- Ganti ikon -->
+    <string name="icon_switch_title">Segarkan Ikon &amp; Nama Aplikasi</string>
+    <string name="icon_switch_section">Kustomisasi</string>
+    <string name="icon_switch_subtitle">ubah ikon dan nama aplikasi di launcher Anda</string>
+    <string name="icon_switch_confirm">Ubah ikon dan nama aplikasi menjadi ini?</string>
+    <string name="icon_switch_apply">Terapkan</string>
+    <string name="icon_switch_toast">Ikon dan nama aplikasi berhasil diubah!</string>
+
+    <!-- Judul dan aksi dialog -->
+    <string name="dialog_delete_chat">Hapus chat</string>
+    <string name="dialog_delete_group">Hapus grup</string>
+    <string name="dialog_delete_confirm_body">Anda yakin ingin menghapus \"%1$s\"? Ini tidak bisa dibatalkan.</string>
+    <string name="action_delete">Hapus</string>
+    <string name="dialog_clear_chat">Bersihkan chat</string>
+    <string name="dialog_clear_confirm_body">Anda yakin ingin menghapus semua pesan di \"%1$s\"?</string>
+    <string name="action_clear">Bersihkan</string>
+    <string name="dialog_title_create_group">Buat Grup Baru</string>
+    <string name="label_group_name">Nama grup</string>
+    <string name="action_create">Buat</string>
+    <string name="dialog_title_join_group">Bergabung ke Grup</string>
+    <string name="label_group_id">ID Grup</string>
+    <string name="label_nickname_optional">Nama panggilan (opsional)</string>
+    <string name="dialog_title_rename_group">Ubah Nama Grup</string>
+    <string name="action_rename">Ubah Nama</string>
+
+    <!-- Judul pengaturan -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">Jaringan P2P</string>
+    <string name="setting_nostr_relays">Relay Nostr</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Pesan toast -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh diaktifkan</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh dinonaktifkan</string>
+    <string name="toast_nostr_enabled">Nostr diaktifkan</string>
+    <string name="toast_nostr_disabled">Nostr dinonaktifkan</string>
+    <string name="toast_tor_p2p_unsupported">Tor dengan P2P tidak didukung. Nonaktifkan P2P terlebih dahulu.</string>
+    <string name="toast_p2p_tor_disabled">P2P melalui Tor tidak didukung. Tor telah dinonaktifkan.</string>
+
+    <!-- Pemilih gambar -->
+    <string name="action_gallery">Galeri</string>
+    <string name="action_camera">Kamera</string>
+
+    <!-- Deskripsi konten aksesibilitas -->
+    <string name="cd_refresh_p2p">Segarkan koneksi P2P</string>
+    <string name="cd_direct_bluetooth">Bluetooth langsung</string>
+    <string name="cd_routed">Dialihkan</string>
+    <string name="cd_p2p_connection">Koneksi P2P</string>
+    <string name="cd_teleported_user">Pengguna teleportasi</string>
+    <string name="cd_user">Pengguna</string>
+    <string name="cd_backspace">hapus</string>
+    <string name="cd_verified">Terverifikasi</string>
+    <string name="cd_add_node">Tambah node</string>
+    <string name="cd_remove">Hapus</string>
+    <string name="action_enable_location">Aktifkan Lokasi</string>
+
+    <!-- Label ID grup -->
+    <string name="label_group_id_fmt">ID Grup: %1$s</string>
+
+    <!-- Placeholder PIN -->
+    <string name="placeholder_6_digits">6 digit</string>
+
+    <!-- Pengaturan P2P -->
+    <string name="p2p_settings_header">PENGATURAN</string>
+    <string name="p2p_enable">Aktifkan P2P</string>
+    <string name="p2p_enable_desc">Hubungkan langsung ke peer Zemzeme lainnya</string>
+    <string name="p2p_use_default_nodes">Gunakan Node Default</string>
+    <string name="p2p_default_nodes_desc">Hubungkan ke node bootstrap IPFS publik</string>
+    <string name="p2p_custom_nodes_header">NODE BOOTSTRAP KUSTOM</string>
+    <string name="p2p_no_custom_nodes">Tidak ada node kustom yang dikonfigurasi. Ketuk + untuk menambah.</string>
+    <string name="p2p_add_bootstrap_node">Tambah Node Bootstrap</string>
+    <string name="p2p_enter_multiaddr">Masukkan multiaddr untuk node bootstrap:</string>
+    <string name="p2p_recovering">Memulihkan…</string>
+    <string name="p2p_recover_connection">Pulihkan Koneksi</string>
+    <string name="action_add">Tambah</string>
+
+    <!-- Channel notifikasi -->
+    <string name="notification_channel_direct_messages">Pesan Langsung</string>
+    <string name="notification_channel_dm_desc">Notifikasi untuk pesan pribadi dari pengguna lain</string>
+    <string name="notification_channel_geohash_chats">Chat Geohash</string>
+    <string name="notification_channel_geohash_desc">Notifikasi untuk penyebutan dan pesan di channel lokasi geohash</string>
+
+    <!-- Debug: topologi mesh -->
+    <string name="debug_mesh_topology">topologi mesh</string>
+    <string name="debug_no_gossip">belum ada gossip</string>
+
+    <!-- Debug: pembaruan mandiri -->
+    <string name="debug_self_update">pembaruan mandiri (dev)</string>
+    <string name="debug_current_version_fmt">Versi saat ini: %1$s</string>
+    <string name="debug_download_updates_desc">Unduh dan instal pembaruan dari rilis GitHub</string>
+    <string name="update_status_ready">Siap</string>
+    <string name="update_status_checking">Memeriksa pembaruan…</string>
+    <string name="update_status_available">Pembaruan tersedia: %1$s</string>
+    <string name="update_status_downloading">Mengunduh: %1$d%%</string>
+    <string name="update_status_ready_install">Siap diinstal: %1$s</string>
+    <string name="update_status_installing">Menginstal…</string>
+    <string name="update_status_success">Pembaruan terinstal! Mulai ulang aplikasi.</string>
+    <string name="update_status_pending_action">Menunggu konfirmasi pengguna…</string>
+    <string name="update_status_error">Kesalahan: %1$s</string>
+    <string name="update_grant_install_permission">Berikan Izin Instal</string>
+    <string name="update_install">Instal Pembaruan</string>
+    <string name="update_check">Periksa Pembaruan</string>
+    <string name="debug_test_update_dialog">Uji Dialog Pembaruan</string>
+
+    <!-- Debug: grafik bandwidth -->
+    <string name="debug_overall">Keseluruhan</string>
+    <string name="debug_per_device">Per Perangkat</string>
+    <string name="debug_per_peer">Per Peer</string>
+    <string name="debug_incoming">Masuk</string>
+    <string name="debug_outgoing">Keluar</string>
+
+    <!-- Debug: konsol -->
+    <string name="debug_refreshing">Menyegarkan…</string>
+    <string name="debug_refresh">Segarkan</string>
+    <string name="debug_clear_logs">Hapus Log</string>
+    <string name="debug_preparing_export">Menyiapkan ekspor…</string>
+    <string name="debug_share_logs">Bagikan Log</string>
+
+    <!-- Simbol dan format yang tidak perlu diterjemahkan -->
+    <string name="dot">.</string>
+    <string name="warning_emoji">⚠️</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
+    <string name="mention_suggestion_at">@%1$s</string>
+    <string name="at_nickname">@%1$s</string>
+    <string name="hash_symbol">#</string>
+    <string name="underscore">_</string>
+    <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+    <string name="progress_filled">█</string>
+    <string name="progress_empty">░</string>
+    <string name="image_counter">%1$d / %2$d</string>
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+    <string name="notification_file_pdf">📄</string>
+    <string name="notification_file_zip">🗜️</string>
+    <string name="notification_file_doc">📄</string>
+    <string name="notification_file_xls">📊</string>
+    <string name="notification_file_ppt">📈</string>
+    <string name="notification_file_generic">📎</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">Pindai QR</string>
+    <string name="fab_choose_city">Pilih kota</string>
+    <string name="fab_join_group">Gabung grup</string>
+    <string name="fab_create_group">Buat grup</string>
+    <!-- Section headers -->
+    <string name="section_nearby">Terdekat</string>
+    <string name="section_geographic_groups">Grup Geografis</string>
+    <string name="section_my_groups">Grup Saya</string>
+    <string name="section_contacts">Kontak</string>
+
+    <!-- Bagian dan status P2P -->
+    <string name="section_username">NAMA PENGGUNA</string>
+    <string name="section_theme">TEMA</string>
+    <string name="section_settings">PENGATURAN</string>
+    <string name="section_network">JARINGAN</string>
+    <string name="section_status">STATUS</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">Jaringan P2P</string>
+    <string name="p2p_status_no_peers">Tidak Ada Peer</string>
+    <string name="p2p_status_connected">Terhubung</string>
+    <string name="p2p_status_connecting">Menghubungkan…</string>
+    <string name="p2p_status_disconnected">Terputus</string>
+    <string name="p2p_status_error">Kesalahan</string>
+    <string name="p2p_peers_connected_fmt">%1$d peer terhubung</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Node aktif: %1$d</string>
+    <string name="location_acquiring_title">Mendapatkan Lokasi</string>
+    <string name="location_acquiring_desc">Mohon tunggu sementara lokasi Anda sedang ditentukan</string>
+    <string name="location_unavailable_title">Lokasi Tidak Tersedia</string>
+    <string name="location_permission_required_notes">Izin lokasi diperlukan untuk catatan</string>
+
+    <!-- Indikator koneksi -->
+    <string name="connection_searching_peers">Mencari peer…</string>
+    <string name="connection_connecting_peers">Menghubungkan ke peer…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d peer terhubung</item>
+        <item quantity="other">%1$d peer terhubung</item>
+    </plurals>
+    <string name="connection_no_new_messages">Terhubung - tidak ada pesan baru</string>
+    <string name="connection_error">Kesalahan koneksi</string>
+    <string name="connection_direct">Langsung</string>
+    <string name="connection_connected">Terhubung</string>
+
+    <!-- Indikator koneksi debug -->
+    <string name="debug_p2p_no_info">P2P (tidak ada info)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE langsung</string>
+    <string name="debug_p2p_searching">P2P: mencari peer…</string>
+    <string name="debug_p2p_connecting">P2P: menghubungkan ke peer…</string>
+    <string name="debug_nostr_no_messages">Nostr terhubung - tidak ada pesan baru</string>
+    <string name="debug_connection_failed">koneksi gagal</string>
+    <string name="debug_error_fmt">kesalahan: %1$s</string>
+
 </resources>

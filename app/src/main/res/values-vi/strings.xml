@@ -2,442 +2,444 @@
 <resources>
     <string name="app_name">Zemzeme</string>
 
-    <!-- Lý do quyền -->
-    <string name="permission_bluetooth_rationale">Quyền Bluetooth là cần thiết để trò chuyện trực tiếp với những người khác mà không cần Internet.</string>
-    <string name="permission_location_rationale">Quyền vị trí là cần thiết để tìm các thiết bị gần đó qua Bluetooth.</string>
-    <string name="permission_notification_rationale">Quyền thông báo là cần thiết để thông báo cho bạn về tin nhắn mới.</string>
+    <!-- Ly do quyen -->
+    <string name="permission_bluetooth_rationale">Quyen Bluetooth la can thiet de tro chuyen truc tiep voi nhung nguoi khac ma khong can Internet.</string>
+    <string name="permission_location_rationale">Quyen vi tri la can thiet de tim cac thiet bi gan do qua Bluetooth.</string>
+    <string name="permission_notification_rationale">Quyen thong bao la can thiet de thong bao cho ban ve tin nhan moi.</string>
 
-    <!-- Placeholder / UI cơ bản -->
-    <string name="nickname_hint">Biệt danh</string>
-    <string name="message_hint">Nhập tin nhắn…</string>
-    <string name="channel_password_hint">Mật khẩu</string>
-    <string name="join_channel">Tham gia kênh</string>
-    <string name="leave_channel">Rời khỏi</string>
-    <string name="send_message">Gửi</string>
-    <string name="show_commands">Hiển thị lệnh</string>
-    <string name="back">Quay lại</string>
-    <string name="people">Mọi người</string>
-    <string name="channels">Kênh</string>
-    <string name="online_users">Người dùng trực tuyến</string>
-    <string name="no_one_connected">Không có ai kết nối</string>
-    <string name="emergency_clear_hint">Nhấn ba lần để xóa tất cả dữ liệu</string>
-    <string name="your_network">Mạng lưới</string>
+    <!-- Placeholder / UI co ban -->
+    <string name="nickname_hint">Biet danh</string>
+    <string name="message_hint">Nhap tin nhan…</string>
+    <string name="channel_password_hint">Mat khau</string>
+    <string name="join_channel">Tham gia kenh</string>
+    <string name="leave_channel">Roi khoi</string>
+    <string name="send_message">Gui</string>
+    <string name="show_commands">Hien thi lenh</string>
+    <string name="back">Quay lai</string>
+    <string name="people">Moi nguoi</string>
+    <string name="channels">Kenh</string>
+    <string name="online_users">Nguoi dung truc tuyen</string>
+    <string name="no_one_connected">Khong co ai ket noi</string>
+    <string name="emergency_clear_hint">Nhan ba lan de xoa tat ca du lieu</string>
+    <string name="your_network">Mang luoi</string>
 
-    <!-- Tối ưu hóa pin -->
-    <string name="battery_optimization_detected">Đã phát hiện tối ưu hóa pin</string>
-    <string name="battery_optimization_disabled">Tối ưu hóa pin đã tắt</string>
-    <string name="battery_optimization_not_required">Không cần tối ưu hóa pin</string>
-    <string name="battery_optimization_checking">Đang kiểm tra tối ưu hóa pin</string>
-    <string name="battery_optimization_why_disable">Tại sao nên tắt tối ưu hóa pin?</string>
-    <string name="battery_optimization_explanation">Zemzeme chạy nền để duy trì kết nối mesh với các thiết bị gần đó. Tối ưu hóa pin có thể làm gián đoạn các kết nối này, gây ra tin nhắn bị trễ hoặc mất.\n\nTắt tối ưu hóa pin đảm bảo liên lạc ngang hàng đáng tin cậy.</string>
-    <string name="battery_optimization_disable_button">Tắt tối ưu hóa pin</string>
-    <string name="battery_optimization_note">Lưu ý: Bạn có thể thay đổi điều này sau trong Android Settings &gt; Apps &gt; Zemzeme &gt; Battery.</string>
-    <string name="battery_optimization_not_supported_explanation">Thiết bị của bạn không cần cài đặt tối ưu hóa pin. Zemzeme sẽ chạy bình thường.</string>
-    <string name="battery_optimization_not_supported_message">Thiết bị của bạn không cần cài đặt tối ưu hóa pin. Zemzeme sẽ chạy bình thường.</string>
-    <string name="battery_optimization_success_message">Zemzeme có thể chạy đáng tin cậy trong nền</string>
-    <string name="battery_optimization_benefits">• Gửi tin nhắn đáng tin cậy\n• Duy trì kết nối mesh\n• Chuyển tiếp tin nhắn nền\n• Ngăn ngừa mất kết nối</string>
-    <string name="battery_optimization_check_again">Kiểm tra lại</string>
-    <string name="battery_optimization_skip">Bỏ qua ngay</string>
-    <string name="battery_optimization_continue">Tiếp tục</string>
-    <string name="retry">Thử lại</string>
-    <string name="skip">Bỏ qua</string>
+    <!-- Toi uu hoa pin -->
+    <string name="battery_optimization_detected">Da phat hien toi uu hoa pin</string>
+    <string name="battery_optimization_disabled">Toi uu hoa pin da tat</string>
+    <string name="battery_optimization_not_required">Khong can toi uu hoa pin</string>
+    <string name="battery_optimization_checking">Dang kiem tra toi uu hoa pin</string>
+    <string name="battery_optimization_why_disable">Tai sao nen tat toi uu hoa pin?</string>
+    <string name="battery_optimization_explanation">Zemzeme chay nen de duy tri ket noi mesh voi cac thiet bi gan do. Toi uu hoa pin co the lam gian doan cac ket noi nay, gay ra tin nhan bi tre hoac mat.\n\nTat toi uu hoa pin dam bao lien lac ngang hang dang tin cay.</string>
+    <string name="battery_optimization_disable_button">Tat toi uu hoa pin</string>
+    <string name="battery_optimization_note">Luu y: Ban co the thay doi dieu nay sau trong Android Settings &gt; Apps &gt; Zemzeme &gt; Battery.</string>
+    <string name="battery_optimization_not_supported_explanation">Thiet bi cua ban khong can cai dat toi uu hoa pin. Zemzeme se chay binh thuong.</string>
+    <string name="battery_optimization_not_supported_message">Thiet bi cua ban khong can cai dat toi uu hoa pin. Zemzeme se chay binh thuong.</string>
+    <string name="battery_optimization_success_message">Zemzeme co the chay dang tin cay trong nen</string>
+    <string name="battery_optimization_benefits">• Gui tin nhan dang tin cay\n• Duy tri ket noi mesh\n• Chuyen tiep tin nhan nen\n• Ngan ngua mat ket noi</string>
+    <string name="battery_optimization_check_again">Kiem tra lai</string>
+    <string name="battery_optimization_skip">Bo qua ngay</string>
+    <string name="battery_optimization_continue">Tiep tuc</string>
+    <string name="retry">Thu lai</string>
+    <string name="skip">Bo qua</string>
 
-    <!-- Thông báo -->
-    <string name="notification_summary_more">và %1$d khác</string>
-    <string name="notification_messages_from_people">%1$d tin nhắn từ %2$d người</string>
-    <string name="notification_more_conversations">và %1$d cuộc trò chuyện khác</string>
-    <string name="notification_active_peers_title">👥 Zemzeme user gần đó!</string>
-    <string name="notification_active_peers_one">1 người gần đó</string>
-    <string name="notification_active_peers_many">%1$d người gần đó</string>
-    <string name="notification_new_messages">Tin nhắn mới</string>
-    <string name="notification_new_location_messages">Tin nhắn vị trí mới</string>
-    <string name="notification_mentions_in">Được nhắc đến trong %1$s</string>
-    <string name="notification_mentions_in_more">Được nhắc đến trong %1$s (+%2$d khác)</string>
-    <string name="notification_mentions_in_plural">%1$d lần nhắc đến trong %2$s</string>
-    <string name="notification_new_activity_in">Hoạt động mới trong %1$s</string>
-    <string name="notification_messages_in">Tin nhắn trong %1$s</string>
-    <string name="notification_joined_conversation">%1$s đã tham gia cuộc trò chuyện</string>
-    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d lần nhắc đến</string>
-    <string name="notification_geohash_summary_title">Zemzeme – Trò chuyện vị trí</string>
-    <string name="notification_geohash_summary_text">%1$d tin nhắn từ %2$d vị trí</string>
-    <string name="notification_mesh_mention_title_singular">Được nhắc đến trong Mesh Chat</string>
-    <string name="notification_mesh_mention_title_plural">%1$d lần nhắc đến trong Mesh Chat</string>
-    <string name="notification_more_locations">và %1$d vị trí khác</string>
-    <string name="notification_and_more">và %1$d khác</string>
+    <!-- Thong bao -->
+    <string name="notification_summary_more">va %1$d khac</string>
+    <string name="notification_messages_from_people">%1$d tin nhan tu %2$d nguoi</string>
+    <string name="notification_more_conversations">va %1$d cuoc tro chuyen khac</string>
+    <string name="notification_active_peers_title">👥 Zemzeme user gan do!</string>
+    <string name="notification_active_peers_one">1 nguoi gan do</string>
+    <string name="notification_active_peers_many">%1$d nguoi gan do</string>
+    <string name="notification_new_messages">Tin nhan moi</string>
+    <string name="notification_new_location_messages">Tin nhan vi tri moi</string>
+    <string name="notification_mentions_in">Duoc nhac den trong %1$s</string>
+    <string name="notification_mentions_in_more">Duoc nhac den trong %1$s (+%2$d khac)</string>
+    <string name="notification_mentions_in_plural">%1$d lan nhac den trong %2$s</string>
+    <string name="notification_new_activity_in">Hoat dong moi trong %1$s</string>
+    <string name="notification_messages_in">Tin nhan trong %1$s</string>
+    <string name="notification_joined_conversation">%1$s da tham gia cuoc tro chuyen</string>
+    <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d lan nhac den</string>
+    <string name="notification_geohash_summary_title">Zemzeme – Tro chuyen vi tri</string>
+    <string name="notification_geohash_summary_text">%1$d tin nhan tu %2$d vi tri</string>
+    <string name="notification_mesh_mention_title_singular">Duoc nhac den trong Bluetooth Chat</string>
+    <string name="notification_mesh_mention_title_plural">%1$d lan nhac den trong Bluetooth Chat</string>
+    <string name="notification_more_locations">va %1$d vi tri khac</string>
+    <string name="notification_and_more">va %1$d khac</string>
 
-    <!-- Khả năng truy cập yêu thích -->
-    <string name="cd_add_favorite">Thêm vào yêu thích</string>
-    <string name="cd_remove_favorite">Xóa khỏi yêu thích</string>
-    <string name="cd_add_bookmark">Thêm bookmark</string>
+    <!-- Kha nang truy cap yeu thich -->
+    <string name="cd_add_favorite">Them vao yeu thich</string>
+    <string name="cd_remove_favorite">Xoa khoi yeu thich</string>
+    <string name="cd_add_bookmark">Them bookmark</string>
 
-    <!-- Header trò chuyện &amp; khả năng truy cập -->
-    <string name="chat_back">quay lại</string>
-    <string name="chat_channel_prefix">Kênh: %1$s</string>
-    <string name="chat_leave">rời khỏi</string>
-    <string name="cd_nostr_reachable">Có thể tiếp cận qua Nostr</string>
-    <string name="cd_unread_private_messages">Tin nhắn riêng chưa đọc</string>
-    <string name="cd_toggle_bookmark">Bật/tắt bookmark</string>
-    <string name="cd_teleported">Đã dịch chuyển</string>
-    <string name="cd_tor_status">Trạng thái Tor</string>
-    <string name="cd_connected_peers">Peers đã kết nối</string>
-    <string name="cd_geohash_participants">Người tham gia geohash</string>
-    <string name="cd_ready_for_handshake">Sẵn sàng cho handshake</string>
-    <string name="cd_handshake_in_progress">Handshake đang tiến hành</string>
-    <string name="cd_encrypted">Mã hóa đầu cuối</string>
-    <string name="cd_handshake_failed">Handshake thất bại</string>
+    <!-- Header tro chuyen &amp; kha nang truy cap -->
+    <string name="chat_back">quay lai</string>
+    <string name="chat_channel_prefix">Kenh: %1$s</string>
+    <string name="chat_leave">roi khoi</string>
+    <string name="cd_nostr_reachable">Co the tiep can qua Nostr</string>
+    <string name="cd_unread_private_messages">Tin nhan rieng chua doc</string>
+    <string name="cd_toggle_bookmark">Bat/tat bookmark</string>
+    <string name="cd_teleported">Da dich chuyen</string>
+    <string name="cd_tor_status">Trang thai Tor</string>
+    <string name="cd_connected_peers">Peers da ket noi</string>
+    <string name="cd_geohash_participants">Nguoi tham gia geohash</string>
+    <string name="cd_ready_for_handshake">San sang cho handshake</string>
+    <string name="cd_handshake_in_progress">Handshake dang tien hanh</string>
+    <string name="cd_encrypted">Ma hoa dau cuoi</string>
+    <string name="cd_handshake_failed">Handshake that bai</string>
 
     <!-- Dialog xem file -->
-    <string name="file_viewer_title">📎 File đã nhận</string>
+    <string name="file_viewer_title">📎 File da nhan</string>
     <string name="file_viewer_name">📄 %1$s</string>
-    <string name="file_viewer_size">📏 Kích thước: %1$s</string>
-    <string name="file_viewer_type">🏷️ Loại: %1$s</string>
-    <string name="file_viewer_open_save">📂 Mở / Lưu</string>
-    <string name="close_with_emoji">❌ Đóng</string>
-    <string name="pick_image">Chọn hình ảnh</string>
+    <string name="file_viewer_size">📏 Kich thuoc: %1$s</string>
+    <string name="file_viewer_type">🏷️ Loai: %1$s</string>
+    <string name="file_viewer_open_save">📂 Mo / Luu</string>
+    <string name="close_with_emoji">❌ Dong</string>
+    <string name="pick_image">Chon hinh anh</string>
 
-    <!-- Sheet giới thiệu -->
-    <string name="about_tagline">Nhắn tin không bị giám sát trong mọi hoàn cảnh, được mã hóa đầu cuối</string>
-    <string name="about_offline_mesh_title">Trò chuyện Mesh ngoại tuyến</string>
-    <string name="about_offline_mesh_desc">Liên lạc trực tiếp qua Bluetooth LE mà không cần Internet hoặc máy chủ. Tin nhắn được chuyển tiếp qua các thiết bị gần để mở rộng phạm vi.</string>
-    <string name="about_online_geohash_title">Kênh Geohash trực tuyến</string>
-    <string name="about_online_geohash_desc">Kết nối với những người trong khu vực của bạn qua các kênh dựa trên geohash. Mở rộng mesh qua các relay Internet công cộng.</string>
-    <string name="about_e2e_title">Mã hóa đầu cuối</string>
-    <string name="about_e2e_desc">Tin nhắn riêng được mã hóa. Tin nhắn kênh là công khai.</string>
-    <string name="about_appearance">Giao diện</string>
-    <string name="about_system">Hệ thống</string>
-    <string name="about_light">Sáng</string>
-    <string name="about_dark">Tối</string>
+    <!-- Sheet gioi thieu -->
+    <string name="about_tagline">Nhan tin khong bi giam sat trong moi hoan canh, duoc ma hoa dau cuoi</string>
+    <string name="about_offline_mesh_title">Tro chuyen Bluetooth ngoai tuyen</string>
+    <string name="about_offline_mesh_desc">Lien lac truc tiep qua Bluetooth LE ma khong can Internet hoac may chu. Tin nhan duoc chuyen tiep qua cac thiet bi gan de mo rong pham vi.</string>
+    <string name="about_online_geohash_title">Kenh Geohash truc tuyen</string>
+    <string name="about_online_geohash_desc">Ket noi voi nhung nguoi trong khu vuc cua ban qua cac kenh dua tren geohash. Mo rong mesh qua cac relay Internet cong cong.</string>
+    <string name="about_e2e_title">Ma hoa dau cuoi</string>
+    <string name="about_e2e_desc">Tin nhan rieng duoc ma hoa. Tin nhan kenh la cong khai.</string>
+    <string name="about_appearance">Giao dien</string>
+    <string name="about_system">He thong</string>
+    <string name="about_light">Sang</string>
+    <string name="about_dark">Toi</string>
     <string name="about_pow">Proof of Work</string>
-    <string name="about_pow_off">PoW tắt</string>
-    <string name="about_pow_on">PoW bật</string>
-    <string name="about_pow_tip">Thêm proof of work vào tin nhắn geohash để làm cho spam khó hơn.</string>
-    <string name="about_pow_difficulty">Độ khó: %1$d bit (~%2$s)</string>
-    <string name="about_pow_difficulty_attempts">Độ khó %1$d cần ~%2$s lần thử hash</string>
-    <string name="about_pow_desc_none">không cần proof of work</string>
-    <string name="about_pow_desc_very_low">rất thấp – bảo vệ spam tối thiểu</string>
-    <string name="about_pow_desc_low">thấp – bảo vệ spam cơ bản</string>
-    <string name="about_pow_desc_medium">trung bình – bảo vệ spam tốt</string>
-    <string name="about_pow_desc_high">cao – bảo vệ spam mạnh</string>
-    <string name="about_pow_desc_very_high">rất cao – có thể gây độ trễ</string>
-    <string name="about_pow_desc_extreme">cực cao – cần sức mạnh tính toán đáng kể</string>
-    <string name="about_network">Mạng lưới</string>
-    <string name="about_tor_off">Tor tắt</string>
-    <string name="about_tor_on">Tor bật</string>
-    <string name="about_tor_route">Định tuyến lưu lượng Internet qua Tor để có thêm quyền riêng tư.</string>
-    <string name="about_tor_status">Trạng thái Tor: %1$s, Bootstrap %2$d%%</string>
-    <string name="about_last">Cuối cùng: %1$s</string>
-    <string name="about_emergency_title">Xóa dữ liệu khẩn cấp</string>
-    <string name="about_emergency_tip">Mẹo: Nhấn ba lần vào tiêu đề ứng dụng để xóa tất cả dữ liệu đã lưu – bao gồm tin nhắn, khóa và cài đặt.</string>
-    <string name="about_debug_settings">Cài đặt debug</string>
-    <string name="about_footer">Mã nguồn mở • Quyền riêng tư trước tiên • Phi tập trung</string>
-    <string name="close_plain">Đóng</string>
-    <string name="cancel_lower">hủy</string>
+    <string name="about_pow_off">PoW tat</string>
+    <string name="about_pow_on">PoW bat</string>
+    <string name="about_pow_tip">Them proof of work vao tin nhan geohash de lam cho spam kho hon.</string>
+    <string name="about_pow_difficulty">Do kho: %1$d bit (~%2$s)</string>
+    <string name="about_pow_difficulty_attempts">Do kho %1$d can ~%2$s lan thu hash</string>
+    <string name="about_pow_desc_none">khong can proof of work</string>
+    <string name="about_pow_desc_very_low">rat thap – bao ve spam toi thieu</string>
+    <string name="about_pow_desc_low">thap – bao ve spam co ban</string>
+    <string name="about_pow_desc_medium">trung binh – bao ve spam tot</string>
+    <string name="about_pow_desc_high">cao – bao ve spam manh</string>
+    <string name="about_pow_desc_very_high">rat cao – co the gay do tre</string>
+    <string name="about_pow_desc_extreme">cuc cao – can suc manh tinh toan dang ke</string>
+    <string name="about_network">Mang luoi</string>
+    <string name="about_tor_off">Tor tat</string>
+    <string name="about_tor_on">Tor bat</string>
+    <string name="about_tor_route">Dinh tuyen luu luong Internet qua Tor de co them quyen rieng tu.</string>
+    <string name="about_tor_status">Trang thai Tor: %1$s, Bootstrap %2$d%%</string>
+    <string name="about_last">Cuoi cung: %1$s</string>
+    <string name="about_emergency_title">Xoa du lieu khan cap</string>
+    <string name="about_emergency_tip">Meo: Nhan ba lan vao tieu de ung dung de xoa tat ca du lieu da luu – bao gom tin nhan, khoa va cai dat.</string>
+    <string name="about_debug_settings">Cai dat debug</string>
+    <string name="about_footer">Ma nguon mo • Quyen rieng tu truoc tien • Phi tap trung</string>
+    <string name="close_plain">Dong</string>
+    <string name="cancel_lower">huy</string>
 
-    <!-- Mô tả nội dung chung -->
-    <string name="cd_warning">Cảnh báo</string>
-    <string name="cd_location_services">Dịch vụ vị trí</string>
-    <string name="cd_privacy">Quyền riêng tư</string>
-    <string name="cd_error">Lỗi</string>
-    <string name="cd_battery_optimization">Tối ưu hóa pin</string>
-    <string name="cd_benefits">Lợi ích</string>
-    <string name="cd_checking_battery_optimization">Đang kiểm tra tối ưu hóa pin</string>
-    <string name="cd_not_supported_battery_optimization">Tối ưu hóa pin không được hỗ trợ</string>
+    <!-- Mo ta noi dung chung -->
+    <string name="cd_warning">Canh bao</string>
+    <string name="cd_location_services">Dich vu vi tri</string>
+    <string name="cd_privacy">Quyen rieng tu</string>
+    <string name="cd_error">Loi</string>
+    <string name="cd_battery_optimization">Toi uu hoa pin</string>
+    <string name="cd_benefits">Loi ich</string>
+    <string name="cd_checking_battery_optimization">Dang kiem tra toi uu hoa pin</string>
+    <string name="cd_not_supported_battery_optimization">Toi uu hoa pin khong duoc ho tro</string>
     <string name="cd_bluetooth">Bluetooth</string>
-    <string name="cd_unread_message">Tin nhắn chưa đọc</string>
-    <string name="cd_open_map">Mở bản đồ</string>
-    <string name="cd_remove_bookmark">Xóa bookmark</string>
-    <string name="cd_teleport">Dịch chuyển</string>
-    <string name="cd_selected">Đã chọn</string>
-    <string name="cd_leave_channel">Rời khỏi kênh</string>
-    <string name="cd_reachable_via_nostr">Có thể tiếp cận qua Nostr</string>
-    <string name="cd_offline_favorite">Yêu thích (ngoại tuyến)</string>
-    <string name="cd_decrease_precision">Giảm độ chính xác</string>
-    <string name="cd_increase_precision">Tăng độ chính xác</string>
-    <string name="cd_select_geohash">Chọn geohash</string>
-    <string name="cd_scroll_to_bottom">Cuộn xuống dưới</string>
+    <string name="cd_unread_message">Tin nhan chua doc</string>
+    <string name="cd_open_map">Mo ban do</string>
+    <string name="cd_remove_bookmark">Xoa bookmark</string>
+    <string name="cd_teleport">Dich chuyen</string>
+    <string name="cd_selected">Da chon</string>
+    <string name="cd_leave_channel">Roi khoi kenh</string>
+    <string name="cd_reachable_via_nostr">Co the tiep can qua Nostr</string>
+    <string name="cd_offline_favorite">Yeu thich (ngoai tuyen)</string>
+    <string name="cd_decrease_precision">Giam do chinh xac</string>
+    <string name="cd_increase_precision">Tang do chinh xac</string>
+    <string name="cd_select_geohash">Chon geohash</string>
+    <string name="cd_scroll_to_bottom">Cuon xuong duoi</string>
     <string name="cd_file">File</string>
-    <string name="cd_image">Hình ảnh</string>
-    <string name="cd_cancel">Hủy</string>
-    <string name="cd_link">Liên kết</string>
-    <string name="cd_pick_media">Chọn media</string>
-    <string name="cd_pick_file">Chọn file</string>
-    <string name="cd_save_current_image">Lưu hình ảnh hiện tại</string>
-    <string name="cd_close">Đóng</string>
-    <string name="cd_image_index_of">Hình ảnh %1$d trong %2$d</string>
-    <string name="cd_privacy_protected">Quyền riêng tư được bảo vệ</string>
-    <string name="cd_record_voice">Ghi tin nhắn thoại</string>
-    <string name="cd_offline_mesh_chat">Trò chuyện Mesh ngoại tuyến</string>
-    <string name="cd_online_geohash_channels">Kênh Geohash trực tuyến</string>
-    <string name="cd_end_to_end_encryption">Mã hóa đầu cuối</string>
+    <string name="cd_image">Hinh anh</string>
+    <string name="cd_cancel">Huy</string>
+    <string name="cd_link">Lien ket</string>
+    <string name="cd_pick_media">Chon media</string>
+    <string name="cd_pick_file">Chon file</string>
+    <string name="cd_save_current_image">Luu hinh anh hien tai</string>
+    <string name="cd_close">Dong</string>
+    <string name="cd_image_index_of">Hinh anh %1$d trong %2$d</string>
+    <string name="cd_privacy_protected">Quyen rieng tu duoc bao ve</string>
+    <string name="cd_record_voice">Ghi tin nhan thoai</string>
+    <string name="cd_offline_mesh_chat">Tro chuyen Mesh ngoai tuyen</string>
+    <string name="cd_online_geohash_channels">Kenh Geohash truc tuyen</string>
+    <string name="cd_end_to_end_encryption">Ma hoa dau cuoi</string>
 
-    <!-- Hình ảnh &amp; file -->
-    <string name="image_page_of">Hình ảnh %1$d trong %2$d</string>
-    <string name="image_unavailable">Hình ảnh không có sẵn</string>
-    <string name="image_saved_to_downloads">Hình ảnh đã lưu vào \"Downloads\"</string>
-    <string name="image_save_failed">Không thể lưu hình ảnh</string>
-    <string name="toast_image_saved">Hình ảnh đã lưu vào \"Downloads\"</string>
-    <string name="toast_failed_to_save_image">Không thể lưu hình ảnh</string>
-    <string name="pick_file">Chọn file</string>
-    <string name="file_unavailable">[File không có sẵn]</string>
-    <string name="unknown">không rõ</string>
+    <!-- Hinh anh &amp; file -->
+    <string name="image_page_of">Hinh anh %1$d trong %2$d</string>
+    <string name="image_unavailable">Hinh anh khong co san</string>
+    <string name="image_saved_to_downloads">Hinh anh da luu vao \"Downloads\"</string>
+    <string name="image_save_failed">Khong the luu hinh anh</string>
+    <string name="toast_image_saved">Hinh anh da luu vao \"Downloads\"</string>
+    <string name="toast_failed_to_save_image">Khong the luu hinh anh</string>
+    <string name="pick_file">Chon file</string>
+    <string name="file_unavailable">[File khong co san]</string>
+    <string name="unknown">khong ro</string>
 
-    <!-- Sheet hành động người dùng -->
-    <string name="choose_action_message_or_user">Chọn hành động cho tin nhắn hoặc người dùng này</string>
-    <string name="choose_action_user">Chọn hành động cho người dùng này</string>
-    <string name="action_copy_message_title">Sao chép tin nhắn</string>
-    <string name="action_copy_message_subtitle">Sao chép tin nhắn này vào clipboard</string>
-    <string name="action_slap_title">Tát %1$s</string>
-    <string name="action_slap_subtitle">Gửi một cái tát vui nhộn</string>
-    <string name="action_hug_title">Ôm %1$s</string>
-    <string name="action_hug_subtitle">Gửi một cái ôm thân thiện</string>
-    <string name="action_block_title">Chặn %1$s</string>
-    <string name="action_block_subtitle">Chặn tất cả tin nhắn từ người dùng này</string>
+    <!-- Sheet hanh dong nguoi dung -->
+    <string name="choose_action_message_or_user">Chon hanh dong cho tin nhan hoac nguoi dung nay</string>
+    <string name="choose_action_user">Chon hanh dong cho nguoi dung nay</string>
+    <string name="action_copy_message_title">Sao chep tin nhan</string>
+    <string name="action_copy_message_subtitle">Sao chep tin nhan nay vao clipboard</string>
+    <string name="action_slap_title">Tat %1$s</string>
+    <string name="action_slap_subtitle">Gui mot cai tat vui nhon</string>
+    <string name="action_hug_title">Om %1$s</string>
+    <string name="action_hug_subtitle">Gui mot cai om than thien</string>
+    <string name="action_block_title">Chan %1$s</string>
+    <string name="action_block_subtitle">Chan tat ca tin nhan tu nguoi dung nay</string>
 
-    <!-- Sheet kênh geohash -->
-    <string name="location_channels_title">#Kênh vị trí</string>
-    <string name="location_channels_desc">Trò chuyện với những người gần bạn qua các kênh geohash. Chỉ geohash thô được chia sẻ, không phải dữ liệu GPS chính xác. Vui lòng không chụp màn hình hoặc chia sẻ chế độ xem này để bảo vệ quyền riêng tư.</string>
-    <string name="grant_location_permission">Cấp quyền vị trí</string>
-    <string name="location_permission_denied">Quyền vị trí bị từ chối. Hãy bật trong Cài đặt để sử dụng kênh vị trí.</string>
-    <string name="open_settings">Mở Cài đặt</string>
-    <string name="location_permission_granted">\u2713 Đã cấp quyền vị trí</string>
-    <string name="checking_permissions">Đang kiểm tra quyền …</string>
-    <string name="finding_nearby_channels">Đang tìm kênh gần đó …</string>
-    <string name="bookmarked">Đã bookmark</string>
+    <!-- Sheet kenh geohash -->
+    <string name="location_channels_title">#Kenh vi tri</string>
+    <string name="location_channels_desc">Tro chuyen voi nhung nguoi gan ban qua cac kenh geohash. Chi geohash tho duoc chia se, khong phai du lieu GPS chinh xac. Vui long khong chup man hinh hoac chia se che do xem nay de bao ve quyen rieng tu.</string>
+    <string name="grant_location_permission">Cap quyen vi tri</string>
+    <string name="location_permission_denied">Quyen vi tri bi tu choi. Hay bat trong Cai dat de su dung kenh vi tri.</string>
+    <string name="open_settings">Mo Cai dat</string>
+    <string name="location_permission_granted">\u2713 Da cap quyen vi tri</string>
+    <string name="checking_permissions">Dang kiem tra quyen …</string>
+    <string name="finding_nearby_channels">Dang tim kenh gan do …</string>
+    <string name="bookmarked">Da bookmark</string>
     <string name="geohash_placeholder">Geohash</string>
-    <string name="invalid_geohash">Geohash không hợp lệ</string>
-    <string name="teleport">dịch chuyển</string>
-    <string name="disable_location_services">Tắt dịch vụ vị trí</string>
-    <string name="enable_location_services">Bật dịch vụ vị trí</string>
-    <string name="mesh_label">mesh</string>
-    <string name="location_level_block">Khối</string>
-    <string name="location_level_neighborhood">Khu phố</string>
-    <string name="location_level_city">Thành phố</string>
-    <string name="location_level_province">Tỉnh</string>
-    <string name="location_level_region">Khu vực</string>
+    <string name="invalid_geohash">Geohash khong hop le</string>
+    <string name="teleport">dich chuyen</string>
+    <string name="disable_location_services">Tat dich vu vi tri</string>
+    <string name="enable_location_services">Bat dich vu vi tri</string>
+    <string name="mesh_label">bluetooth</string>
+    <string name="location_level_block">Khoi</string>
+    <string name="location_level_neighborhood">Khu pho</string>
+    <string name="location_level_city">Thanh pho</string>
+    <string name="location_level_province">Tinh</string>
+    <string name="location_level_region">Khu vuc</string>
     <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
 
-    <!-- Debug / Chẩn đoán -->
-    <string name="debug_tools">Công cụ debug</string>
-    <string name="debug_tools_desc">Công cụ nhà phát triển cho chẩn đoán và điều khiển</string>
-    <string name="debug_verbose_logging">ghi log chi tiết</string>
-    <string name="debug_verbose_hint">Ghi log peer join/leave, hướng kết nối, chuyển tiếp gói và relay</string>
-    <string name="debug_bluetooth_roles">Vai trò Bluetooth</string>
+    <!-- Debug / Chan doan -->
+    <string name="debug_tools">Cong cu debug</string>
+    <string name="debug_tools_desc">Cong cu nha phat trien cho chan doan va dieu khien</string>
+    <string name="debug_verbose_logging">ghi log chi tiet</string>
+    <string name="debug_verbose_hint">Ghi log peer join/leave, huong ket noi, chuyen tiep goi va relay</string>
+    <string name="debug_bluetooth_roles">Vai tro Bluetooth</string>
     <string name="debug_gatt_server">GATT Server</string>
-    <string name="debug_connections_fmt">Kết nối: %1$d / %2$d</string>
-    <string name="debug_max_server">server tối đa</string>
+    <string name="debug_connections_fmt">Ket noi: %1$d / %2$d</string>
+    <string name="debug_max_server">server toi da</string>
     <string name="debug_gatt_client">GATT Client</string>
-    <string name="debug_max_client">client tối đa</string>
-    <string name="debug_overall_connections_fmt">Kết nối: %1$d / %2$d</string>
-    <string name="debug_max_overall">tối đa tổng</string>
+    <string name="debug_max_client">client toi da</string>
+    <string name="debug_overall_connections_fmt">Ket noi: %1$d / %2$d</string>
+    <string name="debug_max_overall">toi da tong</string>
     <string name="debug_packet_relay">Packet Relay</string>
-    <string name="debug_since_start_fmt">từ lúc bắt đầu: %1$d</string>
-    <string name="debug_roles_hint">Bật/tắt vai trò và đóng tất cả kết nối khi tắt</string>
-    <string name="debug_sync_settings">Cài đặt sync</string>
-    <string name="debug_max_packets_per_sync_fmt">gói tối đa mỗi sync: %1$d</string>
-    <string name="debug_max_gcs_filter_size_fmt">kích thước bộ lọc GCS tối đa: %1$d Byte (128–1024)</string>
-    <string name="debug_target_fpr_fmt">FPR mục tiêu: %1$.2f%%</string>
-    <string name="debug_connected_devices">thiết bị đã kết nối</string>
-    <string name="debug_our_device_id_fmt">ID thiết bị của chúng tôi: %1$s</string>
-    <string name="debug_none">không có</string>
-    <string name="debug_disconnect">ngắt kết nối</string>
-    <string name="debug_recent_scan_results">thiết bị được quét gần đây</string>
-    <string name="debug_connect">kết nối</string>
+    <string name="debug_since_start_fmt">tu luc bat dau: %1$d</string>
+    <string name="debug_roles_hint">Bat/tat vai tro va dong tat ca ket noi khi tat</string>
+    <string name="debug_sync_settings">Cai dat sync</string>
+    <string name="debug_max_packets_per_sync_fmt">goi toi da moi sync: %1$d</string>
+    <string name="debug_max_gcs_filter_size_fmt">kich thuoc bo loc GCS toi da: %1$d Byte (128–1024)</string>
+    <string name="debug_target_fpr_fmt">FPR muc tieu: %1$.2f%%</string>
+    <string name="debug_connected_devices">thiet bi da ket noi</string>
+    <string name="debug_our_device_id_fmt">ID thiet bi cua chung toi: %1$s</string>
+    <string name="debug_none">khong co</string>
+    <string name="debug_disconnect">ngat ket noi</string>
+    <string name="debug_recent_scan_results">thiet bi duoc quet gan day</string>
+    <string name="debug_connect">ket noi</string>
     <string name="debug_debug_console">Console debug</string>
-    <string name="debug_clear">xóa</string>
-    <string name="debug_relays_window_fmt">10s cuối: %1$d • 1m: %2$d • 15m: %3$d</string>
-    <string name="debug_derived_p_fmt">P dẫn xuất: %1$s • phần tử tối đa ước tính: %2$s</string>
-    <string name="debug_direct_suffix"> • trực tiếp</string>
-    <string name="debug_role_server">làm server (chúng tôi host)</string>
-    <string name="debug_role_client">làm client (chúng tôi kết nối)</string>
+    <string name="debug_clear">xoa</string>
+    <string name="debug_relays_window_fmt">10s cuoi: %1$d • 1m: %2$d • 15m: %3$d</string>
+    <string name="debug_derived_p_fmt">P dan xuat: %1$s • phan tu toi da uoc tinh: %2$s</string>
+    <string name="debug_direct_suffix"> • truc tiep</string>
+    <string name="debug_role_server">lam server (chung toi host)</string>
+    <string name="debug_role_client">lam client (chung toi ket noi)</string>
 
-    <!-- Màn hình onboarding -->
-    <string name="location_services_required">Yêu cầu dịch vụ vị trí</string>
-    <string name="privacy_first">Quyền riêng tư trước tiên</string>
-    <string name="location_explanation">Zemzeme KHÔNG theo dõi vị trí của bạn.\n\nDịch vụ vị trí cần thiết cho quét Bluetooth và tính năng geohash chat.</string>
-    <string name="location_needs_for">Zemzeme cần dịch vụ vị trí cho:</string>
-    <string name="location_needs_bullets">• Quét thiết bị Bluetooth\n• Khám phá người dùng gần đó trong mạng mesh\n• Tính năng geohash chat\n• Không theo dõi hoặc thu thập vị trí</string>
-    <string name="open_location_settings">Mở cài đặt vị trí</string>
-    <string name="check_again">Kiểm tra lại</string>
-    <string name="location_services_unavailable">Dịch vụ vị trí không có sẵn</string>
-    <string name="location_unavailable_explanation">Dịch vụ vị trí không có sẵn trên thiết bị này. Điều này bất thường vì dịch vụ vị trí là tiêu chuẩn trên thiết bị Android.\n\nZemzeme cần dịch vụ vị trí để quét Bluetooth hoạt động đúng (yêu cầu Android). Không có nó, ứng dụng không thể khám phá người dùng gần đó.</string>
-    <string name="checking_location_services">Đang kiểm tra dịch vụ vị trí …</string>
-    <string name="bluetooth_required">Yêu cầu Bluetooth</string>
-    <string name="bluetooth_needs_for">Zemzeme cần Bluetooth cho:</string>
-    <string name="bluetooth_needs_bullets">• Khám phá người dùng gần đó\n• Tạo kết nối mạng mesh\n• Gửi và nhận tin nhắn\n• Hoạt động mà không cần Internet hoặc máy chủ</string>
-    <string name="enable_bluetooth">Bật Bluetooth</string>
-    <string name="bluetooth_not_supported">Bluetooth không được hỗ trợ</string>
-    <string name="bluetooth_unsupported_explanation">Thiết bị này không hỗ trợ Bluetooth Low Energy (BLE), cần thiết để Zemzeme hoạt động.\n\nZemzeme cần BLE để tạo mạng mesh và liên lạc với thiết bị gần đó mà không cần Internet.</string>
-    <string name="checking_bluetooth_status">Đang kiểm tra trạng thái Bluetooth …</string>
-    <string name="battery_optimization_detected_title">Đã phát hiện tối ưu hóa pin</string>
-    <string name="battery_optimization_enabled_title">Tối ưu hóa pin đã bật</string>
-    <string name="battery_optimization_explanation_short">Zemzeme phải chạy nền để duy trì kết nối mesh. Tối ưu hóa pin có thể làm gián đoạn các kết nối này.</string>
-    <string name="benefits_of_disabling">Lợi ích của việc tắt</string>
-    <string name="battery_benefits_short">• gửi tin nhắn đáng tin cậy\n• duy trì kết nối mesh\n• ngăn ngừa mất kết nối</string>
-    <string name="disable_battery_optimization">Tắt tối ưu hóa pin</string>
-    <string name="battery_optimization_disabled_title">Tối ưu hóa pin đã tắt</string>
-    <string name="continue_btn">Tiếp tục</string>
-    <string name="initializing_mesh_network">Đang khởi tạo mạng mesh</string>
-    <string name="setting_up_bluetooth">Đang thiết lập mạng Bluetooth mesh …</string>
-    <string name="should_take_seconds">Điều này chỉ mất vài giây</string>
-    <string name="setup_not_complete">Thiết lập chưa hoàn thành</string>
-    <string name="try_again">Thử lại</string>
-    <string name="privacy_protected">Quyền riêng tư của bạn được bảo vệ</string>
-    <string name="privacy_bullets">• không theo dõi hoặc thu thập dữ liệu\n• Bluetooth mesh chat hoàn toàn ngoại tuyến\n• Geohash chat sử dụng Internet</string>
-    <string name="permissions_header">Quyền</string>
-    <string name="grant_permissions">Cấp quyền</string>
-    <string name="location_tracking_warning">Zemzeme KHÔNG theo dõi vị trí của bạn</string>
-    <string name="geohash_people_header">MỌI NGƯỜI</string>
-    <string name="nobody_around">không có ai xung quanh …</string>
-    <string name="you_suffix"> (bạn)</string>
-    <string name="pan_zoom_instruction">di chuyển và zoom để chọn geohash</string>
-    <string name="select">chọn</string>
-    <string name="type_a_message_placeholder">Nhập tin nhắn …</string>
-    <string name="mention">nhắc đến</string>
+    <!-- Man hinh onboarding -->
+    <string name="location_services_required">Yeu cau dich vu vi tri</string>
+    <string name="privacy_first">Quyen rieng tu truoc tien</string>
+    <string name="location_explanation">Zemzeme KHONG theo doi vi tri cua ban.\n\nDich vu vi tri can thiet cho quet Bluetooth va tinh nang geohash chat.</string>
+    <string name="location_needs_for">Zemzeme can dich vu vi tri cho:</string>
+    <string name="location_needs_bullets">• Quet thiet bi Bluetooth\n• Kham pha nguoi dung gan do trong mang mesh\n• Tinh nang geohash chat\n• Khong theo doi hoac thu thap vi tri</string>
+    <string name="open_location_settings">Mo cai dat vi tri</string>
+    <string name="check_again">Kiem tra lai</string>
+    <string name="location_services_unavailable">Dich vu vi tri khong co san</string>
+    <string name="location_unavailable_explanation">Dich vu vi tri khong co san tren thiet bi nay. Dieu nay bat thuong vi dich vu vi tri la tieu chuan tren thiet bi Android.\n\nZemzeme can dich vu vi tri de quet Bluetooth hoat dong dung (yeu cau Android). Khong co no, ung dung khong the kham pha nguoi dung gan do.</string>
+    <string name="checking_location_services">Dang kiem tra dich vu vi tri …</string>
+    <string name="bluetooth_required">Yeu cau Bluetooth</string>
+    <string name="bluetooth_needs_for">Zemzeme can Bluetooth cho:</string>
+    <string name="bluetooth_needs_bullets">• Kham pha nguoi dung gan do\n• Tao ket noi mang mesh\n• Gui va nhan tin nhan\n• Hoat dong ma khong can Internet hoac may chu</string>
+    <string name="enable_bluetooth">Bat Bluetooth</string>
+    <string name="bluetooth_not_supported">Bluetooth khong duoc ho tro</string>
+    <string name="bluetooth_unsupported_explanation">Thiet bi nay khong ho tro Bluetooth Low Energy (BLE), can thiet de Zemzeme hoat dong.\n\nZemzeme can BLE de tao mang mesh va lien lac voi thiet bi gan do ma khong can Internet.</string>
+    <string name="checking_bluetooth_status">Dang kiem tra trang thai Bluetooth …</string>
+    <string name="battery_optimization_detected_title">Da phat hien toi uu hoa pin</string>
+    <string name="battery_optimization_enabled_title">Toi uu hoa pin da bat</string>
+    <string name="battery_optimization_explanation_short">Zemzeme phai chay nen de duy tri ket noi mesh. Toi uu hoa pin co the lam gian doan cac ket noi nay.</string>
+    <string name="benefits_of_disabling">Loi ich cua viec tat</string>
+    <string name="battery_benefits_short">• gui tin nhan dang tin cay\n• duy tri ket noi mesh\n• ngan ngua mat ket noi</string>
+    <string name="disable_battery_optimization">Tat toi uu hoa pin</string>
+    <string name="battery_optimization_disabled_title">Toi uu hoa pin da tat</string>
+    <string name="continue_btn">Tiep tuc</string>
+    <string name="initializing_mesh_network">Dang khoi tao mang mesh</string>
+    <string name="setting_up_bluetooth">Dang thiet lap mang Bluetooth mesh …</string>
+    <string name="should_take_seconds">Dieu nay chi mat vai giay</string>
+    <string name="setup_not_complete">Thiet lap chua hoan thanh</string>
+    <string name="try_again">Thu lai</string>
+    <string name="privacy_protected">Quyen rieng tu cua ban duoc bao ve</string>
+    <string name="privacy_bullets">• khong theo doi hoac thu thap du lieu\n• Bluetooth mesh chat hoan toan ngoai tuyen\n• Geohash chat su dung Internet</string>
+    <string name="permissions_header">Quyen</string>
+    <string name="grant_permissions">Cap quyen</string>
+    <string name="location_tracking_warning">Zemzeme KHONG theo doi vi tri cua ban</string>
+    <string name="geohash_people_header">MOI NGUOI</string>
+    <string name="nobody_around">khong co ai xung quanh …</string>
+    <string name="you_suffix"> (ban)</string>
+    <string name="pan_zoom_instruction">di chuyen va zoom de chon geohash</string>
+    <string name="select">chon</string>
+    <string name="type_a_message_placeholder">Nhap tin nhan …</string>
+    <string name="mention">nhac den</string>
     <string name="pow_time_estimate">(~%1$s)</string>
     <string name="version_prefix">v%1$s</string>
     <string name="image_star">image/*</string>
-    <string name="media_type_image">Hình ảnh</string>
+    <string name="media_type_image">Hinh anh</string>
     <string name="media_type_file">File</string>
 
-    <!-- Trợ giúp văn bản thông báo -->
-    <string name="notification_sent_image">📷 đã gửi hình ảnh</string>
-    <string name="notification_sent_voice">🎤 đã gửi tin nhắn thoại</string>
-    <string name="notification_sent_file">📎 đã gửi file</string>
+    <!-- Tro giup van ban thong bao -->
+    <string name="notification_sent_image">📷 da gui hinh anh</string>
+    <string name="notification_sent_voice">🎤 da gui tin nhan thoai</string>
+    <string name="notification_sent_file">📎 da gui file</string>
 
-    <!-- Khả năng truy cập trình phát thoại -->
-    <string name="cd_play_voice">Phát</string>
-    <string name="cd_pause_voice">Tạm dừng</string>
-    <string name="cd_mining_pow">Đang mining PoW</string>
-    <string name="cd_pow_enabled">PoW đã bật</string>
+    <!-- Kha nang truy cap trinh phat thoai -->
+    <string name="cd_play_voice">Phat</string>
+    <string name="cd_pause_voice">Tam dung</string>
+    <string name="cd_mining_pow">Dang mining PoW</string>
+    <string name="cd_pow_enabled">PoW da bat</string>
     <string name="cd_proof_of_work">Proof of Work</string>
-    <string name="pow_mining_ellipsis">Đang mining …</string>
+    <string name="pow_mining_ellipsis">Dang mining …</string>
     <string name="pow_label_format">pow: %1$dbit</string>
 
-    <!-- Mô tả quyền -->
-    <string name="perm_nearby_devices_desc">Cần thiết để khám phá người dùng Zemzeme qua Bluetooth</string>
-    <string name="perm_nearby_devices_system">Cho phép Zemzeme kết nối với thiết bị gần đó</string>
-    <string name="perm_location_desc">Android yêu cầu để khám phá người dùng Zemzeme gần đó qua Bluetooth</string>
-    <string name="perm_location_system">Zemzeme cần điều này để quét thiết bị gần đó</string>
-    <string name="perm_notifications_desc">Nhận thông báo khi bạn nhận tin nhắn riêng</string>
-    <string name="perm_notifications_system">Cho phép Zemzeme gửi thông báo cho bạn</string>
-    <string name="perm_battery_desc">Tắt tối ưu hóa pin để đảm bảo Zemzeme chạy đáng tin cậy trong nền và duy trì kết nối mạng mesh</string>
-    <string name="perm_battery_system">Cho phép Zemzeme chạy mà không bị giới hạn pin</string>
+    <!-- Mo ta quyen -->
+    <string name="perm_nearby_devices_desc">Can thiet de kham pha nguoi dung Zemzeme qua Bluetooth</string>
+    <string name="perm_nearby_devices_system">Cho phep Zemzeme ket noi voi thiet bi gan do</string>
+    <string name="perm_location_desc">Android yeu cau de kham pha nguoi dung Zemzeme gan do qua Bluetooth</string>
+    <string name="perm_location_system">Zemzeme can dieu nay de quet thiet bi gan do</string>
+    <string name="perm_notifications_desc">Nhan thong bao khi ban nhan tin nhan rieng</string>
+    <string name="perm_notifications_system">Cho phep Zemzeme gui thong bao cho ban</string>
+    <string name="perm_battery_desc">Tat toi uu hoa pin de dam bao Zemzeme chay dang tin cay trong nen va duy tri ket noi mang mesh</string>
+    <string name="perm_battery_system">Cho phep Zemzeme chay ma khong bi gioi han pin</string>
 
-    <!-- Loại quyền -->
-    <string name="perm_type_nearby_devices">Thiết bị gần đó</string>
-    <string name="perm_type_precise_location">Vị trí chính xác</string>
+    <!-- Loai quyen -->
+    <string name="perm_type_nearby_devices">Thiet bi gan do</string>
+    <string name="perm_type_precise_location">Vi tri chinh xac</string>
     <string name="perm_type_microphone">Microphone</string>
-    <string name="perm_type_notifications">Thông báo</string>
-    <string name="perm_type_battery_optimization">Tối ưu hóa pin</string>
-    <string name="perm_type_other">Khác</string>
+    <string name="perm_type_notifications">Thong bao</string>
+    <string name="perm_type_battery_optimization">Toi uu hoa pin</string>
+    <string name="perm_type_other">Khac</string>
 
-    <!-- Dialog mật khẩu -->
-    <string name="pwd_prompt_title">Nhập mật khẩu kênh</string>
-    <string name="pwd_prompt_message">Kênh %1$s được bảo vệ bằng mật khẩu. Nhập mật khẩu để tham gia.</string>
-    <string name="pwd_label">Mật khẩu</string>
+    <!-- Dialog mat khau -->
+    <string name="pwd_prompt_title">Nhap mat khau kenh</string>
+    <string name="pwd_prompt_message">Kenh %1$s duoc bao ve bang mat khau. Nhap mat khau de tham gia.</string>
+    <string name="pwd_label">Mat khau</string>
     <string name="join">Tham gia</string>
-    <string name="cancel">Hủy</string>
+    <string name="cancel">Huy</string>
 
-    <!-- Số nhiều -->
+    <!-- So nhieu -->
     <plurals name="notification_and_more">
-        <item quantity="one">và %d khác</item>
-        <item quantity="other">và %d khác</item>
+        <item quantity="one">va %d khac</item>
+        <item quantity="other">va %d khac</item>
     </plurals>
 
     <plurals name="people_count">
-        <item quantity="one">1 người</item>
-        <item quantity="other">%d người</item>
+        <item quantity="one">1 nguoi</item>
+        <item quantity="other">%d nguoi</item>
     </plurals>
 
-    <string name="mesh_service_notification_content">Mesh đang chạy — %1$d ngang hàng</string>
+    <string name="mesh_service_notification_content">Bluetooth dang chay — %1$d ngang hang</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+    <!-- Xac minh -->
+    <string name="verify_title">xac minh</string>
+    <string name="verify_my_qr_title">quet de xac minh toi</string>
+    <string name="verify_scan_prompt_friend">quet ma QR cua nguoi khac</string>
+    <string name="verify_scan_someone">quet ma QR cua nguoi khac</string>
+    <string name="verify_show_my_qr">hien thi ma QR cua toi</string>
+    <string name="verify_remove">xoa xac minh</string>
+    <string name="verify_qr_unavailable">ma QR khong kha dung</string>
+    <string name="verify_camera_permission">can quyen camera de quet ma QR</string>
+    <string name="verify_request_camera">bat camera</string>
+    <string name="verify_paste_label">dan URL xac minh</string>
+    <string name="verify_validate">xac thuc</string>
+    <string name="verify_scanned">da yeu cau xac minh</string>
+    <string name="security_verification_title">xac minh bao mat</string>
+    <string name="fingerprint_their">van tay cua ho</string>
+    <string name="fingerprint_yours">van tay cua ban</string>
+    <string name="fingerprint_pending">dang cho handshake</string>
+    <string name="fingerprint_no_peer">mo cuoc tro chuyen rieng de xem van tay</string>
+    <string name="fingerprint_status_verified">da ma hoa &amp; xac minh</string>
+    <string name="fingerprint_status_encrypted">da ma hoa</string>
+    <string name="fingerprint_status_handshaking">dang handshake</string>
+    <string name="fingerprint_status_failed">handshake that bai</string>
+    <string name="fingerprint_status_uninitialized">chua ma hoa</string>
+    <string name="fingerprint_verified_label">da xac minh</string>
+    <string name="fingerprint_verified_message">ban da xac minh danh tinh cua nguoi nay.</string>
+    <string name="fingerprint_not_verified_label">chua xac minh</string>
+    <string name="fingerprint_not_verified_message_fmt">so sanh cac van tay nay voi %1$s qua kenh bao mat.</string>
+    <string name="fingerprint_mark_verified">danh dau da xac minh</string>
+    <string name="fingerprint_start_handshake">bat dau handshake</string>
+    <string name="fingerprint_copy">sao chep</string>
+    <string name="verify_mutual_match_title">Xac minh doi chieu</string>
+    <string name="verify_mutual_match_body">Ban va %1$s da xac minh lan nhau</string>
+    <string name="verify_mutual_system_message">xac minh doi chieu voi %1$s</string>
+    <string name="verify_success_title">Da xac minh</string>
+    <string name="verify_success_body">Ban da xac minh %1$s</string>
+    <string name="verify_success_system_message">da xac minh %1$s</string>
 
-    <!-- Dịch vụ Mesh nền -->
-    <string name="mesh_service_channel_name">Dịch vụ Mesh nền</string>
-    <string name="mesh_service_channel_desc">Giữ cho Bluetooth mesh chạy trong nền</string>
+    <!-- Dich vu Mesh nen -->
+    <string name="mesh_service_channel_name">Dich vu Bluetooth nen</string>
+    <string name="mesh_service_channel_desc">Giu cho Bluetooth mesh chay trong nen</string>
 
-    <!-- Khả năng truy cập -->
-    <string name="cd_settings">Cài đặt</string>
-    <string name="cd_location_notes">Ghi chú vị trí</string>
+    <!-- Kha nang truy cap -->
+    <string name="cd_settings">Cai dat</string>
+    <string name="cd_location_notes">Ghi chu vi tri</string>
 
-    <!-- Hành động thông báo -->
-    <string name="notification_action_quit_bitchat">Thoát Zemzeme</string>
+    <!-- Hanh dong thong bao -->
+    <string name="notification_action_quit_bitchat">Thoat Zemzeme</string>
 
-    <!-- Giới thiệu -->
-    <string name="about_background_title">chạy nền</string>
-    <string name="about_background_desc">giữ mesh hoạt động khi đóng ứng dụng (foreground service)</string>
-    <string name="about_p2p_subtitle">Kết nối ngang hàng trực tiếp qua p2p</string>
-    <string name="about_nostr_subtitle">Nhắn tin qua relay Internet</string>
-    <string name="about_ble_subtitle">Mesh Bluetooth gần đó</string>
-    <string name="ble_setting_off_subtitle">Bluetooth đang tắt — bật để sử dụng BLE Mesh</string>
-    <string name="ble_banner_off">Bluetooth đang tắt — BLE Mesh không khả dụng</string>
-    <string name="ble_setting_dialog_title">Cần Bluetooth</string>
-    <string name="ble_setting_dialog_msg">Bluetooth đang tắt. Bật để sử dụng BLE Mesh.</string>
-    <string name="ble_setting_dialog_btn">Mở cài đặt Bluetooth</string>
-    <string name="ble_banner_enable_btn">Bật</string>
-    <string name="ble_banner_mesh_disabled">BLE Mesh bị tắt</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
+    <!-- Gioi thieu -->
+    <string name="about_background_title">chay nen</string>
+    <string name="about_background_desc">giu mesh hoat dong khi dong ung dung (foreground service)</string>
+    <string name="about_p2p_subtitle">Ket noi ngang hang truc tiep qua p2p</string>
+    <string name="about_nostr_subtitle">Nhan tin qua relay Internet</string>
+    <string name="about_ble_subtitle">Mesh Bluetooth gan do</string>
+    <string name="ble_setting_off_subtitle">Bluetooth dang tat — bat de su dung BLE Mesh</string>
+    <string name="ble_banner_off">Bluetooth dang tat — BLE Mesh khong kha dung</string>
+    <string name="ble_setting_dialog_title">Can Bluetooth</string>
+    <string name="ble_setting_dialog_msg">Bluetooth dang tat. Bat de su dung BLE Mesh.</string>
+    <string name="ble_setting_dialog_btn">Mo cai dat Bluetooth</string>
+    <string name="ble_banner_enable_btn">Bat</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh bi tat</string>
 
-    <!-- Vị trí nền -->
-    <string name="background_location_required_title">Khuyến nghị vị trí nền</string>
-    <string name="background_location_required_subtitle">tùy chọn, cải thiện độ tin cậy mesh</string>
-    <string name="background_location_explanation">Android khuyến nghị vị trí nền để Zemzeme có thể quét thiết bị gần đó khi ứng dụng không mở. Điều này giữ cho mesh hoạt động sau khi khởi động lại.</string>
-    <string name="background_location_settings_tip">Khi cài đặt mở, chọn "Cho phép mọi lúc".</string>
-    <string name="background_location_needs_for">Zemzeme sử dụng vị trí nền cho:</string>
-    <string name="background_location_needs_bullets">- quét thiết bị gần đó khi ứng dụng đóng\n- kết nối lại sau khi khởi động lại\n- giữ mesh chạy trong nền</string>
-    <string name="background_location_privacy_note">Chúng tôi KHÔNG BAO GIỜ thu thập hoặc lưu trữ vị trí của bạn. Quyền riêng tư của bạn được bảo vệ.</string>
-    <string name="grant_background_location">Cho phép vị trí nền</string>
-    <string name="skip_background_location">Tiếp tục mà không có vị trí nền</string>
+    <!-- Ket noi mang -->
+    <string name="network_setting_off_subtitle">Khong co Internet — kiem tra ket noi cua ban</string>
+    <string name="network_not_available">Khong co ket noi Internet</string>
+    <string name="network_transports_off_hint">Bat P2P hoac Nostr</string>
+    <string name="network_no_internet">Da ket noi nhung khong co Internet</string>
+    <string name="network_setting_dialog_title">Can Internet</string>
+    <string name="network_setting_dialog_msg">Can ket noi Internet cho truyen tai P2P va Nostr.</string>
+    <string name="network_setting_dialog_btn">Cai dat ket noi</string>
+    <string name="network_banner_disconnected">Khong co Internet — kiem tra cai dat ket noi</string>
+    <string name="network_banner_airplane_mode">Che do may bay dang bat</string>
+    <string name="network_airplane_mode">Che do may bay dang bat</string>
+    <string name="network_banner_no_internet">Da ket noi nhung khong co Internet — kiem tra ket noi</string>
+    <string name="network_banner_transports_disabled">Khong co phuong thuc truyen tai — bat P2P hoac Nostr trong cai dat</string>
+    <string name="network_banner_settings_btn">Cai dat</string>
 
-    <!-- Ký hiệu và ký tự đặc biệt -->
+    <!-- Vi tri nen -->
+    <string name="background_location_required_title">Khuyen nghi vi tri nen</string>
+    <string name="background_location_required_subtitle">tuy chon, cai thien do tin cay mesh</string>
+    <string name="background_location_explanation">Android khuyen nghi vi tri nen de Zemzeme co the quet thiet bi gan do khi ung dung khong mo. Dieu nay giu cho mesh hoat dong sau khi khoi dong lai.</string>
+    <string name="background_location_settings_tip">Khi cai dat mo, chon \"Cho phep moi luc\".</string>
+    <string name="background_location_needs_for">Zemzeme su dung vi tri nen cho:</string>
+    <string name="background_location_needs_bullets">- quet thiet bi gan do khi ung dung dong\n- ket noi lai sau khi khoi dong lai\n- giu mesh chay trong nen</string>
+    <string name="background_location_privacy_note">Chung toi KHONG BAO GIO thu thap hoac luu tru vi tri cua ban. Quyen rieng tu cua ban duoc bao ve.</string>
+    <string name="grant_background_location">Cho phep vi tri nen</string>
+    <string name="skip_background_location">Tiep tuc ma khong co vi tri nen</string>
+
+    <!-- Ky hieu va ky tu dac biet -->
     <string name="dot">.</string>
     <string name="warning_emoji">⚠️</string>
     <string name="at_symbol">@</string>
@@ -452,7 +454,7 @@
     <string name="progress_filled">█</string>
     <string name="progress_empty">░</string>
 
-    <!-- Trạng thái tin nhắn -->
+    <!-- Trang thai tin nhan -->
     <string name="status_sending">○</string>
     <string name="status_pending">○</string>
     <string name="status_sent">✓</string>
@@ -460,7 +462,7 @@
     <string name="status_failed">⚠</string>
     <string name="status_read">✓</string>
 
-    <!-- File thông báo -->
+    <!-- File thong bao -->
     <string name="notification_file_pdf">📄</string>
     <string name="notification_file_zip">🗜️</string>
     <string name="notification_file_doc">📄</string>
@@ -468,29 +470,257 @@
     <string name="notification_file_ppt">📈</string>
     <string name="notification_file_generic">📎</string>
 
-    <!-- Quyền vị trí nền -->
-    <string name="perm_background_location_desc">Khuyến nghị để quét thiết bị gần đó khi ứng dụng chạy nền</string>
-    <string name="perm_background_location_system">Cho phép truy cập vị trí nền</string>
-    <string name="perm_type_background_location">Vị trí nền</string>
+    <!-- Quyen vi tri nen -->
+    <string name="perm_background_location_desc">Khuyen nghi de quet thiet bi gan do khi ung dung chay nen</string>
+    <string name="perm_background_location_system">Cho phep truy cap vi tri nen</string>
+    <string name="perm_type_background_location">Vi tri nen</string>
 
     <!-- Tor -->
-    <string name="tor_not_available_in_this_build">Tor không có sẵn trong bản build này</string>
+    <string name="tor_not_available_in_this_build">Tor khong co san trong ban build nay</string>
 
-    <!-- Ghi chú vị trí -->
+    <!-- Ghi chu vi tri -->
     <plurals name="location_notes_title">
-        <item quantity="other">#%1$s ± 1 • %2$d ghi chú</item>
+        <item quantity="other">#%1$s ± 1 • %2$d ghi chu</item>
     </plurals>
-    <string name="location_notes_description">thêm ghi chú ngắn vĩnh viễn vào vị trí này để những người ghé thăm khác tìm thấy.</string>
-    <string name="location_notes_relays_unavailable">geo relay không có sẵn; ghi chú tạm dừng</string>
-    <string name="location_notes_no_relays_title">không có geo relay gần đó</string>
-    <string name="location_notes_no_relays_desc">ghi chú phụ thuộc vào geo relay. kiểm tra kết nối và thử lại.</string>
-    <string name="loading_location_notes">đang tải ghi chú…</string>
-    <string name="location_notes_empty_title">chưa có ghi chú</string>
-    <string name="location_notes_empty_desc">hãy là người đầu tiên thêm ghi chú cho nơi này.</string>
-    <string name="dismiss">bỏ qua</string>
-    <string name="location_notes_input_placeholder">thêm ghi chú cho nơi này</string>
+    <string name="location_notes_description">them ghi chu ngan vinh vien vao vi tri nay de nhung nguoi ghe tham khac tim thay.</string>
+    <string name="location_notes_relays_unavailable">geo relay khong co san; ghi chu tam dung</string>
+    <string name="location_notes_no_relays_title">khong co geo relay gan do</string>
+    <string name="location_notes_no_relays_desc">ghi chu phu thuoc vao geo relay. kiem tra ket noi va thu lai.</string>
+    <string name="loading_location_notes">dang tai ghi chu…</string>
+    <string name="location_notes_empty_title">chua co ghi chu</string>
+    <string name="location_notes_empty_desc">hay la nguoi dau tien them ghi chu cho noi nay.</string>
+    <string name="dismiss">bo qua</string>
+    <string name="location_notes_input_placeholder">them ghi chu cho noi nay</string>
 
     <!-- Debug -->
     <string name="debug_rssi_fmt">RSSI: %1$s</string>
     <string name="debug_question_mark">?</string>
+
+    <!-- Khoa ung dung -->
+    <string name="app_lock_title">Khoa ung dung</string>
+    <string name="app_lock_subtitle_off">Tat</string>
+    <string name="app_lock_subtitle_on">Sinh trac hoc + PIN</string>
+    <string name="app_lock_security_section">BAO MAT</string>
+    <string name="app_lock_enter_pin">Nhap PIN</string>
+    <string name="app_lock_set_pin">Dat PIN</string>
+    <string name="app_lock_confirm_pin">Xac nhan PIN</string>
+    <string name="app_lock_biometric_title">Mo khoa Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">Dung sinh trac hoc de mo khoa</string>
+    <string name="app_lock_use_pin">Dung PIN</string>
+    <string name="app_lock_wrong_pin">PIN sai</string>
+    <string name="app_lock_too_many_attempts">Qua nhieu lan thu. Thu lai sau %1$d giay.</string>
+    <string name="app_lock_cooldown">Con %1$d giay</string>
+    <string name="app_lock_pin_mismatch">PIN khong khop</string>
+    <string name="app_lock_pin_min_length">PIN phai co it nhat 4 chu so</string>
+    <string name="app_lock_disable_title">Tat khoa ung dung</string>
+    <string name="app_lock_disable_msg">Xac minh danh tinh de tat khoa ung dung</string>
+    <string name="app_lock_protect_title">Bao ve cuoc tro chuyen cua ban</string>
+    <string name="app_lock_protect_desc">PIN 6 chu so se khoa ung dung. Su dung sinh trac hoc de truy cap ngay lap tuc.</string>
+    <string name="app_lock_enable">Bat khoa ung dung</string>
+    <string name="app_lock_not_now">Khong phai bay gio</string>
+
+    <!-- Chuoi moi -->
+    <string name="continue_button">Tiep tuc</string>
+    <string name="perm_required_label">Bat buoc</string>
+    <string name="perm_recommended_label">Khuyen nghi</string>
+    <string name="perm_info_dialog_ok">OK</string>
+    <string name="perm_benefit_nearby_devices">Quyen Bluetooth cho phep Zemzeme kham pha va giao tiep voi nhung nguoi dung khac gan do qua mang mesh. Dieu nay cho phep nhan tin ngang hang hoan toan ngoai tuyen ma khong can ket noi Internet.</string>
+    <string name="perm_benefit_location">Android yeu cau quyen vi tri de quet thiet bi Bluetooth gan do. Zemzeme KHONG theo doi hoac luu tru vi tri cua ban.</string>
+    <string name="perm_benefit_background_location">Vi tri nen cho phep Zemzeme kham pha nguoi dung gan do ngay ca khi ung dung chay nen. Khong co quyen nay, mang mesh chi hoat dong khi ung dung dang mo tren man hinh.</string>
+    <string name="perm_benefit_notifications">Thong bao cho ban biet khi ban nhan tin nhan rieng hoac khi co hoat dong moi trong cac kenh, ngay ca khi ung dung chay nen.</string>
+    <string name="perm_benefit_battery_optimization">Tat toi uu hoa pin dam bao Zemzeme chay dang tin cay trong nen va duy tri ket noi mang mesh. Khong tat, Android co the dong ung dung de tiet kiem pin va ngat ket noi mesh.</string>
+
+    <!-- Gioi thieu mesh -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">Giao tiep trong nhom nay dua hoan toan vao Bluetooth. Cac thiet bi gan do chuyen tiep tin nhan giua moi nguoi — khong can ket noi Internet.</string>
+    <string name="mesh_intro_close">Dong</string>
+    <string name="mesh_intro_dont_show">Khong hien thi lai</string>
+
+    <!-- Chia se ung dung -->
+    <string name="about_share_app_header">CHIA SE UNG DUNG</string>
+    <string name="about_share_system_title">Chia se ung dung</string>
+    <string name="about_share_system_desc">Gui APK qua Bluetooth, Nearby Share hoac Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">Khong the chuan bi APK de chia se</string>
+    <string name="about_share_chooser_title">Chia se %1$s APK</string>
+    <string name="about_share_helper_text">Su dung Google Quick Share de gui (bat trong Cai dat dien thoai). Sau khi chuyen, APK se nam trong thu muc Downloads tren thiet bi nhan.</string>
+
+    <!-- Chuyen doi bieu tuong -->
+    <string name="icon_switch_title">Lam moi bieu tuong &amp; ten ung dung</string>
+    <string name="icon_switch_section">Tuy chinh</string>
+    <string name="icon_switch_subtitle">thay doi bieu tuong va ten ung dung tren man hinh chinh</string>
+    <string name="icon_switch_confirm">Thay doi bieu tuong va ten ung dung thanh nay?</string>
+    <string name="icon_switch_apply">Ap dung</string>
+    <string name="icon_switch_toast">Da thay doi bieu tuong va ten ung dung!</string>
+
+    <!-- Hop thoai -->
+    <string name="dialog_delete_chat">Xoa cuoc tro chuyen</string>
+    <string name="dialog_delete_group">Xoa nhom</string>
+    <string name="dialog_delete_confirm_body">Ban co chac chan muon xoa \"%1$s\"? Khong the hoan tac.</string>
+    <string name="action_delete">Xoa</string>
+    <string name="dialog_clear_chat">Xoa tat ca tin nhan</string>
+    <string name="dialog_clear_confirm_body">Ban co chac chan muon xoa tat ca tin nhan trong \"%1$s\"?</string>
+    <string name="action_clear">Xoa</string>
+    <string name="dialog_title_create_group">Tao nhom moi</string>
+    <string name="label_group_name">Ten nhom</string>
+    <string name="action_create">Tao</string>
+    <string name="dialog_title_join_group">Tham gia nhom</string>
+    <string name="label_group_id">Ma nhom</string>
+    <string name="label_nickname_optional">Biet danh (tuy chon)</string>
+    <string name="dialog_title_rename_group">Doi ten nhom</string>
+    <string name="action_rename">Doi ten</string>
+
+    <!-- Cai dat -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">Mang P2P</string>
+    <string name="setting_nostr_relays">Nostr Relays</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast -->
+    <string name="toast_ble_mesh_enabled">Da bat BLE Mesh</string>
+    <string name="toast_ble_mesh_disabled">Da tat BLE Mesh</string>
+    <string name="toast_nostr_enabled">Da bat Nostr</string>
+    <string name="toast_nostr_disabled">Da tat Nostr</string>
+    <string name="toast_tor_p2p_unsupported">Tor voi P2P khong duoc ho tro. Tat P2P truoc.</string>
+    <string name="toast_p2p_tor_disabled">P2P qua Tor khong duoc ho tro. Tor da bi tat.</string>
+
+    <!-- Chon hinh anh -->
+    <string name="action_gallery">Thu vien anh</string>
+    <string name="action_camera">May anh</string>
+
+    <!-- Mo ta noi dung cho kha nang truy cap -->
+    <string name="cd_refresh_p2p">Lam moi ket noi P2P</string>
+    <string name="cd_direct_bluetooth">Bluetooth truc tiep</string>
+    <string name="cd_routed">Dinh tuyen</string>
+    <string name="cd_p2p_connection">Ket noi P2P</string>
+    <string name="cd_teleported_user">Nguoi dung da dich chuyen</string>
+    <string name="cd_user">Nguoi dung</string>
+    <string name="cd_backspace">xoa lui</string>
+    <string name="cd_verified">Da xac minh</string>
+    <string name="cd_add_node">Them node</string>
+    <string name="cd_remove">Xoa</string>
+    <string name="action_enable_location">Bat vi tri</string>
+
+    <!-- Ma nhom -->
+    <string name="label_group_id_fmt">Ma nhom: %1$s</string>
+
+    <!-- PIN -->
+    <string name="placeholder_6_digits">6 chu so</string>
+
+    <!-- P2P -->
+    <string name="p2p_settings_header">CAI DAT</string>
+    <string name="p2p_enable">Bat P2P</string>
+    <string name="p2p_enable_desc">Ket noi truc tiep voi cac peer Zemzeme khac</string>
+    <string name="p2p_use_default_nodes">Su dung node mac dinh</string>
+    <string name="p2p_default_nodes_desc">Ket noi voi cac node bootstrap IPFS cong cong</string>
+    <string name="p2p_custom_nodes_header">NODE BOOTSTRAP TUY CHINH</string>
+    <string name="p2p_no_custom_nodes">Khong co node tuy chinh. Nhan + de them.</string>
+    <string name="p2p_add_bootstrap_node">Them node Bootstrap</string>
+    <string name="p2p_enter_multiaddr">Nhap multiaddr cho node bootstrap:</string>
+    <string name="p2p_recovering">Dang khoi phuc…</string>
+    <string name="p2p_recover_connection">Khoi phuc ket noi</string>
+    <string name="action_add">Them</string>
+
+    <!-- Kenh thong bao -->
+    <string name="notification_channel_direct_messages">Tin nhan truc tiep</string>
+    <string name="notification_channel_dm_desc">Thong bao cho tin nhan rieng tu nguoi dung khac</string>
+    <string name="notification_channel_geohash_chats">Chat Geohash</string>
+    <string name="notification_channel_geohash_desc">Thong bao cho cac lan nhac den va tin nhan trong kenh geohash</string>
+
+    <!-- Debug: mesh topology -->
+    <string name="debug_mesh_topology">mesh topology</string>
+    <string name="debug_no_gossip">chua co gossip</string>
+
+    <!-- Debug: tu cap nhat -->
+    <string name="debug_self_update">tu cap nhat (dev)</string>
+    <string name="debug_current_version_fmt">Phien ban hien tai: %1$s</string>
+    <string name="debug_download_updates_desc">Tai va cai dat cap nhat tu GitHub releases</string>
+    <string name="update_status_ready">San sang</string>
+    <string name="update_status_checking">Dang kiem tra cap nhat…</string>
+    <string name="update_status_available">Co cap nhat: %1$s</string>
+    <string name="update_status_downloading">Dang tai: %1$d%%</string>
+    <string name="update_status_ready_install">San sang cai dat: %1$s</string>
+    <string name="update_status_installing">Dang cai dat…</string>
+    <string name="update_status_success">Da cai dat cap nhat! Khoi dong lai ung dung.</string>
+    <string name="update_status_pending_action">Dang cho xac nhan tu nguoi dung…</string>
+    <string name="update_status_error">Loi: %1$s</string>
+    <string name="update_grant_install_permission">Cap quyen cai dat</string>
+    <string name="update_install">Cai dat cap nhat</string>
+    <string name="update_check">Kiem tra cap nhat</string>
+    <string name="debug_test_update_dialog">Thu hop thoai cap nhat</string>
+
+    <!-- Debug: bang thong -->
+    <string name="debug_overall">Tong the</string>
+    <string name="debug_per_device">Theo thiet bi</string>
+    <string name="debug_per_peer">Theo peer</string>
+    <string name="debug_incoming">Den</string>
+    <string name="debug_outgoing">Di</string>
+
+    <!-- Debug: console -->
+    <string name="debug_refreshing">Dang lam moi…</string>
+    <string name="debug_refresh">Lam moi</string>
+    <string name="debug_clear_logs">Xoa nhat ky</string>
+    <string name="debug_preparing_export">Dang chuan bi xuat…</string>
+    <string name="debug_share_logs">Chia se nhat ky</string>
+
+    <!-- Tai khoan -->
+    <string name="cd_refresh_account">Xoa tai khoan</string>
+    <string name="refresh_account_title">Xoa tai khoan?</string>
+    <string name="refresh_account_message">Thao tac nay se xoa tat ca tin nhan va tao danh tinh moi. Khong the hoan tac.</string>
+    <string name="refresh_account_confirm">Xoa</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">Quét QR</string>
+    <string name="fab_choose_city">Chọn thành phố</string>
+    <string name="fab_join_group">Tham gia nhóm</string>
+    <string name="fab_create_group">Tạo nhóm</string>
+    <!-- Section headers -->
+    <string name="section_nearby">Gần đây</string>
+    <string name="section_geographic_groups">Nhóm địa lý</string>
+    <string name="section_my_groups">Nhóm của tôi</string>
+    <string name="section_contacts">Danh bạ</string>
+
+    <!-- Tieu de muc va trang thai P2P -->
+    <string name="section_username">TEN NGUOI DUNG</string>
+    <string name="section_theme">CHU DE</string>
+    <string name="section_settings">CAI DAT</string>
+    <string name="section_network">MANG</string>
+    <string name="section_status">TRANG THAI</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P Networking</string>
+    <string name="p2p_status_no_peers">Khong co peer</string>
+    <string name="p2p_status_connected">Da ket noi</string>
+    <string name="p2p_status_connecting">Dang ket noi…</string>
+    <string name="p2p_status_disconnected">Da ngat ket noi</string>
+    <string name="p2p_status_error">Loi</string>
+    <string name="p2p_peers_connected_fmt">%1$d peer da ket noi</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Node hoat dong: %1$d</string>
+    <string name="location_acquiring_title">Dang xac dinh vi tri</string>
+    <string name="location_acquiring_desc">Vui long doi trong khi vi tri cua ban dang duoc xac dinh</string>
+    <string name="location_unavailable_title">Vi tri khong kha dung</string>
+    <string name="location_permission_required_notes">Can quyen vi tri cho ghi chu</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">Dang tim kiem peer…</string>
+    <string name="connection_connecting_peers">Dang ket noi voi peer…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d peer da ket noi</item>
+        <item quantity="other">%1$d peer da ket noi</item>
+    </plurals>
+    <string name="connection_no_new_messages">Da ket noi - khong co tin nhan moi</string>
+    <string name="connection_error">Loi ket noi</string>
+    <string name="connection_direct">Truc tiep</string>
+    <string name="connection_connected">Da ket noi</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (khong co thong tin)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE truc tiep</string>
+    <string name="debug_p2p_searching">P2P: dang tim kiem peer…</string>
+    <string name="debug_p2p_connecting">P2P: dang ket noi voi peer…</string>
+    <string name="debug_nostr_no_messages">Nostr da ket noi - khong co tin nhan moi</string>
+    <string name="debug_connection_failed">ket noi that bai</string>
+    <string name="debug_error_fmt">loi: %1$s</string>
+
 </resources>

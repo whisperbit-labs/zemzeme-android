@@ -21,7 +21,7 @@
     <string name="online_users">オンラインユーザー</string>
     <string name="no_one_connected">接続中のユーザーはいません</string>
     <string name="emergency_clear_hint">3 回タップで全データを消去</string>
-    <string name="your_network">あなたのネットワーク</string>
+    <string name="your_network">ネットワーク</string>
 
     <!-- バッテリー最適化 -->
     <string name="battery_optimization_detected">バッテリー最適化を検出</string>
@@ -46,7 +46,7 @@
     <string name="notification_summary_more">ほか %1$d 件</string>
     <string name="notification_messages_from_people">%2$d 人からの %1$d 件のメッセージ</string>
     <string name="notification_more_conversations">ほか %1$d 会話</string>
-    <string name="notification_active_peers_title">👥 近くに Zemzeme user ！</string>
+    <string name="notification_active_peers_title">👥 近くに Zemzeme ユーザー！</string>
     <string name="notification_active_peers_one">近くに 1 人</string>
     <string name="notification_active_peers_many">近くに %1$d 人</string>
     <string name="notification_new_messages">新着メッセージ</string>
@@ -60,8 +60,8 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d 件のメンション</string>
     <string name="notification_geohash_summary_title">Zemzeme – ロケーションチャット</string>
     <string name="notification_geohash_summary_text">%2$d 箇所からの %1$d 件のメッセージ</string>
-    <string name="notification_mesh_mention_title_singular">メッシュチャットでメンション</string>
-    <string name="notification_mesh_mention_title_plural">メッシュチャットで %1$d 件のメンション</string>
+    <string name="notification_mesh_mention_title_singular">Bluetoothチャットでメンション</string>
+    <string name="notification_mesh_mention_title_plural">Bluetoothチャットで %1$d 件のメンション</string>
     <string name="notification_more_locations">ほか %1$d 箇所</string>
     <string name="notification_and_more">ほか %1$d</string>
 
@@ -97,7 +97,7 @@
 
     <!-- 概要シート -->
     <string name="about_tagline">あらゆる状況で監視のないメッセージング、エンドツーエンド暗号化</string>
-    <string name="about_offline_mesh_title">オフライン・メッシュチャット</string>
+    <string name="about_offline_mesh_title">オフライン・Bluetoothチャット</string>
     <string name="about_offline_mesh_desc">インターネットやサーバーなしで、Bluetooth LE 経由で直接通信します。近隣のデバイスを経由してメッセージを中継し、到達範囲を広げます。</string>
     <string name="about_online_geohash_title">オンライン Geohash チャンネル</string>
     <string name="about_online_geohash_desc">Geohash ベースのチャンネルで近くの人々とつながります。公開インターネットのリレーを介してメッシュを拡張します。</string>
@@ -166,7 +166,7 @@
     <string name="cd_image_index_of">画像 %1$d / %2$d</string>
     <string name="cd_privacy_protected">プライバシー保護</string>
     <string name="cd_record_voice">ボイスメモを録音</string>
-    <string name="cd_offline_mesh_chat">オフライン・メッシュチャット</string>
+    <string name="cd_offline_mesh_chat">オフライン・Bluetoothチャット</string>
     <string name="cd_online_geohash_channels">オンライン Geohash チャンネル</string>
     <string name="cd_end_to_end_encryption">エンドツーエンド暗号化</string>
 
@@ -208,13 +208,28 @@
     <string name="teleport">テレポート</string>
     <string name="disable_location_services">位置情報サービスを無効にする</string>
     <string name="enable_location_services">位置情報サービスを有効にする</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">ブロック</string>
     <string name="location_level_neighborhood">近隣</string>
     <string name="location_level_city">市</string>
     <string name="location_level_province">州 / 県</string>
     <string name="location_level_region">地域</string>
     <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
+
+    <!-- ロケーションノート -->
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d 件のメモ</item>
+        <item quantity="other">#%1$s ± 1 • %2$d 件のメモ</item>
+    </plurals>
+    <string name="location_notes_description">他の訪問者が見つけられるよう、この場所に短いメモを追加しましょう。</string>
+    <string name="location_notes_relays_unavailable">ジオリレーが利用できません。メモを一時停止中</string>
+    <string name="location_notes_no_relays_title">近くにジオリレーがありません</string>
+    <string name="location_notes_no_relays_desc">メモはジオリレーに依存します。接続を確認して再試行してください。</string>
+    <string name="loading_location_notes">メモを読み込み中…</string>
+    <string name="location_notes_empty_title">まだメモはありません</string>
+    <string name="location_notes_empty_desc">この場所の最初のメモを追加しましょう。</string>
+    <string name="dismiss">閉じる</string>
+    <string name="location_notes_input_placeholder">この場所へのメモを追加</string>
 
     <!-- デバッグ / 診断 -->
     <string name="debug_tools">デバッグツール</string>
@@ -247,8 +262,47 @@
     <string name="debug_relays_window_fmt">直近 10 秒: %1$d • 1 分: %2$d • 15 分: %3$d</string>
     <string name="debug_derived_p_fmt">導出 P: %1$s • 推定最大アイテム: %2$s</string>
     <string name="debug_direct_suffix"> • 直接</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
     <string name="debug_role_server">サーバーとして (自分がホスト)</string>
     <string name="debug_role_client">クライアントとして (自分が接続)</string>
+
+    <!-- 検証 -->
+    <string name="verify_title">検証</string>
+    <string name="verify_my_qr_title">私を検証するためにスキャン</string>
+    <string name="verify_scan_prompt_friend">他人のQRをスキャン</string>
+    <string name="verify_scan_someone">他人のQRをスキャン</string>
+    <string name="verify_show_my_qr">QRコードを表示</string>
+    <string name="verify_remove">検証を削除</string>
+    <string name="verify_qr_unavailable">QR利用不可</string>
+    <string name="verify_camera_permission">QRスキャンにカメラ権限が必要です</string>
+    <string name="verify_request_camera">カメラを有効化</string>
+    <string name="verify_paste_label">検証URLを貼り付け</string>
+    <string name="verify_validate">検証する</string>
+    <string name="verify_scanned">検証をリクエストしました</string>
+    <string name="security_verification_title">セキュリティ検証</string>
+    <string name="fingerprint_their">相手の指紋</string>
+    <string name="fingerprint_yours">あなたの指紋</string>
+    <string name="fingerprint_pending">ハンドシェイク保留中</string>
+    <string name="fingerprint_no_peer">指紋を見るにはプライベートチャットを開いてください</string>
+    <string name="fingerprint_status_verified">暗号化＆検証済み</string>
+    <string name="fingerprint_status_encrypted">暗号化済み</string>
+    <string name="fingerprint_status_handshaking">ハンドシェイク中</string>
+    <string name="fingerprint_status_failed">ハンドシェイク失敗</string>
+    <string name="fingerprint_status_uninitialized">未暗号化</string>
+    <string name="fingerprint_verified_label">検証済み</string>
+    <string name="fingerprint_verified_message">この人物の身元を検証しました。</string>
+    <string name="fingerprint_not_verified_label">未検証</string>
+    <string name="fingerprint_not_verified_message_fmt">安全な経路で %1$s と指紋を比較してください。</string>
+    <string name="fingerprint_mark_verified">検証済みにする</string>
+    <string name="fingerprint_start_handshake">ハンドシェイク開始</string>
+    <string name="fingerprint_copy">コピー</string>
+    <string name="verify_mutual_match_title">相互検証</string>
+    <string name="verify_mutual_match_body">あなたと %1$s は相互に検証しました</string>
+    <string name="verify_mutual_system_message">%1$s と相互検証しました</string>
+    <string name="verify_success_title">検証済み</string>
+    <string name="verify_success_body">%1$s を検証しました</string>
+    <string name="verify_success_system_message">%1$s を検証しました</string>
 
     <!-- オンボーディング画面 -->
     <string name="location_services_required">位置情報サービスが必要です</string>
@@ -285,6 +339,15 @@
     <string name="privacy_bullets">• 追跡やデータ収集はありません\n• Bluetooth メッシュチャットは完全にオフライン\n• geohash チャットはインターネットを使用</string>
     <string name="permissions_header">権限</string>
     <string name="grant_permissions">権限を付与</string>
+    <string name="continue_button">続行</string>
+    <string name="perm_required_label">必須</string>
+    <string name="perm_recommended_label">推奨</string>
+    <string name="perm_info_dialog_ok">OK</string>
+    <string name="perm_benefit_nearby_devices">Bluetooth 権限により、Zemzeme はメッシュネットワークを通じて近くの他のユーザーを発見し通信できます。インターネット接続なしで完全にオフラインのピアツーピアメッセージングを実現します。</string>
+    <string name="perm_benefit_location">Android は近くの Bluetooth デバイスをスキャンするために位置情報の許可を必要とします。Zemzeme はあなたの位置情報を追跡・保存しません。</string>
+    <string name="perm_benefit_background_location">バックグラウンド位置情報により、アプリがバックグラウンドにあるときでも近くのユーザーを発見できます。これがないと、メッシュネットワークはアプリが画面上に表示されている間のみ動作します。</string>
+    <string name="perm_benefit_notifications">通知により、プライベートメッセージを受信したときやチャンネルで新しいアクティビティがあったときに、アプリがバックグラウンドにあっても知らせてくれます。</string>
+    <string name="perm_benefit_battery_optimization">バッテリー最適化を無効にすると、Zemzeme がバックグラウンドで確実に動作し、メッシュネットワーク接続を維持します。これがないと、Android がバッテリー節約のためにアプリを停止し、メッシュから切断される場合があります。</string>
     <string name="location_tracking_warning">Zemzeme はあなたの位置情報を追跡しません</string>
     <string name="geohash_people_header">人々</string>
     <string name="nobody_around">誰もいません…</string>
@@ -331,82 +394,82 @@
     <string name="perm_type_battery_optimization">バッテリー最適化</string>
     <string name="perm_type_other">その他</string>
 
+    <!-- App Lock -->
+    <string name="app_lock_title">アプリロック</string>
+    <string name="app_lock_subtitle_off">オフ</string>
+    <string name="app_lock_subtitle_on">生体認証 + PIN</string>
+    <string name="app_lock_security_section">セキュリティ</string>
+    <string name="app_lock_enter_pin">PINを入力</string>
+    <string name="app_lock_set_pin">PINを設定</string>
+    <string name="app_lock_confirm_pin">PINを確認</string>
+    <string name="app_lock_biometric_title">Zemzemeをロック解除</string>
+    <string name="app_lock_biometric_subtitle">センサーにタッチしてロック解除</string>
+    <string name="app_lock_use_pin">PINを使用</string>
+    <string name="app_lock_wrong_pin">PINが正しくありません</string>
+    <string name="app_lock_too_many_attempts">残り %1$d 回の試行</string>
+    <string name="app_lock_cooldown">%1$d秒後に再試行してください</string>
+    <string name="app_lock_pin_mismatch">PINが一致しません</string>
+    <string name="app_lock_pin_min_length">PINは4〜6桁です</string>
+    <string name="app_lock_disable_title">アプリロックを無効化</string>
+    <string name="app_lock_disable_msg">アプリロックを無効にするために本人確認が必要です</string>
+    <string name="app_lock_protect_title">チャットを保護する</string>
+    <string name="app_lock_protect_desc">6桁のPINでアプリをロックします。生体認証で素早くアクセスできます。</string>
+    <string name="app_lock_enable">アプリロックを有効にする</string>
+    <string name="app_lock_not_now">後で</string>
+
     <!-- パスワード ダイアログ -->
     <string name="pwd_prompt_title">チャンネルのパスワードを入力</string>
     <string name="pwd_prompt_message">チャンネル %1$s はパスワードで保護されています。参加するにはパスワードを入力してください。</string>
     <string name="pwd_label">パスワード</string>
     <string name="join">参加</string>
     <string name="cancel">キャンセル</string>
+    <string name="tor_not_available_in_this_build">このビルドでは Tor は利用できません</string>
 
     <!-- 複数形 -->
+    <plurals name="notification_and_more">
+        <item quantity="one">ほか %d 件</item>
+        <item quantity="other">ほか %d 件</item>
+    </plurals>
 
     <plurals name="people_count">
         <item quantity="one">1 人</item>
         <item quantity="other">%d 人</item>
     </plurals>
 
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d 件のメモ</item>
-    <item quantity="other">#%1$s ± 1 • %2$d 件のメモ</item>
-  </plurals>
-  <string name="location_notes_description">他の訪問者が見つけられるよう、この場所に短いメモを追加しましょう。</string>
-  <string name="location_notes_relays_unavailable">ジオリレーが利用できません。メモを一時停止中</string>
-  <string name="location_notes_no_relays_title">近くにジオリレーがありません</string>
-  <string name="location_notes_no_relays_desc">メモはジオリレーに依存します。接続を確認して再試行してください。</string>
-  <string name="loading_location_notes">メモを読み込み中…</string>
-  <string name="location_notes_empty_title">まだメモはありません</string>
-  <string name="location_notes_empty_desc">この場所の最初のメモを追加しましょう。</string>
-  <string name="dismiss">閉じる</string>
-  <string name="location_notes_input_placeholder">この場所へのメモを追加</string>
-    <string name="mesh_service_notification_content">メッシュ実行中 — %1$d ピア</string>
+    <!-- Mesh 紹介 -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">このグループの通信はすべて Bluetooth を基盤としています。近くのデバイスが人々の間でメッセージを中継します — インターネット接続は不要です。</string>
+    <string name="mesh_intro_close">閉じる</string>
+    <string name="mesh_intro_dont_show">今後表示しない</string>
 
-  <string name="verify_title">検証</string>
-  <string name="verify_my_qr_title">私を検証するためにスキャン</string>
-  <string name="verify_scan_prompt_friend">他人のQRをスキャン</string>
-  <string name="verify_scan_someone">他人のQRをスキャン</string>
-  <string name="verify_show_my_qr">QRコードを表示</string>
-  <string name="verify_remove">検証を削除</string>
-  <string name="verify_qr_unavailable">QR利用不可</string>
-  <string name="verify_camera_permission">QRスキャンにカメラ権限が必要です</string>
-  <string name="verify_request_camera">カメラを有効化</string>
-  <string name="verify_paste_label">検証URLを貼り付け</string>
-  <string name="verify_validate">検証する</string>
-  <string name="verify_scanned">検証をリクエストしました</string>
-  <string name="security_verification_title">セキュリティ検証</string>
-  <string name="fingerprint_their">相手の指紋</string>
-  <string name="fingerprint_yours">あなたの指紋</string>
-  <string name="fingerprint_pending">ハンドシェイク保留中</string>
-  <string name="fingerprint_no_peer">指紋を見るにはプライベートチャットを開いてください</string>
-  <string name="fingerprint_status_verified">暗号化＆検証済み</string>
-  <string name="fingerprint_status_encrypted">暗号化済み</string>
-  <string name="fingerprint_status_handshaking">ハンドシェイク中</string>
-  <string name="fingerprint_status_failed">ハンドシェイク失敗</string>
-  <string name="fingerprint_status_uninitialized">未暗号化</string>
-  <string name="fingerprint_verified_label">検証済み</string>
-  <string name="fingerprint_verified_message">この人物の身元を検証しました。</string>
-  <string name="fingerprint_not_verified_label">未検証</string>
-  <string name="fingerprint_not_verified_message_fmt">安全な経路で %1$s と指紋を比較してください。</string>
-  <string name="fingerprint_mark_verified">検証済みにする</string>
-  <string name="fingerprint_start_handshake">ハンドシェイク開始</string>
-  <string name="fingerprint_copy">コピー</string>
-  <string name="verify_mutual_match_title">相互検証</string>
-  <string name="verify_mutual_match_body">あなたと %1$s は相互に検証しました</string>
-  <string name="verify_mutual_system_message">%1$s と相互検証しました</string>
-  <string name="verify_success_title">検証済み</string>
-  <string name="verify_success_body">%1$s を検証しました</string>
-  <string name="verify_success_system_message">%1$s を検証しました</string>
+    <!-- アプリ共有 -->
+    <string name="about_share_app_header">アプリを共有</string>
+    <string name="about_share_system_title">アプリを共有</string>
+    <string name="about_share_system_desc">Bluetooth、ニアバイシェア、または Wi-Fi Direct で APK を送信 (%1$s)</string>
+    <string name="about_share_failed">共有用の APK を準備できませんでした</string>
+    <string name="about_share_chooser_title">%1$s APK を共有</string>
+    <string name="about_share_helper_text">Google クイック共有で送信してください（端末の設定で有効にしてください）。転送後、APK は受信側の端末のダウンロードフォルダに保存されます。</string>
 
-  <!-- 不足しているキー -->
-  <string name="mesh_service_channel_name">Meshバックグラウンドサービス</string>
-  <string name="mesh_service_channel_desc">BluetoothメッシュをバックグラウンドでKeepする</string>
-  <string name="cd_settings">設定</string>
-  <string name="cd_location_notes">場所のメモ</string>
-  <string name="notification_action_quit_bitchat">Zemzemeを終了</string>
-  <string name="about_background_title">バックグラウンドで実行</string>
-  <string name="about_background_desc">アプリを閉じてもメッシュをアクティブに保つ（フォアグラウンドサービス）</string>
-  <string name="about_p2p_subtitle">p2p による直接ピア接続</string>
-  <string name="about_nostr_subtitle">インターネットリレーメッセージング</string>
-  <string name="about_ble_subtitle">Bluetooth 近接メッシュ</string>
+    <!-- アイコン切替 -->
+    <string name="icon_switch_title">アプリアイコン &amp; 名前を変更</string>
+    <string name="icon_switch_section">カスタマイズ</string>
+    <string name="icon_switch_subtitle">ランチャーのアプリアイコンと名前を変更</string>
+    <string name="icon_switch_confirm">アプリアイコンと名前をこれに変更しますか？</string>
+    <string name="icon_switch_apply">適用</string>
+    <string name="icon_switch_toast">アプリアイコンと名前を変更しました！</string>
+
+    <!-- サービス &amp; その他 -->
+    <string name="mesh_service_channel_name">Bluetoothバックグラウンドサービス</string>
+    <string name="mesh_service_channel_desc">BluetoothメッシュをバックグラウンドでKeepする</string>
+    <string name="mesh_service_notification_content">Bluetooth 実行中 — %1$d ピア</string>
+    <string name="cd_settings">設定</string>
+    <string name="cd_location_notes">場所のメモ</string>
+    <string name="notification_action_quit_bitchat">Zemzemeを終了</string>
+    <string name="about_background_title">バックグラウンドで実行</string>
+    <string name="about_background_desc">アプリを閉じてもメッシュをアクティブに保つ（フォアグラウンドサービス）</string>
+    <string name="about_p2p_subtitle">p2p による直接ピア接続</string>
+    <string name="about_nostr_subtitle">インターネットリレーメッセージング</string>
+    <string name="about_ble_subtitle">Bluetooth 近接メッシュ</string>
     <string name="ble_setting_off_subtitle">Bluetoothがオフです — BLE Meshを使用するにはオンにしてください</string>
     <string name="ble_banner_off">Bluetoothがオフ — BLE Meshは利用できません</string>
     <string name="ble_setting_dialog_title">Bluetoothが必要です</string>
@@ -414,58 +477,226 @@
     <string name="ble_setting_dialog_btn">Bluetooth設定を開く</string>
     <string name="ble_banner_enable_btn">有効にする</string>
     <string name="ble_banner_mesh_disabled">BLE Meshが無効です</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">バックグラウンド位置情報を推奨</string>
-  <string name="background_location_required_subtitle">任意、メッシュの信頼性を向上</string>
-  <string name="background_location_explanation">Zemzeme がアプリを開いていなくても近くのデバイスをスキャンできるよう、Android はバックグラウンド位置情報を推奨しています。再起動後もメッシュを維持します。</string>
-  <string name="background_location_settings_tip">設定が開いたら「常に許可」を選んでください。</string>
-  <string name="background_location_needs_for">Zemzeme はバックグラウンド位置情報を次のために使用します:</string>
-  <string name="background_location_needs_bullets">- アプリが閉じているときに近くのデバイスをスキャン\n- 再起動後に再接続\n- バックグラウンドでメッシュを維持</string>
-  <string name="background_location_privacy_note">位置情報を収集・保存することは一切ありません。プライバシーは安全です。</string>
-  <string name="grant_background_location">バックグラウンド位置情報を許可</string>
-  <string name="skip_background_location">バックグラウンド位置情報なしで続行</string>
-  <string name="dot">.</string>
-  <string name="warning_emoji">⚠️</string>
-  <string name="at_symbol">@</string>
-  <string name="app_brand">Zemzeme/</string>
-  <string name="channel_count_prefix"> · ⧉ </string>
-  <string name="mention_suggestion_at">@%1$s</string>
-  <string name="at_nickname">@%1$s</string>
-  <string name="hash_symbol">#</string>
-  <string name="underscore">_</string>
-  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
-  <string name="progress_filled">█</string>
-  <string name="progress_empty">░</string>
-  <string name="image_counter">%1$d / %2$d</string>
-  <string name="status_sending">○</string>
-  <string name="status_pending">○</string>
-  <string name="status_sent">✓</string>
-  <string name="status_delivered">✓✓</string>
-  <string name="status_failed">⚠</string>
-  <string name="status_read">✓</string>
-  <string name="notification_file_pdf">📄</string>
-  <string name="notification_file_zip">🗜️</string>
-  <string name="notification_file_doc">📄</string>
-  <string name="notification_file_xls">📊</string>
-  <string name="notification_file_ppt">📈</string>
-  <string name="notification_file_generic">📎</string>
-  <string name="perm_background_location_desc">アプリがバックグラウンドにある間、近くのデバイスをスキャンするために推奨</string>
-  <string name="perm_background_location_system">バックグラウンド位置情報アクセスを許可</string>
-  <string name="perm_type_background_location">バックグラウンド位置情報</string>
-  <string name="tor_not_available_in_this_build">このビルドでは Tor は利用できません</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
-  <string name="debug_question_mark">?</string>
+
+    <!-- ネットワーク接続 -->
+    <string name="network_setting_off_subtitle">インターネットなし — 接続を確認してください</string>
+    <string name="network_not_available">インターネット接続がありません</string>
+    <string name="network_transports_off_hint">P2P または Nostr を有効にしてください</string>
+    <string name="network_no_internet">接続済みですがインターネットが検出されません</string>
+    <string name="network_setting_dialog_title">インターネットが必要です</string>
+    <string name="network_setting_dialog_msg">P2P および Nostr の通信にはインターネット接続が必要です。</string>
+    <string name="network_setting_dialog_btn">接続設定</string>
+    <string name="network_banner_disconnected">インターネットなし — 接続設定を確認してください</string>
+    <string name="network_banner_airplane_mode">機内モードがオンです</string>
+    <string name="network_airplane_mode">機内モードがオンです</string>
+    <string name="network_banner_no_internet">接続済みですがインターネットなし — 接続を確認してください</string>
+    <string name="network_banner_transports_disabled">ネットワークトランスポートなし — 設定で P2P または Nostr を有効にしてください</string>
+    <string name="network_banner_settings_btn">設定</string>
+
+    <!-- バックグラウンド位置情報 -->
+    <string name="background_location_required_title">バックグラウンド位置情報を推奨</string>
+    <string name="background_location_required_subtitle">任意、メッシュの信頼性を向上</string>
+    <string name="background_location_explanation">Zemzeme がアプリを開いていなくても近くのデバイスをスキャンできるよう、Android はバックグラウンド位置情報を推奨しています。再起動後もメッシュを維持します。</string>
+    <string name="background_location_settings_tip">設定が開いたら「常に許可」を選んでください。</string>
+    <string name="background_location_needs_for">Zemzeme はバックグラウンド位置情報を次のために使用します:</string>
+    <string name="background_location_needs_bullets">- アプリが閉じているときに近くのデバイスをスキャン\n- 再起動後に再接続\n- バックグラウンドでメッシュを維持</string>
+    <string name="background_location_privacy_note">位置情報を収集・保存することは一切ありません。プライバシーは安全です。</string>
+    <string name="grant_background_location">バックグラウンド位置情報を許可</string>
+    <string name="skip_background_location">バックグラウンド位置情報なしで続行</string>
+    <string name="perm_background_location_desc">アプリがバックグラウンドにある間、近くのデバイスをスキャンするために推奨</string>
+    <string name="perm_background_location_system">バックグラウンド位置情報アクセスを許可</string>
+    <string name="perm_type_background_location">バックグラウンド位置情報</string>
+
+    <!-- ダイアログタイトルとアクション -->
+    <string name="dialog_delete_chat">チャットを削除</string>
+    <string name="dialog_delete_group">グループを削除</string>
+    <string name="dialog_delete_confirm_body">\"%1$s\" を削除しますか？この操作は取り消せません。</string>
+    <string name="action_delete">削除</string>
+    <string name="dialog_clear_chat">チャットをクリア</string>
+    <string name="dialog_clear_confirm_body">\"%1$s\" のすべてのメッセージをクリアしますか？</string>
+    <string name="action_clear">クリア</string>
+    <string name="dialog_title_create_group">新規グループを作成</string>
+    <string name="label_group_name">グループ名</string>
+    <string name="action_create">作成</string>
+    <string name="dialog_title_join_group">グループに参加</string>
+    <string name="label_group_id">グループ ID</string>
+    <string name="label_nickname_optional">ニックネーム（任意）</string>
+    <string name="dialog_title_rename_group">グループ名を変更</string>
+    <string name="action_rename">名前を変更</string>
+
+    <!-- 設定タイトル -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P ネットワーク</string>
+    <string name="setting_nostr_relays">Nostr リレー</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- トーストメッセージ -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh を有効にしました</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh を無効にしました</string>
+    <string name="toast_nostr_enabled">Nostr を有効にしました</string>
+    <string name="toast_nostr_disabled">Nostr を無効にしました</string>
+    <string name="toast_tor_p2p_unsupported">Tor と P2P の併用はサポートされていません。先に P2P を無効にしてください。</string>
+    <string name="toast_p2p_tor_disabled">P2P over Tor はサポートされていません。Tor を無効にしました。</string>
+
+    <!-- 画像選択 -->
+    <string name="action_gallery">ギャラリー</string>
+    <string name="action_camera">カメラ</string>
+
+    <!-- アクセシビリティのコンテンツ記述 -->
+    <string name="cd_refresh_p2p">P2P 接続を更新</string>
+    <string name="cd_direct_bluetooth">Bluetooth 直接接続</string>
+    <string name="cd_routed">ルーティング済み</string>
+    <string name="cd_p2p_connection">P2P 接続</string>
+    <string name="cd_teleported_user">テレポートしたユーザー</string>
+    <string name="cd_user">ユーザー</string>
+    <string name="cd_backspace">バックスペース</string>
+    <string name="cd_verified">検証済み</string>
+    <string name="cd_add_node">ノードを追加</string>
+    <string name="cd_remove">削除</string>
+    <string name="action_enable_location">位置情報を有効にする</string>
+
+    <!-- グループ ID ラベル -->
+    <string name="label_group_id_fmt">グループ ID: %1$s</string>
+
+    <!-- PIN プレースホルダー -->
+    <string name="placeholder_6_digits">6桁</string>
+
+    <!-- P2P 設定 -->
+    <string name="p2p_settings_header">設定</string>
+    <string name="p2p_enable">P2P を有効にする</string>
+    <string name="p2p_enable_desc">他の Zemzeme ピアに直接接続</string>
+    <string name="p2p_use_default_nodes">デフォルトノードを使用</string>
+    <string name="p2p_default_nodes_desc">公開 IPFS ブートストラップノードに接続</string>
+    <string name="p2p_custom_nodes_header">カスタムブートストラップノード</string>
+    <string name="p2p_no_custom_nodes">カスタムノードは未設定です。+ をタップして追加してください。</string>
+    <string name="p2p_add_bootstrap_node">ブートストラップノードを追加</string>
+    <string name="p2p_enter_multiaddr">ブートストラップノードの multiaddr を入力:</string>
+    <string name="p2p_recovering">復旧中…</string>
+    <string name="p2p_recover_connection">接続を復旧</string>
+    <string name="action_add">追加</string>
+
+    <!-- 通知チャンネル -->
+    <string name="notification_channel_direct_messages">ダイレクトメッセージ</string>
+    <string name="notification_channel_dm_desc">他のユーザーからのプライベートメッセージの通知</string>
+    <string name="notification_channel_geohash_chats">Geohash チャット</string>
+    <string name="notification_channel_geohash_desc">Geohash ロケーションチャンネルでのメンションやメッセージの通知</string>
+
+    <!-- デバッグ: メッシュトポロジー -->
+    <string name="debug_mesh_topology">メッシュトポロジー</string>
+    <string name="debug_no_gossip">ゴシップデータなし</string>
+
+    <!-- デバッグ: セルフアップデート -->
+    <string name="debug_self_update">セルフアップデート (dev)</string>
+    <string name="debug_current_version_fmt">現在のバージョン: %1$s</string>
+    <string name="debug_download_updates_desc">GitHub リリースからアップデートをダウンロードしてインストール</string>
+    <string name="update_status_ready">準備完了</string>
+    <string name="update_status_checking">アップデートを確認中…</string>
+    <string name="update_status_available">アップデートあり: %1$s</string>
+    <string name="update_status_downloading">ダウンロード中: %1$d%%</string>
+    <string name="update_status_ready_install">インストール準備完了: %1$s</string>
+    <string name="update_status_installing">インストール中…</string>
+    <string name="update_status_success">アップデートをインストールしました！アプリを再起動してください。</string>
+    <string name="update_status_pending_action">ユーザーの確認を待っています…</string>
+    <string name="update_status_error">エラー: %1$s</string>
+    <string name="update_grant_install_permission">インストール権限を付与</string>
+    <string name="update_install">アップデートをインストール</string>
+    <string name="update_check">アップデートを確認</string>
+    <string name="debug_test_update_dialog">アップデートダイアログをテスト</string>
+
+    <!-- デバッグ: 帯域幅グラフ -->
+    <string name="debug_overall">全体</string>
+    <string name="debug_per_device">デバイスごと</string>
+    <string name="debug_per_peer">ピアごと</string>
+    <string name="debug_incoming">受信</string>
+    <string name="debug_outgoing">送信</string>
+
+    <!-- デバッグ: コンソール -->
+    <string name="debug_refreshing">更新中…</string>
+    <string name="debug_refresh">更新</string>
+    <string name="debug_clear_logs">ログをクリア</string>
+    <string name="debug_preparing_export">エクスポートを準備中…</string>
+    <string name="debug_share_logs">ログを共有</string>
+
+    <!-- 技術的な文字列（翻訳不要） -->
+    <string name="dot">.</string>
+    <string name="warning_emoji">⚠️</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
+    <string name="mention_suggestion_at">@%1$s</string>
+    <string name="at_nickname">@%1$s</string>
+    <string name="hash_symbol">#</string>
+    <string name="underscore">_</string>
+    <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+    <string name="progress_filled">█</string>
+    <string name="progress_empty">░</string>
+    <string name="image_counter">%1$d / %2$d</string>
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+    <string name="notification_file_pdf">📄</string>
+    <string name="notification_file_zip">🗜️</string>
+    <string name="notification_file_doc">📄</string>
+    <string name="notification_file_xls">📊</string>
+    <string name="notification_file_ppt">📈</string>
+    <string name="notification_file_generic">📎</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">QRスキャン</string>
+    <string name="fab_choose_city">都市を選択</string>
+    <string name="fab_join_group">グループに参加</string>
+    <string name="fab_create_group">グループを作成</string>
+    <!-- Section headers -->
+    <string name="section_nearby">近く</string>
+    <string name="section_geographic_groups">地理グループ</string>
+    <string name="section_my_groups">マイグループ</string>
+    <string name="section_contacts">連絡先</string>
+
+    <!-- セクションと P2P ステータス -->
+    <string name="section_username">ユーザー名</string>
+    <string name="section_theme">テーマ</string>
+    <string name="section_settings">設定</string>
+    <string name="section_network">ネットワーク</string>
+    <string name="section_status">ステータス</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P ネットワーキング</string>
+    <string name="p2p_status_no_peers">ピアなし</string>
+    <string name="p2p_status_connected">接続済み</string>
+    <string name="p2p_status_connecting">接続中…</string>
+    <string name="p2p_status_disconnected">切断</string>
+    <string name="p2p_status_error">エラー</string>
+    <string name="p2p_peers_connected_fmt">%1$d ピア接続中</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">アクティブノード: %1$d</string>
+    <string name="location_acquiring_title">位置情報を取得中</string>
+    <string name="location_acquiring_desc">位置情報を特定しています。しばらくお待ちください</string>
+    <string name="location_unavailable_title">位置情報は利用できません</string>
+    <string name="location_permission_required_notes">メモには位置情報の許可が必要です</string>
+
+    <!-- 接続インジケーター -->
+    <string name="connection_searching_peers">ピアを検索中…</string>
+    <string name="connection_connecting_peers">ピアに接続中…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d ピア接続中</item>
+        <item quantity="other">%1$d ピア接続中</item>
+    </plurals>
+    <string name="connection_no_new_messages">接続済み - 新着メッセージなし</string>
+    <string name="connection_error">接続エラー</string>
+    <string name="connection_direct">直接</string>
+    <string name="connection_connected">接続済み</string>
+
+    <!-- デバッグ接続インジケーター -->
+    <string name="debug_p2p_no_info">P2P (情報なし)</string>
+    <string name="debug_nostr_relay">Nostr リレー</string>
+    <string name="debug_ble_direct">BLE 直接</string>
+    <string name="debug_p2p_searching">P2P: ピアを検索中…</string>
+    <string name="debug_p2p_connecting">P2P: ピアに接続中…</string>
+    <string name="debug_nostr_no_messages">Nostr 接続済み - 新着メッセージなし</string>
+    <string name="debug_connection_failed">接続に失敗しました</string>
+    <string name="debug_error_fmt">エラー: %1$s</string>
+
 </resources>

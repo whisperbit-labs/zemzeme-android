@@ -353,8 +353,8 @@ class BluetoothPacketBroadcaster(
 
         // Source Routing for Originating Packets
         // If we are the sender and a source route is defined, we must send ONLY to the first hop.
-        if (packet.senderID.toHexString() == myPeerID && !packet.route.isNullOrEmpty()) {
-            val firstHop = packet.route!![0].toHexString()
+        if (packet.senderID.toHexString() == myPeerID && !route.isNullOrEmpty()) {
+            val firstHop = route[0].toHexString()
             Log.i(TAG, "Source Routing: Packet has explicit route, attempting to send to first hop: $firstHop")
 
             var sent = false
@@ -499,12 +499,18 @@ class BluetoothPacketBroadcaster(
      * Send data to a single device (client->server)
      */
     private fun writeToDeviceConn(
-        deviceConn: BluetoothConnectionTracker.DeviceConnection, 
+        deviceConn: BluetoothConnectionTracker.DeviceConnection,
         data: ByteArray
     ): Boolean {
         return try {
             deviceConn.characteristic?.let { char ->
                 char.value = data
+                // Use WRITE_NO_RESPONSE so the GATT stack allows multiple in-flight
+                // writes without blocking on onCharacteristicWrite() ACKs.
+                // WRITE_TYPE_DEFAULT (write with response) only allows one pending
+                // write per connection, causing every subsequent fragment write to
+                // fail silently when the 20ms inter-fragment delay < BLE round-trip.
+                char.writeType = android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
                 val result = deviceConn.gatt?.writeCharacteristic(char) ?: false
                 result
             } ?: false

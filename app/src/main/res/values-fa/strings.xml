@@ -60,8 +60,8 @@
     <string name="notification_geohash_summary_title_mentions">زمزمه – %1$d مورد ذکر</string>
     <string name="notification_geohash_summary_title">زمزمه – گفت‌وگوی مکانی</string>
     <string name="notification_geohash_summary_text">%1$d پیام از %2$d موقعیت</string>
-    <string name="notification_mesh_mention_title_singular">ذکر در گفت‌وگوی مِش</string>
-    <string name="notification_mesh_mention_title_plural">%1$d مورد ذکر در گفت‌وگوی مِش</string>
+    <string name="notification_mesh_mention_title_singular">ذکر در گفت‌وگوی Bluetooth</string>
+    <string name="notification_mesh_mention_title_plural">%1$d مورد ذکر در گفت‌وگوی Bluetooth</string>
     <string name="notification_more_locations">و %1$d موقعیت دیگر</string>
     <string name="notification_and_more">و %1$d مورد دیگر</string>
 
@@ -97,7 +97,7 @@
 
     <!-- برگهٔ درباره -->
     <string name="about_tagline">پیام‌رسانی بدون نظارت در تمام شرایط، رمزگذاری‌شده سراسری</string>
-    <string name="about_offline_mesh_title">گفت‌وگوی مِش آفلاین</string>
+    <string name="about_offline_mesh_title">گفت‌وگوی بلوتوث آفلاین</string>
     <string name="about_offline_mesh_desc">بدون اینترنت یا سرور، مستقیماً از طریق Bluetooth LE ارتباط برقرار کنید. پیام‌ها از طریق دستگاه‌های نزدیک رله می‌شوند تا بُرد افزایش یابد.</string>
     <string name="about_online_geohash_title">کانال‌های geohash آنلاین</string>
     <string name="about_online_geohash_desc">از طریق کانال‌های مبتنی بر geohash با افراد منطقهٔ خود ارتباط برقرار کنید. مِش را از طریق رله‌های عمومی اینترنت گسترش دهید.</string>
@@ -166,7 +166,7 @@
     <string name="cd_image_index_of">تصویر %1$d از %2$d</string>
     <string name="cd_privacy_protected">حریم خصوصی محافظت شده است</string>
     <string name="cd_record_voice">ضبط پیام صوتی</string>
-    <string name="cd_offline_mesh_chat">گفت‌وگوی مِش آفلاین</string>
+    <string name="cd_offline_mesh_chat">گفت‌وگوی Bluetooth آفلاین</string>
     <string name="cd_online_geohash_channels">کانال‌های geohash آنلاین</string>
     <string name="cd_end_to_end_encryption">رمزگذاری سرتاسری</string>
 
@@ -208,7 +208,7 @@
     <string name="teleport">انتقال مکانی</string>
     <string name="disable_location_services">غیرفعال‌کردن خدمات مکان</string>
     <string name="enable_location_services">فعال‌کردن خدمات مکان</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">بلوک</string>
     <string name="location_level_neighborhood">محله</string>
     <string name="location_level_city">شهر</string>
@@ -349,55 +349,55 @@
         <item quantity="other">%d نفر</item>
     </plurals>
 
-    <string name="mesh_service_notification_content">مش در حال اجرا — %1$d همتا</string>
+    <string name="mesh_service_notification_content">Bluetooth در حال اجرا — %1$d همتا</string>
 
-  <!-- تأیید هویت و اثرانگشت -->
-  <string name="verify_title">تأیید هویت</string>
-  <string name="verify_my_qr_title">اسکن کنید تا هویتم را تأیید کنید</string>
-  <string name="verify_scan_prompt_friend">کد QR شخص دیگری را اسکن کنید</string>
-  <string name="verify_scan_someone">کد QR شخص دیگری را اسکن کنید</string>
-  <string name="verify_show_my_qr">نمایش کد QR من</string>
-  <string name="verify_remove">حذف تأیید</string>
-  <string name="verify_qr_unavailable">کد QR در دسترس نیست</string>
-  <string name="verify_camera_permission">برای اسکن کد QR، به مجوز دوربین نیاز است</string>
-  <string name="verify_request_camera">فعال‌سازی دوربین</string>
-  <string name="verify_paste_label">الصاق آدرس تأیید</string>
-  <string name="verify_validate">اعتبارسنجی</string>
-  <string name="verify_scanned">درخواست تأیید ارسال شد</string>
-  <string name="security_verification_title">تأیید امنیتی</string>
-  <string name="fingerprint_their">اثرانگشت آن‌ها</string>
-  <string name="fingerprint_yours">اثرانگشت شما</string>
-  <string name="fingerprint_pending">دست‌دهی در انتظار</string>
-  <string name="fingerprint_no_peer">برای مشاهدهٔ اثرانگشت‌ها، یک چت خصوصی باز کنید</string>
-  <string name="fingerprint_status_verified">رمزگذاری‌شده &amp; تأییدشده</string>
-  <string name="fingerprint_status_encrypted">رمزگذاری‌شده</string>
-  <string name="fingerprint_status_handshaking">در حال دست‌دهی</string>
-  <string name="fingerprint_status_failed">دست‌دهی ناموفق بود</string>
-  <string name="fingerprint_status_uninitialized">رمزگذاری نشده</string>
-  <string name="fingerprint_verified_label">تأییدشده</string>
-  <string name="fingerprint_verified_message">شما هویت این شخص را تأیید کرده‌اید.</string>
-  <string name="fingerprint_not_verified_label">تأیید نشده</string>
-  <string name="fingerprint_not_verified_message_fmt">این اثرانگشت‌ها را با %1$s از طریق یک کانال امن مقایسه کنید.</string>
-  <string name="fingerprint_mark_verified">علامت‌گذاری به‌عنوان تأییدشده</string>
-  <string name="fingerprint_start_handshake">شروع دست‌دهی</string>
-  <string name="fingerprint_copy">کپی</string>
-  <string name="verify_mutual_match_title">تأیید متقابل</string>
-  <string name="verify_mutual_match_body">شما و %1$s یکدیگر را تأیید کردید</string>
-  <string name="verify_mutual_system_message">تأیید متقابل با %1$s</string>
-  <string name="verify_success_title">تأییدشده</string>
-  <string name="verify_success_body">شما %1$s را تأیید کردید</string>
-  <string name="verify_success_system_message">%1$s تأیید شد</string>
+    <!-- تأیید هویت و اثرانگشت -->
+    <string name="verify_title">تأیید هویت</string>
+    <string name="verify_my_qr_title">اسکن کنید تا هویتم را تأیید کنید</string>
+    <string name="verify_scan_prompt_friend">کد QR شخص دیگری را اسکن کنید</string>
+    <string name="verify_scan_someone">کد QR شخص دیگری را اسکن کنید</string>
+    <string name="verify_show_my_qr">نمایش کد QR من</string>
+    <string name="verify_remove">حذف تأیید</string>
+    <string name="verify_qr_unavailable">کد QR در دسترس نیست</string>
+    <string name="verify_camera_permission">برای اسکن کد QR، به مجوز دوربین نیاز است</string>
+    <string name="verify_request_camera">فعال‌سازی دوربین</string>
+    <string name="verify_paste_label">الصاق آدرس تأیید</string>
+    <string name="verify_validate">اعتبارسنجی</string>
+    <string name="verify_scanned">درخواست تأیید ارسال شد</string>
+    <string name="security_verification_title">تأیید امنیتی</string>
+    <string name="fingerprint_their">اثرانگشت آن‌ها</string>
+    <string name="fingerprint_yours">اثرانگشت شما</string>
+    <string name="fingerprint_pending">دست‌دهی در انتظار</string>
+    <string name="fingerprint_no_peer">برای مشاهدهٔ اثرانگشت‌ها، یک چت خصوصی باز کنید</string>
+    <string name="fingerprint_status_verified">رمزگذاری‌شده &amp; تأییدشده</string>
+    <string name="fingerprint_status_encrypted">رمزگذاری‌شده</string>
+    <string name="fingerprint_status_handshaking">در حال دست‌دهی</string>
+    <string name="fingerprint_status_failed">دست‌دهی ناموفق بود</string>
+    <string name="fingerprint_status_uninitialized">رمزگذاری نشده</string>
+    <string name="fingerprint_verified_label">تأییدشده</string>
+    <string name="fingerprint_verified_message">شما هویت این شخص را تأیید کرده‌اید.</string>
+    <string name="fingerprint_not_verified_label">تأیید نشده</string>
+    <string name="fingerprint_not_verified_message_fmt">این اثرانگشت‌ها را با %1$s از طریق یک کانال امن مقایسه کنید.</string>
+    <string name="fingerprint_mark_verified">علامت‌گذاری به‌عنوان تأییدشده</string>
+    <string name="fingerprint_start_handshake">شروع دست‌دهی</string>
+    <string name="fingerprint_copy">کپی</string>
+    <string name="verify_mutual_match_title">تأیید متقابل</string>
+    <string name="verify_mutual_match_body">شما و %1$s یکدیگر را تأیید کردید</string>
+    <string name="verify_mutual_system_message">تأیید متقابل با %1$s</string>
+    <string name="verify_success_title">تأییدشده</string>
+    <string name="verify_success_body">شما %1$s را تأیید کردید</string>
+    <string name="verify_success_system_message">%1$s تأیید شد</string>
 
-  <string name="mesh_service_channel_name">سرویس مِش زمزمه</string>
-  <string name="mesh_service_channel_desc">سرویس بلوتوث مِش را در پس‌زمینه فعال نگه می‌دارد</string>
-  <string name="cd_settings">تنظیمات</string>
-  <string name="cd_location_notes">یادداشت‌های مکان</string>
-  <string name="notification_action_quit_bitchat">خروج از زمزمه</string>
-  <string name="about_background_title">اجرا در پس‌زمینه</string>
-  <string name="about_background_desc">برای حفظ اتصال مِش پس از بستن برنامه (سرویس پیش‌زمینه)</string>
-  <string name="about_p2p_subtitle">اتصال مستقیم همتابه‌همتا</string>
-  <string name="about_nostr_subtitle">پیام‌رسانی از طریق رله اینترنتی</string>
-  <string name="about_ble_subtitle">مِش مجاورتی بلوتوث</string>
+    <string name="mesh_service_channel_name">سرویس Bluetooth زمزمه</string>
+    <string name="mesh_service_channel_desc">سرویس بلوتوث مِش را در پس‌زمینه فعال نگه می‌دارد</string>
+    <string name="cd_settings">تنظیمات</string>
+    <string name="cd_location_notes">یادداشت‌های مکان</string>
+    <string name="notification_action_quit_bitchat">خروج از زمزمه</string>
+    <string name="about_background_title">اجرا در پس‌زمینه</string>
+    <string name="about_background_desc">برای حفظ اتصال مِش پس از بستن برنامه (سرویس پیش‌زمینه)</string>
+    <string name="about_p2p_subtitle">اتصال مستقیم همتابه‌همتا</string>
+    <string name="about_nostr_subtitle">پیام‌رسانی از طریق رله اینترنتی</string>
+    <string name="about_ble_subtitle">مِش مجاورتی بلوتوث</string>
     <string name="ble_setting_off_subtitle">بلوتوث خاموش است — برای استفاده از BLE Mesh روشن کنید</string>
     <string name="ble_banner_off">بلوتوث خاموش است — BLE Mesh در دسترس نیست</string>
     <string name="ble_setting_dialog_title">بلوتوث لازم است</string>
@@ -405,71 +405,302 @@
     <string name="ble_setting_dialog_btn">باز کردن تنظیمات بلوتوث</string>
     <string name="ble_banner_enable_btn">فعال‌سازی</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh غیرفعال است</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">موقعیت پس‌زمینه توصیه می‌شود</string>
-  <string name="background_location_required_subtitle">اختیاری، قابلیت اطمینان مِش را بهبود می‌دهد</string>
-  <string name="background_location_explanation">اندروید موقعیت پس‌زمینه را توصیه می‌کند تا زمزمه بتواند هنگامی که برنامه باز نیست دستگاه‌های نزدیک را اسکن کند. این کار باعث می‌شود مِش پس از راه‌اندازی مجدد فعال بماند.</string>
-  <string name="background_location_settings_tip">وقتی تنظیمات باز می‌شود، «همیشه مجاز» را انتخاب کنید.</string>
-  <string name="background_location_needs_for">زمزمه از موقعیت پس‌زمینه برای موارد زیر استفاده می‌کند:</string>
-  <string name="background_location_needs_bullets">- اسکن دستگاه‌های نزدیک هنگام بسته بودن برنامه\n- اتصال مجدد پس از راه‌اندازی\n- حفظ اجرای مِش در پس‌زمینه</string>
-  <string name="background_location_privacy_note">ما موقعیت شما را هرگز جمع‌آوری یا ذخیره نمی‌کنیم. حریم خصوصی شما در امان است.</string>
-  <string name="grant_background_location">اجازهٔ موقعیت پس‌زمینه</string>
-  <string name="skip_background_location">ادامه بدون موقعیت پس‌زمینه</string>
-  <string name="dot">.</string>
-  <string name="warning_emoji">⚠️</string>
-  <string name="at_symbol">@</string>
-  <string name="app_brand">Zemzeme/</string>
-  <string name="channel_count_prefix"> · ⧉ </string>
-  <string name="mention_suggestion_at">@%1$s</string>
-  <string name="at_nickname">@%1$s</string>
-  <string name="hash_symbol">#</string>
-  <string name="underscore">_</string>
-  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
-  <string name="progress_filled">█</string>
-  <string name="progress_empty">░</string>
-  <string name="image_counter">%1$d / %2$d</string>
-  <string name="status_sending">○</string>
-  <string name="status_pending">○</string>
-  <string name="status_sent">✓</string>
-  <string name="status_delivered">✓✓</string>
-  <string name="status_failed">⚠</string>
-  <string name="status_read">✓</string>
-  <string name="notification_file_pdf">📄</string>
-  <string name="notification_file_zip">🗜️</string>
-  <string name="notification_file_doc">📄</string>
-  <string name="notification_file_xls">📊</string>
-  <string name="notification_file_ppt">📈</string>
-  <string name="notification_file_generic">📎</string>
-  <string name="perm_background_location_desc">برای اسکن دستگاه‌های نزدیک هنگامی که برنامه در پس‌زمینه است توصیه می‌شود</string>
-  <string name="perm_background_location_system">اجازهٔ دسترسی به موقعیت در پس‌زمینه</string>
-  <string name="perm_type_background_location">موقعیت پس‌زمینه</string>
-  <string name="tor_not_available_in_this_build">Tor در این نسخه موجود نیست</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
-  <string name="debug_question_mark">?</string>
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d یادداشت</item>
-    <item quantity="other">#%1$s ± 1 • %2$d یادداشت</item>
-  </plurals>
-  <string name="location_notes_description">یادداشت‌های کوتاه دائمی به این مکان اضافه کنید تا بازدیدکنندگان آینده بیابند.</string>
-  <string name="location_notes_relays_unavailable">رله‌های جغرافیایی در دسترس نیستند؛ یادداشت‌ها متوقف شده‌اند</string>
-  <string name="location_notes_no_relays_title">هیچ رلهٔ جغرافیایی نزدیکی نیست</string>
-  <string name="location_notes_no_relays_desc">یادداشت‌ها به رله‌های جغرافیایی نیاز دارند. اتصال را بررسی کنید و دوباره امتحان کنید.</string>
-  <string name="loading_location_notes">در حال بارگذاری یادداشت‌ها …</string>
-  <string name="location_notes_empty_title">هنوز هیچ یادداشتی نیست</string>
-  <string name="location_notes_empty_desc">اولین نفری باشید که برای این مکان یادداشت می‌گذارد.</string>
-  <string name="dismiss">بستن</string>
-  <string name="location_notes_input_placeholder">یادداشتی برای این مکان اضافه کنید</string>
+
+    <!-- اتصال شبکه -->
+    <string name="network_setting_off_subtitle">اینترنت نیست — اتصال خود را بررسی کنید</string>
+    <string name="network_not_available">اتصال اینترنت وجود ندارد</string>
+    <string name="network_transports_off_hint">P2P یا Nostr را فعال کنید</string>
+    <string name="network_no_internet">متصل اما اینترنت شناسایی نشد</string>
+    <string name="network_setting_dialog_title">اینترنت لازم است</string>
+    <string name="network_setting_dialog_msg">برای انتقال P2P و Nostr، اتصال اینترنت لازم است.</string>
+    <string name="network_setting_dialog_btn">تنظیمات اتصال</string>
+    <string name="network_banner_disconnected">اینترنت نیست — تنظیمات اتصال خود را بررسی کنید</string>
+    <string name="network_banner_airplane_mode">حالت هواپیما روشن است</string>
+    <string name="network_airplane_mode">حالت هواپیما روشن است</string>
+    <string name="network_banner_no_internet">متصل اما بدون اینترنت — اتصال خود را بررسی کنید</string>
+    <string name="network_banner_transports_disabled">انتقال شبکه وجود ندارد — P2P یا Nostr را در تنظیمات فعال کنید</string>
+    <string name="network_banner_settings_btn">تنظیمات</string>
+
+    <string name="background_location_required_title">موقعیت پس‌زمینه توصیه می‌شود</string>
+    <string name="background_location_required_subtitle">اختیاری، قابلیت اطمینان مِش را بهبود می‌دهد</string>
+    <string name="background_location_explanation">اندروید موقعیت پس‌زمینه را توصیه می‌کند تا زمزمه بتواند هنگامی که برنامه باز نیست دستگاه‌های نزدیک را اسکن کند. این کار باعث می‌شود مِش پس از راه‌اندازی مجدد فعال بماند.</string>
+    <string name="background_location_settings_tip">وقتی تنظیمات باز می‌شود، «همیشه مجاز» را انتخاب کنید.</string>
+    <string name="background_location_needs_for">زمزمه از موقعیت پس‌زمینه برای موارد زیر استفاده می‌کند:</string>
+    <string name="background_location_needs_bullets">- اسکن دستگاه‌های نزدیک هنگام بسته بودن برنامه\n- اتصال مجدد پس از راه‌اندازی\n- حفظ اجرای مِش در پس‌زمینه</string>
+    <string name="background_location_privacy_note">ما موقعیت شما را هرگز جمع‌آوری یا ذخیره نمی‌کنیم. حریم خصوصی شما در امان است.</string>
+    <string name="grant_background_location">اجازهٔ موقعیت پس‌زمینه</string>
+    <string name="skip_background_location">ادامه بدون موقعیت پس‌زمینه</string>
+    <string name="dot">.</string>
+    <string name="warning_emoji">⚠️</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
+    <string name="mention_suggestion_at">@%1$s</string>
+    <string name="at_nickname">@%1$s</string>
+    <string name="hash_symbol">#</string>
+    <string name="underscore">_</string>
+    <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+    <string name="progress_filled">█</string>
+    <string name="progress_empty">░</string>
+    <string name="image_counter">%1$d / %2$d</string>
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+    <string name="notification_file_pdf">📄</string>
+    <string name="notification_file_zip">🗜️</string>
+    <string name="notification_file_doc">📄</string>
+    <string name="notification_file_xls">📊</string>
+    <string name="notification_file_ppt">📈</string>
+    <string name="notification_file_generic">📎</string>
+    <string name="perm_background_location_desc">برای اسکن دستگاه‌های نزدیک هنگامی که برنامه در پس‌زمینه است توصیه می‌شود</string>
+    <string name="perm_background_location_system">اجازهٔ دسترسی به موقعیت در پس‌زمینه</string>
+    <string name="perm_type_background_location">موقعیت پس‌زمینه</string>
+    <string name="tor_not_available_in_this_build">Tor در این نسخه موجود نیست</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
+
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d یادداشت</item>
+        <item quantity="other">#%1$s ± 1 • %2$d یادداشت</item>
+    </plurals>
+    <string name="location_notes_description">یادداشت‌های کوتاه دائمی به این مکان اضافه کنید تا بازدیدکنندگان آینده بیابند.</string>
+    <string name="location_notes_relays_unavailable">رله‌های جغرافیایی در دسترس نیستند؛ یادداشت‌ها متوقف شده‌اند</string>
+    <string name="location_notes_no_relays_title">هیچ رلهٔ جغرافیایی نزدیکی نیست</string>
+    <string name="location_notes_no_relays_desc">یادداشت‌ها به رله‌های جغرافیایی نیاز دارند. اتصال را بررسی کنید و دوباره امتحان کنید.</string>
+    <string name="loading_location_notes">در حال بارگذاری یادداشت‌ها …</string>
+    <string name="location_notes_empty_title">هنوز هیچ یادداشتی نیست</string>
+    <string name="location_notes_empty_desc">اولین نفری باشید که برای این مکان یادداشت می‌گذارد.</string>
+    <string name="dismiss">بستن</string>
+    <string name="location_notes_input_placeholder">یادداشتی برای این مکان اضافه کنید</string>
+
+    <!-- قفل برنامه -->
+    <string name="app_lock_title">قفل برنامه</string>
+    <string name="app_lock_subtitle_off">خاموش</string>
+    <string name="app_lock_subtitle_on">بیومتریک + PIN</string>
+    <string name="app_lock_security_section">امنیت</string>
+    <string name="app_lock_enter_pin">وارد کردن PIN</string>
+    <string name="app_lock_set_pin">تنظیم PIN</string>
+    <string name="app_lock_confirm_pin">تأیید PIN</string>
+    <string name="app_lock_biometric_title">باز کردن Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">حسگر را لمس کنید تا قفل باز شود</string>
+    <string name="app_lock_use_pin">استفاده از PIN</string>
+    <string name="app_lock_wrong_pin">PIN اشتباه</string>
+    <string name="app_lock_too_many_attempts">%1$d تلاش باقی‌مانده</string>
+    <string name="app_lock_cooldown">%1$d ثانیه دیگر دوباره امتحان کنید</string>
+    <string name="app_lock_pin_mismatch">PIN‌ها مطابقت ندارند</string>
+    <string name="app_lock_pin_min_length">PIN باید ۴–۶ رقم داشته باشد</string>
+    <string name="app_lock_disable_title">غیرفعال کردن قفل برنامه</string>
+    <string name="app_lock_disable_msg">برای غیرفعال کردن قفل، هویت خود را تأیید کنید</string>
+    <string name="app_lock_protect_title">از گفت‌وگوهایتان محافظت کنید</string>
+    <string name="app_lock_protect_desc">یک PIN ۶ رقمی برنامه را قفل می‌کند. از بیومتریک برای دسترسی فوری استفاده کنید.</string>
+    <string name="app_lock_enable">فعال‌سازی قفل برنامه</string>
+    <string name="app_lock_not_now">فعلاً نه</string>
+
+    <!-- مقدمهٔ مِش -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">ارتباط در این گروه کاملاً بر پایهٔ بلوتوث است. دستگاه‌های نزدیک پیام‌ها را بین افراد رله می‌کنند — نیازی به اتصال اینترنت نیست.</string>
+    <string name="mesh_intro_close">بستن</string>
+    <string name="mesh_intro_dont_show">دیگر نشان نده</string>
+
+    <!-- اشتراک‌گذاری برنامه -->
+    <string name="about_share_app_header">اشتراک‌گذاری برنامه</string>
+    <string name="about_share_system_title">اشتراک‌گذاری برنامه</string>
+    <string name="about_share_system_desc">APK را از طریق بلوتوث، اشتراک نزدیک یا Wi-Fi Direct ارسال کنید (%1$s)</string>
+    <string name="about_share_failed">آماده‌سازی APK برای اشتراک‌گذاری ناموفق بود</string>
+    <string name="about_share_chooser_title">اشتراک‌گذاری APK %1$s</string>
+    <string name="about_share_helper_text">برای ارسال از Google Quick Share استفاده کنید (در تنظیمات تلفن فعال کنید). پس از انتقال، APK در پوشهٔ Downloads دستگاه دریافت‌کننده خواهد بود.</string>
+
+    <!-- تغییر آیکون -->
+    <string name="icon_switch_title">بازنشانی آیکون &amp; نام برنامه</string>
+    <string name="icon_switch_section">سفارشی‌سازی</string>
+    <string name="icon_switch_subtitle">تغییر آیکون و نام برنامه در لانچر</string>
+    <string name="icon_switch_confirm">آیکون و نام برنامه به این تغییر کند؟</string>
+    <string name="icon_switch_apply">اعمال</string>
+    <string name="icon_switch_toast">آیکون و نام برنامه تغییر کرد!</string>
+
+    <!-- بازنشانی حساب -->
+    <string name="cd_refresh_account">نابودسازی حساب</string>
+    <string name="refresh_account_title">حساب نابود شود؟</string>
+    <string name="refresh_account_message">همهٔ پیام‌ها حذف و هویت جدیدی ایجاد می‌شود. قابل بازگشت نیست.</string>
+    <string name="refresh_account_confirm">نابودسازی</string>
+
+    <!-- عنوان‌های دیالوگ و اقدامات -->
+    <string name="dialog_delete_chat">حذف چت</string>
+    <string name="dialog_delete_group">حذف گروه</string>
+    <string name="dialog_delete_confirm_body">آیا مطمئنید که می‌خواهید \"%1$s\" را حذف کنید؟ قابل بازگشت نیست.</string>
+    <string name="action_delete">حذف</string>
+    <string name="dialog_clear_chat">پاک‌کردن چت</string>
+    <string name="dialog_clear_confirm_body">آیا مطمئنید که می‌خواهید همهٔ پیام‌های \"%1$s\" را پاک کنید؟</string>
+    <string name="action_clear">پاک‌کردن</string>
+    <string name="dialog_title_create_group">ایجاد گروه جدید</string>
+    <string name="label_group_name">نام گروه</string>
+    <string name="action_create">ایجاد</string>
+    <string name="dialog_title_join_group">پیوستن به گروه</string>
+    <string name="label_group_id">شناسهٔ گروه</string>
+    <string name="label_nickname_optional">نام مستعار (اختیاری)</string>
+    <string name="dialog_title_rename_group">تغییر نام گروه</string>
+    <string name="action_rename">تغییر نام</string>
+
+    <!-- عنوان‌های تنظیمات -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">شبکهٔ P2P</string>
+    <string name="setting_nostr_relays">رله‌های Nostr</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- پیام‌های Toast -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh فعال شد</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh غیرفعال شد</string>
+    <string name="toast_nostr_enabled">Nostr فعال شد</string>
+    <string name="toast_nostr_disabled">Nostr غیرفعال شد</string>
+    <string name="toast_tor_p2p_unsupported">Tor با P2P پشتیبانی نمی‌شود. ابتدا P2P را غیرفعال کنید.</string>
+    <string name="toast_p2p_tor_disabled">P2P از طریق Tor پشتیبانی نمی‌شود. Tor غیرفعال شد.</string>
+
+    <!-- انتخابگر تصویر -->
+    <string name="action_gallery">گالری</string>
+    <string name="action_camera">دوربین</string>
+
+    <!-- توضیحات دسترسی‌پذیری -->
+    <string name="cd_refresh_p2p">بازنشانی اتصال P2P</string>
+    <string name="cd_direct_bluetooth">بلوتوث مستقیم</string>
+    <string name="cd_routed">مسیریابی‌شده</string>
+    <string name="cd_p2p_connection">اتصال P2P</string>
+    <string name="cd_teleported_user">کاربر منتقل‌شده</string>
+    <string name="cd_user">کاربر</string>
+    <string name="cd_backspace">حذف حرف</string>
+    <string name="cd_verified">تأییدشده</string>
+    <string name="cd_add_node">افزودن گره</string>
+    <string name="cd_remove">حذف</string>
+    <string name="action_enable_location">فعال‌سازی مکان</string>
+
+    <!-- شناسهٔ گروه -->
+    <string name="label_group_id_fmt">شناسهٔ گروه: %1$s</string>
+
+    <!-- نگهدارنده PIN -->
+    <string name="placeholder_6_digits">۶ رقم</string>
+
+    <!-- تنظیمات P2P -->
+    <string name="p2p_settings_header">تنظیمات</string>
+    <string name="p2p_enable">فعال‌سازی P2P</string>
+    <string name="p2p_enable_desc">اتصال مستقیم با سایر همتایان زمزمه</string>
+    <string name="p2p_use_default_nodes">استفاده از گره‌های پیش‌فرض</string>
+    <string name="p2p_default_nodes_desc">اتصال به گره‌های عمومی IPFS</string>
+    <string name="p2p_custom_nodes_header">گره‌های بوت‌استرپ سفارشی</string>
+    <string name="p2p_no_custom_nodes">هیچ گرهٔ سفارشی تنظیم نشده. + بزنید تا اضافه کنید.</string>
+    <string name="p2p_add_bootstrap_node">افزودن گره بوت‌استرپ</string>
+    <string name="p2p_enter_multiaddr">آدرس multiaddr گره بوت‌استرپ را وارد کنید:</string>
+    <string name="p2p_recovering">در حال بازیابی …</string>
+    <string name="p2p_recover_connection">بازیابی اتصال</string>
+    <string name="action_add">افزودن</string>
+
+    <!-- کانال‌های اعلان -->
+    <string name="notification_channel_direct_messages">پیام‌های مستقیم</string>
+    <string name="notification_channel_dm_desc">اعلان‌های پیام‌های خصوصی از سایر کاربران</string>
+    <string name="notification_channel_geohash_chats">گفت‌وگوهای Geohash</string>
+    <string name="notification_channel_geohash_desc">اعلان‌های ذکر و پیام در کانال‌های مکانی geohash</string>
+
+    <!-- اشکال‌زدایی: توپولوژی mesh -->
+    <string name="debug_mesh_topology">توپولوژی مِش</string>
+    <string name="debug_no_gossip">هنوز gossip ای نیست</string>
+
+    <!-- اشکال‌زدایی: به‌روزرسانی خودکار -->
+    <string name="debug_self_update">به‌روزرسانی خودکار (توسعه‌دهنده)</string>
+    <string name="debug_current_version_fmt">نسخهٔ فعلی: %1$s</string>
+    <string name="debug_download_updates_desc">دانلود و نصب به‌روزرسانی‌ها از انتشارات GitHub</string>
+    <string name="update_status_ready">آماده</string>
+    <string name="update_status_checking">در حال بررسی به‌روزرسانی‌ها …</string>
+    <string name="update_status_available">به‌روزرسانی موجود: %1$s</string>
+    <string name="update_status_downloading">در حال دانلود: %1$d%%</string>
+    <string name="update_status_ready_install">آمادهٔ نصب: %1$s</string>
+    <string name="update_status_installing">در حال نصب …</string>
+    <string name="update_status_success">به‌روزرسانی نصب شد! برنامه را مجدداً راه‌اندازی کنید.</string>
+    <string name="update_status_pending_action">منتظر تأیید کاربر …</string>
+    <string name="update_status_error">خطا: %1$s</string>
+    <string name="update_grant_install_permission">اعطای مجوز نصب</string>
+    <string name="update_install">نصب به‌روزرسانی</string>
+    <string name="update_check">بررسی به‌روزرسانی‌ها</string>
+    <string name="debug_test_update_dialog">آزمایش دیالوگ به‌روزرسانی</string>
+
+    <!-- اشکال‌زدایی: نمودارهای پهنای باند -->
+    <string name="debug_overall">کلی</string>
+    <string name="debug_per_device">هر دستگاه</string>
+    <string name="debug_per_peer">هر همتا</string>
+    <string name="debug_incoming">ورودی</string>
+    <string name="debug_outgoing">خروجی</string>
+
+    <!-- اشکال‌زدایی: کنسول -->
+    <string name="debug_refreshing">در حال بازنشانی …</string>
+    <string name="debug_refresh">بازنشانی</string>
+    <string name="debug_clear_logs">پاک‌کردن گزارش‌ها</string>
+    <string name="debug_preparing_export">در حال آماده‌سازی خروجی …</string>
+    <string name="debug_share_logs">اشتراک‌گذاری گزارش‌ها</string>
+
+    <!-- مجوزهای جدید -->
+    <string name="continue_button">ادامه</string>
+    <string name="perm_required_label">ضروری</string>
+    <string name="perm_recommended_label">توصیه‌شده</string>
+    <string name="perm_info_dialog_ok">تأیید</string>
+    <string name="perm_benefit_nearby_devices">مجوزهای بلوتوث به زمزمه اجازه می‌دهند از طریق شبکهٔ مِش کاربران نزدیک را کشف و ارتباط برقرار کند. این امکان پیام‌رسانی کاملاً آفلاین و همتابه‌همتا بدون اتصال اینترنت را فراهم می‌کند.</string>
+    <string name="perm_benefit_location">اندروید برای اسکن دستگاه‌های بلوتوث نزدیک به مجوز مکان نیاز دارد. زمزمه موقعیت شما را ردیابی یا ذخیره نمی‌کند.</string>
+    <string name="perm_benefit_background_location">موقعیت پس‌زمینه به زمزمه اجازه می‌دهد حتی هنگامی که برنامه در پس‌زمینه است، کاربران نزدیک را بیابد. بدون آن، شبکهٔ مِش فقط هنگام باز بودن برنامه کار می‌کند.</string>
+    <string name="perm_benefit_notifications">اعلان‌ها به شما اطلاع می‌دهند وقتی پیام خصوصی دریافت می‌کنید یا فعالیت جدیدی در کانال‌هایتان رخ می‌دهد، حتی هنگامی که برنامه در پس‌زمینه است.</string>
+    <string name="perm_benefit_battery_optimization">غیرفعال‌کردن بهینه‌سازی باتری تضمین می‌کند زمزمه به‌طور قابل اعتماد در پس‌زمینه اجرا شود و اتصال‌های مِش را حفظ کند. بدون آن، اندروید ممکن است برنامه را برای صرفه‌جویی باتری متوقف کند.</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">اسکن QR</string>
+    <string name="fab_choose_city">انتخاب شهر</string>
+    <string name="fab_join_group">پیوستن به گروه</string>
+    <string name="fab_create_group">ایجاد گروه</string>
+    <!-- Section headers -->
+    <string name="section_nearby">نزدیک</string>
+    <string name="section_geographic_groups">گروه‌های جغرافیایی</string>
+    <string name="section_my_groups">گروه‌های من</string>
+    <string name="section_contacts">مخاطبین</string>
+
+    <!-- P2P and location strings -->
+    <string name="section_username">نام کاربری</string>
+    <string name="section_theme">پوسته</string>
+    <string name="section_settings">تنظیمات</string>
+    <string name="section_network">شبکه</string>
+    <string name="section_status">وضعیت</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">شبکهٔ P2P</string>
+    <string name="p2p_status_no_peers">بدون همتا</string>
+    <string name="p2p_status_connected">متصل</string>
+    <string name="p2p_status_connecting">در حال اتصال…</string>
+    <string name="p2p_status_disconnected">قطع شده</string>
+    <string name="p2p_status_error">خطا</string>
+    <string name="p2p_peers_connected_fmt">%1$d همتای متصل</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">گره‌های فعال: %1$d</string>
+    <string name="location_acquiring_title">در حال دریافت موقعیت</string>
+    <string name="location_acquiring_desc">لطفاً صبر کنید تا موقعیت شما تعیین شود</string>
+    <string name="location_unavailable_title">موقعیت در دسترس نیست</string>
+    <string name="location_permission_required_notes">مجوز مکان برای یادداشت‌ها لازم است</string>
+
+    <!-- نشانگر اتصال -->
+    <string name="connection_searching_peers">در حال جستجوی همتاها…</string>
+    <string name="connection_connecting_peers">در حال اتصال به همتاها…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d همتا متصل</item>
+        <item quantity="other">%1$d همتا متصل</item>
+    </plurals>
+    <string name="connection_no_new_messages">متصل - پیام جدیدی نیست</string>
+    <string name="connection_error">خطای اتصال</string>
+    <string name="connection_direct">مستقیم</string>
+    <string name="connection_connected">متصل</string>
+
+    <!-- نشانگر اتصال دیباگ -->
+    <string name="debug_p2p_no_info">P2P (بدون اطلاعات)</string>
+    <string name="debug_nostr_relay">رله Nostr</string>
+    <string name="debug_ble_direct">BLE مستقیم</string>
+    <string name="debug_p2p_searching">P2P: در حال جستجوی همتاها…</string>
+    <string name="debug_p2p_connecting">P2P: در حال اتصال به همتاها…</string>
+    <string name="debug_nostr_no_messages">Nostr متصل - پیام جدیدی نیست</string>
+    <string name="debug_connection_failed">اتصال ناموفق</string>
+    <string name="debug_error_fmt">خطا: %1$s</string>
+
 </resources>

@@ -8,6 +8,7 @@ import com.roman.zemzeme.model.RoutedPacket
 import com.roman.zemzeme.protocol.ZemzemePacket
 import com.roman.zemzeme.protocol.MessageType
 import com.roman.zemzeme.util.toHexString
+import com.roman.zemzeme.util.DebugLogger
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.random.Random
@@ -104,8 +105,21 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
                         )
                         
                         // Notify delegate
+                        val receiveLatency = System.currentTimeMillis() - packet.timestamp.toLong()
+                        DebugLogger.log(
+                            action = "RECEIVE",
+                            msgId = privateMessage.messageID,
+                            srcName = delegate?.getPeerNickname(peerID),
+                            srcId = peerID,
+                            destName = delegate?.getMyNickname(),
+                            destId = myPeerID,
+                            protocol = "NOISE_ENCRYPTED",
+                            content = privateMessage.content,
+                            hopCounter = packet.ttl.toInt(),
+                            latencyMs = receiveLatency
+                        )
                         delegate?.onMessageReceived(message)
-                        
+
                         // Send delivery ACK exactly like iOS
                         sendDeliveryAck(privateMessage.messageID, peerID)
                     }
@@ -131,6 +145,18 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
                         )
 
                         Log.i(TAG, "📄 Saved encrypted incoming file to $savedPath (msgId=$uniqueMsgId)")
+                        DebugLogger.log(
+                            action = "RECEIVE",
+                            msgId = uniqueMsgId,
+                            srcName = delegate?.getPeerNickname(peerID),
+                            srcId = peerID,
+                            destName = delegate?.getMyNickname(),
+                            destId = myPeerID,
+                            protocol = "NOISE_ENCRYPTED",
+                            content = "[FILE:${file.fileName}]",
+                            hopCounter = packet.ttl.toInt(),
+                            latencyMs = System.currentTimeMillis() - packet.timestamp.toLong()
+                        )
                         delegate?.onMessageReceived(message)
 
                         // Send delivery ACK with generated message ID
@@ -248,7 +274,7 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
         // If existing peer has a different noise public key, do not consider this verified
         val existingPeer = delegate?.getPeerInfo(peerID)
         
-        if (existingPeer != null && existingPeer.noisePublicKey != null && !existingPeer.noisePublicKey!!.contentEquals(announcement.noisePublicKey)) {
+        if (existingPeer != null && existingPeer.noisePublicKey != null && existingPeer.noisePublicKey?.contentEquals(announcement.noisePublicKey) == false) {
             Log.w(TAG, "⚠️ Announce key mismatch for ${peerID.take(8)}... — keeping unverified")
             verified = false
         }
@@ -408,6 +434,18 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
                     timestamp = Date(packet.timestamp.toLong())
                 )
                 Log.i(TAG, "📄 Saved incoming file to $savedPath")
+                DebugLogger.log(
+                    action = "RECEIVE",
+                    msgId = message.id,
+                    srcName = delegate?.getPeerNickname(peerID),
+                    srcId = peerID,
+                    destName = "broadcast",
+                    destId = "all",
+                    protocol = "BLE_MESH",
+                    content = "[FILE:${file.fileName}]",
+                    hopCounter = packet.ttl.toInt(),
+                    latencyMs = System.currentTimeMillis() - packet.timestamp.toLong()
+                )
                 delegate?.onMessageReceived(message)
                 return
             } else if (isFileTransfer) {
@@ -415,11 +453,24 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
             }
 
             // Fallback: plain text
+            val textContent = String(packet.payload, Charsets.UTF_8)
             val message = ZemzemeMessage(
                 sender = delegate?.getPeerNickname(peerID) ?: "unknown",
-                content = String(packet.payload, Charsets.UTF_8),
+                content = textContent,
                 senderPeerID = peerID,
                 timestamp = Date(packet.timestamp.toLong())
+            )
+            DebugLogger.log(
+                action = "RECEIVE",
+                msgId = message.id,
+                srcName = delegate?.getPeerNickname(peerID),
+                srcId = peerID,
+                destName = "broadcast",
+                destId = "all",
+                protocol = "BLE_MESH",
+                content = textContent,
+                hopCounter = packet.ttl.toInt(),
+                latencyMs = System.currentTimeMillis() - packet.timestamp.toLong()
             )
             delegate?.onMessageReceived(message)
         } catch (e: Exception) {
@@ -433,7 +484,7 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
     private suspend fun handlePrivateMessage(packet: ZemzemePacket, peerID: String) {
         try {
             // Verify signature if present
-            if (packet.signature != null && !delegate?.verifySignature(packet, peerID)!!) {
+            if (packet.signature != null && delegate?.verifySignature(packet, peerID) == false) {
                 Log.w(TAG, "Invalid signature for private message from $peerID")
                 return
             }
@@ -457,6 +508,18 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
                     recipientNickname = delegate?.getMyNickname()
                 )
                 Log.i(TAG, "📄 Saved incoming file to $savedPath")
+                DebugLogger.log(
+                    action = "RECEIVE",
+                    msgId = message.id,
+                    srcName = delegate?.getPeerNickname(peerID),
+                    srcId = peerID,
+                    destName = delegate?.getMyNickname(),
+                    destId = myPeerID,
+                    protocol = "BLE_MESH",
+                    content = "[FILE:${file.fileName}]",
+                    hopCounter = packet.ttl.toInt(),
+                    latencyMs = System.currentTimeMillis() - packet.timestamp.toLong()
+                )
                 delegate?.onMessageReceived(message)
                 return
             } else if (isFileTransfer) {
@@ -464,11 +527,24 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
             }
 
             // Fallback: plain text
+            val pmTextContent = String(packet.payload, Charsets.UTF_8)
             val message = ZemzemeMessage(
                 sender = delegate?.getPeerNickname(peerID) ?: "unknown",
-                content = String(packet.payload, Charsets.UTF_8),
+                content = pmTextContent,
                 senderPeerID = peerID,
                 timestamp = Date(packet.timestamp.toLong())
+            )
+            DebugLogger.log(
+                action = "RECEIVE",
+                msgId = message.id,
+                srcName = delegate?.getPeerNickname(peerID),
+                srcId = peerID,
+                destName = delegate?.getMyNickname(),
+                destId = myPeerID,
+                protocol = "BLE_MESH",
+                content = pmTextContent,
+                hopCounter = packet.ttl.toInt(),
+                latencyMs = System.currentTimeMillis() - packet.timestamp.toLong()
             )
             delegate?.onMessageReceived(message)
 

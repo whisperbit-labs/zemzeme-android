@@ -40,7 +40,7 @@
     <string name="notification_summary_more">и ещё %1$d</string>
     <string name="notification_messages_from_people">%1$d сообщений от %2$d людей</string>
     <string name="notification_more_conversations">и ещё %1$d бесед</string>
-    <string name="notification_active_peers_title">👥 Zemzeme user рядом!</string>
+    <string name="notification_active_peers_title">👥 пользователи Zemzeme рядом!</string>
     <string name="notification_active_peers_one">Рядом 1 человек</string>
     <string name="notification_active_peers_many">Рядом %1$d человек</string>
     <string name="notification_new_messages">Новые сообщения</string>
@@ -54,7 +54,7 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme — %1$d упоминаний</string>
     <string name="notification_geohash_summary_title">Zemzeme — чаты по локациям</string>
     <string name="notification_geohash_summary_text">%1$d сообщений из %2$d локаций</string>
-    <string name="notification_mesh_mention_title_singular">Упоминание в Mesh‑чате</string>
+    <string name="notification_mesh_mention_title_singular">Упоминание в Bluetooth‑чате</string>
     <string name="notification_mesh_mention_title_plural">%1$d упоминаний в Mesh‑чате</string>
     <string name="notification_more_locations">и ещё %1$d локаций</string>
     <string name="notification_and_more">и ещё %1$d</string>
@@ -87,7 +87,7 @@
     <string name="pick_image">Выбрать изображение</string>
 
     <string name="about_tagline">Обмен сообщениями без слежки при любых обстоятельствах, зашифрованный от конца до конца</string>
-    <string name="about_offline_mesh_title">Оффлайн Mesh‑чат</string>
+    <string name="about_offline_mesh_title">Оффлайн Bluetooth‑чат</string>
     <string name="about_offline_mesh_desc">Общение напрямую по Bluetooth LE без интернета и серверов. Сообщения ретранслируются близлежащими устройствами.</string>
     <string name="about_online_geohash_title">Онлайн‑каналы Geohash</string>
     <string name="about_online_geohash_desc">Общайся с людьми поблизости через каналы на основе geohash. Расширяй mesh через публичные ретрансляторы.</string>
@@ -188,7 +188,7 @@
     <string name="disable_location_services">отключить службы локации</string>
     <string name="enable_location_services">включить службы локации</string>
     <string name="location_bluetooth_subtitle">#bluetooth • %1$s</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">квартал</string>
     <string name="location_level_neighborhood">район</string>
     <string name="location_level_city">город</string>
@@ -196,7 +196,9 @@
     <string name="location_level_region">регион</string>
 
     <string name="debug_tools">инструменты отладки</string>
+    <string name="debug_tools_desc">утилиты разработчика для диагностики и управления</string>
     <string name="debug_verbose_logging">подробное логирование</string>
+    <string name="debug_verbose_hint">записывает подключения/отключения пиров, направление соединения, маршрутизацию пакетов и ретрансляторы</string>
     <string name="debug_bluetooth_roles">роли Bluetooth</string>
     <string name="debug_gatt_server">сервер GATT</string>
     <string name="debug_connections_fmt">подключения: %1$d / %2$d</string>
@@ -207,6 +209,7 @@
     <string name="debug_max_overall">макс. всего</string>
     <string name="debug_packet_relay">ретрансляция пакетов</string>
     <string name="debug_since_start_fmt">с начала: %1$d</string>
+    <string name="debug_roles_hint">включить/выключить роли и закрыть все соединения при отключении</string>
     <string name="debug_sync_settings">настройки синхр.</string>
     <string name="debug_max_packets_per_sync_fmt">макс. пакетов на синхр.: %1$d</string>
     <string name="debug_max_gcs_filter_size_fmt">макс. размер фильтра GCS: %1$d байт (128–1024)</string>
@@ -262,6 +265,15 @@
     <string name="privacy_bullets">• без трекинга и сбора данных\n• Bluetooth‑mesh чаты полностью оффлайн\n• Geohash‑чаты используют интернет</string>
     <string name="permissions_header">разрешения</string>
     <string name="grant_permissions">Выдать разрешения</string>
+    <string name="continue_button">Продолжить</string>
+    <string name="perm_required_label">Обязательно</string>
+    <string name="perm_recommended_label">Рекомендуется</string>
+    <string name="perm_info_dialog_ok">ОК</string>
+    <string name="perm_benefit_nearby_devices">Разрешения Bluetooth позволяют Zemzeme обнаруживать и общаться с другими пользователями поблизости через mesh-сеть. Это обеспечивает полностью оффлайновый обмен сообщениями peer-to-peer без подключения к интернету.</string>
+    <string name="perm_benefit_location">Android требует разрешение на доступ к геопозиции для сканирования Bluetooth-устройств поблизости. Zemzeme НЕ отслеживает и не хранит вашу геопозицию.</string>
+    <string name="perm_benefit_background_location">Фоновое местоположение позволяет Zemzeme обнаруживать пользователей поблизости, даже когда приложение находится в фоне. Без этого mesh-сеть работает только при открытом приложении.</string>
+    <string name="perm_benefit_notifications">Уведомления сообщают о получении личных сообщений или новой активности в каналах, даже когда приложение работает в фоне.</string>
+    <string name="perm_benefit_battery_optimization">Отключение оптимизации батареи обеспечивает надёжную работу Zemzeme в фоне с поддержанием mesh-соединений. Без этого Android может завершить приложение для экономии батареи, отключив вас от сети.</string>
     <string name="location_tracking_warning">Zemzeme НЕ отслеживает вашу геопозицию</string>
     <string name="at_symbol">@</string>
     <string name="app_brand">Zemzeme/</string>
@@ -329,11 +341,15 @@
     <string name="join">Войти</string>
     <string name="cancel">Отмена</string>
 
-
     <plurals name="people_count">
         <item quantity="one">1 человек</item>
         <item quantity="other">%d человек</item>
     </plurals>
+
+  <plurals name="notification_and_more">
+    <item quantity="one">и ещё %d</item>
+    <item quantity="other">и ещё %d</item>
+  </plurals>
 
   <plurals name="location_notes_title">
     <item quantity="one">#%1$s ± 1 • %2$d заметка</item>
@@ -348,7 +364,7 @@
   <string name="location_notes_empty_desc">станьте первым, кто добавит заметку для этого места.</string>
   <string name="dismiss">закрыть</string>
   <string name="location_notes_input_placeholder">добавьте заметку для этого места</string>
-    <string name="mesh_service_notification_content">Mesh запущен — %1$d пиров</string>
+    <string name="mesh_service_notification_content">Bluetooth запущен — %1$d пиров</string>
 
   <string name="verify_title">проверить</string>
   <string name="verify_my_qr_title">сканируй для проверки</string>
@@ -387,7 +403,7 @@
   <string name="verify_success_system_message">проверен %1$s</string>
 
   <!-- Недостающие ключи -->
-  <string name="mesh_service_channel_name">Фоновая служба Mesh</string>
+  <string name="mesh_service_channel_name">Фоновая служба Bluetooth</string>
   <string name="mesh_service_channel_desc">Поддерживает работу Bluetooth-сети в фоне</string>
   <string name="cd_settings">Настройки</string>
   <string name="cd_location_notes">Заметки о местоположении</string>
@@ -404,20 +420,22 @@
     <string name="ble_setting_dialog_btn">Открыть настройки Bluetooth</string>
     <string name="ble_banner_enable_btn">Включить</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh отключён</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
+
+  <!-- Сетевое подключение -->
+  <string name="network_setting_off_subtitle">Нет интернета — проверьте подключение</string>
+  <string name="network_not_available">Нет подключения к интернету</string>
+  <string name="network_transports_off_hint">Включите P2P или Nostr</string>
+  <string name="network_no_internet">Подключено, но интернет не обнаружен</string>
+  <string name="network_setting_dialog_title">Требуется интернет</string>
+  <string name="network_setting_dialog_msg">Подключение к интернету необходимо для транспортов P2P и Nostr.</string>
+  <string name="network_setting_dialog_btn">Настройки подключения</string>
+  <string name="network_banner_disconnected">Нет интернета — проверьте настройки подключения</string>
+  <string name="network_banner_airplane_mode">Режим полёта включён</string>
+  <string name="network_airplane_mode">Режим полёта включён</string>
+  <string name="network_banner_no_internet">Подключено, но нет интернета — проверьте подключение</string>
+  <string name="network_banner_transports_disabled">Нет сетевого транспорта — включите P2P или Nostr в настройках</string>
+  <string name="network_banner_settings_btn">Настройки</string>
+
   <string name="background_location_required_title">Рекомендуется фоновое местоположение</string>
   <string name="background_location_required_subtitle">необязательно, улучшает надёжность сети</string>
   <string name="background_location_explanation">Android рекомендует фоновое местоположение, чтобы Zemzeme мог сканировать ближайшие устройства, когда приложение не открыто. Это поддерживает сеть после перезагрузки.</string>
@@ -441,11 +459,217 @@
   <string name="cd_privacy_protected">Конфиденциальность защищена</string>
   <string name="cd_proof_of_work">Доказательство работы</string>
   <string name="cd_save_current_image">Сохранить текущее изображение</string>
-  <string name="debug_roles_hint">включить/выключить роли и закрыть все соединения при отключении</string>
-  <string name="debug_tools_desc">утилиты разработчика для диагностики и управления</string>
-  <string name="debug_verbose_hint">записывает подключения/отключения пиров, направление соединения, маршрутизацию пакетов и ретрансляторы</string>
   <string name="pow_label_format">pow: %1$dbit</string>
   <string name="pow_mining_ellipsis">добыча...</string>
   <string name="toast_failed_to_save_image">Не удалось сохранить изображение</string>
   <string name="toast_image_saved">Изображение сохранено в Загрузки</string>
+
+    <!-- Блокировка приложения -->
+    <string name="app_lock_title">Блокировка приложения</string>
+    <string name="app_lock_subtitle_off">Выключено</string>
+    <string name="app_lock_subtitle_on">Биометрия + PIN</string>
+    <string name="app_lock_security_section">БЕЗОПАСНОСТЬ</string>
+    <string name="app_lock_enter_pin">Введите PIN</string>
+    <string name="app_lock_set_pin">Установить PIN</string>
+    <string name="app_lock_confirm_pin">Подтвердите PIN</string>
+    <string name="app_lock_biometric_title">Разблокировать Zemzeme</string>
+    <string name="app_lock_biometric_subtitle">Коснитесь сенсора для разблокировки</string>
+    <string name="app_lock_use_pin">Использовать PIN</string>
+    <string name="app_lock_wrong_pin">Неверный PIN</string>
+    <string name="app_lock_too_many_attempts">Осталось попыток: %1$d</string>
+    <string name="app_lock_cooldown">Повторите через %1$d секунд</string>
+    <string name="app_lock_pin_mismatch">PIN-коды не совпадают</string>
+    <string name="app_lock_pin_min_length">PIN должен содержать 4–6 цифр</string>
+    <string name="app_lock_disable_title">Отключить блокировку</string>
+    <string name="app_lock_disable_msg">Подтвердите личность для отключения блокировки</string>
+    <string name="app_lock_protect_title">Защитите свои чаты</string>
+    <string name="app_lock_protect_desc">6-значный PIN блокирует приложение. Используйте биометрию для быстрого доступа.</string>
+    <string name="app_lock_enable">Включить блокировку</string>
+    <string name="app_lock_not_now">Не сейчас</string>
+
+    <!-- Введение в Mesh -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">Общение в этой группе полностью основано на Bluetooth. Ближайшие устройства передают сообщения между людьми — подключение к интернету не требуется.</string>
+    <string name="mesh_intro_close">Закрыть</string>
+    <string name="mesh_intro_dont_show">Не показывать снова</string>
+
+    <!-- Поделиться приложением -->
+    <string name="about_share_app_header">ПОДЕЛИТЬСЯ ПРИЛОЖЕНИЕМ</string>
+    <string name="about_share_system_title">Поделиться приложением</string>
+    <string name="about_share_system_desc">Отправить APK через Bluetooth, Nearby Share или Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">Не удалось подготовить APK для передачи</string>
+    <string name="about_share_chooser_title">Поделиться APK %1$s</string>
+    <string name="about_share_helper_text">Используйте Google Quick Share для отправки (включите в настройках телефона). После передачи APK будет в папке «Загрузки» на принимающем устройстве.</string>
+
+    <!-- Смена иконки -->
+    <string name="icon_switch_title">Обновить иконку и имя приложения</string>
+    <string name="icon_switch_section">Персонализация</string>
+    <string name="icon_switch_subtitle">изменить иконку и имя приложения на экране</string>
+    <string name="icon_switch_confirm">Изменить иконку и имя на это?</string>
+    <string name="icon_switch_apply">Применить</string>
+    <string name="icon_switch_toast">Иконка и имя приложения изменены!</string>
+
+    <!-- Заголовки диалогов и действия -->
+    <string name="dialog_delete_chat">Удалить чат</string>
+    <string name="dialog_delete_group">Удалить группу</string>
+    <string name="dialog_delete_confirm_body">Вы уверены, что хотите удалить \"%1$s\"? Это нельзя отменить.</string>
+    <string name="action_delete">Удалить</string>
+    <string name="dialog_clear_chat">Очистить чат</string>
+    <string name="dialog_clear_confirm_body">Вы уверены, что хотите очистить все сообщения в \"%1$s\"?</string>
+    <string name="action_clear">Очистить</string>
+    <string name="dialog_title_create_group">Создать новую группу</string>
+    <string name="label_group_name">Название группы</string>
+    <string name="action_create">Создать</string>
+    <string name="dialog_title_join_group">Присоединиться к группе</string>
+    <string name="label_group_id">ID группы</string>
+    <string name="label_nickname_optional">Ник (необязательно)</string>
+    <string name="dialog_title_rename_group">Переименовать группу</string>
+    <string name="action_rename">Переименовать</string>
+
+    <!-- Заголовки настроек -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P-сеть</string>
+    <string name="setting_nostr_relays">Ретрансляторы Nostr</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast-сообщения -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh включён</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh отключён</string>
+    <string name="toast_nostr_enabled">Nostr включён</string>
+    <string name="toast_nostr_disabled">Nostr отключён</string>
+    <string name="toast_tor_p2p_unsupported">Tor с P2P не поддерживается. Сначала отключите P2P.</string>
+    <string name="toast_p2p_tor_disabled">P2P через Tor не поддерживается. Tor отключён.</string>
+
+    <!-- Выбор изображения -->
+    <string name="action_gallery">Галерея</string>
+    <string name="action_camera">Камера</string>
+
+    <!-- Описания для доступности -->
+    <string name="cd_refresh_p2p">Обновить P2P-соединение</string>
+    <string name="cd_direct_bluetooth">Прямой Bluetooth</string>
+    <string name="cd_routed">Маршрутизировано</string>
+    <string name="cd_p2p_connection">P2P-соединение</string>
+    <string name="cd_teleported_user">Телепортированный пользователь</string>
+    <string name="cd_user">Пользователь</string>
+    <string name="cd_backspace">стереть</string>
+    <string name="cd_verified">Проверено</string>
+    <string name="cd_add_node">Добавить узел</string>
+    <string name="cd_remove">Удалить</string>
+    <string name="action_enable_location">Включить локацию</string>
+
+    <!-- Метка ID группы -->
+    <string name="label_group_id_fmt">ID группы: %1$s</string>
+
+    <!-- Заполнитель PIN -->
+    <string name="placeholder_6_digits">6 цифр</string>
+
+    <!-- Настройки P2P -->
+    <string name="p2p_settings_header">НАСТРОЙКИ</string>
+    <string name="p2p_enable">Включить P2P</string>
+    <string name="p2p_enable_desc">Подключаться напрямую к другим пирам Zemzeme</string>
+    <string name="p2p_use_default_nodes">Использовать узлы по умолчанию</string>
+    <string name="p2p_default_nodes_desc">Подключаться к публичным bootstrap-узлам IPFS</string>
+    <string name="p2p_custom_nodes_header">ПОЛЬЗОВАТЕЛЬСКИЕ BOOTSTRAP-УЗЛЫ</string>
+    <string name="p2p_no_custom_nodes">Пользовательских узлов нет. Нажмите +, чтобы добавить.</string>
+    <string name="p2p_add_bootstrap_node">Добавить bootstrap-узел</string>
+    <string name="p2p_enter_multiaddr">Введите multiaddr bootstrap-узла:</string>
+    <string name="p2p_recovering">Восстановление…</string>
+    <string name="p2p_recover_connection">Восстановить соединение</string>
+    <string name="action_add">Добавить</string>
+
+    <!-- Каналы уведомлений -->
+    <string name="notification_channel_direct_messages">Личные сообщения</string>
+    <string name="notification_channel_dm_desc">Уведомления о личных сообщениях от других пользователей</string>
+    <string name="notification_channel_geohash_chats">Geohash-чаты</string>
+    <string name="notification_channel_geohash_desc">Уведомления об упоминаниях и сообщениях в geohash-каналах</string>
+
+    <!-- Отладка: топология mesh -->
+    <string name="debug_mesh_topology">топология mesh</string>
+    <string name="debug_no_gossip">нет данных gossip</string>
+
+    <!-- Отладка: самообновление -->
+    <string name="debug_self_update">самообновление (dev)</string>
+    <string name="debug_current_version_fmt">Текущая версия: %1$s</string>
+    <string name="debug_download_updates_desc">Загрузить и установить обновления из релизов GitHub</string>
+    <string name="update_status_ready">Готово</string>
+    <string name="update_status_checking">Проверка обновлений…</string>
+    <string name="update_status_available">Доступно обновление: %1$s</string>
+    <string name="update_status_downloading">Загрузка: %1$d%%</string>
+    <string name="update_status_ready_install">Готово к установке: %1$s</string>
+    <string name="update_status_installing">Установка…</string>
+    <string name="update_status_success">Обновление установлено! Перезапустите приложение.</string>
+    <string name="update_status_pending_action">Ожидание подтверждения пользователя…</string>
+    <string name="update_status_error">Ошибка: %1$s</string>
+    <string name="update_grant_install_permission">Выдать разрешение на установку</string>
+    <string name="update_install">Установить обновление</string>
+    <string name="update_check">Проверить обновления</string>
+    <string name="debug_test_update_dialog">Тест диалога обновления</string>
+
+    <!-- Отладка: графики пропускной способности -->
+    <string name="debug_overall">Общее</string>
+    <string name="debug_per_device">По устройству</string>
+    <string name="debug_per_peer">По пиру</string>
+    <string name="debug_incoming">Входящее</string>
+    <string name="debug_outgoing">Исходящее</string>
+
+    <!-- Отладка: консоль -->
+    <string name="debug_refreshing">Обновление…</string>
+    <string name="debug_refresh">Обновить</string>
+    <string name="debug_clear_logs">Очистить логи</string>
+    <string name="debug_preparing_export">Подготовка экспорта…</string>
+    <string name="debug_share_logs">Поделиться логами</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">Сканировать QR</string>
+    <string name="fab_choose_city">Выбрать город</string>
+    <string name="fab_join_group">Вступить в группу</string>
+    <string name="fab_create_group">Создать группу</string>
+    <!-- Section headers -->
+    <string name="section_nearby">Поблизости</string>
+    <string name="section_geographic_groups">Географические группы</string>
+    <string name="section_my_groups">Мои группы</string>
+    <string name="section_contacts">Контакты</string>
+    <string name="section_username">ИМЯ ПОЛЬЗОВАТЕЛЯ</string>
+    <string name="section_theme">ТЕМА</string>
+    <string name="section_settings">НАСТРОЙКИ</string>
+    <string name="section_network">СЕТЬ</string>
+    <string name="section_status">СТАТУС</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P сеть</string>
+    <string name="p2p_status_no_peers">Нет пиров</string>
+    <string name="p2p_status_connected">Подключено</string>
+    <string name="p2p_status_connecting">Подключение…</string>
+    <string name="p2p_status_disconnected">Отключено</string>
+    <string name="p2p_status_error">Ошибка</string>
+    <string name="p2p_peers_connected_fmt">Подключено пиров: %1$d</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Активные узлы: %1$d</string>
+    <string name="location_acquiring_title">Определение местоположения</string>
+    <string name="location_acquiring_desc">Пожалуйста, подождите, пока определяется ваше местоположение</string>
+    <string name="location_unavailable_title">Местоположение недоступно</string>
+    <string name="location_permission_required_notes">Для заметок требуется разрешение на определение местоположения</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">Поиск пиров…</string>
+    <string name="connection_connecting_peers">Подключение к пирам…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d пир подключён</item>
+        <item quantity="other">%1$d пиров подключено</item>
+    </plurals>
+    <string name="connection_no_new_messages">Подключено - нет новых сообщений</string>
+    <string name="connection_error">Ошибка подключения</string>
+    <string name="connection_direct">Прямое</string>
+    <string name="connection_connected">Подключено</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (нет информации)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE прямое</string>
+    <string name="debug_p2p_searching">P2P: поиск пиров…</string>
+    <string name="debug_p2p_connecting">P2P: подключение к пирам…</string>
+    <string name="debug_nostr_no_messages">Nostr подключено - нет новых сообщений</string>
+    <string name="debug_connection_failed">ошибка подключения</string>
+    <string name="debug_error_fmt">ошибка: %1$s</string>
+
 </resources>

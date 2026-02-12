@@ -46,7 +46,7 @@
     <string name="notification_summary_more">en %1$d meer</string>
     <string name="notification_messages_from_people">%1$d berichten van %2$d personen</string>
     <string name="notification_more_conversations">en %1$d meer conversaties</string>
-    <string name="notification_active_peers_title">👥 Zemzeme users in de buurt!</string>
+    <string name="notification_active_peers_title">👥 Zemzeme-gebruikers in de buurt!</string>
     <string name="notification_active_peers_one">1 persoon in de buurt</string>
     <string name="notification_active_peers_many">%1$d personen in de buurt</string>
     <string name="notification_new_messages">Nieuwe berichten</string>
@@ -60,7 +60,7 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme - %1$d vermeldingen</string>
     <string name="notification_geohash_summary_title">Zemzeme - locatiechats</string>
     <string name="notification_geohash_summary_text">%1$d berichten van %2$d locaties</string>
-    <string name="notification_mesh_mention_title_singular">Vermeld in meshchat</string>
+    <string name="notification_mesh_mention_title_singular">Vermeld in Bluetooth-chat</string>
     <string name="notification_mesh_mention_title_plural">%1$d vermeldingen in meshchat</string>
     <string name="notification_more_locations">en %1$d meer locaties</string>
     <string name="notification_and_more">en %1$d meer</string>
@@ -97,7 +97,7 @@
 
     <!-- Info-sheet -->
     <string name="about_tagline">Bewakingsvrije berichten onder alle omstandigheden, end-to-end versleuteld</string>
-    <string name="about_offline_mesh_title">Offline meshchat</string>
+    <string name="about_offline_mesh_title">Offline Bluetooth-chat</string>
     <string name="about_offline_mesh_desc">Communiceer rechtstreeks via Bluetooth LE zonder internet of servers. Berichten worden doorgestuurd via apparaten in de buurt om het bereik te vergroten.</string>
     <string name="about_online_geohash_title">Online geohash-kanalen</string>
     <string name="about_online_geohash_desc">Maak contact met mensen in uw omgeving met geohash-gebaseerde kanalen. Breid het mesh uit met openbare internetrelays.</string>
@@ -208,7 +208,7 @@
     <string name="teleport">teleporteren</string>
     <string name="disable_location_services">locatiediensten uitschakelen</string>
     <string name="enable_location_services">locatiediensten inschakelen</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">blok</string>
     <string name="location_level_neighborhood">buurt</string>
     <string name="location_level_city">stad</string>
@@ -285,6 +285,15 @@
     <string name="privacy_bullets">• geen tracking of gegevensverzameling\n• Bluetooth-meshchats zijn volledig offline\n• Geohash-chats gebruiken internet</string>
     <string name="permissions_header">toestemmingen</string>
     <string name="grant_permissions">Toestemmingen verlenen</string>
+    <string name="continue_button">Doorgaan</string>
+    <string name="perm_required_label">Vereist</string>
+    <string name="perm_recommended_label">Aanbevolen</string>
+    <string name="perm_info_dialog_ok">OK</string>
+    <string name="perm_benefit_nearby_devices">Bluetooth-toestemmingen stellen Zemzeme in staat om andere gebruikers in de buurt te ontdekken en te communiceren via een meshnetwerk. Dit maakt volledig offline peer-to-peer berichten mogelijk zonder internetverbinding.</string>
+    <string name="perm_benefit_location">Android vereist locatietoestemming om te scannen naar Bluetooth-apparaten in de buurt. Zemzeme volgt of slaat uw locatie NIET op.</string>
+    <string name="perm_benefit_background_location">Achtergrondlocatie stelt Zemzeme in staat om gebruikers in de buurt te ontdekken, zelfs wanneer de app op de achtergrond draait. Zonder dit werkt het meshnetwerk alleen als de app op het scherm geopend is.</string>
+    <string name="perm_benefit_notifications">Meldingen laten u weten wanneer u een privébericht ontvangt of wanneer er nieuwe activiteit is in uw kanalen, zelfs als de app op de achtergrond draait.</string>
+    <string name="perm_benefit_battery_optimization">Het uitschakelen van batterijoptimalisatie zorgt ervoor dat Zemzeme betrouwbaar op de achtergrond draait en meshnetwerkverbindingen onderhoudt. Zonder dit kan Android de app sluiten om batterij te besparen, waardoor u wordt losgekoppeld van het mesh.</string>
     <string name="location_tracking_warning">Zemzeme volgt NIET uw locatie</string>
     <string name="geohash_people_header">PERSONEN</string>
     <string name="nobody_around">niemand in de buurt…</string>
@@ -371,11 +380,15 @@
     <string name="notification_file_generic">📎</string>
 
     <!-- Meervouden -->
-
     <plurals name="people_count">
         <item quantity="one">1 persoon</item>
         <item quantity="other">%d personen</item>
     </plurals>
+
+  <plurals name="notification_and_more">
+    <item quantity="one">en %d meer</item>
+    <item quantity="other">en %d meer</item>
+  </plurals>
 
   <plurals name="location_notes_title">
     <item quantity="one">#%1$s ± 1 • %2$d notitie</item>
@@ -390,46 +403,46 @@
   <string name="location_notes_empty_desc">wees de eerste die een notitie voor deze plek toevoegt.</string>
   <string name="dismiss">sluiten</string>
   <string name="location_notes_input_placeholder">voeg een notitie toe voor deze plek</string>
-    <string name="mesh_service_notification_content">Mesh actief — %1$d peers</string>
+    <string name="mesh_service_notification_content">Bluetooth actief — %1$d peers</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
+  <string name="verify_title">verifiëren</string>
+  <string name="verify_my_qr_title">scan om mij te verifiëren</string>
+  <string name="verify_scan_prompt_friend">scan de QR van iemand anders</string>
+  <string name="verify_scan_someone">scan de QR van iemand anders</string>
+  <string name="verify_show_my_qr">mijn QR tonen</string>
+  <string name="verify_remove">verificatie verwijderen</string>
+  <string name="verify_qr_unavailable">QR niet beschikbaar</string>
+  <string name="verify_camera_permission">cameratoestemming is nodig om QR-codes te scannen</string>
+  <string name="verify_request_camera">camera inschakelen</string>
+  <string name="verify_paste_label">verificatie-URL plakken</string>
+  <string name="verify_validate">valideren</string>
+  <string name="verify_scanned">verificatie aangevraagd</string>
+  <string name="security_verification_title">beveiligingsverificatie</string>
+  <string name="fingerprint_their">hun vingerafdruk</string>
+  <string name="fingerprint_yours">jouw vingerafdruk</string>
+  <string name="fingerprint_pending">handshake wachtend</string>
+  <string name="fingerprint_no_peer">open een privéchat om vingerafdrukken te bekijken</string>
+  <string name="fingerprint_status_verified">versleuteld &amp; geverifieerd</string>
+  <string name="fingerprint_status_encrypted">versleuteld</string>
+  <string name="fingerprint_status_handshaking">handshake</string>
+  <string name="fingerprint_status_failed">handshake mislukt</string>
+  <string name="fingerprint_status_uninitialized">niet versleuteld</string>
+  <string name="fingerprint_verified_label">geverifieerd</string>
+  <string name="fingerprint_verified_message">je hebt de identiteit van deze persoon geverifieerd.</string>
+  <string name="fingerprint_not_verified_label">niet geverifieerd</string>
+  <string name="fingerprint_not_verified_message_fmt">vergelijk deze vingerafdrukken met %1$s via een beveiligd kanaal.</string>
+  <string name="fingerprint_mark_verified">als geverifieerd markeren</string>
+  <string name="fingerprint_start_handshake">handshake starten</string>
+  <string name="fingerprint_copy">kopiëren</string>
+  <string name="verify_mutual_match_title">Wederzijdse verificatie</string>
+  <string name="verify_mutual_match_body">Jij en %1$s hebben elkaar geverifieerd</string>
+  <string name="verify_mutual_system_message">wederzijdse verificatie met %1$s</string>
+  <string name="verify_success_title">Geverifieerd</string>
   <string name="verify_success_body">Je hebt %1$s geverifieerd</string>
   <string name="verify_success_system_message">geverifieerd %1$s</string>
 
   <!-- Ontbrekende sleutels -->
-  <string name="mesh_service_channel_name">Mesh-achtergrondservice</string>
+  <string name="mesh_service_channel_name">Bluetooth-achtergrondservice</string>
   <string name="mesh_service_channel_desc">Houdt het Bluetooth-mesh actief op de achtergrond</string>
   <string name="cd_settings">Instellingen</string>
   <string name="cd_location_notes">Locatienotities</string>
@@ -446,20 +459,22 @@
     <string name="ble_setting_dialog_btn">Bluetooth-instellingen openen</string>
     <string name="ble_banner_enable_btn">Inschakelen</string>
     <string name="ble_banner_mesh_disabled">BLE Mesh is uitgeschakeld</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
+
+  <!-- Netwerkconnectiviteit -->
+  <string name="network_setting_off_subtitle">Geen internet — controleer uw verbinding</string>
+  <string name="network_not_available">Geen internetverbinding</string>
+  <string name="network_transports_off_hint">P2P of Nostr inschakelen</string>
+  <string name="network_no_internet">Verbonden maar geen internet gedetecteerd</string>
+  <string name="network_setting_dialog_title">Internet vereist</string>
+  <string name="network_setting_dialog_msg">Een internetverbinding is vereist voor P2P- en Nostr-transporten.</string>
+  <string name="network_setting_dialog_btn">Verbindingsinstellingen</string>
+  <string name="network_banner_disconnected">Geen internet — controleer uw verbindingsinstellingen</string>
+  <string name="network_banner_airplane_mode">Vliegtuigmodus is aan</string>
+  <string name="network_airplane_mode">Vliegtuigmodus is aan</string>
+  <string name="network_banner_no_internet">Verbonden maar geen internet — controleer uw verbinding</string>
+  <string name="network_banner_transports_disabled">Geen netwerktransport — schakel P2P of Nostr in via instellingen</string>
+  <string name="network_banner_settings_btn">Instellingen</string>
+
   <string name="background_location_required_title">Achtergrondlocatie aanbevolen</string>
   <string name="background_location_required_subtitle">optioneel, verbetert mesh-betrouwbaarheid</string>
   <string name="background_location_explanation">Android raadt achtergrondlocatie aan zodat Zemzeme apparaten in de buurt kan scannen wanneer de app niet open is. Dit houdt het mesh actief na herstart.</string>
@@ -474,4 +489,215 @@
   <string name="perm_type_background_location">Achtergrondlocatie</string>
   <string name="tor_not_available_in_this_build">Tor niet beschikbaar in deze versie</string>
   <string name="debug_rssi_fmt">RSSI: %1$s</string>
+
+    <!-- App-vergrendeling -->
+    <string name="app_lock_title">App-vergrendeling</string>
+    <string name="app_lock_subtitle_off">Uit</string>
+    <string name="app_lock_subtitle_on">Biometrisch + PIN</string>
+    <string name="app_lock_security_section">BEVEILIGING</string>
+    <string name="app_lock_enter_pin">Voer PIN in</string>
+    <string name="app_lock_set_pin">PIN instellen</string>
+    <string name="app_lock_confirm_pin">PIN bevestigen</string>
+    <string name="app_lock_biometric_title">Zemzeme ontgrendelen</string>
+    <string name="app_lock_biometric_subtitle">Raak sensor aan om te ontgrendelen</string>
+    <string name="app_lock_use_pin">Gebruik PIN</string>
+    <string name="app_lock_wrong_pin">Verkeerde PIN</string>
+    <string name="app_lock_too_many_attempts">%1$d poging(en) resterend</string>
+    <string name="app_lock_cooldown">Probeer opnieuw over %1$d seconden</string>
+    <string name="app_lock_pin_mismatch">PIN\'s komen niet overeen</string>
+    <string name="app_lock_pin_min_length">PIN moet 4–6 cijfers zijn</string>
+    <string name="app_lock_disable_title">App-vergrendeling uitschakelen</string>
+    <string name="app_lock_disable_msg">Verifieer uw identiteit om de vergrendeling uit te schakelen</string>
+    <string name="app_lock_protect_title">Bescherm uw chats</string>
+    <string name="app_lock_protect_desc">Een 6-cijferige PIN vergrendelt de app. Gebruik biometrie voor directe toegang.</string>
+    <string name="app_lock_enable">App-vergrendeling inschakelen</string>
+    <string name="app_lock_not_now">Niet nu</string>
+
+    <!-- Mesh-introductie -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">Communicatie in deze groep is volledig gebaseerd op Bluetooth. Apparaten in de buurt sturen berichten door tussen personen — er is geen internetverbinding nodig.</string>
+    <string name="mesh_intro_close">Sluiten</string>
+    <string name="mesh_intro_dont_show">Niet meer tonen</string>
+
+    <!-- App delen -->
+    <string name="about_share_app_header">APP DELEN</string>
+    <string name="about_share_system_title">App delen</string>
+    <string name="about_share_system_desc">APK verzenden via Bluetooth, Nearby Share of Wi-Fi Direct (%1$s)</string>
+    <string name="about_share_failed">Kon APK niet voorbereiden voor delen</string>
+    <string name="about_share_chooser_title">%1$s APK delen</string>
+    <string name="about_share_helper_text">Gebruik Google Quick Share om te verzenden (schakel in via telefooninstellingen). Na overdracht staat de APK in de map Downloads op het ontvangende apparaat.</string>
+
+    <!-- Pictogramwissel -->
+    <string name="icon_switch_title">App-pictogram &amp; naam vernieuwen</string>
+    <string name="icon_switch_section">Aanpassing</string>
+    <string name="icon_switch_subtitle">wijzig het app-pictogram en de naam op uw startscherm</string>
+    <string name="icon_switch_confirm">Het app-pictogram en de naam hiernaar wijzigen?</string>
+    <string name="icon_switch_apply">Toepassen</string>
+    <string name="icon_switch_toast">App-pictogram en naam gewijzigd!</string>
+
+    <!-- Dialoogtitels en acties -->
+    <string name="dialog_delete_chat">Chat verwijderen</string>
+    <string name="dialog_delete_group">Groep verwijderen</string>
+    <string name="dialog_delete_confirm_body">Weet u zeker dat u \"%1$s\" wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</string>
+    <string name="action_delete">Verwijderen</string>
+    <string name="dialog_clear_chat">Chat wissen</string>
+    <string name="dialog_clear_confirm_body">Weet u zeker dat u alle berichten in \"%1$s\" wilt wissen?</string>
+    <string name="action_clear">Wissen</string>
+    <string name="dialog_title_create_group">Nieuwe groep aanmaken</string>
+    <string name="label_group_name">Groepsnaam</string>
+    <string name="action_create">Aanmaken</string>
+    <string name="dialog_title_join_group">Groep deelnemen</string>
+    <string name="label_group_id">Groeps-ID</string>
+    <string name="label_nickname_optional">Bijnaam (optioneel)</string>
+    <string name="dialog_title_rename_group">Groep hernoemen</string>
+    <string name="action_rename">Hernoemen</string>
+
+    <!-- Instellingentitels -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P-netwerk</string>
+    <string name="setting_nostr_relays">Nostr Relays</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- Toast-berichten -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh ingeschakeld</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh uitgeschakeld</string>
+    <string name="toast_nostr_enabled">Nostr ingeschakeld</string>
+    <string name="toast_nostr_disabled">Nostr uitgeschakeld</string>
+    <string name="toast_tor_p2p_unsupported">Tor met P2P wordt niet ondersteund. Schakel P2P eerst uit.</string>
+    <string name="toast_p2p_tor_disabled">P2P via Tor wordt niet ondersteund. Tor is uitgeschakeld.</string>
+
+    <!-- Afbeeldingkiezer -->
+    <string name="action_gallery">Galerij</string>
+    <string name="action_camera">Camera</string>
+
+    <!-- Toegankelijkheidsbeschrijvingen -->
+    <string name="cd_refresh_p2p">P2P-verbinding vernieuwen</string>
+    <string name="cd_direct_bluetooth">Directe Bluetooth</string>
+    <string name="cd_routed">Gerouteerd</string>
+    <string name="cd_p2p_connection">P2P-verbinding</string>
+    <string name="cd_teleported_user">Geteleporteerde gebruiker</string>
+    <string name="cd_user">Gebruiker</string>
+    <string name="cd_backspace">wissen</string>
+    <string name="cd_verified">Geverifieerd</string>
+    <string name="cd_add_node">Node toevoegen</string>
+    <string name="cd_remove">Verwijderen</string>
+    <string name="action_enable_location">Locatie inschakelen</string>
+
+    <!-- Groeps-ID label -->
+    <string name="label_group_id_fmt">Groeps-ID: %1$s</string>
+
+    <!-- PIN placeholder -->
+    <string name="placeholder_6_digits">6 cijfers</string>
+
+    <!-- P2P-instellingen -->
+    <string name="p2p_settings_header">INSTELLINGEN</string>
+    <string name="p2p_enable">P2P inschakelen</string>
+    <string name="p2p_enable_desc">Verbind rechtstreeks met andere Zemzeme-peers</string>
+    <string name="p2p_use_default_nodes">Standaard nodes gebruiken</string>
+    <string name="p2p_default_nodes_desc">Verbind met openbare IPFS-bootstrap-nodes</string>
+    <string name="p2p_custom_nodes_header">AANGEPASTE BOOTSTRAP-NODES</string>
+    <string name="p2p_no_custom_nodes">Geen aangepaste nodes geconfigureerd. Tik op + om toe te voegen.</string>
+    <string name="p2p_add_bootstrap_node">Bootstrap-node toevoegen</string>
+    <string name="p2p_enter_multiaddr">Voer het multiaddr in voor de bootstrap-node:</string>
+    <string name="p2p_recovering">Herstellen…</string>
+    <string name="p2p_recover_connection">Verbinding herstellen</string>
+    <string name="action_add">Toevoegen</string>
+
+    <!-- Meldingskanalen -->
+    <string name="notification_channel_direct_messages">Directe berichten</string>
+    <string name="notification_channel_dm_desc">Meldingen voor privéberichten van andere gebruikers</string>
+    <string name="notification_channel_geohash_chats">Geohash-chats</string>
+    <string name="notification_channel_geohash_desc">Meldingen voor vermeldingen en berichten in geohash-locatiekanalen</string>
+
+    <!-- Debug: mesh-topologie -->
+    <string name="debug_mesh_topology">mesh-topologie</string>
+    <string name="debug_no_gossip">nog geen gossip</string>
+
+    <!-- Debug: zelfupdate -->
+    <string name="debug_self_update">zelfupdate (dev)</string>
+    <string name="debug_current_version_fmt">Huidige versie: %1$s</string>
+    <string name="debug_download_updates_desc">Updates downloaden en installeren van GitHub-releases</string>
+    <string name="update_status_ready">Gereed</string>
+    <string name="update_status_checking">Controleren op updates…</string>
+    <string name="update_status_available">Update beschikbaar: %1$s</string>
+    <string name="update_status_downloading">Downloaden: %1$d%%</string>
+    <string name="update_status_ready_install">Klaar om te installeren: %1$s</string>
+    <string name="update_status_installing">Installeren…</string>
+    <string name="update_status_success">Update geïnstalleerd! Herstart de app.</string>
+    <string name="update_status_pending_action">Wacht op gebruikersbevestiging…</string>
+    <string name="update_status_error">Fout: %1$s</string>
+    <string name="update_grant_install_permission">Installatietoestemming verlenen</string>
+    <string name="update_install">Update installeren</string>
+    <string name="update_check">Controleren op updates</string>
+    <string name="debug_test_update_dialog">Updatedialog testen</string>
+
+    <!-- Debug: bandbreedtegrafieken -->
+    <string name="debug_overall">Totaal</string>
+    <string name="debug_per_device">Per apparaat</string>
+    <string name="debug_per_peer">Per peer</string>
+    <string name="debug_incoming">Inkomend</string>
+    <string name="debug_outgoing">Uitgaand</string>
+
+    <!-- Debug: console -->
+    <string name="debug_refreshing">Vernieuwen…</string>
+    <string name="debug_refresh">Vernieuwen</string>
+    <string name="debug_clear_logs">Logs wissen</string>
+    <string name="debug_preparing_export">Export voorbereiden…</string>
+    <string name="debug_share_logs">Logs delen</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">QR scannen</string>
+    <string name="fab_choose_city">Kies stad</string>
+    <string name="fab_join_group">Groep deelnemen</string>
+    <string name="fab_create_group">Groep aanmaken</string>
+    <!-- Section headers -->
+    <string name="section_nearby">In de buurt</string>
+    <string name="section_geographic_groups">Geografische groepen</string>
+    <string name="section_my_groups">Mijn groepen</string>
+    <string name="section_contacts">Contacten</string>
+
+    <!-- New translated strings -->
+    <string name="section_username">GEBRUIKERSNAAM</string>
+    <string name="section_theme">THEMA</string>
+    <string name="section_settings">INSTELLINGEN</string>
+    <string name="section_network">NETWERK</string>
+    <string name="section_status">STATUS</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P-netwerk</string>
+    <string name="p2p_status_no_peers">Geen peers</string>
+    <string name="p2p_status_connected">Verbonden</string>
+    <string name="p2p_status_connecting">Verbinden…</string>
+    <string name="p2p_status_disconnected">Verbinding verbroken</string>
+    <string name="p2p_status_error">Fout</string>
+    <string name="p2p_peers_connected_fmt">%1$d peers verbonden</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">Actieve knooppunten: %1$d</string>
+    <string name="location_acquiring_title">Locatie bepalen</string>
+    <string name="location_acquiring_desc">Even geduld terwijl uw locatie wordt bepaald</string>
+    <string name="location_unavailable_title">Locatie niet beschikbaar</string>
+    <string name="location_permission_required_notes">Locatietoestemming is vereist voor notities</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">Peers zoeken…</string>
+    <string name="connection_connecting_peers">Verbinden met peers…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d peer verbonden</item>
+        <item quantity="other">%1$d peers verbonden</item>
+    </plurals>
+    <string name="connection_no_new_messages">Verbonden - geen nieuwe berichten</string>
+    <string name="connection_error">Verbindingsfout</string>
+    <string name="connection_direct">Direct</string>
+    <string name="connection_connected">Verbonden</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (geen info)</string>
+    <string name="debug_nostr_relay">Nostr relay</string>
+    <string name="debug_ble_direct">BLE direct</string>
+    <string name="debug_p2p_searching">P2P: peers zoeken…</string>
+    <string name="debug_p2p_connecting">P2P: verbinden met peers…</string>
+    <string name="debug_nostr_no_messages">Nostr verbonden - geen nieuwe berichten</string>
+    <string name="debug_connection_failed">verbinding mislukt</string>
+    <string name="debug_error_fmt">fout: %1$s</string>
+
 </resources>

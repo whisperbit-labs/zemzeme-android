@@ -12,9 +12,9 @@
     <string name="message_hint">پیغام لکھو…</string>
     <string name="channel_password_hint">پاس ورڈ</string>
     <string name="join_channel">چینل وچ شامل ہوو</string>
-    <string name="leave_channel">باہر آؤ</string>
+    <string name="leave_channel">باہر آؤ</string>
     <string name="send_message">پھجو</string>
-    <string name="show_commands">کمانڈ وکھاؤ</string>
+    <string name="show_commands">کمانڈ وکھاؤ</string>
     <string name="back">واپس</string>
     <string name="people">لوگ</string>
     <string name="channels">چینل</string>
@@ -35,7 +35,7 @@
     <string name="battery_optimization_not_supported_explanation">توانڈے ڈیوائس نوں بیٹری آپٹمائزیشن سیٹنگ دی لوڑ نئیں۔ Zemzeme عام طرح چلّو گا۔</string>
     <string name="battery_optimization_not_supported_message">توانڈے ڈیوائس نوں بیٹری آپٹمائزیشن سیٹنگ دی لوڑ نئیں۔ Zemzeme عام طرح چلّو گا۔</string>
     <string name="battery_optimization_success_message">Zemzeme پس منظر وچ قابلِ اعتماد چل سکدا اے</string>
-    <string name="battery_optimization_benefits">• معتبر پیغام ترسیل\n• میش کنکشن برقرار\n• پس منظر وچ پیغام ریلے\n• کنکشن ٹٹّن توں بچاؤ</string>
+    <string name="battery_optimization_benefits">• معتبر پیغام ترسیل\n• میش کنکشن برقرار\n• پس منظر وچ پیغام ریلے\n• کنکشن ٹٹّن توں بچاؤ</string>
     <string name="battery_optimization_check_again">فیر چیک کرو</string>
     <string name="battery_optimization_skip">ہور ویلے</string>
     <string name="battery_optimization_continue">جاری رکھو</string>
@@ -60,20 +60,20 @@
     <string name="notification_geohash_summary_title_mentions">Zemzeme – %1$d ذکر</string>
     <string name="notification_geohash_summary_title">Zemzeme – لوکیشن چیٹ</string>
     <string name="notification_geohash_summary_text">%2$d ٹھاں توں %1$d پیغام</string>
-    <string name="notification_mesh_mention_title_singular">میش چیٹ وچ ذکر</string>
-    <string name="notification_mesh_mention_title_plural">میش چیٹ وچ %1$d ذکر</string>
+    <string name="notification_mesh_mention_title_singular">Bluetooth چیٹ وچ ذکر</string>
+    <string name="notification_mesh_mention_title_plural">Bluetooth چیٹ وچ %1$d ذکر</string>
     <string name="notification_more_locations">تے %1$d ہور ٹھاں</string>
     <string name="notification_and_more">تے %1$d ہور</string>
 
     <!-- پسندیدہ رسائی پذیری -->
-    <string name="cd_add_favorite">پسندیدہ وچ پاؤ</string>
-    <string name="cd_remove_favorite">پسندیدہ توں ہٹاؤ</string>
-    <string name="cd_add_bookmark">بُک مارک پاؤ</string>
+    <string name="cd_add_favorite">پسندیدہ وچ پاؤ</string>
+    <string name="cd_remove_favorite">پسندیدہ توں ہٹاؤ</string>
+    <string name="cd_add_bookmark">بُک مارک پاؤ</string>
 
     <!-- چیٹ ہیڈر &amp; رسائی پذیری -->
     <string name="chat_back">واپس</string>
     <string name="chat_channel_prefix">چینل: %1$s</string>
-    <string name="chat_leave">باہر آؤ</string>
+    <string name="chat_leave">باہر آؤ</string>
     <string name="cd_nostr_reachable">Nostr راہین پہنچ ممکن اے</string>
     <string name="cd_unread_private_messages">انہ پڑھیا ذاتی پیغام</string>
     <string name="cd_toggle_bookmark">بُک مارک ٹوگل کرو</string>
@@ -86,7 +86,7 @@
     <string name="cd_encrypted">اینڈ ٹو اینڈ انکرپٹڈ</string>
     <string name="cd_handshake_failed">ہینڈشیک فیل ہویا</string>
 
-    <!-- فائل ویؤر ڈائیلاگ -->
+    <!-- فائل ویؤر ڈائیلاگ -->
     <string name="file_viewer_title">📎 فائل ملی</string>
     <string name="file_viewer_name">📄 %1$s</string>
     <string name="file_viewer_size">📏 سائز: %1$s</string>
@@ -97,7 +97,7 @@
 
     <!-- بارے شیٹ -->
     <string name="about_tagline">ਸਾਰੀਆਂ ਸਥਿਤੀਆਂ ਵਿੱਚ ਨਿਗਰਾਨੀ-ਮੁਕਤ ਸੁਨੇਹੇ, ਅੰਤ-ਤੋਂ-ਅੰਤ ਇਨਕ੍ਰਿਪਟਡ</string>
-    <string name="about_offline_mesh_title">آف لائن میش چیٹ</string>
+    <string name="about_offline_mesh_title">آف لائن بلوٹوتھ چیٹ</string>
     <string name="about_offline_mesh_desc">انٹرنیٹ یا سرور توں بغیر Bluetooth LE راہین سیدھا رابطہ کرو۔ رینج ودھاؤن لئی پیغام نیڑے ڈیوائساں راہین ریلے ہوندے نیں۔</string>
     <string name="about_online_geohash_title">آن لائن geohash چینل</string>
     <string name="about_online_geohash_desc">geohash بیسڈ چینلاں راہین اپنے علاقے دے لوکاں نال جڑو۔ پبلک انٹرنیٹ ریلے راہین میش نوں وسیع کرو۔</string>
@@ -145,14 +145,14 @@
     <string name="cd_bluetooth">بلوٹوتھ</string>
     <string name="cd_unread_message">انہ پڑھیا پیغام</string>
     <string name="cd_open_map">نقشہ کھولو</string>
-    <string name="cd_remove_bookmark">بُک مارک ہٹاؤ</string>
+    <string name="cd_remove_bookmark">بُک مارک ہٹاؤ</string>
     <string name="cd_teleport">ٹیلپورٹ</string>
     <string name="cd_selected">چُنے ہوۓ</string>
     <string name="cd_leave_channel">چینل چھوڑو</string>
     <string name="cd_reachable_via_nostr">Nostr راہین پہنچ ممکن اے</string>
     <string name="cd_offline_favorite">پسندیدہ (آف لائن)</string>
-    <string name="cd_decrease_precision">درستگی گھٹاؤ</string>
-    <string name="cd_increase_precision">درستگی وداؤ</string>
+    <string name="cd_decrease_precision">درستگی گھٹاؤ</string>
+    <string name="cd_increase_precision">درستگی وداؤ</string>
     <string name="cd_select_geohash">geohash چُنو</string>
     <string name="cd_scroll_to_bottom">تھلے سکرول کرو</string>
     <string name="cd_file">فائل</string>
@@ -166,7 +166,7 @@
     <string name="cd_image_index_of">تصویر %1$d توں %2$d</string>
     <string name="cd_privacy_protected">پرائیویسی محفوظ اے</string>
     <string name="cd_record_voice">وائس پیغام ریکارڈ کرو</string>
-    <string name="cd_offline_mesh_chat">آف لائن میش چیٹ</string>
+    <string name="cd_offline_mesh_chat">آف لائن Bluetooth چیٹ</string>
     <string name="cd_online_geohash_channels">آن لائن geohash چینل</string>
     <string name="cd_end_to_end_encryption">اینڈ ٹو اینڈ انکرپشن</string>
 
@@ -208,7 +208,7 @@
     <string name="teleport">ٹیلپورٹ</string>
     <string name="disable_location_services">لوکیشن سروسز بند کرو</string>
     <string name="enable_location_services">لوکیشن سروسز چالو کرو</string>
-    <string name="mesh_label">mesh</string>
+    <string name="mesh_label">bluetooth</string>
     <string name="location_level_block">بلاک</string>
     <string name="location_level_neighborhood">پڑوس</string>
     <string name="location_level_city">شہر</string>
@@ -272,7 +272,7 @@
     <string name="battery_optimization_enabled_title">بیٹری آپٹمائزیشن چالو اے</string>
     <string name="battery_optimization_explanation_short">میش کنکشن قائم رکھن لئی Zemzeme نوں پس منظر وچ چلنا پوے گا۔ بیٹری آپٹمائزیشن ایہ کنکشناں وچ رکاوٹ پا سکدی اے۔</string>
     <string name="benefits_of_disabling">بند کرن دے فائدے</string>
-    <string name="battery_benefits_short">• معتبر پیغام رسانی\n• میش کنکشن برقرار\n• کنکشن ٹٹّن توں بچاؤ</string>
+    <string name="battery_benefits_short">• معتبر پیغام رسانی\n• میش کنکشن برقرار\n• کنکشن ٹٹّن توں بچاؤ</string>
     <string name="disable_battery_optimization">بیٹری آپٹمائزیشن بند کرو</string>
     <string name="battery_optimization_disabled_title">بیٹری آپٹمائزیشن بند اے</string>
     <string name="continue_btn">جاری رکھو</string>
@@ -305,8 +305,8 @@
     <string name="notification_sent_file">📎 فائل بھیجی</string>
 
     <!-- وائس پلیئر رسائی پذیری -->
-    <string name="cd_play_voice">چلاؤ</string>
-    <string name="cd_pause_voice">روکੋ</string>
+    <string name="cd_play_voice">چلاؤ</string>
+    <string name="cd_pause_voice">روکو</string>
     <string name="cd_mining_pow">PoW مائننگ</string>
     <string name="cd_pow_enabled">PoW چالو</string>
     <string name="cd_proof_of_work">Proof of Work</string>
@@ -349,126 +349,351 @@
         <item quantity="other">%d بندے</item>
     </plurals>
 
-    <string name="mesh_service_notification_content">میش چل رہا ہے — %1$d ساتھی</string>
+    <string name="mesh_service_notification_content">بلوٹوتھ چل رہا اے — %1$d ساتھی</string>
 
-  <string name="verify_title">verify</string>
-  <string name="verify_my_qr_title">scan to verify me</string>
-  <string name="verify_scan_prompt_friend">scan someone elses qr</string>
-  <string name="verify_scan_someone">scan someone elses qr</string>
-  <string name="verify_show_my_qr">show my qr</string>
-  <string name="verify_remove">remove verification</string>
-  <string name="verify_qr_unavailable">qr unavailable</string>
-  <string name="verify_camera_permission">camera permission is needed to scan qr codes</string>
-  <string name="verify_request_camera">enable camera</string>
-  <string name="verify_paste_label">paste verification url</string>
-  <string name="verify_validate">validate</string>
-  <string name="verify_scanned">verification requested</string>
-  <string name="security_verification_title">security verification</string>
-  <string name="fingerprint_their">their fingerprint</string>
-  <string name="fingerprint_yours">your fingerprint</string>
-  <string name="fingerprint_pending">handshake pending</string>
-  <string name="fingerprint_no_peer">open a private chat to view fingerprints</string>
-  <string name="fingerprint_status_verified">encrypted &amp; verified</string>
-  <string name="fingerprint_status_encrypted">encrypted</string>
-  <string name="fingerprint_status_handshaking">handshaking</string>
-  <string name="fingerprint_status_failed">handshake failed</string>
-  <string name="fingerprint_status_uninitialized">not encrypted</string>
-  <string name="fingerprint_verified_label">verified</string>
-  <string name="fingerprint_verified_message">you have verified this persons identity.</string>
-  <string name="fingerprint_not_verified_label">not verified</string>
-  <string name="fingerprint_not_verified_message_fmt">compare these fingerprints with %1$s using a secure channel.</string>
-  <string name="fingerprint_mark_verified">mark as verified</string>
-  <string name="fingerprint_start_handshake">start handshake</string>
-  <string name="fingerprint_copy">copy</string>
-  <string name="verify_mutual_match_title">Mutual verification</string>
-  <string name="verify_mutual_match_body">You and %1$s verified each other</string>
-  <string name="verify_mutual_system_message">mutual verification with %1$s</string>
-  <string name="verify_success_title">Verified</string>
-  <string name="verify_success_body">You verified %1$s</string>
-  <string name="verify_success_system_message">verified %1$s</string>
+    <!-- تصدیق -->
+    <string name="verify_title">ਤਸਦੀਕ</string>
+    <string name="verify_my_qr_title">ਮੈਨੂੰ ਤਸਦੀਕ ਕਰਨ ਲਈ ਸਕੈਨ ਕਰੋ</string>
+    <string name="verify_scan_prompt_friend">ਕਿਸੇ ਹੋਰ ਦਾ QR ਸਕੈਨ ਕਰੋ</string>
+    <string name="verify_scan_someone">ਕਿਸੇ ਹੋਰ ਦਾ QR ਸਕੈਨ ਕਰੋ</string>
+    <string name="verify_show_my_qr">ਮੇਰਾ QR ਦਿਖਾਓ</string>
+    <string name="verify_remove">ਤਸਦੀਕ ਹਟਾਓ</string>
+    <string name="verify_qr_unavailable">QR ਉਪਲਬਧ ਨਹੀਂ</string>
+    <string name="verify_camera_permission">QR ਕੋਡ ਸਕੈਨ ਕਰਨ ਲਈ ਕੈਮਰੇ ਦੀ ਇਜਾਜ਼ਤ ਚਾਹੀਦੀ ਹੈ</string>
+    <string name="verify_request_camera">ਕੈਮਰਾ ਚਾਲੂ ਕਰੋ</string>
+    <string name="verify_paste_label">ਤਸਦੀਕ URL ਪੇਸਟ ਕਰੋ</string>
+    <string name="verify_validate">ਪ੍ਰਮਾਣਿਤ ਕਰੋ</string>
+    <string name="verify_scanned">ਤਸਦੀਕ ਦੀ ਬੇਨਤੀ ਕੀਤੀ</string>
+    <string name="security_verification_title">ਸੁਰੱਖਿਆ ਤਸਦੀਕ</string>
+    <string name="fingerprint_their">ਉਨ੍ਹਾਂ ਦੀ ਫਿੰਗਰਪ੍ਰਿੰਟ</string>
+    <string name="fingerprint_yours">ਤੁਹਾਡੀ ਫਿੰਗਰਪ੍ਰਿੰਟ</string>
+    <string name="fingerprint_pending">ਹੈਂਡਸ਼ੇਕ ਬਾਕੀ ਹੈ</string>
+    <string name="fingerprint_no_peer">ਫਿੰਗਰਪ੍ਰਿੰਟ ਦੇਖਣ ਲਈ ਪ੍ਰਾਈਵੇਟ ਚੈਟ ਖੋਲ੍ਹੋ</string>
+    <string name="fingerprint_status_verified">ਇਨਕ੍ਰਿਪਟਡ &amp; ਤਸਦੀਕ ਹੋਇਆ</string>
+    <string name="fingerprint_status_encrypted">ਇਨਕ੍ਰਿਪਟਡ</string>
+    <string name="fingerprint_status_handshaking">ਹੈਂਡਸ਼ੇਕ ਹੋ ਰਿਹਾ ਹੈ</string>
+    <string name="fingerprint_status_failed">ਹੈਂਡਸ਼ੇਕ ਫੇਲ੍ਹ ਹੋਇਆ</string>
+    <string name="fingerprint_status_uninitialized">ਇਨਕ੍ਰਿਪਟਡ ਨਹੀਂ</string>
+    <string name="fingerprint_verified_label">ਤਸਦੀਕ ਹੋਇਆ</string>
+    <string name="fingerprint_verified_message">ਤੁਸੀਂ ਇਸ ਵਿਅਕਤੀ ਦੀ ਪਛਾਣ ਤਸਦੀਕ ਕਰ ਲਈ ਹੈ।</string>
+    <string name="fingerprint_not_verified_label">ਤਸਦੀਕ ਨਹੀਂ ਹੋਇਆ</string>
+    <string name="fingerprint_not_verified_message_fmt">ਇਨ੍ਹਾਂ ਫਿੰਗਰਪ੍ਰਿੰਟਾਂ ਦੀ ਤੁਲਨਾ %1$s ਨਾਲ ਸੁਰੱਖਿਅਤ ਚੈਨਲ ਰਾਹੀਂ ਕਰੋ।</string>
+    <string name="fingerprint_mark_verified">ਤਸਦੀਕ ਵਜੋਂ ਮਾਰਕ ਕਰੋ</string>
+    <string name="fingerprint_start_handshake">ਹੈਂਡਸ਼ੇਕ ਸ਼ੁਰੂ ਕਰੋ</string>
+    <string name="fingerprint_copy">ਕਾਪੀ</string>
+    <string name="verify_mutual_match_title">ਆਪਸੀ ਤਸਦੀਕ</string>
+    <string name="verify_mutual_match_body">ਤੁਸੀਂ ਅਤੇ %1$s ਨੇ ਇੱਕ ਦੂਜੇ ਨੂੰ ਤਸਦੀਕ ਕੀਤਾ</string>
+    <string name="verify_mutual_system_message">%1$s ਨਾਲ ਆਪਸੀ ਤਸਦੀਕ</string>
+    <string name="verify_success_title">ਤਸਦੀਕ ਹੋ ਗਿਆ</string>
+    <string name="verify_success_body">ਤੁਸੀਂ %1$s ਨੂੰ ਤਸਦੀਕ ਕੀਤਾ</string>
+    <string name="verify_success_system_message">%1$s ਤਸਦੀਕ ਹੋਇਆ</string>
 
-  <string name="mesh_service_channel_name">بٹ چیٹ میش نیٹ ورک</string>
-  <string name="mesh_service_channel_desc">Zemzeme میش مواصلات کے لیے</string>
-  <string name="cd_settings">ترتیبات</string>
-  <string name="cd_location_notes">مقام نوٹ</string>
-  <string name="notification_action_quit_bitchat">بند کریں</string>
-  <string name="about_background_title">بیک گراؤنڈ بلوٹوتھ</string>
-  <string name="about_background_desc">بہترین کارکردگی کے لیے، Zemzeme کو پس منظر میں چلتے وقت بلوٹوتھ کنکشن برقرار رکھنے کی اجازت دیں</string>
-  <string name="about_p2p_subtitle">براہ راست پیر ٹو پیر میسجنگ</string>
-  <string name="about_nostr_subtitle">Nostr پروٹوکول پر مبنی</string>
-  <string name="about_ble_subtitle">بلوٹوتھ لو انرجی میش نیٹ ورک</string>
-    <string name="ble_setting_off_subtitle">بلوٹوتھ بند ہے — BLE Mesh استعمال کرنے لئی چالو کرو</string>
-    <string name="ble_banner_off">بلوٹوتھ بند ہے — BLE Mesh دستیاب نہیں</string>
-    <string name="ble_setting_dialog_title">بلوٹوتھ ضروری اے</string>
-    <string name="ble_setting_dialog_msg">بلوٹوتھ بند ہے۔ BLE Mesh استعمال کرنے لئی چالو کرو۔</string>
-    <string name="ble_setting_dialog_btn">بلوٹوتھ سیٹنگز کھولو</string>
-    <string name="ble_banner_enable_btn">چالو کرو</string>
-    <string name="ble_banner_mesh_disabled">BLE Mesh غیر فعال اے</string>
-  <!-- Network connectivity -->
-  <string name="network_setting_off_subtitle">No internet — check your connection</string>
-  <string name="network_not_available">No internet connection</string>
-  <string name="network_transports_off_hint">Enable P2P or Nostr</string>
-  <string name="network_no_internet">Connected but no internet detected</string>
-  <string name="network_setting_dialog_title">Internet Required</string>
-  <string name="network_setting_dialog_msg">An internet connection is required for P2P and Nostr transports.</string>
-  <string name="network_setting_dialog_btn">Connection Settings</string>
-  <string name="network_banner_disconnected">No internet — check your connection settings</string>
-  <string name="network_banner_airplane_mode">Airplane mode is on</string>
-  <string name="network_airplane_mode">Airplane mode is on</string>
-  <string name="network_banner_no_internet">Connected but no internet — check your connection</string>
-  <string name="network_banner_transports_disabled">No network transport — enable P2P or Nostr in settings</string>
-  <string name="network_banner_settings_btn">Settings</string>
-  <string name="background_location_required_title">بیک گراؤنڈ مقام رسائی</string>
-  <string name="background_location_required_subtitle">Zemzeme کو قریبی لوگوں کو تلاش کرنے کے لیے بیک گراؤنڈ مقام کی ضرورت ہے</string>
-  <string name="background_location_explanation">Zemzeme بیک گراؤنڈ مقام رسائی استعمال کرتا ہے:</string>
-  <string name="background_location_settings_tip">سیٹنگز پر جائیں ← اجازتیں ← مقام ← ہمیشہ اجازت دیں</string>
-  <string name="background_location_needs_for">Zemzeme کو بیک گراؤنڈ مقام کی ضرورت ہے:</string>
-  <string name="background_location_needs_bullets">• قریبی صارفین سے جڑنے کے لیے\n• بلوٹوتھ میش نیٹ ورک برقرار رکھنے کے لیے\n• مقام پر مبنی چینلز میں حصہ لینے کے لیے</string>
-  <string name="background_location_privacy_note">آپ کا مقام کبھی سرور کو نہیں بھیجا جائے گا</string>
-  <string name="grant_background_location">بیک گراؤنڈ مقام کی اجازت دیں</string>
-  <string name="skip_background_location">چھوڑیں</string>
-  <string name="dot">.</string>
-  <string name="warning_emoji">⚠️</string>
-  <string name="at_symbol">@</string>
-  <string name="app_brand">Zemzeme/</string>
-  <string name="channel_count_prefix"> · ⧉ </string>
-  <string name="mention_suggestion_at">@%1$s</string>
-  <string name="at_nickname">@%1$s</string>
-  <string name="hash_symbol">#</string>
-  <string name="underscore">_</string>
-  <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
-  <string name="progress_filled">█</string>
-  <string name="progress_empty">░</string>
-  <string name="image_counter">%1$d / %2$d</string>
-  <string name="status_sending">○</string>
-  <string name="status_pending">○</string>
-  <string name="status_sent">✓</string>
-  <string name="status_delivered">✓✓</string>
-  <string name="status_failed">⚠</string>
-  <string name="status_read">✓</string>
-  <string name="notification_file_pdf">📄</string>
-  <string name="notification_file_zip">🗜️</string>
-  <string name="notification_file_doc">📄</string>
-  <string name="notification_file_xls">📊</string>
-  <string name="notification_file_ppt">📈</string>
-  <string name="notification_file_generic">📎</string>
-  <string name="perm_background_location_desc">قریبی صارفین سے جڑنے کے لیے بیک گراؤنڈ مقام رسائی درکار ہے</string>
-  <string name="perm_background_location_system">ہمیشہ اجازت دیں</string>
-  <string name="perm_type_background_location">بیک گراؤنڈ مقام</string>
-  <string name="tor_not_available_in_this_build">Tor اس بلڈ میں دستیاب نہیں</string>
-  <string name="debug_rssi_fmt">RSSI: %1$s</string>
-  <string name="debug_question_mark">?</string>
-  <plurals name="location_notes_title">
-    <item quantity="one">#%1$s ± 1 • %2$d نوٹ</item>
-    <item quantity="other">#%1$s ± 1 • %2$d نوٹ</item>
-  </plurals>
-  <string name="location_notes_description">اس مقام کے نوٹ</string>
-  <string name="location_notes_relays_unavailable">ریلے دستیاب نہیں</string>
-  <string name="location_notes_no_relays_title">کوئی ریلے نہیں</string>
-  <string name="location_notes_no_relays_desc">مقام نوٹ کے لیے کوئی Nostr ریلے کنفیگر نہیں</string>
-  <string name="loading_location_notes">مقام نوٹ لوڈ ہو رہے ہیں…</string>
-  <string name="location_notes_empty_title">کوئی نوٹ نہیں</string>
-  <string name="location_notes_empty_desc">اس علاقے میں ابھی تک کسی نے نوٹ نہیں چھوڑا</string>
-  <string name="dismiss">بند کریں</string>
-  <string name="location_notes_input_placeholder">یہاں نوٹ لکھیں…</string>
+    <string name="mesh_service_channel_name">Bluetooth ਬੈਕਗ੍ਰਾਊਂਡ ਸੇਵਾ</string>
+    <string name="mesh_service_channel_desc">ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ Bluetooth ਮੈਸ਼ ਚੱਲਦਾ ਰੱਖਦਾ ਹੈ</string>
+    <string name="cd_settings">ਸੈਟਿੰਗਾਂ</string>
+    <string name="cd_location_notes">ਟਿਕਾਣੇ ਦੇ ਨੋਟ</string>
+    <string name="notification_action_quit_bitchat">Zemzeme ਬੰਦ ਕਰੋ</string>
+    <string name="about_background_title">ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਚਲਾਓ</string>
+    <string name="about_background_desc">ਐਪ ਬੰਦ ਹੋਣ \'ਤੇ ਮੈਸ਼ ਚਾਲੂ ਰੱਖੋ (foreground service)</string>
+    <string name="about_p2p_subtitle">p2p ਰਾਹੀਂ ਸਿੱਧੇ ਪੀਅਰ ਕਨੈਕਸ਼ਨ</string>
+    <string name="about_nostr_subtitle">ਇੰਟਰਨੈੱਟ ਰੀਲੇ ਮੈਸੇਜਿੰਗ</string>
+    <string name="about_ble_subtitle">Bluetooth ਨੇੜਤਾ ਮੈਸ਼</string>
+    <string name="ble_setting_off_subtitle">ਬਲੂਟੁੱਥ ਬੰਦ ਹੈ — BLE Mesh ਵਰਤਣ ਲਈ ਚਾਲੂ ਕਰੋ</string>
+    <string name="ble_banner_off">ਬਲੂਟੁੱਥ ਬੰਦ ਹੈ — BLE Mesh ਉਪਲਬਧ ਨਹੀਂ</string>
+    <string name="ble_setting_dialog_title">ਬਲੂਟੁੱਥ ਜ਼ਰੂਰੀ ਹੈ</string>
+    <string name="ble_setting_dialog_msg">ਬਲੂਟੁੱਥ ਬੰਦ ਹੈ। BLE Mesh ਵਰਤਣ ਲਈ ਚਾਲੂ ਕਰੋ।</string>
+    <string name="ble_setting_dialog_btn">ਬਲੂਟੁੱਥ ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ</string>
+    <string name="ble_banner_enable_btn">ਚਾਲੂ ਕਰੋ</string>
+    <string name="ble_banner_mesh_disabled">BLE Mesh ਅਯੋਗ ਹੈ</string>
+
+    <!-- ਨੈੱਟਵਰਕ ਕਨੈਕਟੀਵਿਟੀ -->
+    <string name="network_setting_off_subtitle">ਇੰਟਰਨੈੱਟ ਨਹੀਂ — ਆਪਣਾ ਕਨੈਕਸ਼ਨ ਚੈੱਕ ਕਰੋ</string>
+    <string name="network_not_available">ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਹੀਂ</string>
+    <string name="network_transports_off_hint">P2P ਜਾਂ Nostr ਚਾਲੂ ਕਰੋ</string>
+    <string name="network_no_internet">ਕਨੈਕਟ ਹੈ ਪਰ ਇੰਟਰਨੈੱਟ ਨਹੀਂ ਮਿਲਿਆ</string>
+    <string name="network_setting_dialog_title">ਇੰਟਰਨੈੱਟ ਜ਼ਰੂਰੀ ਹੈ</string>
+    <string name="network_setting_dialog_msg">P2P ਅਤੇ Nostr ਟ੍ਰਾਂਸਪੋਰਟ ਲਈ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਜ਼ਰੂਰੀ ਹੈ।</string>
+    <string name="network_setting_dialog_btn">ਕਨੈਕਸ਼ਨ ਸੈਟਿੰਗਾਂ</string>
+    <string name="network_banner_disconnected">ਇੰਟਰਨੈੱਟ ਨਹੀਂ — ਕਨੈਕਸ਼ਨ ਸੈਟਿੰਗਾਂ ਚੈੱਕ ਕਰੋ</string>
+    <string name="network_banner_airplane_mode">ਏਅਰਪਲੇਨ ਮੋਡ ਚਾਲੂ ਹੈ</string>
+    <string name="network_airplane_mode">ਏਅਰਪਲੇਨ ਮੋਡ ਚਾਲੂ ਹੈ</string>
+    <string name="network_banner_no_internet">ਕਨੈਕਟ ਹੈ ਪਰ ਇੰਟਰਨੈੱਟ ਨਹੀਂ — ਕਨੈਕਸ਼ਨ ਚੈੱਕ ਕਰੋ</string>
+    <string name="network_banner_transports_disabled">ਕੋਈ ਨੈੱਟਵਰਕ ਟ੍ਰਾਂਸਪੋਰਟ ਨਹੀਂ — ਸੈਟਿੰਗਾਂ ਵਿੱਚ P2P ਜਾਂ Nostr ਚਾਲੂ ਕਰੋ</string>
+    <string name="network_banner_settings_btn">ਸੈਟਿੰਗਾਂ</string>
+
+    <!-- ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣਾ -->
+    <string name="background_location_required_title">ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣੇ ਦੀ ਸਿਫ਼ਾਰਸ਼</string>
+    <string name="background_location_required_subtitle">ਵਿਕਲਪਿਕ, ਮੈਸ਼ ਦੀ ਭਰੋਸੇਯੋਗਤਾ ਵਧਾਉਂਦਾ ਹੈ</string>
+    <string name="background_location_explanation">Android ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣੇ ਦੀ ਸਿਫ਼ਾਰਸ਼ ਕਰਦਾ ਹੈ ਤਾਂ ਜੋ Zemzeme ਐਪ ਬੰਦ ਹੋਣ \'ਤੇ ਵੀ ਨੇੜਲੇ ਡਿਵਾਈਸ ਲੱਭ ਸਕੇ। ਇਹ ਰੀਬੂਟ ਤੋਂ ਬਾਅਦ ਮੈਸ਼ ਚਾਲੂ ਰੱਖਦਾ ਹੈ।</string>
+    <string name="background_location_settings_tip">ਸੈਟਿੰਗਾਂ ਖੁੱਲ੍ਹਣ \'ਤੇ, \"ਹਮੇਸ਼ਾ ਇਜਾਜ਼ਤ ਦਿਓ\" ਚੁਣੋ।</string>
+    <string name="background_location_needs_for">Zemzeme ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣਾ ਵਰਤਦਾ ਹੈ:</string>
+    <string name="background_location_needs_bullets">- ਐਪ ਬੰਦ ਹੋਣ \'ਤੇ ਨੇੜਲੇ ਡਿਵਾਈਸ ਲੱਭਣ ਲਈ\n- ਰੀਬੂਟ ਤੋਂ ਬਾਅਦ ਦੁਬਾਰਾ ਕਨੈਕਟ ਕਰਨ ਲਈ\n- ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਮੈਸ਼ ਚੱਲਦਾ ਰੱਖਣ ਲਈ</string>
+    <string name="background_location_privacy_note">ਅਸੀਂ ਤੁਹਾਡਾ ਟਿਕਾਣਾ ਕਦੇ ਇਕੱਠਾ ਜਾਂ ਸਟੋਰ ਨਹੀਂ ਕਰਦੇ। ਤੁਹਾਡੀ ਪ੍ਰਾਈਵੇਸੀ ਸੁਰੱਖਿਅਤ ਹੈ।</string>
+    <string name="grant_background_location">ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣੇ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ</string>
+    <string name="skip_background_location">ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣੇ ਤੋਂ ਬਿਨਾਂ ਜਾਰੀ ਰੱਖੋ</string>
+
+    <string name="dot">.</string>
+    <string name="warning_emoji">⚠️</string>
+    <string name="at_symbol">@</string>
+    <string name="app_brand">Zemzeme/</string>
+    <string name="channel_count_prefix"> · ⧉ </string>
+    <string name="mention_suggestion_at">@%1$s</string>
+    <string name="at_nickname">@%1$s</string>
+    <string name="hash_symbol">#</string>
+    <string name="underscore">_</string>
+    <string name="progress_bar_brackets">[%1$s] %2$d%%</string>
+    <string name="progress_filled">█</string>
+    <string name="progress_empty">░</string>
+    <string name="image_counter">%1$d / %2$d</string>
+    <string name="status_sending">○</string>
+    <string name="status_pending">○</string>
+    <string name="status_sent">✓</string>
+    <string name="status_delivered">✓✓</string>
+    <string name="status_failed">⚠</string>
+    <string name="status_read">✓</string>
+    <string name="notification_file_pdf">📄</string>
+    <string name="notification_file_zip">🗜️</string>
+    <string name="notification_file_doc">📄</string>
+    <string name="notification_file_xls">📊</string>
+    <string name="notification_file_ppt">📈</string>
+    <string name="notification_file_generic">📎</string>
+    <string name="perm_background_location_desc">ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਨੇੜਲੇ ਡਿਵਾਈਸ ਲੱਭਣ ਲਈ ਸਿਫ਼ਾਰਸ਼ੀ</string>
+    <string name="perm_background_location_system">ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣੇ ਦੀ ਪਹੁੰਚ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ</string>
+    <string name="perm_type_background_location">ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣਾ</string>
+    <string name="tor_not_available_in_this_build">ਇਸ ਬਿਲਡ ਵਿੱਚ Tor ਉਪਲਬਧ ਨਹੀਂ</string>
+    <string name="debug_rssi_fmt">RSSI: %1$s</string>
+    <string name="debug_question_mark">?</string>
+    <plurals name="location_notes_title">
+        <item quantity="one">#%1$s ± 1 • %2$d ਨੋਟ</item>
+        <item quantity="other">#%1$s ± 1 • %2$d ਨੋਟ</item>
+    </plurals>
+    <string name="location_notes_description">ਇਸ ਟਿਕਾਣੇ \'ਤੇ ਹੋਰ ਸੈਲਾਨੀਆਂ ਲਈ ਛੋਟੇ ਸਥਾਈ ਨੋਟ ਸ਼ਾਮਲ ਕਰੋ।</string>
+    <string name="location_notes_relays_unavailable">geo relay ਉਪਲਬਧ ਨਹੀਂ; ਨੋਟ ਰੁਕੇ ਹੋਏ</string>
+    <string name="location_notes_no_relays_title">ਨੇੜੇ ਕੋਈ geo relay ਨਹੀਂ</string>
+    <string name="location_notes_no_relays_desc">ਨੋਟ geo relay \'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਕਨੈਕਸ਼ਨ ਚੈੱਕ ਕਰੋ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="loading_location_notes">ਨੋਟ ਲੋਡ ਹੋ ਰਹੇ ਹਨ…</string>
+    <string name="location_notes_empty_title">ਅਜੇ ਕੋਈ ਨੋਟ ਨਹੀਂ</string>
+    <string name="location_notes_empty_desc">ਇਸ ਥਾਂ ਲਈ ਪਹਿਲਾ ਨੋਟ ਸ਼ਾਮਲ ਕਰੋ।</string>
+    <string name="dismiss">ਬੰਦ ਕਰੋ</string>
+    <string name="location_notes_input_placeholder">ਇਸ ਥਾਂ ਲਈ ਨੋਟ ਸ਼ਾਮਲ ਕਰੋ</string>
+
+    <!-- ਐਪ ਲਾਕ -->
+    <string name="app_lock_title">ਐਪ ਲਾਕ</string>
+    <string name="app_lock_subtitle_off">ਬੰਦ</string>
+    <string name="app_lock_subtitle_on">ਬਾਇਓਮੈਟ੍ਰਿਕ + PIN</string>
+    <string name="app_lock_security_section">ਸੁਰੱਖਿਆ</string>
+    <string name="app_lock_enter_pin">PIN ਦਾਖਲ ਕਰੋ</string>
+    <string name="app_lock_set_pin">PIN ਸੈੱਟ ਕਰੋ</string>
+    <string name="app_lock_confirm_pin">PIN ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ</string>
+    <string name="app_lock_biometric_title">Zemzeme ਖੋਲ੍ਹੋ</string>
+    <string name="app_lock_biometric_subtitle">ਖੋਲ੍ਹਣ ਲਈ ਬਾਇਓਮੈਟ੍ਰਿਕ ਵਰਤੋ</string>
+    <string name="app_lock_use_pin">PIN ਵਰਤੋ</string>
+    <string name="app_lock_wrong_pin">ਗਲਤ PIN</string>
+    <string name="app_lock_too_many_attempts">ਬਹੁਤ ਜ਼ਿਆਦਾ ਕੋਸ਼ਿਸ਼ਾਂ। %1$d ਸਕਿੰਟਾਂ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="app_lock_cooldown">%1$d ਸਕਿੰਟ ਬਾਕੀ</string>
+    <string name="app_lock_pin_mismatch">PIN ਮੇਲ ਨਹੀਂ ਖਾਂਦੇ</string>
+    <string name="app_lock_pin_min_length">PIN ਘੱਟੋ-ਘੱਟ 4 ਅੰਕਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ</string>
+    <string name="app_lock_disable_title">ਐਪ ਲਾਕ ਅਯੋਗ ਕਰੋ</string>
+    <string name="app_lock_disable_msg">ਐਪ ਲਾਕ ਅਯੋਗ ਕਰਨ ਲਈ ਆਪਣੀ ਪਛਾਣ ਤਸਦੀਕ ਕਰੋ</string>
+    <string name="app_lock_protect_title">ਆਪਣੀਆਂ ਚੈਟਾਂ ਸੁਰੱਖਿਅਤ ਕਰੋ</string>
+    <string name="app_lock_protect_desc">6 ਅੰਕਾਂ ਦਾ PIN ਐਪ ਨੂੰ ਲਾਕ ਕਰਦਾ ਹੈ। ਤੁਰੰਤ ਪਹੁੰਚ ਲਈ ਬਾਇਓਮੈਟ੍ਰਿਕ ਵਰਤੋ।</string>
+    <string name="app_lock_enable">ਐਪ ਲਾਕ ਚਾਲੂ ਕਰੋ</string>
+    <string name="app_lock_not_now">ਹੁਣੇ ਨਹੀਂ</string>
+
+    <!-- ਨਵੇਂ ਸਟ੍ਰਿੰਗਜ਼ -->
+    <string name="continue_button">ਜਾਰੀ ਰੱਖੋ</string>
+    <string name="perm_required_label">ਜ਼ਰੂਰੀ</string>
+    <string name="perm_recommended_label">ਸਿਫ਼ਾਰਸ਼ੀ</string>
+    <string name="perm_info_dialog_ok">ਠੀਕ ਹੈ</string>
+    <string name="perm_benefit_nearby_devices">Bluetooth ਇਜਾਜ਼ਤਾਂ Zemzeme ਨੂੰ ਮੈਸ਼ ਨੈੱਟਵਰਕ ਰਾਹੀਂ ਨੇੜਲੇ ਹੋਰ ਯੂਜ਼ਰ ਲੱਭਣ ਅਤੇ ਗੱਲ ਕਰਨ ਦੀ ਆਗਿਆ ਦਿੰਦੀਆਂ ਹਨ। ਇਹ ਬਿਨਾਂ ਇੰਟਰਨੈੱਟ ਦੇ ਪੀਅਰ-ਟੂ-ਪੀਅਰ ਮੈਸੇਜਿੰਗ ਯੋਗ ਕਰਦਾ ਹੈ।</string>
+    <string name="perm_benefit_location">Android ਨੂੰ ਨੇੜਲੇ Bluetooth ਡਿਵਾਈਸ ਸਕੈਨ ਕਰਨ ਲਈ ਟਿਕਾਣੇ ਦੀ ਇਜਾਜ਼ਤ ਚਾਹੀਦੀ ਹੈ। Zemzeme ਤੁਹਾਡਾ ਟਿਕਾਣਾ ਟ੍ਰੈਕ ਜਾਂ ਸਟੋਰ ਨਹੀਂ ਕਰਦਾ।</string>
+    <string name="perm_benefit_background_location">ਬੈਕਗ੍ਰਾਊਂਡ ਟਿਕਾਣਾ Zemzeme ਨੂੰ ਐਪ ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਹੋਣ \'ਤੇ ਵੀ ਨੇੜਲੇ ਯੂਜ਼ਰ ਲੱਭਣ ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ। ਇਸ ਤੋਂ ਬਿਨਾਂ, ਮੈਸ਼ ਨੈੱਟਵਰਕ ਸਿਰਫ਼ ਐਪ ਸਕ੍ਰੀਨ \'ਤੇ ਖੁੱਲ੍ਹੀ ਹੋਣ \'ਤੇ ਕੰਮ ਕਰਦਾ ਹੈ।</string>
+    <string name="perm_benefit_notifications">ਨੋਟੀਫ਼ਿਕੇਸ਼ਨ ਤੁਹਾਨੂੰ ਦੱਸਦੇ ਹਨ ਜਦੋਂ ਤੁਹਾਨੂੰ ਪ੍ਰਾਈਵੇਟ ਮੈਸੇਜ ਜਾਂ ਚੈਨਲਾਂ ਵਿੱਚ ਨਵੀਂ ਸਰਗਰਮੀ ਹੁੰਦੀ ਹੈ, ਐਪ ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਹੋਣ \'ਤੇ ਵੀ।</string>
+    <string name="perm_benefit_battery_optimization">ਬੈਟਰੀ ਆਪਟੀਮਾਈਜ਼ੇਸ਼ਨ ਬੰਦ ਕਰਨ ਨਾਲ Zemzeme ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਭਰੋਸੇਯੋਗ ਚੱਲਦਾ ਹੈ ਅਤੇ ਮੈਸ਼ ਨੈੱਟਵਰਕ ਕਨੈਕਸ਼ਨ ਬਰਕਰਾਰ ਰਹਿੰਦੇ ਹਨ। ਇਸ ਤੋਂ ਬਿਨਾਂ, Android ਬੈਟਰੀ ਬਚਾਉਣ ਲਈ ਐਪ ਬੰਦ ਕਰ ਸਕਦਾ ਹੈ।</string>
+
+    <!-- ਮੈਸ਼ ਜਾਣ-ਪਛਾਣ -->
+    <string name="mesh_intro_title">Bluetooth</string>
+    <string name="mesh_intro_body">ਇਸ ਗਰੁੱਪ ਵਿੱਚ ਗੱਲਬਾਤ ਪੂਰੀ ਤਰ੍ਹਾਂ Bluetooth \'ਤੇ ਅਧਾਰਤ ਹੈ। ਨੇੜਲੇ ਡਿਵਾਈਸ ਲੋਕਾਂ ਵਿਚਕਾਰ ਮੈਸੇਜ ਰੀਲੇ ਕਰਦੇ ਹਨ — ਕੋਈ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਜ਼ਰੂਰੀ ਨਹੀਂ।</string>
+    <string name="mesh_intro_close">ਬੰਦ ਕਰੋ</string>
+    <string name="mesh_intro_dont_show">ਦੁਬਾਰਾ ਨਾ ਦਿਖਾਓ</string>
+
+    <!-- ਐਪ ਸ਼ੇਅਰ ਕਰੋ -->
+    <string name="about_share_app_header">ਐਪ ਸ਼ੇਅਰ ਕਰੋ</string>
+    <string name="about_share_system_title">ਐਪ ਸ਼ੇਅਰ ਕਰੋ</string>
+    <string name="about_share_system_desc">Bluetooth, Nearby Share, ਜਾਂ Wi-Fi Direct (%1$s) ਰਾਹੀਂ APK ਭੇਜੋ</string>
+    <string name="about_share_failed">ਸ਼ੇਅਰ ਕਰਨ ਲਈ APK ਤਿਆਰ ਨਹੀਂ ਹੋ ਸਕੀ</string>
+    <string name="about_share_chooser_title">%1$s APK ਸ਼ੇਅਰ ਕਰੋ</string>
+    <string name="about_share_helper_text">ਭੇਜਣ ਲਈ Google Quick Share ਵਰਤੋ (ਫ਼ੋਨ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਚਾਲੂ ਕਰੋ)। ਟ੍ਰਾਂਸਫ਼ਰ ਤੋਂ ਬਾਅਦ, APK ਪ੍ਰਾਪਤ ਕਰਨ ਵਾਲੇ ਡਿਵਾਈਸ \'ਤੇ Downloads ਫ਼ੋਲਡਰ ਵਿੱਚ ਹੋਵੇਗੀ।</string>
+
+    <!-- ਆਈਕਨ ਸਵਿੱਚ -->
+    <string name="icon_switch_title">ਐਪ ਆਈਕਨ &amp; ਨਾਮ ਰੀਫ਼੍ਰੈਸ਼ ਕਰੋ</string>
+    <string name="icon_switch_section">ਕਸਟਮਾਈਜ਼ੇਸ਼ਨ</string>
+    <string name="icon_switch_subtitle">ਆਪਣੇ ਲਾਂਚਰ \'ਤੇ ਐਪ ਆਈਕਨ ਅਤੇ ਨਾਮ ਬਦਲੋ</string>
+    <string name="icon_switch_confirm">ਐਪ ਆਈਕਨ ਅਤੇ ਨਾਮ ਇਸ ਵਿੱਚ ਬਦਲੋ?</string>
+    <string name="icon_switch_apply">ਲਾਗੂ ਕਰੋ</string>
+    <string name="icon_switch_toast">ਐਪ ਆਈਕਨ ਅਤੇ ਨਾਮ ਬਦਲ ਗਿਆ!</string>
+
+    <!-- ਡਾਇਲਾਗ ਸਿਰਲੇਖ ਅਤੇ ਕਾਰਵਾਈਆਂ -->
+    <string name="dialog_delete_chat">ਚੈਟ ਮਿਟਾਓ</string>
+    <string name="dialog_delete_group">ਗਰੁੱਪ ਮਿਟਾਓ</string>
+    <string name="dialog_delete_confirm_body">ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਹੋ ਕਿ \"%1$s\" ਮਿਟਾਉਣਾ ਹੈ? ਇਹ ਵਾਪਸ ਨਹੀਂ ਹੋ ਸਕਦਾ।</string>
+    <string name="action_delete">ਮਿਟਾਓ</string>
+    <string name="dialog_clear_chat">ਚੈਟ ਸਾਫ਼ ਕਰੋ</string>
+    <string name="dialog_clear_confirm_body">ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਹੋ ਕਿ \"%1$s\" ਦੇ ਸਾਰੇ ਮੈਸੇਜ ਸਾਫ਼ ਕਰਨੇ ਹਨ?</string>
+    <string name="action_clear">ਸਾਫ਼ ਕਰੋ</string>
+    <string name="dialog_title_create_group">ਨਵਾਂ ਗਰੁੱਪ ਬਣਾਓ</string>
+    <string name="label_group_name">ਗਰੁੱਪ ਦਾ ਨਾਮ</string>
+    <string name="action_create">ਬਣਾਓ</string>
+    <string name="dialog_title_join_group">ਗਰੁੱਪ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ</string>
+    <string name="label_group_id">ਗਰੁੱਪ ID</string>
+    <string name="label_nickname_optional">ਉਪਨਾਮ (ਵਿਕਲਪਿਕ)</string>
+    <string name="dialog_title_rename_group">ਗਰੁੱਪ ਦਾ ਨਾਮ ਬਦਲੋ</string>
+    <string name="action_rename">ਨਾਮ ਬਦਲੋ</string>
+
+    <!-- ਸੈਟਿੰਗ ਸਿਰਲੇਖ -->
+    <string name="setting_ble_mesh">BLE Mesh</string>
+    <string name="setting_p2p_network">P2P ਨੈੱਟਵਰਕ</string>
+    <string name="setting_nostr_relays">Nostr Relays</string>
+    <string name="setting_tor_nostr">\u0020\u0020Tor (Nostr)</string>
+
+    <!-- ਟੋਸਟ ਮੈਸੇਜ -->
+    <string name="toast_ble_mesh_enabled">BLE Mesh ਚਾਲੂ ਹੋ ਗਿਆ</string>
+    <string name="toast_ble_mesh_disabled">BLE Mesh ਬੰਦ ਹੋ ਗਿਆ</string>
+    <string name="toast_nostr_enabled">Nostr ਚਾਲੂ ਹੋ ਗਿਆ</string>
+    <string name="toast_nostr_disabled">Nostr ਬੰਦ ਹੋ ਗਿਆ</string>
+    <string name="toast_tor_p2p_unsupported">P2P ਨਾਲ Tor ਸਮਰਥਿਤ ਨਹੀਂ। ਪਹਿਲਾਂ P2P ਬੰਦ ਕਰੋ।</string>
+    <string name="toast_p2p_tor_disabled">Tor \'ਤੇ P2P ਸਮਰਥਿਤ ਨਹੀਂ। Tor ਬੰਦ ਕਰ ਦਿੱਤਾ ਗਿਆ।</string>
+
+    <!-- ਤਸਵੀਰ ਚੋਣਕਾਰ -->
+    <string name="action_gallery">ਗੈਲਰੀ</string>
+    <string name="action_camera">ਕੈਮਰਾ</string>
+
+    <!-- ਪਹੁੰਚਯੋਗਤਾ -->
+    <string name="cd_refresh_p2p">P2P ਕਨੈਕਸ਼ਨ ਰੀਫ਼੍ਰੈਸ਼ ਕਰੋ</string>
+    <string name="cd_direct_bluetooth">ਸਿੱਧਾ Bluetooth</string>
+    <string name="cd_routed">ਰਾਊਟ ਕੀਤਾ</string>
+    <string name="cd_p2p_connection">P2P ਕਨੈਕਸ਼ਨ</string>
+    <string name="cd_teleported_user">ਟੈਲੀਪੋਰਟ ਕੀਤਾ ਯੂਜ਼ਰ</string>
+    <string name="cd_user">ਯੂਜ਼ਰ</string>
+    <string name="cd_backspace">ਬੈਕਸਪੇਸ</string>
+    <string name="cd_verified">ਤਸਦੀਕ ਹੋਇਆ</string>
+    <string name="cd_add_node">ਨੋਡ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="cd_remove">ਹਟਾਓ</string>
+    <string name="action_enable_location">ਟਿਕਾਣਾ ਚਾਲੂ ਕਰੋ</string>
+
+    <!-- ਗਰੁੱਪ ID -->
+    <string name="label_group_id_fmt">ਗਰੁੱਪ ID: %1$s</string>
+
+    <!-- PIN ਪਲੇਸਹੋਲਡਰ -->
+    <string name="placeholder_6_digits">6 ਅੰਕ</string>
+
+    <!-- P2P ਸੈਟਿੰਗਾਂ -->
+    <string name="p2p_settings_header">ਸੈਟਿੰਗਾਂ</string>
+    <string name="p2p_enable">P2P ਚਾਲੂ ਕਰੋ</string>
+    <string name="p2p_enable_desc">ਹੋਰ Zemzeme ਪੀਅਰਾਂ ਨਾਲ ਸਿੱਧੇ ਜੁੜੋ</string>
+    <string name="p2p_use_default_nodes">ਡਿਫ਼ਾਲਟ ਨੋਡ ਵਰਤੋ</string>
+    <string name="p2p_default_nodes_desc">ਪਬਲਿਕ IPFS ਬੂਟਸਟ੍ਰੈਪ ਨੋਡਾਂ ਨਾਲ ਜੁੜੋ</string>
+    <string name="p2p_custom_nodes_header">ਕਸਟਮ ਬੂਟਸਟ੍ਰੈਪ ਨੋਡ</string>
+    <string name="p2p_no_custom_nodes">ਕੋਈ ਕਸਟਮ ਨੋਡ ਕੌਂਫ਼ਿਗਰ ਨਹੀਂ। ਸ਼ਾਮਲ ਕਰਨ ਲਈ + ਦਬਾਓ।</string>
+    <string name="p2p_add_bootstrap_node">ਬੂਟਸਟ੍ਰੈਪ ਨੋਡ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="p2p_enter_multiaddr">ਬੂਟਸਟ੍ਰੈਪ ਨੋਡ ਲਈ multiaddr ਦਾਖਲ ਕਰੋ:</string>
+    <string name="p2p_recovering">ਰਿਕਵਰ ਹੋ ਰਿਹਾ ਹੈ…</string>
+    <string name="p2p_recover_connection">ਕਨੈਕਸ਼ਨ ਰਿਕਵਰ ਕਰੋ</string>
+    <string name="action_add">ਸ਼ਾਮਲ ਕਰੋ</string>
+
+    <!-- ਨੋਟੀਫ਼ਿਕੇਸ਼ਨ ਚੈਨਲ -->
+    <string name="notification_channel_direct_messages">ਸਿੱਧੇ ਮੈਸੇਜ</string>
+    <string name="notification_channel_dm_desc">ਹੋਰ ਯੂਜ਼ਰਾਂ ਤੋਂ ਪ੍ਰਾਈਵੇਟ ਮੈਸੇਜਾਂ ਲਈ ਨੋਟੀਫ਼ਿਕੇਸ਼ਨ</string>
+    <string name="notification_channel_geohash_chats">Geohash ਚੈਟਾਂ</string>
+    <string name="notification_channel_geohash_desc">geohash ਟਿਕਾਣਾ ਚੈਨਲਾਂ ਵਿੱਚ ਜ਼ਿਕਰ ਅਤੇ ਮੈਸੇਜਾਂ ਲਈ ਨੋਟੀਫ਼ਿਕੇਸ਼ਨ</string>
+
+    <!-- ਡੀਬੱਗ: ਮੈਸ਼ ਟੋਪੋਲੋਜੀ -->
+    <string name="debug_mesh_topology">ਮੈਸ਼ ਟੋਪੋਲੋਜੀ</string>
+    <string name="debug_no_gossip">ਅਜੇ ਕੋਈ gossip ਨਹੀਂ</string>
+
+    <!-- ਡੀਬੱਗ: ਸੈਲਫ਼-ਅੱਪਡੇਟ -->
+    <string name="debug_self_update">ਸੈਲਫ਼-ਅੱਪਡੇਟ (dev)</string>
+    <string name="debug_current_version_fmt">ਮੌਜੂਦਾ ਵਰਜ਼ਨ: %1$s</string>
+    <string name="debug_download_updates_desc">GitHub ਰਿਲੀਜ਼ਾਂ ਤੋਂ ਅੱਪਡੇਟ ਡਾਊਨਲੋਡ ਅਤੇ ਇੰਸਟਾਲ ਕਰੋ</string>
+    <string name="update_status_ready">ਤਿਆਰ</string>
+    <string name="update_status_checking">ਅੱਪਡੇਟ ਚੈੱਕ ਹੋ ਰਹੇ ਹਨ…</string>
+    <string name="update_status_available">ਅੱਪਡੇਟ ਉਪਲਬਧ: %1$s</string>
+    <string name="update_status_downloading">ਡਾਊਨਲੋਡ ਹੋ ਰਿਹਾ: %1$d%%</string>
+    <string name="update_status_ready_install">ਇੰਸਟਾਲ ਲਈ ਤਿਆਰ: %1$s</string>
+    <string name="update_status_installing">ਇੰਸਟਾਲ ਹੋ ਰਿਹਾ…</string>
+    <string name="update_status_success">ਅੱਪਡੇਟ ਇੰਸਟਾਲ ਹੋ ਗਿਆ! ਐਪ ਰੀਸਟਾਰਟ ਕਰੋ।</string>
+    <string name="update_status_pending_action">ਯੂਜ਼ਰ ਦੀ ਪੁਸ਼ਟੀ ਦੀ ਉਡੀਕ…</string>
+    <string name="update_status_error">ਗਲਤੀ: %1$s</string>
+    <string name="update_grant_install_permission">ਇੰਸਟਾਲ ਇਜਾਜ਼ਤ ਦਿਓ</string>
+    <string name="update_install">ਅੱਪਡੇਟ ਇੰਸਟਾਲ ਕਰੋ</string>
+    <string name="update_check">ਅੱਪਡੇਟ ਚੈੱਕ ਕਰੋ</string>
+    <string name="debug_test_update_dialog">ਟੈਸਟ ਅੱਪਡੇਟ ਡਾਇਲਾਗ</string>
+
+    <!-- ਡੀਬੱਗ: ਬੈਂਡਵਿਡਥ -->
+    <string name="debug_overall">ਕੁੱਲ</string>
+    <string name="debug_per_device">ਪ੍ਰਤੀ ਡਿਵਾਈਸ</string>
+    <string name="debug_per_peer">ਪ੍ਰਤੀ ਪੀਅਰ</string>
+    <string name="debug_incoming">ਆਉਂਦਾ</string>
+    <string name="debug_outgoing">ਜਾਂਦਾ</string>
+
+    <!-- ਡੀਬੱਗ: ਕੰਸੋਲ -->
+    <string name="debug_refreshing">ਰੀਫ਼੍ਰੈਸ਼ ਹੋ ਰਿਹਾ…</string>
+    <string name="debug_refresh">ਰੀਫ਼੍ਰੈਸ਼</string>
+    <string name="debug_clear_logs">ਲਾਗ ਸਾਫ਼ ਕਰੋ</string>
+    <string name="debug_preparing_export">ਐਕਸਪੋਰਟ ਤਿਆਰ ਹੋ ਰਿਹਾ…</string>
+    <string name="debug_share_logs">ਲਾਗ ਸ਼ੇਅਰ ਕਰੋ</string>
+
+    <!-- FAB menu items -->
+    <string name="fab_scan_qr">QR سکین کرو</string>
+    <string name="fab_choose_city">شہر چُنو</string>
+    <string name="fab_join_group">گروپ وچ شامل ہوو</string>
+    <string name="fab_create_group">گروپ بناؤ</string>
+    <!-- Section headers -->
+    <string name="section_nearby">نیڑے</string>
+    <string name="section_geographic_groups">جغرافیائی گروپ</string>
+    <string name="section_my_groups">میرے گروپ</string>
+    <string name="section_contacts">رابطے</string>
+    <string name="section_username">ਯੂਜ਼ਰਨੇਮ</string>
+    <string name="section_theme">ਥੀਮ</string>
+    <string name="section_settings">ਸੈਟਿੰਗਾਂ</string>
+    <string name="section_network">ਨੈੱਟਵਰਕ</string>
+    <string name="section_status">ਸਥਿਤੀ</string>
+    <string name="app_lock_subtitle_pin">PIN</string>
+    <string name="p2p_networking_title">P2P ਨੈੱਟਵਰਕਿੰਗ</string>
+    <string name="p2p_status_no_peers">ਕੋਈ ਪੀਅਰ ਨਹੀਂ</string>
+    <string name="p2p_status_connected">ਜੁੜਿਆ ਹੋਇਆ</string>
+    <string name="p2p_status_connecting">ਜੁੜ ਰਿਹਾ ਹੈ…</string>
+    <string name="p2p_status_disconnected">ਡਿਸਕਨੈਕਟ ਹੋਇਆ</string>
+    <string name="p2p_status_error">ਗਲਤੀ</string>
+    <string name="p2p_peers_connected_fmt">%1$d ਪੀਅਰ ਜੁੜੇ ਹੋਏ</string>
+    <string name="p2p_dht_fmt">DHT: %1$s</string>
+    <string name="p2p_peer_id_fmt">Peer ID: %1$s…%2$s</string>
+    <string name="p2p_active_nodes_fmt">ਐਕਟਿਵ ਨੋਡ: %1$d</string>
+    <string name="location_acquiring_title">ਟਿਕਾਣਾ ਲੱਭ ਰਿਹਾ ਹੈ</string>
+    <string name="location_acquiring_desc">ਕਿਰਪਾ ਕਰਕੇ ਉਡੀਕ ਕਰੋ ਜਦੋਂ ਤੁਹਾਡਾ ਟਿਕਾਣਾ ਨਿਰਧਾਰਤ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
+    <string name="location_unavailable_title">ਟਿਕਾਣਾ ਉਪਲਬਧ ਨਹੀਂ</string>
+    <string name="location_permission_required_notes">ਨੋਟਸ ਲਈ ਟਿਕਾਣੇ ਦੀ ਇਜਾਜ਼ਤ ਲੋੜੀਂਦੀ ਹੈ</string>
+
+    <!-- Connection indicator -->
+    <string name="connection_searching_peers">ਪੀਅਰ ਲੱਭ ਰਿਹਾ ਹੈ…</string>
+    <string name="connection_connecting_peers">ਪੀਅਰਾਂ ਨਾਲ ਜੁੜ ਰਿਹਾ ਹੈ…</string>
+    <plurals name="connection_peers_connected">
+        <item quantity="one">%1$d ਪੀਅਰ ਜੁੜਿਆ</item>
+        <item quantity="other">%1$d ਪੀਅਰ ਜੁੜੇ</item>
+    </plurals>
+    <string name="connection_no_new_messages">ਜੁੜਿਆ ਹੋਇਆ - ਕੋਈ ਨਵੇਂ ਸੁਨੇਹੇ ਨਹੀਂ</string>
+    <string name="connection_error">ਕਨੈਕਸ਼ਨ ਗਲਤੀ</string>
+    <string name="connection_direct">ਸਿੱਧਾ</string>
+    <string name="connection_connected">ਜੁੜਿਆ ਹੋਇਆ</string>
+
+    <!-- Debug connection indicator -->
+    <string name="debug_p2p_no_info">P2P (ਕੋਈ ਜਾਣਕਾਰੀ ਨਹੀਂ)</string>
+    <string name="debug_nostr_relay">Nostr ਰੀਲੇਅ</string>
+    <string name="debug_ble_direct">BLE ਸਿੱਧਾ</string>
+    <string name="debug_p2p_searching">P2P: ਪੀਅਰ ਲੱਭ ਰਿਹਾ ਹੈ…</string>
+    <string name="debug_p2p_connecting">P2P: ਪੀਅਰਾਂ ਨਾਲ ਜੁੜ ਰਿਹਾ ਹੈ…</string>
+    <string name="debug_nostr_no_messages">Nostr ਜੁੜਿਆ ਹੋਇਆ - ਕੋਈ ਨਵੇਂ ਸੁਨੇਹੇ ਨਹੀਂ</string>
+    <string name="debug_connection_failed">ਕਨੈਕਸ਼ਨ ਅਸਫਲ</string>
+    <string name="debug_error_fmt">ਗਲਤੀ: %1$s</string>
+
 </resources>

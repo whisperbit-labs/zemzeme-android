@@ -54,7 +54,7 @@ sealed class ChannelID {
      */
     val displayName: String
         get() = when (this) {
-            is Mesh -> "Mesh"
+            is Mesh -> "Bluetooth"
             is Location -> channel.displayName
         }
     

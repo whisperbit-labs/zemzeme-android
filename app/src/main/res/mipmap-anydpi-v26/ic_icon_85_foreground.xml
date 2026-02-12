@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="108"
+    android:viewportHeight="108"
+    android:width="108dp"
+    android:height="108dp">
+    <path
+        android:pathData="M34.00 62.00 L74.00 62.00 L78.00 52.00 L77.81 50.05 L77.24 48.17 L76.31 46.44 L75.07 44.93 L73.56 43.69 L71.83 42.76 L69.95 42.19 L68.00 42.00 L69.46 38.45 L68.46 36.12 L66.99 34.05 L65.12 32.34 L62.93 31.06 L60.52 30.27 L58.00 30.00 L55.48 30.27 L53.07 31.06 L50.88 32.34 L49.01 34.05 L47.54 36.12 L46.54 38.45 L50.09 40.12 L47.88 37.91 L45.09 36.49 L42.00 36.00 L38.91 36.49 L36.12 37.91 L33.91 40.12 L32.49 42.91 L32.00 46.00 L30.00 54.00 L30.27 56.07 L31.07 58.00 L32.34 59.66 L34.00 60.93 L35.93 61.73 L38.00 62.00 Z"
+        android:fillColor="#FFFFFF" />
+</vector>

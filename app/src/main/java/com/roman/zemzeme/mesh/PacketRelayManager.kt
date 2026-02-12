@@ -4,8 +4,11 @@ import com.roman.zemzeme.protocol.MessageType
 import android.util.Log
 import com.roman.zemzeme.model.RoutedPacket
 import com.roman.zemzeme.protocol.ZemzemePacket
+import com.roman.zemzeme.util.DebugLogger
 import com.roman.zemzeme.util.toHexString
 import kotlinx.coroutines.*
+import java.nio.ByteBuffer
+import java.util.UUID
 import kotlin.random.Random
 
 /**
@@ -167,7 +170,31 @@ class PacketRelayManager(private val myPeerID: String) {
      */
     private fun relayPacket(routed: RoutedPacket) {
         Log.i(TAG, "🔄 Relaying packet type ${routed.packet.type} with TTL ${routed.packet.ttl}")
+        DebugLogger.log(
+            action = "RELAY",
+            msgId = derivePacketId(routed.packet),
+            srcName = null,
+            srcId = routed.packet.senderID.toHexString(),
+            destName = null,
+            destId = routed.packet.recipientID?.toHexString() ?: "broadcast",
+            protocol = "BLE_MESH",
+            content = "[type=${routed.packet.type}]",
+            hopCounter = routed.packet.ttl.toInt(),
+            latencyMs = System.currentTimeMillis() - routed.packet.timestamp.toLong()
+        )
         delegate?.broadcastPacket(routed)
+    }
+
+    /**
+     * Derive a deterministic UUID from the packet's senderID + timestamp.
+     * Since the wire protocol doesn't carry a message UUID, this produces a
+     * stable identifier so the same message is traceable across relay hops.
+     */
+    private fun derivePacketId(packet: ZemzemePacket): String {
+        val buf = ByteBuffer.allocate(packet.senderID.size + 8)
+        buf.put(packet.senderID)
+        buf.putLong(packet.timestamp.toLong())
+        return UUID.nameUUIDFromBytes(buf.array()).toString().uppercase()
     }
     
     /**
