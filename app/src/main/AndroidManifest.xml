@@ -66,8 +66,8 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_icon_1"
+        android:roundIcon="@mipmap/ic_icon_1"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.ZemzemeAndroid"
@@ -95,6 +95,19 @@
             android:theme="@style/Theme.ZemzemeAndroid"
             android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTop">
+        </activity>
+
+        <!-- ═══ Dynamic icon / name aliases (100 variants) ═══ -->
+
+        <!-- Alias 1: Zemzeme -->
+        <activity-alias
+            android:name=".iconswitch.Alias_1"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:label="Zemzeme"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -105,7 +118,2088 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="zemzeme" android:host="verify" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
+        <!-- Alias 2: NetChat -->
+        <activity-alias
+            android:name=".iconswitch.Alias_2"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_2"
+            android:roundIcon="@mipmap/ic_icon_2"
+            android:label="NetChat"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 3: TalkBox -->
+        <activity-alias
+            android:name=".iconswitch.Alias_3"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_3"
+            android:roundIcon="@mipmap/ic_icon_3"
+            android:label="TalkBox"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 4: MsgHub -->
+        <activity-alias
+            android:name=".iconswitch.Alias_4"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_4"
+            android:roundIcon="@mipmap/ic_icon_4"
+            android:label="MsgHub"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 5: BuzzTalk -->
+        <activity-alias
+            android:name=".iconswitch.Alias_5"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_5"
+            android:roundIcon="@mipmap/ic_icon_5"
+            android:label="BuzzTalk"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 6: PingMe -->
+        <activity-alias
+            android:name=".iconswitch.Alias_6"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_6"
+            android:roundIcon="@mipmap/ic_icon_6"
+            android:label="PingMe"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 7: ChatNow -->
+        <activity-alias
+            android:name=".iconswitch.Alias_7"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_7"
+            android:roundIcon="@mipmap/ic_icon_7"
+            android:label="ChatNow"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 8: QuickMsg -->
+        <activity-alias
+            android:name=".iconswitch.Alias_8"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_8"
+            android:roundIcon="@mipmap/ic_icon_8"
+            android:label="QuickMsg"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 9: TalkLine -->
+        <activity-alias
+            android:name=".iconswitch.Alias_9"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_9"
+            android:roundIcon="@mipmap/ic_icon_9"
+            android:label="TalkLine"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 10: MsgWave -->
+        <activity-alias
+            android:name=".iconswitch.Alias_10"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_10"
+            android:roundIcon="@mipmap/ic_icon_10"
+            android:label="MsgWave"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 11: ChatZone -->
+        <activity-alias
+            android:name=".iconswitch.Alias_11"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_11"
+            android:roundIcon="@mipmap/ic_icon_11"
+            android:label="ChatZone"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 12: HiTalk -->
+        <activity-alias
+            android:name=".iconswitch.Alias_12"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_12"
+            android:roundIcon="@mipmap/ic_icon_12"
+            android:label="HiTalk"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 13: TxtFlow -->
+        <activity-alias
+            android:name=".iconswitch.Alias_13"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_13"
+            android:roundIcon="@mipmap/ic_icon_13"
+            android:label="TxtFlow"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 14: ConnectMe -->
+        <activity-alias
+            android:name=".iconswitch.Alias_14"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_14"
+            android:roundIcon="@mipmap/ic_icon_14"
+            android:label="ConnectMe"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 15: ChatBolt -->
+        <activity-alias
+            android:name=".iconswitch.Alias_15"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_15"
+            android:roundIcon="@mipmap/ic_icon_15"
+            android:label="ChatBolt"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 16: MsgPulse -->
+        <activity-alias
+            android:name=".iconswitch.Alias_16"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_16"
+            android:roundIcon="@mipmap/ic_icon_16"
+            android:label="MsgPulse"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 17: TalkSnap -->
+        <activity-alias
+            android:name=".iconswitch.Alias_17"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_17"
+            android:roundIcon="@mipmap/ic_icon_17"
+            android:label="TalkSnap"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 18: ChatLink -->
+        <activity-alias
+            android:name=".iconswitch.Alias_18"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_18"
+            android:roundIcon="@mipmap/ic_icon_18"
+            android:label="ChatLink"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 19: FlowChat -->
+        <activity-alias
+            android:name=".iconswitch.Alias_19"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_19"
+            android:roundIcon="@mipmap/ic_icon_19"
+            android:label="FlowChat"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 20: PingTalk -->
+        <activity-alias
+            android:name=".iconswitch.Alias_20"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_20"
+            android:roundIcon="@mipmap/ic_icon_20"
+            android:label="PingTalk"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 21: MsgDash -->
+        <activity-alias
+            android:name=".iconswitch.Alias_21"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_21"
+            android:roundIcon="@mipmap/ic_icon_21"
+            android:label="MsgDash"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 22: ChatVibe -->
+        <activity-alias
+            android:name=".iconswitch.Alias_22"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_22"
+            android:roundIcon="@mipmap/ic_icon_22"
+            android:label="ChatVibe"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 23: TalkSync -->
+        <activity-alias
+            android:name=".iconswitch.Alias_23"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_23"
+            android:roundIcon="@mipmap/ic_icon_23"
+            android:label="TalkSync"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 24: MsgNest -->
+        <activity-alias
+            android:name=".iconswitch.Alias_24"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_24"
+            android:roundIcon="@mipmap/ic_icon_24"
+            android:label="MsgNest"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 25: ChatBee -->
+        <activity-alias
+            android:name=".iconswitch.Alias_25"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_25"
+            android:roundIcon="@mipmap/ic_icon_25"
+            android:label="ChatBee"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 26: QuickTalk -->
+        <activity-alias
+            android:name=".iconswitch.Alias_26"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_26"
+            android:roundIcon="@mipmap/ic_icon_26"
+            android:label="QuickTalk"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 27: MsgLoop -->
+        <activity-alias
+            android:name=".iconswitch.Alias_27"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_27"
+            android:roundIcon="@mipmap/ic_icon_27"
+            android:label="MsgLoop"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 28: ChatGrid -->
+        <activity-alias
+            android:name=".iconswitch.Alias_28"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_28"
+            android:roundIcon="@mipmap/ic_icon_28"
+            android:label="ChatGrid"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 29: TalkNet -->
+        <activity-alias
+            android:name=".iconswitch.Alias_29"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_29"
+            android:roundIcon="@mipmap/ic_icon_29"
+            android:label="TalkNet"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 30: MsgDrop -->
+        <activity-alias
+            android:name=".iconswitch.Alias_30"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_30"
+            android:roundIcon="@mipmap/ic_icon_30"
+            android:label="MsgDrop"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 31: ChatPing -->
+        <activity-alias
+            android:name=".iconswitch.Alias_31"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_31"
+            android:roundIcon="@mipmap/ic_icon_31"
+            android:label="ChatPing"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 32: TalkWave -->
+        <activity-alias
+            android:name=".iconswitch.Alias_32"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_32"
+            android:roundIcon="@mipmap/ic_icon_32"
+            android:label="TalkWave"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 33: MsgBlip -->
+        <activity-alias
+            android:name=".iconswitch.Alias_33"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_33"
+            android:roundIcon="@mipmap/ic_icon_33"
+            android:label="MsgBlip"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 34: ChatRush -->
+        <activity-alias
+            android:name=".iconswitch.Alias_34"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_34"
+            android:roundIcon="@mipmap/ic_icon_34"
+            android:label="ChatRush"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 35: TalkMesh -->
+        <activity-alias
+            android:name=".iconswitch.Alias_35"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_35"
+            android:roundIcon="@mipmap/ic_icon_35"
+            android:label="TalkMesh"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 36: MsgLink -->
+        <activity-alias
+            android:name=".iconswitch.Alias_36"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_36"
+            android:roundIcon="@mipmap/ic_icon_36"
+            android:label="MsgLink"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 37: ChatSpark -->
+        <activity-alias
+            android:name=".iconswitch.Alias_37"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_37"
+            android:roundIcon="@mipmap/ic_icon_37"
+            android:label="ChatSpark"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 38: TalkZap -->
+        <activity-alias
+            android:name=".iconswitch.Alias_38"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_38"
+            android:roundIcon="@mipmap/ic_icon_38"
+            android:label="TalkZap"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 39: MsgBuzz -->
+        <activity-alias
+            android:name=".iconswitch.Alias_39"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_39"
+            android:roundIcon="@mipmap/ic_icon_39"
+            android:label="MsgBuzz"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 40: ChatDrift -->
+        <activity-alias
+            android:name=".iconswitch.Alias_40"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_40"
+            android:roundIcon="@mipmap/ic_icon_40"
+            android:label="ChatDrift"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 41: TalkPad -->
+        <activity-alias
+            android:name=".iconswitch.Alias_41"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_41"
+            android:roundIcon="@mipmap/ic_icon_41"
+            android:label="TalkPad"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 42: MsgVault -->
+        <activity-alias
+            android:name=".iconswitch.Alias_42"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_42"
+            android:roundIcon="@mipmap/ic_icon_42"
+            android:label="MsgVault"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 43: ChatOrb -->
+        <activity-alias
+            android:name=".iconswitch.Alias_43"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_43"
+            android:roundIcon="@mipmap/ic_icon_43"
+            android:label="ChatOrb"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 44: TalkDeck -->
+        <activity-alias
+            android:name=".iconswitch.Alias_44"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_44"
+            android:roundIcon="@mipmap/ic_icon_44"
+            android:label="TalkDeck"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 45: MsgBeam -->
+        <activity-alias
+            android:name=".iconswitch.Alias_45"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_45"
+            android:roundIcon="@mipmap/ic_icon_45"
+            android:label="MsgBeam"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 46: ChatNode -->
+        <activity-alias
+            android:name=".iconswitch.Alias_46"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_46"
+            android:roundIcon="@mipmap/ic_icon_46"
+            android:label="ChatNode"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 47: TalkBase -->
+        <activity-alias
+            android:name=".iconswitch.Alias_47"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_47"
+            android:roundIcon="@mipmap/ic_icon_47"
+            android:label="TalkBase"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 48: MsgCore -->
+        <activity-alias
+            android:name=".iconswitch.Alias_48"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_48"
+            android:roundIcon="@mipmap/ic_icon_48"
+            android:label="MsgCore"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 49: ChatFlux -->
+        <activity-alias
+            android:name=".iconswitch.Alias_49"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_49"
+            android:roundIcon="@mipmap/ic_icon_49"
+            android:label="ChatFlux"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 50: TalkEdge -->
+        <activity-alias
+            android:name=".iconswitch.Alias_50"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_50"
+            android:roundIcon="@mipmap/ic_icon_50"
+            android:label="TalkEdge"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 51: MsgRing -->
+        <activity-alias
+            android:name=".iconswitch.Alias_51"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_51"
+            android:roundIcon="@mipmap/ic_icon_51"
+            android:label="MsgRing"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 52: ChatPlex -->
+        <activity-alias
+            android:name=".iconswitch.Alias_52"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_52"
+            android:roundIcon="@mipmap/ic_icon_52"
+            android:label="ChatPlex"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 53: TalkStar -->
+        <activity-alias
+            android:name=".iconswitch.Alias_53"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_53"
+            android:roundIcon="@mipmap/ic_icon_53"
+            android:label="TalkStar"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 54: MsgHive -->
+        <activity-alias
+            android:name=".iconswitch.Alias_54"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_54"
+            android:roundIcon="@mipmap/ic_icon_54"
+            android:label="MsgHive"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 55: ChatBit -->
+        <activity-alias
+            android:name=".iconswitch.Alias_55"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_55"
+            android:roundIcon="@mipmap/ic_icon_55"
+            android:label="ChatBit"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 56: TalkNote -->
+        <activity-alias
+            android:name=".iconswitch.Alias_56"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_56"
+            android:roundIcon="@mipmap/ic_icon_56"
+            android:label="TalkNote"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 57: MsgPort -->
+        <activity-alias
+            android:name=".iconswitch.Alias_57"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_57"
+            android:roundIcon="@mipmap/ic_icon_57"
+            android:label="MsgPort"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 58: ChatWeave -->
+        <activity-alias
+            android:name=".iconswitch.Alias_58"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_58"
+            android:roundIcon="@mipmap/ic_icon_58"
+            android:label="ChatWeave"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 59: TalkCast -->
+        <activity-alias
+            android:name=".iconswitch.Alias_59"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_59"
+            android:roundIcon="@mipmap/ic_icon_59"
+            android:label="TalkCast"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 60: MsgPeer -->
+        <activity-alias
+            android:name=".iconswitch.Alias_60"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_60"
+            android:roundIcon="@mipmap/ic_icon_60"
+            android:label="MsgPeer"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 61: ChatBridge -->
+        <activity-alias
+            android:name=".iconswitch.Alias_61"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_61"
+            android:roundIcon="@mipmap/ic_icon_61"
+            android:label="ChatBridge"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 62: TalkFusion -->
+        <activity-alias
+            android:name=".iconswitch.Alias_62"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_62"
+            android:roundIcon="@mipmap/ic_icon_62"
+            android:label="TalkFusion"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 63: MsgSwift -->
+        <activity-alias
+            android:name=".iconswitch.Alias_63"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_63"
+            android:roundIcon="@mipmap/ic_icon_63"
+            android:label="MsgSwift"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 64: ChatPulsar -->
+        <activity-alias
+            android:name=".iconswitch.Alias_64"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_64"
+            android:roundIcon="@mipmap/ic_icon_64"
+            android:label="ChatPulsar"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 65: TalkRelay -->
+        <activity-alias
+            android:name=".iconswitch.Alias_65"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_65"
+            android:roundIcon="@mipmap/ic_icon_65"
+            android:label="TalkRelay"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 66: MsgHop -->
+        <activity-alias
+            android:name=".iconswitch.Alias_66"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_66"
+            android:roundIcon="@mipmap/ic_icon_66"
+            android:label="MsgHop"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 67: ChatTrace -->
+        <activity-alias
+            android:name=".iconswitch.Alias_67"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_67"
+            android:roundIcon="@mipmap/ic_icon_67"
+            android:label="ChatTrace"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 68: TalkPath -->
+        <activity-alias
+            android:name=".iconswitch.Alias_68"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_68"
+            android:roundIcon="@mipmap/ic_icon_68"
+            android:label="TalkPath"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 69: MsgRoute -->
+        <activity-alias
+            android:name=".iconswitch.Alias_69"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_69"
+            android:roundIcon="@mipmap/ic_icon_69"
+            android:label="MsgRoute"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 70: ChatAxis -->
+        <activity-alias
+            android:name=".iconswitch.Alias_70"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_70"
+            android:roundIcon="@mipmap/ic_icon_70"
+            android:label="ChatAxis"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 71: TalkGo -->
+        <activity-alias
+            android:name=".iconswitch.Alias_71"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_71"
+            android:roundIcon="@mipmap/ic_icon_71"
+            android:label="TalkGo"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 72: MsgLift -->
+        <activity-alias
+            android:name=".iconswitch.Alias_72"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_72"
+            android:roundIcon="@mipmap/ic_icon_72"
+            android:label="MsgLift"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 73: ChatDot -->
+        <activity-alias
+            android:name=".iconswitch.Alias_73"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_73"
+            android:roundIcon="@mipmap/ic_icon_73"
+            android:label="ChatDot"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 74: TalkAir -->
+        <activity-alias
+            android:name=".iconswitch.Alias_74"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_74"
+            android:roundIcon="@mipmap/ic_icon_74"
+            android:label="TalkAir"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 75: MsgWire -->
+        <activity-alias
+            android:name=".iconswitch.Alias_75"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_75"
+            android:roundIcon="@mipmap/ic_icon_75"
+            android:label="MsgWire"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 76: ChatJet -->
+        <activity-alias
+            android:name=".iconswitch.Alias_76"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_76"
+            android:roundIcon="@mipmap/ic_icon_76"
+            android:label="ChatJet"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 77: TalkBit -->
+        <activity-alias
+            android:name=".iconswitch.Alias_77"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_77"
+            android:roundIcon="@mipmap/ic_icon_77"
+            android:label="TalkBit"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 78: MsgNova -->
+        <activity-alias
+            android:name=".iconswitch.Alias_78"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_78"
+            android:roundIcon="@mipmap/ic_icon_78"
+            android:label="MsgNova"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 79: ChatRipple -->
+        <activity-alias
+            android:name=".iconswitch.Alias_79"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_79"
+            android:roundIcon="@mipmap/ic_icon_79"
+            android:label="ChatRipple"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 80: TalkMint -->
+        <activity-alias
+            android:name=".iconswitch.Alias_80"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_80"
+            android:roundIcon="@mipmap/ic_icon_80"
+            android:label="TalkMint"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 81: MsgCloud -->
+        <activity-alias
+            android:name=".iconswitch.Alias_81"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_81"
+            android:roundIcon="@mipmap/ic_icon_81"
+            android:label="MsgCloud"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 82: ChatBreeze -->
+        <activity-alias
+            android:name=".iconswitch.Alias_82"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_82"
+            android:roundIcon="@mipmap/ic_icon_82"
+            android:label="ChatBreeze"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 83: TalkEcho -->
+        <activity-alias
+            android:name=".iconswitch.Alias_83"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_83"
+            android:roundIcon="@mipmap/ic_icon_83"
+            android:label="TalkEcho"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 84: MsgWarp -->
+        <activity-alias
+            android:name=".iconswitch.Alias_84"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_84"
+            android:roundIcon="@mipmap/ic_icon_84"
+            android:label="MsgWarp"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 85: ChatStream -->
+        <activity-alias
+            android:name=".iconswitch.Alias_85"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_85"
+            android:roundIcon="@mipmap/ic_icon_85"
+            android:label="ChatStream"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 86: TalkQuick -->
+        <activity-alias
+            android:name=".iconswitch.Alias_86"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_86"
+            android:roundIcon="@mipmap/ic_icon_86"
+            android:label="TalkQuick"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 87: MsgBolt -->
+        <activity-alias
+            android:name=".iconswitch.Alias_87"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_87"
+            android:roundIcon="@mipmap/ic_icon_87"
+            android:label="MsgBolt"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 88: ChatSphere -->
+        <activity-alias
+            android:name=".iconswitch.Alias_88"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_88"
+            android:roundIcon="@mipmap/ic_icon_88"
+            android:label="ChatSphere"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 89: TalkSpace -->
+        <activity-alias
+            android:name=".iconswitch.Alias_89"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_89"
+            android:roundIcon="@mipmap/ic_icon_89"
+            android:label="TalkSpace"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 90: MsgTap -->
+        <activity-alias
+            android:name=".iconswitch.Alias_90"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_90"
+            android:roundIcon="@mipmap/ic_icon_90"
+            android:label="MsgTap"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 91: ChatFlash -->
+        <activity-alias
+            android:name=".iconswitch.Alias_91"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_91"
+            android:roundIcon="@mipmap/ic_icon_91"
+            android:label="ChatFlash"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 92: TalkBlaze -->
+        <activity-alias
+            android:name=".iconswitch.Alias_92"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_92"
+            android:roundIcon="@mipmap/ic_icon_92"
+            android:label="TalkBlaze"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 93: MsgGlow -->
+        <activity-alias
+            android:name=".iconswitch.Alias_93"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_93"
+            android:roundIcon="@mipmap/ic_icon_93"
+            android:label="MsgGlow"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 94: ChatPulse -->
+        <activity-alias
+            android:name=".iconswitch.Alias_94"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_94"
+            android:roundIcon="@mipmap/ic_icon_94"
+            android:label="ChatPulse"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 95: TalkVolt -->
+        <activity-alias
+            android:name=".iconswitch.Alias_95"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_95"
+            android:roundIcon="@mipmap/ic_icon_95"
+            android:label="TalkVolt"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 96: MsgSnap -->
+        <activity-alias
+            android:name=".iconswitch.Alias_96"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_96"
+            android:roundIcon="@mipmap/ic_icon_96"
+            android:label="MsgSnap"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 97: ChatDial -->
+        <activity-alias
+            android:name=".iconswitch.Alias_97"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_97"
+            android:roundIcon="@mipmap/ic_icon_97"
+            android:label="ChatDial"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 98: TalkRush -->
+        <activity-alias
+            android:name=".iconswitch.Alias_98"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_98"
+            android:roundIcon="@mipmap/ic_icon_98"
+            android:label="TalkRush"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 99: MsgZone -->
+        <activity-alias
+            android:name=".iconswitch.Alias_99"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_99"
+            android:roundIcon="@mipmap/ic_icon_99"
+            android:label="MsgZone"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Alias 100: ChatWave -->
+        <activity-alias
+            android:name=".iconswitch.Alias_100"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_icon_100"
+            android:roundIcon="@mipmap/ic_icon_100"
+            android:label="ChatWave"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zemzeme" android:host="verify" />
+            </intent-filter>
+        </activity-alias>
+
+
 
         <!-- Persistent foreground service to run the mesh in background -->
         <service
