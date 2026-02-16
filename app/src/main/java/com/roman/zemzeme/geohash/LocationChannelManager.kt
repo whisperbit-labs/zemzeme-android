@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.roman.zemzeme.util.DebugLogger
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import kotlinx.coroutines.*
@@ -213,6 +214,22 @@ class LocationChannelManager private constructor(private val context: Context) {
      */
     fun select(channel: ChannelID) {
         Log.d(TAG, "Selected channel: ${channel.displayName}")
+        DebugLogger.log(
+            action = "GROUP_OPEN",
+            destName = channel.displayName,
+            destId = when (channel) {
+                is ChannelID.Location -> "geo:${channel.channel.geohash}"
+                is ChannelID.Mesh -> "mesh"
+            },
+            protocol = when (channel) {
+                is ChannelID.Location -> "NOSTR_GEOHASH"
+                is ChannelID.Mesh -> "BLE_MESH"
+            },
+            content = when (channel) {
+                is ChannelID.Location -> "[precision=${channel.channel.level.precision}]"
+                is ChannelID.Mesh -> "[local-mesh]"
+            }
+        )
         // Use synchronous set to avoid race with background recomputation
         _selectedChannel.value = channel
         saveChannelSelection(channel)

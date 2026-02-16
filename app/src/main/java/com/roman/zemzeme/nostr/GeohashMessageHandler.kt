@@ -25,7 +25,15 @@ class GeohashMessageHandler(
     private val scope: CoroutineScope,
     private val dataManager: com.roman.zemzeme.ui.DataManager
 ) {
-    companion object { private const val TAG = "GeohashMessageHandler" }
+    companion object {
+        private const val TAG = "GeohashMessageHandler"
+
+        private fun decodeBase64Url(input: String): ByteArray? = try {
+            val padded = input.replace("-", "+").replace("_", "/")
+                .let { it + "=".repeat((4 - it.length % 4) % 4) }
+            android.util.Base64.decode(padded, android.util.Base64.DEFAULT)
+        } catch (_: Exception) { null }
+    }
 
     // Simple event deduplication
     private val processedIds = ArrayDeque<String>()
@@ -96,6 +104,35 @@ class GeohashMessageHandler(
                 if (isTeleportPresence) return@launch
 
                 val senderName = repo.displayNameForNostrPubkeyUI(event.pubkey)
+
+                // Media transfer embedded as bitchat1:<base64url> in event content
+                if (event.content.startsWith("bitchat1:")) {
+                    val b64 = event.content.removePrefix("bitchat1:")
+                    val fileBytes = decodeBase64Url(b64)
+                    if (fileBytes != null) {
+                        val filePacket = com.roman.zemzeme.model.ZemzemeFilePacket.decode(fileBytes)
+                        if (filePacket != null) {
+                            val savedPath = com.roman.zemzeme.features.file.FileUtils.saveIncomingFile(application, filePacket)
+                            val msgType = com.roman.zemzeme.features.file.FileUtils.messageTypeForMime(filePacket.mimeType)
+                            val mediaMsg = ZemzemeMessage(
+                                id = event.id,
+                                sender = senderName,
+                                content = savedPath,
+                                type = msgType,
+                                timestamp = Date(event.createdAt * 1000L),
+                                isRelay = false,
+                                originalSender = repo.displayNameForNostrPubkey(event.pubkey),
+                                senderPeerID = "nostr:${event.pubkey.take(8)}",
+                                channel = "#$subscribedGeohash"
+                            )
+                            withContext(Dispatchers.Main) { messageManager.addChannelMessage("geo:$subscribedGeohash", mediaMsg) }
+                            return@launch
+                        }
+                    }
+                    Log.w(TAG, "Failed to decode geohash media event ${event.id.take(8)}")
+                    return@launch
+                }
+
                 val hasNonce = try { NostrProofOfWork.hasNonce(event) } catch (_: Exception) { false }
                 val msg = ZemzemeMessage(
                     id = event.id,

@@ -1,11 +1,12 @@
 package com.roman.zemzeme.p2p
 
 import android.content.Context
+import android.util.Base64
 import android.util.Log
-import com.roman.zemzeme.model.ZemzemeMessage
-import com.roman.zemzeme.model.NoisePayloadType
+import com.roman.zemzeme.model.ZemzemeFilePacket
 import com.roman.zemzeme.nostr.NostrTransport
 import com.google.gson.Gson
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CoroutineScope
@@ -48,6 +49,12 @@ class P2PTransport private constructor(
     }
     
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    /** Chunk size for P2P media transfers (200 KB of raw binary per chunk). */
+    private val MEDIA_CHUNK_SIZE = 200 * 1024
+
+    /** Separate assembler for incoming P2P media chunks. */
+    private val chunkAssembler = P2PChunkAssembler()
     
     // Gson is thread-safe with default configuration, but we use lazy init for safety
     private val gson: Gson by lazy { Gson() }
@@ -79,7 +86,8 @@ class P2PTransport private constructor(
     }
     
     /**
-     * Data class for incoming messages from P2P
+     * Data class for incoming messages from P2P.
+     * When [fileBytes] is non-null the message carries media; [content] will be empty.
      */
     data class P2PIncomingMessage(
         val senderPeerID: String,
@@ -87,7 +95,11 @@ class P2PTransport private constructor(
         val type: P2PMessageType,
         val topicName: String? = null,
         val timestamp: Long = System.currentTimeMillis(),
-        val senderNickname: String? = null
+        val senderNickname: String? = null,
+        // ── media payload (null = text message) ─────────────────────────
+        val fileBytes: ByteArray? = null,
+        val fileName: String? = null,
+        val contentType: String? = null
     )
     
     enum class P2PMessageType {
@@ -99,13 +111,22 @@ class P2PTransport private constructor(
     /**
      * P2P wire message format.
      * Wraps Zemzeme message content with type information.
+     * All media fields are optional (null = text message).
      */
     data class P2PWireMessage(
         val type: String,               // "dm", "channel", "topic"
-        val content: String,            // Actual message content
+        val content: String,            // Text content, or "" for media messages
         val messageID: String,          // Unique message ID
         val senderNickname: String?,    // Optional sender nickname
-        val timestamp: Long             // Unix timestamp
+        val timestamp: Long,            // Unix timestamp
+        // ── media fields (null for text messages) ──────────────────────
+        val contentType: String? = null,  // e.g. "image/jpeg", "audio/mp4"
+        val fileName: String? = null,
+        val fileSize: Long? = null,
+        val chunkId: String? = null,      // Stable UUID across all chunks for one file
+        val chunkIndex: Int? = null,      // 0-based chunk index
+        val totalChunks: Int? = null,
+        val fileData: String? = null      // Base64-encoded chunk bytes
     )
     
     // ============== Initialization ==============
@@ -276,6 +297,105 @@ class P2PTransport private constructor(
         }
     }
     
+    // ============== Media Sending ==============
+
+    /**
+     * Send a [ZemzemeFilePacket] to a P2P peer (DM) or channel topic, asynchronously.
+     *
+     * The file is Base64-encoded and split into ≤200 KB chunks, each wrapped in a
+     * [P2PWireMessage] with media fields.  For DMs ([channelOrNull] == null) the chunks
+     * are sent directly to [rawPeerID]; for channel sends they are published to the
+     * channel's GossipSub topic.
+     *
+     * @param rawPeerID     libp2p Peer ID without the "p2p:" prefix (for DMs).
+     * @param filePacket    The file to send.
+     * @param channelOrNull Channel/topic name, or null for a private DM.
+     * @param messageID     Stable ID for this media message.
+     * @param senderNickname Our display nickname to embed in each chunk.
+     * @param onComplete    Called on the IO dispatcher with true on success, false on failure.
+     */
+    fun sendMediaAsync(
+        rawPeerID: String,
+        filePacket: ZemzemeFilePacket,
+        channelOrNull: String?,
+        messageID: String,
+        senderNickname: String,
+        onComplete: ((Boolean) -> Unit)? = null
+    ) {
+        scope.launch {
+            val success = sendMedia(rawPeerID, filePacket, channelOrNull, messageID, senderNickname)
+            onComplete?.invoke(success)
+        }
+    }
+
+    private suspend fun sendMedia(
+        rawPeerID: String,
+        filePacket: ZemzemeFilePacket,
+        channelOrNull: String?,
+        messageID: String,
+        senderNickname: String
+    ): Boolean = withContext(Dispatchers.IO) {
+        if (!isRunning()) {
+            Log.w(TAG, "sendMedia failed: P2P not running")
+            return@withContext false
+        }
+
+        val fileBytes = filePacket.encode() ?: run {
+            Log.e(TAG, "sendMedia: failed to encode ZemzemeFilePacket")
+            return@withContext false
+        }
+
+        // Split into ≤200 KB chunks
+        val chunkId = UUID.randomUUID().toString()
+        val totalChunks = (fileBytes.size + MEDIA_CHUNK_SIZE - 1) / MEDIA_CHUNK_SIZE
+
+        Log.i(TAG, "sendMedia: ${filePacket.fileName} ${fileBytes.size} bytes → $totalChunks chunk(s) chunkId=${chunkId.take(8)}")
+
+        for (i in 0 until totalChunks) {
+            val start = i * MEDIA_CHUNK_SIZE
+            val end = minOf(start + MEDIA_CHUNK_SIZE, fileBytes.size)
+            val chunkBytes = fileBytes.copyOfRange(start, end)
+            val chunkB64 = Base64.encodeToString(chunkBytes, Base64.NO_WRAP)
+
+            val wireMessage = P2PWireMessage(
+                type = if (channelOrNull != null) "channel" else "dm",
+                content = "",
+                messageID = messageID,
+                senderNickname = senderNickname,
+                timestamp = System.currentTimeMillis(),
+                contentType = filePacket.mimeType,
+                fileName = filePacket.fileName,
+                fileSize = filePacket.fileSize,
+                chunkId = chunkId,
+                chunkIndex = i,
+                totalChunks = totalChunks,
+                fileData = chunkB64
+            )
+
+            val json = gson.toJson(wireMessage)
+
+            val result = if (channelOrNull != null) {
+                p2pRepository.publishToTopic(channelOrNull, json)
+            } else {
+                // Ensure connection before sending
+                if (!p2pRepository.isConnected(rawPeerID)) {
+                    p2pRepository.connectToPeer(rawPeerID)
+                }
+                p2pRepository.sendMessage(rawPeerID, json)
+            }
+
+            if (result.isFailure) {
+                Log.w(TAG, "sendMedia chunk $i failed: ${result.exceptionOrNull()?.message}")
+                return@withContext false
+            }
+
+            Log.d(TAG, "sendMedia chunk $i/$totalChunks sent (${chunkBytes.size} bytes)")
+        }
+
+        Log.i(TAG, "sendMedia: all $totalChunks chunk(s) sent for ${filePacket.fileName}")
+        true
+    }
+
     // ============== Topic/Channel Operations ==============
     
     /**
@@ -360,10 +480,56 @@ class P2PTransport private constructor(
     
     private fun handleIncomingP2PMessage(message: P2PMessage) {
         Log.i(TAG, "handleIncomingP2PMessage: isTopicMessage=${message.isTopicMessage}, topicName=${message.topicName}, content=${message.content.take(30)}...")
-        
+
         try {
             val wireMessage = gson.fromJson(message.content, P2PWireMessage::class.java)
-            
+
+            // ── Media chunk ──────────────────────────────────────────────────
+            if (wireMessage.contentType != null && wireMessage.fileData != null) {
+                val chunkId = wireMessage.chunkId ?: run {
+                    Log.w(TAG, "Media message missing chunkId, dropping")
+                    return
+                }
+                val chunkIndex = wireMessage.chunkIndex ?: 0
+                val totalChunks = wireMessage.totalChunks ?: 1
+                val contentType = wireMessage.contentType
+                val fileName = wireMessage.fileName ?: "file"
+
+                val chunkBytes = try {
+                    Base64.decode(wireMessage.fileData, Base64.DEFAULT)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Failed to Base64-decode media chunk: ${e.message}")
+                    return
+                }
+
+                val assembled = chunkAssembler.addChunk(
+                    chunkId, chunkIndex, totalChunks, contentType, fileName, chunkBytes
+                )
+
+                if (assembled != null) {
+                    val msgType = when (wireMessage.type) {
+                        "channel" -> P2PMessageType.CHANNEL_MESSAGE
+                        "topic", "geohash" -> P2PMessageType.TOPIC_MESSAGE
+                        else -> P2PMessageType.DIRECT_MESSAGE
+                    }
+                    val incomingMedia = P2PIncomingMessage(
+                        senderPeerID = message.senderPeerID,
+                        content = "",
+                        type = msgType,
+                        topicName = message.topicName,
+                        timestamp = wireMessage.timestamp,
+                        senderNickname = wireMessage.senderNickname,
+                        fileBytes = assembled.bytes,
+                        fileName = assembled.fileName,
+                        contentType = assembled.contentType
+                    )
+                    Log.i(TAG, "P2P media assembled (${assembled.bytes.size} bytes) from ${message.senderPeerID}")
+                    messageCallback.get()?.invoke(incomingMedia)
+                }
+                return
+            }
+
+            // ── Text message ─────────────────────────────────────────────────
             val incomingMessage = P2PIncomingMessage(
                 senderPeerID = message.senderPeerID,
                 content = wireMessage.content,
@@ -377,16 +543,16 @@ class P2PTransport private constructor(
                 timestamp = wireMessage.timestamp,
                 senderNickname = wireMessage.senderNickname
             )
-            
+
             Log.i(TAG, "Parsed wire message: type=${wireMessage.type} -> ${incomingMessage.type}")
             messageCallback.get()?.invoke(incomingMessage)
             Log.i(TAG, "Received P2P message from ${message.senderPeerID}: ${wireMessage.content.take(50)}...")
-            
+
         } catch (e: Exception) {
-            // Message might not be in our wire format (could be raw text)
+            // Message not in our wire format (raw text fallback)
             val computedType = if (message.isTopicMessage) P2PMessageType.TOPIC_MESSAGE else P2PMessageType.DIRECT_MESSAGE
             Log.i(TAG, "JSON parse failed, using raw: isTopicMessage=${message.isTopicMessage} -> $computedType")
-            
+
             val incomingMessage = P2PIncomingMessage(
                 senderPeerID = message.senderPeerID,
                 content = message.content,
@@ -394,7 +560,7 @@ class P2PTransport private constructor(
                 topicName = message.topicName,
                 timestamp = message.timestamp
             )
-            
+
             messageCallback.get()?.invoke(incomingMessage)
             Log.i(TAG, "Received raw P2P message from ${message.senderPeerID}")
         }

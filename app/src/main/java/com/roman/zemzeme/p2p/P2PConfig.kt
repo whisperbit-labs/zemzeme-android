@@ -85,28 +85,12 @@ class P2PConfig(private val context: Context) {
             }
         }
 
-        private fun normalizeMutuallyExclusive(toggles: TransportToggles): TransportToggles {
-            // P2P and Nostr cannot be enabled at the same time.
-            return if (toggles.p2pEnabled && toggles.nostrEnabled) {
-                toggles.copy(nostrEnabled = false)
-            } else {
-                toggles
-            }
-        }
-
         private fun readTransportToggles(prefs: SharedPreferences): TransportToggles {
-            val raw = TransportToggles(
+            return TransportToggles(
                 bleEnabled = prefs.getBoolean(KEY_BLE_ENABLED, DEFAULT_BLE_ENABLED),
                 p2pEnabled = prefs.getBoolean(KEY_P2P_ENABLED, DEFAULT_P2P_ENABLED),
                 nostrEnabled = prefs.getBoolean(KEY_NOSTR_ENABLED, DEFAULT_NOSTR_ENABLED)
             )
-
-            val normalized = normalizeMutuallyExclusive(raw)
-            if (normalized != raw) {
-                prefs.edit().putBoolean(KEY_NOSTR_ENABLED, normalized.nostrEnabled).apply()
-                Log.w(TAG, "P2P and Nostr were both enabled; forcing Nostr off")
-            }
-            return normalized
         }
     }
     
@@ -140,20 +124,11 @@ class P2PConfig(private val context: Context) {
         _transportTogglesFlow.value = getTransportToggles()
     }
 
-    private fun normalizeMutuallyExclusive(toggles: TransportToggles): TransportToggles {
-        return if (toggles.p2pEnabled && toggles.nostrEnabled) {
-            toggles.copy(nostrEnabled = false)
-        } else {
-            toggles
-        }
-    }
-
     private fun saveTransportToggles(target: TransportToggles) {
-        val normalized = normalizeMutuallyExclusive(target)
         prefs.edit()
-            .putBoolean(KEY_BLE_ENABLED, normalized.bleEnabled)
-            .putBoolean(KEY_P2P_ENABLED, normalized.p2pEnabled)
-            .putBoolean(KEY_NOSTR_ENABLED, normalized.nostrEnabled)
+            .putBoolean(KEY_BLE_ENABLED, target.bleEnabled)
+            .putBoolean(KEY_P2P_ENABLED, target.p2pEnabled)
+            .putBoolean(KEY_NOSTR_ENABLED, target.nostrEnabled)
             .apply()
         publishTransportToggles()
     }
@@ -169,11 +144,7 @@ class P2PConfig(private val context: Context) {
         set(value) {
             synchronized(transportToggleWriteLock) {
                 val current = getTransportToggles()
-                val target = if (value) {
-                    current.copy(p2pEnabled = true, nostrEnabled = false)
-                } else {
-                    current.copy(p2pEnabled = false)
-                }
+                val target = current.copy(p2pEnabled = value)
                 saveTransportToggles(target)
                 Log.d(TAG, "P2P enabled: ${target.p2pEnabled}, Nostr enabled: ${target.nostrEnabled}")
             }
@@ -201,11 +172,7 @@ class P2PConfig(private val context: Context) {
         set(value) {
             synchronized(transportToggleWriteLock) {
                 val current = getTransportToggles()
-                val target = if (value) {
-                    current.copy(nostrEnabled = true, p2pEnabled = false)
-                } else {
-                    current.copy(nostrEnabled = false)
-                }
+                val target = current.copy(nostrEnabled = value)
                 saveTransportToggles(target)
                 Log.d(TAG, "Nostr enabled: ${target.nostrEnabled}, P2P enabled: ${target.p2pEnabled}")
             }

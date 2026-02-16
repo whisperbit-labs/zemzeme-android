@@ -8,6 +8,7 @@ import com.roman.zemzeme.model.DeliveryStatus
 import com.roman.zemzeme.model.NoisePayload
 import com.roman.zemzeme.model.NoisePayloadType
 import com.roman.zemzeme.model.PrivateMessagePacket
+import com.roman.zemzeme.protocol.MessageType
 import com.roman.zemzeme.protocol.ZemzemePacket
 import com.roman.zemzeme.services.SeenMessageStore
 import com.roman.zemzeme.ui.ChatState
@@ -74,9 +75,21 @@ class NostrDirectMessageHandler(
                 val packetData = base64URLDecode(base64Content) ?: return@launch
                 val packet = ZemzemePacket.fromBinaryData(packetData) ?: return@launch
 
-                if (packet.type != com.roman.zemzeme.protocol.MessageType.NOISE_ENCRYPTED.value) return@launch
+                // Route FRAGMENT packets through the Nostr-specific assembler.
+                // When all fragments arrive the assembler returns the full NOISE_ENCRYPTED packet.
+                val resolvedPacket: ZemzemePacket = when (packet.type) {
+                    MessageType.NOISE_ENCRYPTED.value -> packet
+                    MessageType.FRAGMENT.value -> {
+                        val assembled = NostrFragmentAssembler.handleFragment(packet)
+                        if (assembled == null) return@launch // still waiting for more fragments
+                        assembled
+                    }
+                    else -> return@launch
+                }
 
-                val noisePayload = NoisePayload.decode(packet.payload) ?: return@launch
+                if (resolvedPacket.type != MessageType.NOISE_ENCRYPTED.value) return@launch
+
+                val noisePayload = NoisePayload.decode(resolvedPacket.payload) ?: return@launch
                 val messageTimestamp = Date(giftWrap.createdAt * 1000L)
                 val convKey = "nostr_${senderPubkey.take(16)}"
                 repo.putNostrKeyMapping(convKey, senderPubkey)

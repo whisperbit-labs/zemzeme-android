@@ -13,8 +13,14 @@ import java.util.*
  * Direct port from iOS implementation for 100% compatibility
  */
 object NostrEmbeddedZemzeme {
-    
+
     private const val TAG = "NostrEmbeddedZemzeme"
+
+    /**
+     * Files whose TLV encoding is smaller than this threshold are sent as a single Gift Wrap.
+     * Larger files are split via [FragmentManager.createFragments] and sent as multiple wraps.
+     */
+    const val NOSTR_INLINE_FILE_THRESHOLD = 48 * 1024 // 48 KB
     
     /**
      * Build a `bitchat1:` base64url-encoded Zemzeme packet carrying a private message for Nostr DMs.
@@ -169,6 +175,96 @@ object NostrEmbeddedZemzeme {
         }
     }
     
+    // ── File-transfer helpers ────────────────────────────────────────────────
+
+    /**
+     * Build a `bitchat1:` payload carrying a [ZemzemeFilePacket] for a Nostr DM.
+     *
+     * The packet has type [MessageType.NOISE_ENCRYPTED] with a
+     * [NoisePayloadType.FILE_TRANSFER] prefix byte, matching what
+     * [NostrDirectMessageHandler] already decodes on the receive side.
+     *
+     * For files ≥ [NOSTR_INLINE_FILE_THRESHOLD] bytes use
+     * [encodePacketForNostr] on each fragment produced by [FragmentManager].
+     */
+    fun encodeFileTransferForNostr(
+        filePacketBytes: ByteArray,
+        messageID: String,
+        recipientPeerID: String,
+        senderPeerID: String
+    ): String? {
+        try {
+            val payload = ByteArray(1 + filePacketBytes.size)
+            payload[0] = NoisePayloadType.FILE_TRANSFER.value.toByte()
+            System.arraycopy(filePacketBytes, 0, payload, 1, filePacketBytes.size)
+
+            val recipientIDHex = normalizeRecipientPeerID(recipientPeerID)
+
+            val packet = ZemzemePacket(
+                version = 1u,
+                type = com.roman.zemzeme.protocol.MessageType.NOISE_ENCRYPTED.value,
+                senderID = hexStringToByteArray(senderPeerID),
+                recipientID = hexStringToByteArray(recipientIDHex),
+                timestamp = System.currentTimeMillis().toULong(),
+                payload = payload,
+                signature = null,
+                ttl = com.roman.zemzeme.util.AppConstants.MESSAGE_TTL_HOPS
+            )
+
+            val data = packet.toBinaryData() ?: return null
+            return "bitchat1:" + base64URLEncode(data)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to encode file transfer for Nostr: ${e.message}")
+            return null
+        }
+    }
+
+    /**
+     * Geohash-identity variant of [encodeFileTransferForNostr] (no recipient peer ID embedded).
+     */
+    fun encodeFileTransferForNostrNoRecipient(
+        filePacketBytes: ByteArray,
+        messageID: String,
+        senderPeerID: String
+    ): String? {
+        try {
+            val payload = ByteArray(1 + filePacketBytes.size)
+            payload[0] = NoisePayloadType.FILE_TRANSFER.value.toByte()
+            System.arraycopy(filePacketBytes, 0, payload, 1, filePacketBytes.size)
+
+            val packet = ZemzemePacket(
+                version = 1u,
+                type = com.roman.zemzeme.protocol.MessageType.NOISE_ENCRYPTED.value,
+                senderID = hexStringToByteArray(senderPeerID),
+                recipientID = null,
+                timestamp = System.currentTimeMillis().toULong(),
+                payload = payload,
+                signature = null,
+                ttl = com.roman.zemzeme.util.AppConstants.MESSAGE_TTL_HOPS
+            )
+
+            val data = packet.toBinaryData() ?: return null
+            return "bitchat1:" + base64URLEncode(data)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to encode file transfer for Nostr (no recipient): ${e.message}")
+            return null
+        }
+    }
+
+    /**
+     * Encode an already-constructed [ZemzemePacket] (e.g. a FRAGMENT packet from
+     * [FragmentManager.createFragments]) into the `bitchat1:` wire format.
+     */
+    fun encodePacketForNostr(packet: ZemzemePacket): String? {
+        return try {
+            val data = packet.toBinaryData() ?: return null
+            "bitchat1:" + base64URLEncode(data)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to encode packet for Nostr: ${e.message}")
+            null
+        }
+    }
+
     /**
      * Normalize recipient peer ID (matches iOS implementation)
      */

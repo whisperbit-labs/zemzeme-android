@@ -1,6 +1,7 @@
 package com.roman.zemzeme
 
 import android.app.Application
+import com.roman.zemzeme.iconswitch.IconSwitchTaskDescription
 import com.roman.zemzeme.nostr.RelayDirectory
 import com.roman.zemzeme.ui.theme.ThemePreferenceManager
 import com.roman.zemzeme.net.ArtiTorManager
@@ -58,6 +59,9 @@ class ZemzemeApplication : Application() {
 
         // Proactively start the foreground service to keep mesh alive
         try { com.roman.zemzeme.service.MeshForegroundService.start(this) } catch (_: Exception) { }
+
+        // Update recent-apps card with current dynamic icon/name
+        registerActivityLifecycleCallbacks(IconSwitchTaskDescription())
 
         // TorManager already initialized above
     }

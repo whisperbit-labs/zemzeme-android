@@ -178,6 +178,7 @@ class P2PTopicsRepository private constructor(
                 initTopicState(topic.name)
                 p2pLibraryRepository.subscribeTopic(topic.name)
                 startTopicDiscovery(topic.name)
+                startContinuousRefresh(topic.name)
                 Log.d(TAG, "Re-subscribed to saved topic: ${topic.name}")
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to re-subscribe to ${topic.name}: ${e.message}")
@@ -282,14 +283,16 @@ class P2PTopicsRepository private constructor(
                 return@withContext
             }
             
-            // Set state to CONNECTING while discovering
+            // Only set state to CONNECTING if not already connected with peers
             val current = _topicStates.value.toMutableMap()
             val state = current[topicName] ?: TopicState()
-            current[topicName] = state.copy(
-                connectionState = TopicConnectionState.CONNECTING,
-                lastUpdated = System.currentTimeMillis()
-            )
-            _topicStates.value = current
+            if (state.connectionState != TopicConnectionState.CONNECTED || state.peers.isEmpty()) {
+                current[topicName] = state.copy(
+                    connectionState = TopicConnectionState.CONNECTING,
+                    lastUpdated = System.currentTimeMillis()
+                )
+                _topicStates.value = current
+            }
             
             Log.d(TAG, "Starting DHT discovery for topic: $topicName")
             
@@ -535,8 +538,11 @@ class P2PTopicsRepository private constructor(
     
     private fun initTopicState(topicName: String) {
         val current = _topicStates.value.toMutableMap()
-        current[topicName] = TopicState(connectionState = TopicConnectionState.CONNECTING)
-        _topicStates.value = current
+        // Don't overwrite existing state if already connected
+        if (current[topicName] == null) {
+            current[topicName] = TopicState(connectionState = TopicConnectionState.CONNECTING)
+            _topicStates.value = current
+        }
     }
     
     private fun initTopicData(topicName: String) {
@@ -691,17 +697,21 @@ class P2PTopicsRepository private constructor(
                 .split(",")
                 .map { it.trim().removeSurrounding("\"") }
                 .filter { it.isNotBlank() }
-            
+                .filter { !it.startsWith("meta:") } // Remove legacy meta topics
+
             _subscribedTopics.value = topicNames.map { TopicInfo(it) }
-            
+
             // Initialize states
             val initialStates = mutableMapOf<String, TopicState>()
             topicNames.forEach { name ->
                 initialStates[name] = TopicState(connectionState = TopicConnectionState.CONNECTING)
             }
             _topicStates.value = initialStates
-            
+
             Log.d(TAG, "Loaded ${topicNames.size} saved topics")
+
+            // Persist cleaned list (removes any legacy meta: topics)
+            saveTopics()
         } catch (e: Exception) {
             Log.e(TAG, "Failed to load saved topics: ${e.message}")
             _subscribedTopics.value = emptyList()
