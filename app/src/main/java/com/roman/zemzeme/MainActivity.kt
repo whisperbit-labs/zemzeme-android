@@ -7,6 +7,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -19,14 +20,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
 import com.roman.zemzeme.mesh.BluetoothMeshService
+import com.roman.zemzeme.onboarding.AppLockSetupScreen
 import com.roman.zemzeme.onboarding.BluetoothCheckScreen
 import com.roman.zemzeme.onboarding.BluetoothStatus
 import com.roman.zemzeme.onboarding.BluetoothStatusManager
 import com.roman.zemzeme.onboarding.BatteryOptimizationManager
-import com.roman.zemzeme.onboarding.BatteryOptimizationPreferenceManager
-import com.roman.zemzeme.onboarding.BatteryOptimizationScreen
-import com.roman.zemzeme.onboarding.BatteryOptimizationStatus
-import com.roman.zemzeme.onboarding.BackgroundLocationPermissionScreen
+import com.roman.zemzeme.onboarding.PermissionType
 import com.roman.zemzeme.onboarding.InitializationErrorScreen
 import com.roman.zemzeme.onboarding.InitializingScreen
 import com.roman.zemzeme.onboarding.LocationCheckScreen
@@ -38,6 +37,7 @@ import com.roman.zemzeme.onboarding.OnboardingCoordinator
 import com.roman.zemzeme.onboarding.OnboardingState
 import com.roman.zemzeme.onboarding.PermissionExplanationScreen
 import com.roman.zemzeme.onboarding.PermissionManager
+import com.roman.zemzeme.ui.AppLockScreen
 import com.roman.zemzeme.ui.ChatScreen
 import com.roman.zemzeme.ui.ChatViewModel
 import com.roman.zemzeme.ui.HomeScreen
@@ -45,6 +45,8 @@ import com.roman.zemzeme.ui.OrientationAwareActivity
 import com.roman.zemzeme.ui.theme.ZemzemeTheme
 import androidx.activity.compose.BackHandler
 import com.roman.zemzeme.nostr.PoWPreferenceManager
+import com.roman.zemzeme.security.AppLockManager
+import com.roman.zemzeme.security.AppLockPreferenceManager
 import com.roman.zemzeme.services.VerificationService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,7 +59,15 @@ class MainActivity : OrientationAwareActivity() {
     private lateinit var networkStatusManager: NetworkStatusManager
     private lateinit var locationStatusManager: LocationStatusManager
     private lateinit var batteryOptimizationManager: BatteryOptimizationManager
-    
+
+    // True while we are launching a child activity (camera, image picker, audio recorder, etc.).
+    // Used in onStop() to distinguish "user left the app" from "we opened a picker".
+    private var startingChildActivity = false
+
+    // Tracks permission types that have been requested at least once,
+    // so we can detect when Android permanently denied them (won't show dialog again)
+    private val previouslyRequestedPermissionTypes = mutableSetOf<PermissionType>()
+
     // Core mesh service - provided by the foreground service holder
     private lateinit var meshService: BluetoothMeshService
     private val mainViewModel: MainViewModel by viewModels()
@@ -110,7 +120,11 @@ class MainActivity : OrientationAwareActivity() {
         }
 
         com.roman.zemzeme.service.AppShutdownCoordinator.cancelPendingShutdown()
-        
+
+        // Initialize app-lock preferences (needed before any lock state check)
+        AppLockPreferenceManager.init(applicationContext)
+        AppLockManager.initLockState()
+
         // Enable edge-to-edge display for modern Android look
         enableEdgeToEdge()
 
@@ -135,29 +149,44 @@ class MainActivity : OrientationAwareActivity() {
         batteryOptimizationManager = BatteryOptimizationManager(
             activity = this,
             context = this,
-            onBatteryOptimizationDisabled = ::handleBatteryOptimizationDisabled,
-            onBatteryOptimizationFailed = ::handleBatteryOptimizationFailed
+            onBatteryOptimizationDisabled = {
+                Log.d("MainActivity", "Battery optimization disabled by user")
+            },
+            onBatteryOptimizationFailed = { message ->
+                Log.w("MainActivity", "Battery optimization failed: $message")
+            }
         )
         onboardingCoordinator = OnboardingCoordinator(
             activity = this,
             permissionManager = permissionManager,
             onOnboardingComplete = ::handleOnboardingComplete,
-            onBackgroundLocationRequired = {
-                mainViewModel.updateOnboardingState(OnboardingState.BACKGROUND_LOCATION_EXPLANATION)
-            },
             onOnboardingFailed = ::handleOnboardingFailed
         )
         
         setContent {
+            val isLocked by AppLockManager.isLocked.collectAsState()
+            val currentOnboardingState by mainViewModel.onboardingState.collectAsState()
+
             ZemzemeTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.background
                 ) { innerPadding ->
-                    OnboardingFlowScreen(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                    )
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        // Only render chat content when not locked — prevents flash of content
+                        if (!isLocked || currentOnboardingState != OnboardingState.COMPLETE) {
+                            OnboardingFlowScreen(modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                            )
+                        }
+                        if (isLocked && currentOnboardingState == OnboardingState.COMPLETE) {
+                            AppLockScreen(
+                                activity = this@MainActivity,
+                                onUnlocked = { AppLockManager.unlock() }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -184,11 +213,9 @@ class MainActivity : OrientationAwareActivity() {
         val onboardingState by mainViewModel.onboardingState.collectAsState()
         val bluetoothStatus by mainViewModel.bluetoothStatus.collectAsState()
         val locationStatus by mainViewModel.locationStatus.collectAsState()
-        val batteryOptimizationStatus by mainViewModel.batteryOptimizationStatus.collectAsState()
         val errorMessage by mainViewModel.errorMessage.collectAsState()
         val isBluetoothLoading by mainViewModel.isBluetoothLoading.collectAsState()
         val isLocationLoading by mainViewModel.isLocationLoading.collectAsState()
-        val isBatteryOptimizationLoading by mainViewModel.isBatteryOptimizationLoading.collectAsState()
 
         DisposableEffect(context, bluetoothStatusManager, networkStatusManager) {
 
@@ -258,90 +285,94 @@ class MainActivity : OrientationAwareActivity() {
                 )
             }
             
-            OnboardingState.BATTERY_OPTIMIZATION_CHECK -> {
-                BatteryOptimizationScreen(
-                    modifier = modifier,
-                    status = batteryOptimizationStatus,
-                    onDisableBatteryOptimization = {
-                        mainViewModel.updateBatteryOptimizationLoading(true)
-                        batteryOptimizationManager.requestDisableBatteryOptimization()
-                    },
-                    onRetry = {
-                        checkBatteryOptimizationAndProceed()
-                    },
-                    onSkip = {
-                        // Skip battery optimization and proceed
-                        proceedWithPermissionCheck()
-                    },
-                    isLoading = isBatteryOptimizationLoading
-                )
-            }
-            
             OnboardingState.PERMISSION_EXPLANATION -> {
                 PermissionExplanationScreen(
                     modifier = modifier,
-                    permissionCategories = permissionManager.getCategorizedPermissions(),
+                    permissionManager = permissionManager,
+                    onRequestPermissionForCategory = { category ->
+                        previouslyRequestedPermissionTypes.add(category.type)
+
+                        when (category.type) {
+                            PermissionType.BATTERY_OPTIMIZATION ->
+                                batteryOptimizationManager.requestDisableBatteryOptimization()
+                            else -> {
+                                if (category.type == PermissionType.BACKGROUND_LOCATION) {
+                                    onboardingCoordinator.requestBackgroundLocation()
+                                } else {
+                                    onboardingCoordinator.requestSpecificPermissions(category.permissions)
+                                }
+                            }
+                        }
+                    },
+                    onOpenSettings = {
+                        onboardingCoordinator.openAppSettings()
+                    },
                     onContinue = {
                         mainViewModel.updateOnboardingState(OnboardingState.PERMISSION_REQUESTING)
-                        onboardingCoordinator.requestPermissions()
+                        onboardingCoordinator.startOnboarding()
                     }
                 )
             }
 
-            OnboardingState.BACKGROUND_LOCATION_EXPLANATION -> {
-                BackgroundLocationPermissionScreen(
+            OnboardingState.APP_LOCK_SETUP -> {
+                AppLockSetupScreen(
                     modifier = modifier,
-                    onContinue = {
-                        onboardingCoordinator.requestBackgroundLocation()
-                    },
-                    onRetry = {
-                        onboardingCoordinator.checkBackgroundLocationAndProceed()
-                    },
-                    onSkip = {
-                        onboardingCoordinator.skipBackgroundLocation()
+                    onComplete = {
+                        AppLockPreferenceManager.markSetupPromptShown()
+                        AppLockManager.initLockState()
+                        mainViewModel.updateOnboardingState(OnboardingState.COMPLETE)
                     }
                 )
             }
 
             OnboardingState.CHECKING, OnboardingState.INITIALIZING, OnboardingState.COMPLETE -> {
-                val isInChat by mainViewModel.isInChat.collectAsState()
+                val isLockedInner by AppLockManager.isLocked.collectAsState()
 
-                if (isInChat) {
-                    BackHandler {
-                        // Let ChatViewModel handle internal navigation first (close sheets, exit channels)
-                        val handled = chatViewModel.handleBackPressed()
-                        if (!handled) {
-                            mainViewModel.exitChat()
-                        }
-                    }
-                    ChatScreen(
-                        viewModel = chatViewModel,
-                        isBluetoothEnabled = bluetoothStatus == BluetoothStatus.ENABLED,
-                        onBackToHome = { mainViewModel.exitChat() }
-                    )
+                if (isLockedInner) {
+                    // Render nothing while locked — AppLockScreen overlays once state reaches COMPLETE.
+                    // This prevents HomeScreen from flashing during the CHECKING/INITIALIZING phase.
+                    Box(modifier = modifier)
                 } else {
-                    HomeScreen(
-                        chatViewModel = chatViewModel,
-                        onGroupSelected = { mainViewModel.enterChat() },
-                        onSettingsClick = { chatViewModel.showAppInfo() },
-                        onRefreshAccount = { chatViewModel.panicClearAllData() },
-                        onCityChosen = { geohash ->
-                            // Reverse geocode the chosen geohash to get city name
-                            lifecycleScope.launch {
-                                val cityName = try {
-                                    val (lat, lon) = com.roman.zemzeme.geohash.Geohash.decodeToCenter(geohash)
-                                    val geocoder = com.roman.zemzeme.geohash.GeocoderFactory.get(context)
-                                    val addresses = geocoder.getFromLocation(lat, lon, 1)
-                                    addresses.firstOrNull()?.locality
-                                        ?: addresses.firstOrNull()?.subAdminArea
-                                        ?: addresses.firstOrNull()?.adminArea
-                                        ?: addresses.firstOrNull()?.countryName
-                                } catch (_: Exception) { null }
-                                val nickname = cityName ?: geohash
-                                chatViewModel.addGeographicGroup(geohash, nickname)
+                    val isInChat by mainViewModel.isInChat.collectAsState()
+
+                    if (isInChat) {
+                        BackHandler {
+                            // Let ChatViewModel handle internal navigation first (close sheets, exit channels)
+                            val handled = chatViewModel.handleBackPressed()
+                            if (!handled) {
+                                chatViewModel.setOnChatScreen(false)
+                                mainViewModel.exitChat()
                             }
                         }
-                    )
+                        ChatScreen(
+                            viewModel = chatViewModel,
+                            isBluetoothEnabled = bluetoothStatus == BluetoothStatus.ENABLED,
+                            onBackToHome = { chatViewModel.setOnChatScreen(false); mainViewModel.exitChat() }
+                        )
+                    } else {
+                        HomeScreen(
+                            chatViewModel = chatViewModel,
+                            onGroupSelected = { chatViewModel.setOnChatScreen(true); mainViewModel.enterChat() },
+                            onSettingsClick = { chatViewModel.showAppInfo() },
+                            onRefreshAccount = { chatViewModel.panicClearAllData() },
+                            onCityChosen = { geohash ->
+                                // Reverse geocode the chosen geohash to get city name
+                                lifecycleScope.launch {
+                                    val cityName = try {
+                                        val (lat, lon) = com.roman.zemzeme.geohash.Geohash.decodeToCenter(geohash)
+                                        val geocoder = com.roman.zemzeme.geohash.GeocoderFactory.get(context)
+                                        val addresses = geocoder.getFromLocation(lat, lon, 1)
+                                        addresses.firstOrNull()?.locality
+                                            ?: addresses.firstOrNull()?.subAdminArea
+                                            ?: addresses.firstOrNull()?.adminArea
+                                            ?: addresses.firstOrNull()?.countryName
+                                    } catch (_: Exception) { null }
+                                    val nickname = cityName ?: geohash
+                                    chatViewModel.addGeographicGroup(geohash, nickname)
+                                }
+                            }
+                        )
+                    }
                 }
             }
             
@@ -439,24 +470,17 @@ class MainActivity : OrientationAwareActivity() {
      */
     private fun proceedWithPermissionCheck() {
         Log.d("MainActivity", "Proceeding with permission check")
-        
+
         lifecycleScope.launch {
             delay(200) // Small delay for smooth transition
-            
+
             if (permissionManager.isFirstTimeLaunch()) {
                 Log.d("MainActivity", "First time launch, showing permission explanation")
                 mainViewModel.updateOnboardingState(OnboardingState.PERMISSION_EXPLANATION)
             } else if (permissionManager.areRequiredPermissionsGranted()) {
                 Log.d("MainActivity", "Existing user with required permissions")
-                if (permissionManager.needsBackgroundLocationPermission() &&
-                    !permissionManager.isBackgroundLocationGranted() &&
-                    !com.roman.zemzeme.onboarding.BackgroundLocationPreferenceManager.isSkipped(this@MainActivity)
-                ) {
-                    mainViewModel.updateOnboardingState(OnboardingState.BACKGROUND_LOCATION_EXPLANATION)
-                } else {
-                    mainViewModel.updateOnboardingState(OnboardingState.INITIALIZING)
-                    initializeApp()
-                }
+                mainViewModel.updateOnboardingState(OnboardingState.INITIALIZING)
+                initializeApp()
             } else {
                 Log.d("MainActivity", "Existing user missing permissions, showing explanation")
                 mainViewModel.updateOnboardingState(OnboardingState.PERMISSION_EXPLANATION)
@@ -582,44 +606,28 @@ class MainActivity : OrientationAwareActivity() {
     
     private fun handleOnboardingComplete() {
         Log.d("MainActivity", "Onboarding completed, checking Bluetooth and Location before initializing app")
-        
-        // After permissions are granted, re-check Bluetooth, Location, and Battery Optimization status
+
         val p2pConfig = com.roman.zemzeme.p2p.P2PConfig(this)
         val currentBluetoothStatus = bluetoothStatusManager.checkBluetoothStatus()
         val currentLocationStatus = locationStatusManager.checkLocationStatus()
-        val currentBatteryOptimizationStatus = when {
-            !batteryOptimizationManager.isBatteryOptimizationSupported() -> BatteryOptimizationStatus.NOT_SUPPORTED
-            batteryOptimizationManager.isBatteryOptimizationDisabled() -> BatteryOptimizationStatus.DISABLED
-            else -> BatteryOptimizationStatus.ENABLED
-        }
-        
+
         // Skip Bluetooth check if BLE is disabled in config (for emulator testing)
         val bluetoothOk = !p2pConfig.bleEnabled || currentBluetoothStatus == BluetoothStatus.ENABLED
-        
+
         when {
             !bluetoothOk -> {
-                // Bluetooth still disabled, but now we have permissions to enable it
                 Log.d("MainActivity", "Permissions granted, but Bluetooth still disabled. Showing Bluetooth enable screen.")
                 mainViewModel.updateBluetoothStatus(currentBluetoothStatus)
                 mainViewModel.updateOnboardingState(OnboardingState.BLUETOOTH_CHECK)
                 mainViewModel.updateBluetoothLoading(false)
             }
             currentLocationStatus != LocationStatus.ENABLED -> {
-                // Location services still disabled, but now we have permissions to enable it
                 Log.d("MainActivity", "Permissions granted, but Location services still disabled. Showing Location enable screen.")
                 mainViewModel.updateLocationStatus(currentLocationStatus)
                 mainViewModel.updateOnboardingState(OnboardingState.LOCATION_CHECK)
                 mainViewModel.updateLocationLoading(false)
             }
-            currentBatteryOptimizationStatus == BatteryOptimizationStatus.ENABLED -> {
-                // Battery optimization still enabled, show battery optimization screen
-                android.util.Log.d("MainActivity", "Permissions granted, but battery optimization still enabled. Showing battery optimization screen.")
-                mainViewModel.updateBatteryOptimizationStatus(currentBatteryOptimizationStatus)
-                mainViewModel.updateOnboardingState(OnboardingState.BATTERY_OPTIMIZATION_CHECK)
-                mainViewModel.updateBatteryOptimizationLoading(false)
-            }
             else -> {
-                // Both are enabled (or BLE bypassed), proceed to app initialization
                 Log.d("MainActivity", "Bluetooth/Location checks passed, proceeding to initialization")
                 mainViewModel.updateOnboardingState(OnboardingState.INITIALIZING)
                 initializeApp()
@@ -634,74 +642,11 @@ class MainActivity : OrientationAwareActivity() {
     }
     
     /**
-     * Check Battery Optimization status and proceed with onboarding flow
+     * Battery optimization is now handled on the permission explanation screen.
+     * Just proceed to permission check directly.
      */
     private fun checkBatteryOptimizationAndProceed() {
-        android.util.Log.d("MainActivity", "Checking battery optimization status")
-        
-        // For first-time users, skip battery optimization check and go straight to permissions
-        // We'll check battery optimization after permissions are granted
-        if (permissionManager.isFirstTimeLaunch()) {
-            android.util.Log.d("MainActivity", "First-time launch, skipping battery optimization check - will check after permissions")
-            proceedWithPermissionCheck()
-            return
-        }
-        
-        // Check if user has previously skipped battery optimization
-        if (BatteryOptimizationPreferenceManager.isSkipped(this)) {
-            android.util.Log.d("MainActivity", "User previously skipped battery optimization, proceeding to permissions")
-            proceedWithPermissionCheck()
-            return
-        }
-        
-        // For existing users, check battery optimization status
-        batteryOptimizationManager.logBatteryOptimizationStatus()
-        val currentBatteryOptimizationStatus = when {
-            !batteryOptimizationManager.isBatteryOptimizationSupported() -> BatteryOptimizationStatus.NOT_SUPPORTED
-            batteryOptimizationManager.isBatteryOptimizationDisabled() -> BatteryOptimizationStatus.DISABLED
-            else -> BatteryOptimizationStatus.ENABLED
-        }
-        mainViewModel.updateBatteryOptimizationStatus(currentBatteryOptimizationStatus)
-        
-        when (currentBatteryOptimizationStatus) {
-            BatteryOptimizationStatus.DISABLED, BatteryOptimizationStatus.NOT_SUPPORTED -> {
-                // Battery optimization is disabled or not supported, proceed with permission check
-                proceedWithPermissionCheck()
-            }
-            BatteryOptimizationStatus.ENABLED -> {
-                // Show battery optimization disable screen
-                android.util.Log.d("MainActivity", "Battery optimization enabled, showing disable screen")
-                mainViewModel.updateOnboardingState(OnboardingState.BATTERY_OPTIMIZATION_CHECK)
-                mainViewModel.updateBatteryOptimizationLoading(false)
-            }
-        }
-    }
-    
-    /**
-     * Handle Battery Optimization disabled callback
-     */
-    private fun handleBatteryOptimizationDisabled() {
-        android.util.Log.d("MainActivity", "Battery optimization disabled by user")
-        mainViewModel.updateBatteryOptimizationLoading(false)
-        mainViewModel.updateBatteryOptimizationStatus(BatteryOptimizationStatus.DISABLED)
         proceedWithPermissionCheck()
-    }
-    
-    /**
-     * Handle Battery Optimization failed callback
-     */
-    private fun handleBatteryOptimizationFailed(message: String) {
-        android.util.Log.w("MainActivity", "Battery optimization disable failed: $message")
-        mainViewModel.updateBatteryOptimizationLoading(false)
-        val currentStatus = when {
-            !batteryOptimizationManager.isBatteryOptimizationSupported() -> BatteryOptimizationStatus.NOT_SUPPORTED
-            batteryOptimizationManager.isBatteryOptimizationDisabled() -> BatteryOptimizationStatus.DISABLED
-            else -> BatteryOptimizationStatus.ENABLED
-        }
-        mainViewModel.updateBatteryOptimizationStatus(currentStatus)
-        
-        // Stay on battery optimization check screen for retry
-        mainViewModel.updateOnboardingState(OnboardingState.BATTERY_OPTIMIZATION_CHECK)
     }
     
     private fun initializeApp() {
@@ -743,7 +688,14 @@ class MainActivity : OrientationAwareActivity() {
                 // Small delay to ensure mesh service is fully initialized
                 delay(500)
                 Log.d("MainActivity", "App initialization complete")
-                mainViewModel.updateOnboardingState(OnboardingState.COMPLETE)
+                // Show app lock setup once on first install if not yet configured
+                if (!AppLockPreferenceManager.isEnabled() &&
+                    !AppLockPreferenceManager.hasShownSetupPrompt()
+                ) {
+                    mainViewModel.updateOnboardingState(OnboardingState.APP_LOCK_SETUP)
+                } else {
+                    mainViewModel.updateOnboardingState(OnboardingState.COMPLETE)
+                }
             } catch (e: Exception) {
                 Log.e("MainActivity", "Failed to initialize app", e)
                 handleOnboardingFailed("Failed to initialize the app: ${e.message}")
@@ -806,12 +758,30 @@ class MainActivity : OrientationAwareActivity() {
         }
     }
     
+    // Intercept every startActivityForResult call (including those from registerForActivityResult /
+    // ActivityResultLauncher) so we know we're opening a child activity, not going to background.
+    override fun startActivityForResult(intent: android.content.Intent, requestCode: Int, options: android.os.Bundle?) {
+        startingChildActivity = true
+        super.startActivityForResult(intent, requestCode, options)
+    }
+
     override fun onPause() {
         super.onPause()
         // Only set background state if app is fully initialized
         if (mainViewModel.onboardingState.value == OnboardingState.COMPLETE) {
             // Detach UI delegate so the foreground service can own DM notifications while UI is closed
             try { meshService.delegate = null } catch (_: Exception) { }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (startingChildActivity) {
+            // We launched a child activity (camera, image picker, etc.) — do not lock.
+            startingChildActivity = false
+        } else {
+            // User genuinely left the app (Home, Recents, screen-off, etc.) — lock.
+            AppLockManager.lock()
         }
     }
     
@@ -838,6 +808,7 @@ class MainActivity : OrientationAwareActivity() {
                     Log.d("MainActivity", "Opening private chat with $senderNickname (peerID: $peerID) from notification")
 
                     // Navigate into chat and open the private chat sheet with this peer
+                    chatViewModel.setOnChatScreen(true)
                     mainViewModel.enterChat()
                     chatViewModel.showMeshPeerList()
                     chatViewModel.showPrivateChatSheet(peerID)
@@ -854,6 +825,7 @@ class MainActivity : OrientationAwareActivity() {
                     Log.d("MainActivity", "Opening geohash chat #$geohash from notification")
 
                     // Navigate into chat
+                    chatViewModel.setOnChatScreen(true)
                     mainViewModel.enterChat()
 
                     // Switch to the geohash channel - create appropriate geohash channel level
