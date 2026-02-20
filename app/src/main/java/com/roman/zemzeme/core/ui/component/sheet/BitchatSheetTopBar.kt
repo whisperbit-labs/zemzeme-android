@@ -11,6 +11,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.roman.zemzeme.core.ui.component.button.CloseButton
@@ -80,7 +81,7 @@ fun ZemzemeSheetTitle(text: String) {
         text = text,
         style = MaterialTheme.typography.titleMedium.copy(
             fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.Monospace
+            fontFamily = NunitoFontFamily
         )
     )
 }

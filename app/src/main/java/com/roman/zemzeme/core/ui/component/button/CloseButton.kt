@@ -9,7 +9,9 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.roman.zemzeme.R
 
 @Composable
 fun CloseButton(
@@ -27,7 +29,7 @@ fun CloseButton(
     ) {
         Icon(
             imageVector = Icons.Default.Close,
-            contentDescription = "Close",
+            contentDescription = stringResource(R.string.cd_close),
             modifier = Modifier.Companion.size(18.dp)
         )
     }
