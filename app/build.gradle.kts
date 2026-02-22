@@ -20,8 +20,8 @@ android {
         applicationId = "com.roman.zemzeme"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -172,6 +172,9 @@ dependencies {
 
     // Security preferences
     implementation(libs.androidx.security.crypto)
+
+    // Biometric authentication
+    implementation(libs.androidx.biometric)
     
     // EXIF orientation handling for images
     implementation("androidx.exifinterface:exifinterface:1.3.7")

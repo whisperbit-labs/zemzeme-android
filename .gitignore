@@ -40,6 +40,9 @@ dependency-reduced-pom.xml
 # Linters
 .lint/
 
+# Logo source assets (exported to docs/logo.png for README)
+logos/
+
 # Other
 *.log
 .cxx/
@@ -65,4 +68,3 @@ tools/arti-build/.arti-source/
 tools/arti-build/target/
 /logs/
 /logs/
-.claude/
