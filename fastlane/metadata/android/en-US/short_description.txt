@@ -1,1 +1,1 @@
-IRC style chat over Bluetooth mesh
+Private, serverless messaging over Bluetooth mesh and internet

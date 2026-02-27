@@ -1,1 +1,19 @@
-A secure, decentralized, peer-to-peer messaging app that works over Bluetooth mesh networks. No internet required, no servers, no phone numbers - just pure encrypted communication.
+Zemzeme is a private, serverless messaging app that works without internet, accounts, or central servers. It supports three independent transport layers that operate simultaneously:
+
+- Offline Bluetooth mesh (BLE) — no internet needed
+- Direct peer-to-peer via libp2p + ICE — over Wi-Fi or mobile data
+- Nostr relay — internet-based fallback
+
+All messages are end-to-end encrypted using the Noise Protocol (Curve25519 + ChaCha20-Poly1305).
+
+Features:
+- Text messages with formatting and @mention support
+- Voice notes, image, and file sharing
+- Read receipts and delivery indicators
+- Password-protected channels
+- Geohash-based public channels (city to country granularity)
+- Ed25519 signed QR codes for peer identity verification
+- Biometric + PIN app lock
+- 35+ languages supported
+
+Forked from bitchat v1.7.0, extended with internet-capable transport layers built on libp2p.
