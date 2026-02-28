@@ -11,6 +11,7 @@ import java.util.zip.Inflater
  */
 object CompressionUtil {
     private const val COMPRESSION_THRESHOLD = com.roman.zemzeme.util.AppConstants.Protocol.COMPRESSION_THRESHOLD_BYTES  // bytes - same as iOS
+    private const val MAX_DECOMPRESSED_PAYLOAD_BYTES = com.roman.zemzeme.util.AppConstants.Protocol.MAX_DECOMPRESSED_PAYLOAD_BYTES
     
     /**
      * Helper to check if compression is worth it - exact same logic as iOS
@@ -39,6 +40,7 @@ object CompressionUtil {
     fun compress(data: ByteArray): ByteArray? {
         // Skip compression for small data
         if (data.size < COMPRESSION_THRESHOLD) return null
+        if (data.size > MAX_DECOMPRESSED_PAYLOAD_BYTES) return null
         
         try {
             // Use raw deflate format (no headers) to match iOS COMPRESSION_ZLIB behavior
@@ -74,6 +76,10 @@ object CompressionUtil {
      */
     fun decompress(compressedData: ByteArray, originalSize: Int): ByteArray? {
         // iOS COMPRESSION_ZLIB produces raw deflate format (no headers)
+        if (originalSize <= 0 || originalSize > MAX_DECOMPRESSED_PAYLOAD_BYTES) {
+            Log.w("CompressionUtil", "Rejecting invalid decompression size: $originalSize")
+            return null
+        }
         try {
             val inflater = Inflater(true) // true = raw deflate, no headers
             inflater.setInput(compressedData)

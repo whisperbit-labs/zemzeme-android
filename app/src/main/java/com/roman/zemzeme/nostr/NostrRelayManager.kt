@@ -661,6 +661,10 @@ class NostrRelayManager private constructor() {
         if (connections.containsKey(urlString)) {
             return
         }
+        if (!urlString.startsWith("wss://", ignoreCase = true)) {
+            Log.w(TAG, "Rejecting non-TLS relay URL: $urlString")
+            return
+        }
         
         Log.v(TAG, "Attempting to connect to Nostr relay: $urlString")
         
