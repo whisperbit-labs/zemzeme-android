@@ -6,6 +6,7 @@ import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.util.Log
+import com.roman.zemzeme.identity.SecureIdentityStateManager
 import com.roman.zemzeme.util.AppConstants
 import golib.Golib
 import golib.MobileConnectionHandler
@@ -149,6 +150,10 @@ class P2PLibraryRepository(
     // Preferences for key storage
     private val prefs by lazy {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
+
+    private val identityStateManager by lazy {
+        SecureIdentityStateManager(context)
     }
 
     private val connectivityManager by lazy {
@@ -341,7 +346,8 @@ class P2PLibraryRepository(
                 _peerID.value = newNode.peerID
                 _multiaddrs.value = newNode.multiaddrs
                 _nodeStatus.value = P2PNodeStatus.RUNNING
-                prefs.edit().putString(KEY_PEER_ID, newNode.peerID).apply()
+                identityStateManager.saveP2PPeerID(newNode.peerID)
+                prefs.edit().remove(KEY_PEER_ID).apply()
 
                 updateMeteredModeForNetwork()
                 registerNetworkCallback()
@@ -1368,12 +1374,19 @@ class P2PLibraryRepository(
     // ============== Key Management ==============
     
     private fun getStoredPrivateKey(): String? {
-        return prefs.getString(KEY_PRIVATE_KEY, null)
+        identityStateManager.getStoredP2PPrivateKey()?.let { return it }
+
+        val legacyKey = prefs.getString(KEY_PRIVATE_KEY, null) ?: return null
+        identityStateManager.saveP2PPrivateKey(legacyKey)
+        prefs.edit().remove(KEY_PRIVATE_KEY).apply()
+        Log.i(TAG, "Migrated legacy P2P private key to encrypted storage")
+        return legacyKey
     }
     
     private fun generateAndStoreNewKey(): String {
         val newKey = Golib.generateNewKey()
-        prefs.edit().putString(KEY_PRIVATE_KEY, newKey).apply()
+        identityStateManager.saveP2PPrivateKey(newKey)
+        prefs.edit().remove(KEY_PRIVATE_KEY).apply()
         Log.d(TAG, "Generated and stored new P2P key")
         return newKey
     }
@@ -1383,20 +1396,28 @@ class P2PLibraryRepository(
      * Must be called before startNode() to take effect.
      */
     fun setPrivateKey(privateKeyBase64: String) {
-        prefs.edit().putString(KEY_PRIVATE_KEY, privateKeyBase64).apply()
+        identityStateManager.saveP2PPrivateKey(privateKeyBase64)
+        prefs.edit().remove(KEY_PRIVATE_KEY).apply()
     }
     
     /**
      * Get the stored Peer ID (may return null if node hasn't been started).
      */
     fun getStoredPeerID(): String? {
-        return prefs.getString(KEY_PEER_ID, null)
+        identityStateManager.getP2PPeerID()?.let { return it }
+
+        val legacyPeerID = prefs.getString(KEY_PEER_ID, null) ?: return null
+        identityStateManager.saveP2PPeerID(legacyPeerID)
+        prefs.edit().remove(KEY_PEER_ID).apply()
+        Log.i(TAG, "Migrated legacy P2P peer ID to encrypted storage")
+        return legacyPeerID
     }
     
     /**
      * Clear all P2P keys (for identity reset).
      */
     fun clearKeys() {
+        identityStateManager.clearP2PIdentity()
         prefs.edit().clear().apply()
         Log.d(TAG, "Cleared P2P keys")
     }

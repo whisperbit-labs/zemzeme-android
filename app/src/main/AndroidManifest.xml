@@ -71,7 +71,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.ZemzemeAndroid"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="false"
         tools:targetApi="31">
         <!-- FileProvider for sharing temp/cache files with external viewers -->
         <provider

@@ -1,5 +1,6 @@
 package com.roman.zemzeme.ui
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -100,6 +101,7 @@ class NotificationManager(
                 description = dmDescriptionText
                 enableVibration(true)
                 setShowBadge(true)
+                lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             }
             systemNotificationManager.createNotificationChannel(dmChannel)
 
@@ -111,6 +113,7 @@ class NotificationManager(
                 description = geohashDescriptionText
                 enableVibration(true)
                 setShowBadge(true)
+                lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             }
             systemNotificationManager.createNotificationChannel(geohashChannel)
         }
@@ -236,6 +239,7 @@ class NotificationManager(
             .setContentText(contentText)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .addPerson(person)
@@ -303,6 +307,7 @@ class NotificationManager(
             .setContentText(body)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_STATUS)
             .setShowWhen(true)
@@ -338,6 +343,7 @@ class NotificationManager(
           .setContentText(contentText)
           .setContentIntent(pendingIntent)
           .setAutoCancel(true)
+          .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
           .setPriority(NotificationCompat.PRIORITY_MIN)
           .setCategory(NotificationCompat.CATEGORY_MESSAGE)
           .setShowWhen(true)
@@ -369,6 +375,7 @@ class NotificationManager(
             .setContentText(context.getString(R.string.notification_messages_from_people, totalMessages, senderCount))
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setGroup(GROUP_KEY_DM)
@@ -511,6 +518,7 @@ class NotificationManager(
             .setContentText(contentText)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPriority(if (latestNotification.isMention) NotificationCompat.PRIORITY_HIGH else NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setShowWhen(true)
@@ -591,6 +599,7 @@ class NotificationManager(
             .setContentText(contentText)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setGroup(GROUP_KEY_GEOHASH)
@@ -724,6 +733,7 @@ class NotificationManager(
             .setContentText(contentText)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setShowWhen(true)
