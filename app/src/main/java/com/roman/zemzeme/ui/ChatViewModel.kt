@@ -474,7 +474,7 @@ class ChatViewModel(
                     // Add to private chat
                     privateChatManager.handleIncomingPrivateMessage(message)
                     addContactIfNeeded(senderPeerID)
-                    Log.d("ChatViewModel", "Received P2P DM from $senderPeerID ($displayName): ${incomingMessage.content.take(30)}...")
+                    Log.d("ChatViewModel", "Received P2P DM from $senderPeerID ($displayName) (content scrubbed for security)")
                 }
             }
         } catch (e: Exception) {
@@ -787,8 +787,9 @@ class ChatViewModel(
                 selectedPeer,
                 recipientNickname,
                 state.getNicknameValue(),
-                meshService.myPeerID
-            ) { messageContent, peerID, recipientNicknameParam, messageId ->
+                meshService.myPeerID,
+                mentions
+            ) { messageContent, peerID, recipientNicknameParam, messageId, mentionsParam ->
                 DebugLogger.log(
                     action = "SEND",
                     msgId = messageId,
@@ -801,7 +802,7 @@ class ChatViewModel(
                 )
                 // Route via MessageRouter (mesh when connected+established, else Nostr)
                 val router = com.roman.zemzeme.services.MessageRouter.getInstance(getApplication(), meshService)
-                router.sendPrivate(messageContent, peerID, recipientNicknameParam, messageId)
+                router.sendPrivate(messageContent, peerID, recipientNicknameParam, messageId, mentionsParam)
             }
             // Auto-add as contact when sending a private message
             addContactIfNeeded(selectedPeer)

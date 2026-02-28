@@ -87,7 +87,8 @@ class PrivateChatManager(
         recipientNickname: String?,
         senderNickname: String?,
         myPeerID: String,
-        onSendMessage: (String, String, String, String) -> Unit
+        mentions: List<String>? = null,
+        onSendMessage: (String, String, String, String, List<String>?) -> Unit
     ): Boolean {
         if (isPeerBlocked(peerID)) {
             val systemMessage = ZemzemeMessage(
@@ -108,11 +109,12 @@ class PrivateChatManager(
             isPrivate = true,
             recipientNickname = recipientNickname,
             senderPeerID = myPeerID,
-            deliveryStatus = DeliveryStatus.Sending
+            deliveryStatus = DeliveryStatus.Sending,
+            mentions = mentions
         )
 
         messageManager.addPrivateMessage(peerID, message)
-        onSendMessage(content, peerID, recipientNickname ?: "", message.id)
+        onSendMessage(content, peerID, recipientNickname ?: "", message.id, mentions)
 
         return true
     }

@@ -79,7 +79,7 @@ class MessageRouter private constructor(
         }
     }
 
-    fun sendPrivate(content: String, toPeerID: String, recipientNickname: String, messageID: String) {
+    fun sendPrivate(content: String, toPeerID: String, recipientNickname: String, messageID: String, mentions: List<String>? = null) {
         val toggles = currentTransportToggles()
 
         // First: if this is a P2P peer (starts with p2p:), route via P2PTransport
@@ -125,7 +125,7 @@ class MessageRouter private constructor(
         val hasBleSession = hasBleLink && mesh.hasEstablishedSession(toPeerID)
         if (hasBleSession) {
             Log.d(TAG, "Routing PM via BLE mesh to ${toPeerID.take(12)}... msg_id=${messageID.take(8)}...")
-            mesh.sendPrivateMessage(content, toPeerID, recipientNickname, messageID)
+            mesh.sendPrivateMessage(content, toPeerID, recipientNickname, messageID, mentions)
             return
         }
 

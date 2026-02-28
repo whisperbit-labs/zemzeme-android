@@ -1142,14 +1142,14 @@ class BluetoothMeshService(private val context: Context) {
      * Send private message - SIMPLIFIED iOS-compatible version 
      * Uses NoisePayloadType system exactly like iOS SimplifiedBluetoothService
      */
-    fun sendPrivateMessage(content: String, recipientPeerID: String, recipientNickname: String, messageID: String? = null) {
+    fun sendPrivateMessage(content: String, recipientPeerID: String, recipientNickname: String, messageID: String? = null, mentions: List<String>? = null) {
         if (content.isEmpty() || recipientPeerID.isEmpty()) return
         if (recipientNickname.isEmpty()) return
         
         serviceScope.launch {
             val finalMessageID = messageID ?: java.util.UUID.randomUUID().toString()
             
-            Log.d(TAG, "📨 Sending PM to $recipientPeerID: ${content.take(30)}...")
+            Log.d(TAG, "📨 Sending PM to $recipientPeerID (content scrubbed for security)")
             
             // Check if we have an established Noise session
             if (encryptionService.hasEstablishedSession(recipientPeerID)) {
@@ -1157,7 +1157,8 @@ class BluetoothMeshService(private val context: Context) {
                     // Create TLV-encoded private message exactly like iOS
                     val privateMessage = com.roman.zemzeme.model.PrivateMessagePacket(
                         messageID = finalMessageID,
-                        content = content
+                        content = content,
+                        mentions = mentions
                     )
                     
                     val tlvData = privateMessage.encode()

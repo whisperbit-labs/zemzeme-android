@@ -254,7 +254,7 @@ class P2PTransport private constructor(
             return false
         }
         
-        Log.i(TAG, "Sending P2P DM to ${rawPeerID.take(12)}... (content: ${content.take(30)}...)")
+        Log.i(TAG, "Sending P2P DM to ${rawPeerID.take(12)}... (content scrubbed for security)")
         
         return try {
             val wireMessage = P2PWireMessage(
@@ -479,7 +479,7 @@ class P2PTransport private constructor(
     }
     
     private fun handleIncomingP2PMessage(message: P2PMessage) {
-        Log.i(TAG, "handleIncomingP2PMessage: isTopicMessage=${message.isTopicMessage}, topicName=${message.topicName}, content=${message.content.take(30)}...")
+        Log.i(TAG, "handleIncomingP2PMessage: isTopicMessage=${message.isTopicMessage}, topicName=${message.topicName} (content scrubbed for security)")
 
         try {
             val wireMessage = gson.fromJson(message.content, P2PWireMessage::class.java)
@@ -546,7 +546,7 @@ class P2PTransport private constructor(
 
             Log.i(TAG, "Parsed wire message: type=${wireMessage.type} -> ${incomingMessage.type}")
             messageCallback.get()?.invoke(incomingMessage)
-            Log.i(TAG, "Received P2P message from ${message.senderPeerID}: ${wireMessage.content.take(50)}...")
+            Log.i(TAG, "Received P2P message from ${message.senderPeerID} (content scrubbed for security)")
 
         } catch (e: Exception) {
             // Message not in our wire format (raw text fallback)

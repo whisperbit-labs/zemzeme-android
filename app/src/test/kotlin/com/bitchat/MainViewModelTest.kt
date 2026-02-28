@@ -17,7 +17,6 @@ class MainViewModelTest {
             OnboardingState.CHECKING,
             OnboardingState.BLUETOOTH_CHECK,
             OnboardingState.LOCATION_CHECK,
-            OnboardingState.BATTERY_OPTIMIZATION_CHECK,
             OnboardingState.PERMISSION_REQUESTING,
             OnboardingState.PERMISSION_EXPLANATION,
             OnboardingState.COMPLETE,

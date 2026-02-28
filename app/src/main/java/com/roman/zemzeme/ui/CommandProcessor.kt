@@ -90,10 +90,11 @@ class CommandProcessor(
                             peerID, 
                             recipientNickname,
                             state.getNicknameValue(),
-                            getMyPeerID(meshService)
-                        ) { content, peerIdParam, recipientNicknameParam, messageId ->
+                            getMyPeerID(meshService),
+                            null // Mentions not parsed for /msg command yet
+                        ) { content, peerIdParam, recipientNicknameParam, messageId, mentionsParam ->
                             // This would trigger the actual mesh service send
-                            sendPrivateMessageVia(meshService, content, peerIdParam, recipientNicknameParam, messageId)
+                            sendPrivateMessageVia(meshService, content, peerIdParam, recipientNicknameParam, messageId, mentionsParam)
                         }
                     } else {
                         val systemMessage = ZemzemeMessage(
@@ -451,7 +452,7 @@ class CommandProcessor(
         return meshService.myPeerID
     }
     
-    private fun sendPrivateMessageVia(meshService: BluetoothMeshService, content: String, peerID: String, recipientNickname: String, messageId: String) {
-        meshService.sendPrivateMessage(content, peerID, recipientNickname, messageId)
+    private fun sendPrivateMessageVia(meshService: BluetoothMeshService, content: String, peerID: String, recipientNickname: String, messageId: String, mentions: List<String>?) {
+        meshService.sendPrivateMessage(content, peerID, recipientNickname, messageId, mentions)
     }
 }
