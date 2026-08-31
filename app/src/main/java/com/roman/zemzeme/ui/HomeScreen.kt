@@ -28,6 +28,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.HealthAndSafety
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Edit
@@ -160,6 +162,9 @@ fun HomeScreen(
 
     // Refresh account confirmation dialog
     var showRefreshDialog by remember { mutableStateOf(false) }
+
+    // Clinical assessment state
+    var isAssessmentOpen by remember { mutableStateOf(false) }
 
     // Mesh intro dialog (first-time only)
     val meshIntroPrefs = remember { context.getSharedPreferences("mesh_intro", android.content.Context.MODE_PRIVATE) }
@@ -355,6 +360,17 @@ fun HomeScreen(
             Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
+            // Pinned Assessment Bot Row
+            item(key = "assessment_bot") {
+                PinnedAssessmentBotRow(
+                    onClick = { isAssessmentOpen = true }
+                )
+                HorizontalDivider(
+                    color = colorScheme.outline.copy(alpha = 0.3f),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+
             // ── NEARBY ──
             item(key = "nearby_header") { SectionHeader(stringResource(R.string.section_nearby)) }
 
@@ -682,6 +698,19 @@ fun HomeScreen(
             onDismiss = { showDebugSheet = false },
             meshService = chatViewModel.meshService
         )
+    }
+
+
+    // Render Assessment Screen in Dialog
+    if (isAssessmentOpen) {
+        Dialog(
+            onDismissRequest = { isAssessmentOpen = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                AssessmentScreen(onBack = { isAssessmentOpen = false })
+            }
+        }
     }
 }
 
@@ -1124,4 +1153,23 @@ private fun RenameGroupDialog(currentName: String, onDismiss: () -> Unit, onConf
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
+}
+
+// Assessment Bot Row
+@Composable
+fun PinnedAssessmentBotRow(onClick: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().clickable { onClick() }.background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)).padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.size(50.dp).background(MaterialTheme.colorScheme.primaryContainer, CircleShape), contentAlignment = Alignment.Center) {
+            Icon(imageVector = Icons.Default.HealthAndSafety, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = "${stringResource(R.string.assessment_tab_title_fa)} | ${stringResource(R.string.assessment_tab_title_en)}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = "${stringResource(R.string.assessment_tab_subtitle_en)} | ${stringResource(R.string.assessment_tab_subtitle_fa)}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Icon(imageVector = Icons.Default.PushPin, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+    }
 }

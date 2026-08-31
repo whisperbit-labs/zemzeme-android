@@ -690,12 +690,184 @@
     <string name="fab_choose_city">Choose city</string>
     <string name="fab_join_group">Join group</string>
     <string name="fab_create_group">Create group</string>
+    <string name="fab_clinical_assessment">Clinical Assessment</string>
+
+    <!-- Assessment Screen -->
+    <string name="assessment_english">English</string>
+    <string name="assessment_farsi">فارسی</string>
+    <string name="assessment_view_results">View Results</string>
+    <string name="assessment_farsi_view_results">مشاهده نتایج</string>
+    <string name="assessment_back">Finish / Back</string>
+    <string name="assessment_farsi_back">بازگشت</string>
+    <string name="assessment_total_score">Total Score: %1$d</string>
+    <string name="assessment_severity">Severity: %1$s</string>
+    <string name="assessment_next_steps">Next Steps: %1$s</string>
+    <string name="assessment_suicide_risk_warning">CRITICAL: Patient responded positively to self-harm thoughts. Immediate risk assessment required.</string>
+    <string name="assessment_suicide_risk_warning_farsi">هشدار: بیمار افکار خودکشی دارد. ارزیابی فوری خطر الزامی است.</string>
+    <string name="assessment_crisis_resources">Please seek immediate help: Call 988 (US Suicide Prevention) or go to your nearest emergency room.</string>
+    <string name="assessment_crisis_resources_farsi">لطفاً فوراً کمک بخواهید: با شماره 988 (پیشگیری از خودکشی) تماس بگیرید یا به نزدیک‌ترین اورژانس مراجعه کنید.</string>
+
+    <!-- Assessment Options Strings -->
+    <string name="opt_not_at_all_en">Not at all</string>
+    <string name="opt_not_at_all_fa">اصلاً</string>
+    <string name="opt_several_days_en">Several days</string>
+    <string name="opt_several_days_fa">چند روز</string>
+    <string name="opt_more_than_half_en">More than half the days</string>
+    <string name="opt_more_than_half_fa">بیش از نیمی از روزها</string>
+    <string name="opt_nearly_every_en">Nearly every day</string>
+    <string name="opt_nearly_every_fa">تقریباً هر روز</string>
+
+    <!-- GAD-7 Questions -->
+    <string name="gad7_q1_en">Feeling nervous, anxious, or on edge</string>
+    <string name="gad7_q1_fa">احساس عصبی بودن، اضطراب یا تنش</string>
+    <string name="gad7_q2_en">Not being able to stop or control worrying</string>
+    <string name="gad7_q2_fa">ناتوانی در توقف یا کنترل نگرانی</string>
+    <string name="gad7_q3_en">Worrying too much about different things</string>
+    <string name="gad7_q3_fa">نگرانی بیش از حد در مورد مسائل مختلف</string>
+    <string name="gad7_q4_en">Trouble relaxing</string>
+    <string name="gad7_q4_fa">مشکل در آرام شدن (ریلکس کردن)</string>
+    <string name="gad7_q5_en">Being so restless that it is hard to sit still</string>
+    <string name="gad7_q5_fa">بی‌قراری به حدی که نشستن در یک جا دشوار باشد</string>
+    <string name="gad7_q6_en">Becoming easily annoyed or irritable</string>
+    <string name="gad7_q6_fa">به سادگی آزرده یا تحریک‌پذیر شدن</string>
+    <string name="gad7_q7_en">Feeling afraid as if something awful might happen</string>
+    <string name="gad7_q7_fa">احساس ترس از اینکه ممکن است اتفاق وحشتناکی بیفتد</string>
+
+    <!-- PHQ-9 Questions -->
+    <string name="phq9_q1_en">Little interest or pleasure in doing things</string>
+    <string name="phq9_q1_fa">کمبود علاقه یا لذت در انجام کارها</string>
+    <string name="phq9_q2_en">Feeling down, depressed, or hopeless</string>
+    <string name="phq9_q2_fa">احساس ناراحتی، افسردگی یا ناامیدی</string>
+    <string name="phq9_q3_en">Trouble falling or staying asleep, or sleeping too much</string>
+    <string name="phq9_q3_fa">مشکل در به خواب رفتن، بیدار ماندن یا خوابیدن بیش از حد</string>
+    <string name="phq9_q4_en">Feeling tired or having little energy</string>
+    <string name="phq9_q4_fa">احساس خستگی یا کمبود انرژی</string>
+    <string name="phq9_q5_en">Poor appetite or overeating</string>
+    <string name="phq9_q5_fa">کم‌اشتهایی یا پرخوری</string>
+    <string name="phq9_q6_en">Feeling bad about yourself, or that you are a failure or have let yourself or your family down</string>
+    <string name="phq9_q6_fa">احساس بد نسبت به خود، یا اینکه یک شکست‌خورده هستید یا خانواده‌تان را ناامید کرده‌اید</string>
+    <string name="phq9_q7_en">Trouble concentrating on things, such as reading the newspaper or watching television</string>
+    <string name="phq9_q7_fa">مشکل در تمرکز روی کارها، مانند روزنامه خواندن یا تماشای تلویزیون</string>
+    <string name="phq9_q8_en">Moving or speaking so slowly that other people could have noticed? Or so fidgety or restless that you have been moving a lot more than usual</string>
+    <string name="phq9_q8_fa">حرکت یا صحبت کردن به قدری کند که دیگران متوجه شوند؟ یا به قدری بی‌قرار که خیلی بیشتر از حد معمول حرکت می‌کنید</string>
+    <string name="phq9_q9_en">Thoughts that you would be better off dead, or of hurting yourself</string>
+    <string name="phq9_q9_fa">افکاری درباره اینکه اگر مرده بودید بهتر بود، یا آسیب به خودتان</string>
+
+    <!-- Medical Disclaimer -->
+    <string name="medical_disclaimer_title">MEDICAL DISCLAIMER</string>
+    <string name="medical_disclaimer_title_fa">سلب مسئولیت پزشکی</string>
+    <string name="medical_disclaimer_en">This tool is strictly for screening purposes. It is NOT a clinical diagnosis and cannot replace a medical professional. If you are in crisis, seek immediate emergency help.</string>
+    <string name="medical_disclaimer_fa">این ابزار صرفاً جنبه و غربالگری دارد و به هیچ وجه جایگزین تشخیص قطعی پزشک متخصص نیست. در صورت بروز شرایط بحرانی، لطفاً فوراً با اورژانس تماس بگیرید.</string>
+    <string name="medical_disclaimer_accept_en">I Understand and Agree</string>
+    <string name="medical_disclaimer_accept_fa">شرایط را مطالعه کردم و می‌پذیرم</string>
+
+    <!-- Crisis Intervention -->
+    <string name="crisis_warning_en">CRITICAL: Self-harm risk detected. Please contact a crisis hotline immediately.</string>
+    <string name="crisis_warning_fa">هشدار مهم: خطر اورژانسی. لطفاً بی‌درنگ با خطوط ویژه بحران روان‌شناختی تماس بگیرید.</string>
+    <string name="crisis_call_1480_en">Call 1480 (IR)</string>
+    <string name="crisis_call_1480_fa">تماس با 1480 (ایران)</string>
+    <string name="crisis_call_988">Call 988 (US)</string>
+
+    <!-- Results Screen Labels -->
+    <string name="total_score_en">Total Score: %1$d</string>
+    <string name="total_score_fa">مجموع امتیاز شما: %1$d</string>
+    <string name="severity_en">Severity: %1$s</string>
+    <string name="severity_fa">وضعیت ارزیابی: %1$s</string>
+    <string name="next_steps_en">Next Steps: %1$s</string>
+    <string name="next_steps_fa">اقدام پیشنهادی: %1$s</string>
+
+    <!-- Button Labels -->
+    <string name="view_results_en">View Results</string>
+    <string name="view_results_fa">مشاهده نتیجه ارزیابی</string>
+    <string name="finish_back_en">Finish / Back</string>
+    <string name="finish_back_fa">پایان ارزیابی و بازگشت</string>
+
+    <!-- Severity Levels -->
+    <string name="severity_minimal_en">Minimal or none</string>
+    <string name="severity_minimal_fa">حداقل یا هیچ</string>
+    <string name="severity_mild_en">Mild</string>
+    <string name="severity_mild_fa">خفیف</string>
+    <string name="severity_moderate_en">Moderate</string>
+    <string name="severity_moderate_fa">متوسط</string>
+    <string name="severity_moderately_severe_en">Moderately severe</string>
+    <string name="severity_moderately_severe_fa">نسبتاً شدید</string>
+    <string name="severity_severe_en">Severe</string>
+    <string name="severity_severe_fa">شدید</string>
+    <string name="severity_no_anxiety_en">No anxiety disorder</string>
+    <string name="severity_no_anxiety_fa">اضطراب وجود ندارد</string>
+
+    <!-- Next Steps Recommendations -->
+    <string name="steps_monitor_en">Monitor. May not require treatment.</string>
+    <string name="steps_monitor_fa">پایش؛ ممکن است نیاز به درمان نداشته باشد.</string>
+    <string name="steps_monitor_symptom_en">Monitor symptom severity.</string>
+    <string name="steps_monitor_symptom_fa">پایش شدت علائم.</string>
+    <string name="steps_clinical_en">Use clinical judgment to determine necessity of treatment.</string>
+    <string name="steps_clinical_fa">استفاده از قضاوت بالینی برای تعیین ضرورت درمان.</string>
+    <string name="steps_clinical_duration_en">Use clinical judgment (symptom duration, functional impairment).</string>
+    <string name="steps_clinical_duration_fa">استفاده از قضاوت بالینی بر اساس مدت علائم.</string>
+    <string name="steps_active_treatment_en">Warrants active treatment with psychotherapy, medications, or combination.</string>
+    <string name="steps_active_treatment_fa">نیاز به درمان فعال با روان‌درمانی، دارو یا ترکیبی از هر دو.</string>
+    <string name="steps_referral_en">Active treatment probably warranted. Referral to mental health professional.</string>
+    <string name="steps_referral_fa">احتمالاً نیاز به درمان فعال. ارجاع به متخصص بهداشت روان.</string>
+
+    <!-- Validation Error -->
+    <string name="validation_incomplete_en">Please answer all questions before proceeding.</string>
+    <string name="validation_incomplete_fa">لطفاً پیش از ادامه به تمامی سوالات پاسخ دهید.</string>
 
     <!-- Section headers -->
     <string name="section_nearby">Nearby</string>
     <string name="section_geographic_groups">Geographic Groups</string>
     <string name="section_my_groups">My Groups</string>
     <string name="section_contacts">Contacts</string>
+
+    <!-- Pinned Assessment Bot Row -->
+    <string name="assessment_bot_title_en">Depression &amp; Anxiety</string>
+    <string name="assessment_bot_title_fa">ارزیابی افسردگی و اضطراب</string>
+    <string name="assessment_bot_subtitle_en">Tap to start</string>
+    <string name="assessment_bot_subtitle_fa">برای شروع ضربه بزنید</string>
+
+    <!-- Assessment Tab -->
+    <string name="assessment_tab_title_en">Anxiety / Depression Screening</string>
+    <string name="assessment_tab_title_fa">غربالگری اضطراب / افسردگی</string>
+    <string name="assessment_tab_subtitle_en">Tap to start</string>
+    <string name="assessment_tab_subtitle_fa">برای شروع ضربه بزنید</string>
+    <string name="lang_en">EN</string>
+    <string name="lang_fa">FA</string>
+
+    <!-- New consolidated assessment strings -->
+    <string name="assessment_welcome_en">Welcome to the Mental Health Assessment Tool</string>
+    <string name="assessment_welcome_fa">به ابزار ارزیابی سلامت روان خوش آمدید</string>
+    <string name="assessment_intro_en">This tool helps you check your current depression or anxiety status.\n\nPlease note that these questionnaires are designed strictly for screening purposes and cannot replace a professional clinical diagnosis. Results are provided as a guide only.</string>
+    <string name="assessment_intro_fa">این ابزار به شما کمک می‌کند وضعیت فعلی افسردگی یا اضطراب خود را بررسی کنید.\n\nلطفاً توجه داشته باشید که این پرسشنامه‌ها صرفاً برای غربالگری طراحی شده‌اند و به هیچ وجه جایگزین تشخیص متخصص بالینی نیستند. نتایج تنها به عنوان یک راهنما ارائه می‌شوند.</string>
+    <string name="disclaimer_accept_en">I understand and agree</string>
+    <string name="disclaimer_accept_fa">شرایط را مطالعه کردم و می‌پذیرم</string>
+    <string name="assessment_start_en">Start Assessment</string>
+    <string name="assessment_start_fa">شروع ارزیابی</string>
+    <string name="assessment_selection_title_en">What would you like to assess?</string>
+    <string name="assessment_selection_title_fa">مایلید کدام مورد را بررسی کنید؟</string>
+    <string name="assessment_gad7_btn_en">Anxiety Assessment (GAD-7)</string>
+    <string name="assessment_gad7_btn_fa">ارزیابی اضطراب (GAD-7)</string>
+    <string name="assessment_phq9_btn_en">Depression Assessment (PHQ-9)</string>
+    <string name="assessment_phq9_btn_fa">ارزیابی افسردگی (PHQ-9)</string>
+    <string name="assessment_incomplete_error_en">Please answer all questions before proceeding.</string>
+    <string name="assessment_incomplete_error_fa">لطفاً پیش از ادامه به تمامی سوالات پاسخ دهید.</string>
+    <string name="assessment_view_results_en">View Results</string>
+    <string name="assessment_view_results_fa">مشاهده نتیجه ارزیابی</string>
+    <string name="assessment_total_score_en">Total Score: %1$d</string>
+    <string name="assessment_total_score_fa">مجموع امتیاز شما: %1$d</string>
+    <string name="assessment_severity_en">Severity: %1$s</string>
+    <string name="assessment_severity_fa">وضعیت ارزیابی: %1$s</string>
+    <string name="assessment_next_steps_en">Next Steps: %1$s</string>
+    <string name="assessment_next_steps_fa">اقدام پیشنهادی: %1$s</string>
+    <string name="assessment_critical_warning_en">CRITICAL: Self-harm risk detected. Please contact a crisis hotline immediately.</string>
+    <string name="assessment_critical_warning_fa">هشدار مهم: خطر اورژانسی. لطفاً بی‌درنگ با خطوط ویژه بحران تماس بگیرید.</string>
+    <string name="assessment_finish_back_en">Finish / Back</string>
+    <string name="assessment_finish_back_fa">پایان ارزیابی و بازگشت</string>
+    <string name="assessment_call_1480">تماس با 1480 (صدای مشاور)</string>
+    <string name="assessment_call_123">تماس با 123 (اورژانس اجتماعی)</string>
+    <string name="assessment_call_115">تماس با 115 (اورژانس پزشکی)</string>
+    <string name="assessment_call_988">Call 988 (Crisis Lifeline)</string>
+    <string name="assessment_call_911">Call 911 (Emergency)</string>
 
     <!-- Group ID label -->
     <string name="label_group_id_fmt">Group ID: %1$s</string>
