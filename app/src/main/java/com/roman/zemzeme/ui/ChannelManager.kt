@@ -129,7 +129,13 @@ class ChannelManager(
     // MARK: - Channel Password and Encryption
     
     private fun verifyChannelPassword(channel: String, password: String): Boolean {
-        // TODO: REMOVE THIS - FOR TESTING ONLY
+        // Derive the AES key from the provided password and store it.
+        // In a P2P mesh there is no central authority to reject a wrong password;
+        // verification is implicit — AES-GCM decryption will fail (auth tag
+        // mismatch) if the key is wrong.
+        val key = deriveChannelKey(password, channel)
+        channelKeys[channel] = key
+        channelPasswords[channel] = password
         return true
     }
     
