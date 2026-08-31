@@ -102,7 +102,8 @@ data class NoisePayload(
 @Parcelize
 data class PrivateMessagePacket(
     val messageID: String,
-    val content: String
+    val content: String,
+    val mentions: List<String>? = null
 ) : Parcelable {
 
     /**
@@ -110,7 +111,8 @@ data class PrivateMessagePacket(
      */
     private enum class TLVType(val value: UByte) {
         MESSAGE_ID(0x00u),
-        CONTENT(0x01u);
+        CONTENT(0x01u),
+        MENTIONS(0x02u);
         
         companion object {
             fun fromValue(value: UByte): TLVType? {
@@ -126,9 +128,10 @@ data class PrivateMessagePacket(
     fun encode(): ByteArray? {
         val messageIDData = messageID.toByteArray(Charsets.UTF_8)
         val contentData = content.toByteArray(Charsets.UTF_8)
+        val mentionsData = mentions?.takeIf { it.isNotEmpty() }?.joinToString(",")?.toByteArray(Charsets.UTF_8)
         
         // Check size limits (TLV length field is 1 byte = max 255)
-        if (messageIDData.size > 255 || contentData.size > 255) {
+        if (messageIDData.size > 255 || contentData.size > 255 || (mentionsData != null && mentionsData.size > 255)) {
             return null
         }
         
@@ -143,6 +146,13 @@ data class PrivateMessagePacket(
         result.add(TLVType.CONTENT.value.toByte())
         result.add(contentData.size.toByte())
         result.addAll(contentData.toList())
+
+        // TLV for mentions
+        mentionsData?.let {
+            result.add(TLVType.MENTIONS.value.toByte())
+            result.add(it.size.toByte())
+            result.addAll(it.toList())
+        }
         
         return result.toByteArray()
     }
@@ -155,6 +165,7 @@ data class PrivateMessagePacket(
             var offset = 0
             var messageID: String? = null
             var content: String? = null
+            var mentions: List<String>? = null
             
             while (offset + 2 <= data.size) {
                 // Read TLV type
@@ -180,11 +191,17 @@ data class PrivateMessagePacket(
                     TLVType.CONTENT -> {
                         content = String(value, Charsets.UTF_8)
                     }
+                    TLVType.MENTIONS -> {
+                        val mentionsStr = String(value, Charsets.UTF_8)
+                        if (mentionsStr.isNotEmpty()) {
+                            mentions = mentionsStr.split(",")
+                        }
+                    }
                 }
             }
             
             return if (messageID != null && content != null) {
-                PrivateMessagePacket(messageID, content)
+                PrivateMessagePacket(messageID, content, mentions)
             } else {
                 null
             }
