@@ -1,5 +1,7 @@
 package com.roman.zemzeme.model
 
+import com.roman.zemzeme.util.AppConstants
+import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -24,6 +26,10 @@ data class ZemzemeFilePacket(
     val mimeType: String,
     val content: ByteArray
 ) {
+    private companion object {
+        private const val MAX_FILE_BYTES = AppConstants.Media.MAX_FILE_SIZE_BYTES.toInt()
+    }
+
     private enum class TLVType(val v: UByte) {
         FILE_NAME(0x01u), FILE_SIZE(0x02u), MIME_TYPE(0x03u), CONTENT(0x04u);
         companion object { fun from(value: UByte) = values().find { it.v == value } }
@@ -37,6 +43,14 @@ data class ZemzemeFilePacket(
         // Validate bounds for 2-byte TLV lengths (per-TLV). CONTENT may exceed 65535 and will be chunked.
         if (nameBytes.size > 0xFFFF || mimeBytes.size > 0xFFFF) {
                 android.util.Log.e("ZemzemeFilePacket", "❌ TLV field too large: name=${nameBytes.size}, mime=${mimeBytes.size} (max: 65535)")
+                return null
+            }
+            if (fileSize < 0 || fileSize > MAX_FILE_BYTES.toLong()) {
+                android.util.Log.e("ZemzemeFilePacket", "❌ File size out of bounds: $fileSize")
+                return null
+            }
+            if (content.size > MAX_FILE_BYTES || content.size.toLong() != fileSize) {
+                android.util.Log.e("ZemzemeFilePacket", "❌ File content size mismatch or exceeds limit: declared=$fileSize actual=${content.size}")
                 return null
             }
             if (content.size > 0xFFFF) {
@@ -89,7 +103,7 @@ data class ZemzemeFilePacket(
                 var name: String? = null
                 var size: Long? = null
                 var mime: String? = null
-                var contentBytes: ByteArray? = null
+                val contentBuffer = ByteArrayOutputStream()
                 while (off + 3 <= data.size) { // minimum TLV header size (type + 2 bytes length)
                     val t = TLVType.from(data[off].toUByte()) ?: return null
                     off += 1
@@ -113,20 +127,20 @@ data class ZemzemeFilePacket(
                             if (len != 4) return null
                             val bb = ByteBuffer.wrap(value).order(ByteOrder.BIG_ENDIAN)
                             size = bb.int.toLong()
+                            if (size!! < 0 || size!! > MAX_FILE_BYTES.toLong()) return null
                         }
                         TLVType.MIME_TYPE -> mime = String(value, Charsets.UTF_8)
                         TLVType.CONTENT -> {
-                            // Expect a single CONTENT TLV
-                            if (contentBytes == null) contentBytes = value else {
-                                // If multiple CONTENT TLVs appear, concatenate for tolerance
-                                contentBytes = (contentBytes!! + value)
-                            }
+                            if (contentBuffer.size() + value.size > MAX_FILE_BYTES) return null
+                            contentBuffer.write(value)
                         }
                     }
                 }
                 val n = name ?: return null
-                val c = contentBytes ?: return null
-                val s = size ?: c.size.toLong()
+                val c = contentBuffer.toByteArray()
+                if (c.isEmpty()) return null
+                val s = size ?: return null
+                if (s != c.size.toLong()) return null
                 val m = mime ?: "application/octet-stream"
                 val result = ZemzemeFilePacket(n, s, m, c)
                 android.util.Log.d("ZemzemeFilePacket", "✅ Decoded: name=$n, size=$s, mime=$m, content=${c.size} bytes")
@@ -138,4 +152,3 @@ data class ZemzemeFilePacket(
         }
     }
 }
-
