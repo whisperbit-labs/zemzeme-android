@@ -273,7 +273,7 @@ class P2PLibraryRepository(
                                     )
                                 )
                             }
-                            Log.d(TAG, "Message from $peerID: ${message.take(50)}...")
+                            Log.d(TAG, "Message from $peerID (content scrubbed for security)")
                         }
                     }
                 })
@@ -318,7 +318,7 @@ class P2PLibraryRepository(
                                     )
                                 )
                             }
-                            Log.d(TAG, "Topic message [$topicName] from $senderID: ${message.take(50)}...")
+                            Log.d(TAG, "Topic message [$topicName] from $senderID (content scrubbed for security)")
                         }
                     }
                 })
@@ -670,7 +670,7 @@ class P2PLibraryRepository(
         try {
             val n = node ?: return@withContext Result.failure(Exception("Node not started"))
             n.sendMessage(peerID, message)
-            Log.d(TAG, "Sent message to $peerID: ${message.take(50)}...")
+            Log.d(TAG, "Sent message to $peerID (content scrubbed for security)")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to send message to $peerID", e)
@@ -750,7 +750,7 @@ class P2PLibraryRepository(
         try {
             val n = node ?: return@withContext Result.failure(Exception("Node not started"))
             n.publishToTopic(topicName, message)
-            Log.d(TAG, "Published to topic $topicName: ${message.take(50)}...")
+            Log.d(TAG, "Published to topic $topicName (content scrubbed for security)")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to publish to topic $topicName", e)
