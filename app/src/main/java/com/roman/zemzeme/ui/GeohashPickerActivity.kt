@@ -4,11 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.setContent
@@ -30,7 +29,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import com.roman.zemzeme.ui.theme.NunitoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -85,6 +83,7 @@ class GeohashPickerActivity : OrientationAwareActivity() {
         }
 
         val initialPrecision = geohashToFocus?.length ?: 5
+        val pickerHtml = assets.open("geohash_picker.html").bufferedReader(Charsets.UTF_8).use { it.readText() }
 
         setContent {
             MaterialTheme {
@@ -103,11 +102,12 @@ class GeohashPickerActivity : OrientationAwareActivity() {
                             factory = { context ->
                                 WebView(context).apply {
                                     settings.javaScriptEnabled = true
-                                    settings.domStorageEnabled = true
-                                    settings.cacheMode = WebSettings.LOAD_DEFAULT
-                                    settings.allowFileAccess = true
-                                    settings.allowContentAccess = true
-                                    webChromeClient = WebChromeClient()
+                                    settings.domStorageEnabled = false
+                                    settings.allowFileAccess = false
+                                    settings.allowContentAccess = false
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        settings.safeBrowsingEnabled = true
+                                    }
                                     webViewClient = object : WebViewClient() {
                                         override fun onPageFinished(view: WebView?, url: String?) {
                                             super.onPageFinished(view, url)
@@ -139,7 +139,13 @@ class GeohashPickerActivity : OrientationAwareActivity() {
                                         }
                                     }, "Android")
 
-                                    loadUrl("file:///android_asset/geohash_picker.html")
+                                    loadDataWithBaseURL(
+                                        "https://local.zemzeme.invalid/",
+                                        pickerHtml,
+                                        "text/html",
+                                        "UTF-8",
+                                        null
+                                    )
                                 }
                             },
                             modifier = Modifier

@@ -457,6 +457,14 @@ class SecureIdentityStateManager(private val context: Context) {
         // No keys available
         return null
     }
+
+    /**
+     * Get only the explicitly stored P2P private key.
+     * Does not fall back to the signing key.
+     */
+    fun getStoredP2PPrivateKey(): String? {
+        return prefs.getString(KEY_P2P_PRIVATE_KEY, null)
+    }
     
     /**
      * Store a P2P private key explicitly.

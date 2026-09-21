@@ -117,7 +117,14 @@ object RelayDirectory {
     private fun normalizeRelayUrl(raw: String): String {
         val trimmed = raw.trim()
         if (trimmed.isEmpty()) return trimmed
-        return if ("://" in trimmed) trimmed else "wss://$trimmed"
+        if ("://" !in trimmed) return "wss://$trimmed"
+
+        val lower = trimmed.lowercase()
+        return when {
+            lower.startsWith("wss://") -> trimmed
+            lower.startsWith("ws://") -> "wss://${trimmed.substringAfter("://")}"
+            else -> ""
+        }
     }
 
     // ===== Implementation details =====
@@ -300,4 +307,3 @@ object RelayDirectory {
         }
     }
 }
-

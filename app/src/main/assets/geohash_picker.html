@@ -4,222 +4,631 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      :root { --text: #333; }
-      html, body, #map { height: 100%; margin: 0; padding: 0; background: #ffffff; }
-      .leaflet-container { background: #ffffff; }
-      .leaflet-div-icon { background: transparent; border: none; }
-      .gh-label { background: transparent; border: none; pointer-events: none; filter: none; }
-      .gh-text {
-        color: #444444;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 1;
-        text-shadow: 0 0 2px #ffffff, 0 0 2px #ffffff, 0 0 2px #ffffff;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      :root {
+        --bg-top: #f6fbff;
+        --bg-bottom: #d8e9f5;
+        --grid: rgba(38, 74, 94, 0.16);
+        --grid-strong: rgba(38, 74, 94, 0.28);
+        --cell: rgba(37, 138, 61, 0.16);
+        --cell-selected: rgba(37, 138, 61, 0.28);
+        --outline: #248a3d;
+        --outline-soft: rgba(36, 138, 61, 0.35);
+        --text: #173042;
+        --muted: rgba(23, 48, 66, 0.68);
+        --hud: rgba(255, 255, 255, 0.8);
       }
-      .dark .gh-text {
-        color: #dddddd;
-        text-shadow: 0 0 2px #000000, 0 0 2px #000000, 0 0 2px #000000;
+
+      body[data-theme="dark"] {
+        --bg-top: #06141d;
+        --bg-bottom: #0f2532;
+        --grid: rgba(176, 219, 239, 0.16);
+        --grid-strong: rgba(176, 219, 239, 0.3);
+        --cell: rgba(0, 245, 255, 0.12);
+        --cell-selected: rgba(0, 245, 255, 0.22);
+        --outline: #00f5ff;
+        --outline-soft: rgba(0, 245, 255, 0.28);
+        --text: #ebf6fb;
+        --muted: rgba(235, 246, 251, 0.72);
+        --hud: rgba(6, 20, 29, 0.78);
       }
-      .gh-text-selected {
-        color: #00C851 !important;
+
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+        font-family: "SF Mono", "Roboto Mono", Menlo, Consolas, monospace;
+      }
+
+      #viewport {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        user-select: none;
+        overflow: hidden;
+      }
+
+      #surface {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      #hud {
+        position: absolute;
+        left: 16px;
+        bottom: 16px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: var(--hud);
+        color: var(--text);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        font-size: 12px;
+        line-height: 1.4;
+        pointer-events: none;
+      }
+
+      .label {
+        fill: var(--text);
+        font-size: 12px;
+        font-weight: 600;
+        paint-order: stroke;
+        stroke: rgba(255, 255, 255, 0.7);
+        stroke-width: 3px;
+        stroke-linejoin: round;
+      }
+
+      body[data-theme="dark"] .label {
+        stroke: rgba(0, 0, 0, 0.65);
+      }
+
+      .label.selected {
+        fill: var(--outline);
       }
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
-  <body>
-    <div id="map"></div>
+  <body data-theme="light">
+    <div id="viewport">
+      <svg id="surface" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"></svg>
+      <div id="hud"></div>
+    </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-      // Minimal geohash (bounds/encode/adjacent)
       (function () {
         const base32 = "0123456789bcdefghjkmnpqrstuvwxyz";
+
         function bounds(geohash) {
-          let evenBit = true; let latMin = -90, latMax = 90, lonMin = -180, lonMax = 180;
-          geohash = geohash.toLowerCase();
-          for (let i = 0; i < geohash.length; i++) {
-            const idx = base32.indexOf(geohash.charAt(i));
-            if (idx == -1) throw new Error("Invalid geohash");
-            for (let n = 4; n >= 0; n--) {
+          let evenBit = true;
+          let latMin = -90;
+          let latMax = 90;
+          let lonMin = -180;
+          let lonMax = 180;
+          const normalized = geohash.toLowerCase();
+
+          for (let i = 0; i < normalized.length; i += 1) {
+            const idx = base32.indexOf(normalized.charAt(i));
+            if (idx === -1) throw new Error("Invalid geohash");
+
+            for (let n = 4; n >= 0; n -= 1) {
               const bitN = (idx >> n) & 1;
-              if (evenBit) { const lonMid = (lonMin + lonMax) / 2; if (bitN == 1) lonMin = lonMid; else lonMax = lonMid; }
-              else { const latMid = (latMin + latMax) / 2; if (bitN == 1) latMin = latMid; else latMax = latMid; }
+              if (evenBit) {
+                const lonMid = (lonMin + lonMax) / 2;
+                if (bitN === 1) lonMin = lonMid;
+                else lonMax = lonMid;
+              } else {
+                const latMid = (latMin + latMax) / 2;
+                if (bitN === 1) latMin = latMid;
+                else latMax = latMid;
+              }
               evenBit = !evenBit;
             }
           }
-          return { sw: { lat: latMin, lng: lonMin }, ne: { lat: latMax, lng: lonMax } };
+
+          return {
+            sw: { lat: latMin, lng: lonMin },
+            ne: { lat: latMax, lng: lonMax }
+          };
         }
+
         function encode(lat, lon, precision) {
-          let idx = 0, bit = 0, evenBit = true, hash = "";
-          let latMin = -90, latMax = 90, lonMin = -180, lonMax = 180;
+          let idx = 0;
+          let bit = 0;
+          let evenBit = true;
+          let hash = "";
+          let latMin = -90;
+          let latMax = 90;
+          let lonMin = -180;
+          let lonMax = 180;
+
           while (hash.length < precision) {
-            if (evenBit) { const lonMid = (lonMin + lonMax) / 2; if (lon >= lonMid) { idx = idx * 2 + 1; lonMin = lonMid; } else { idx = idx * 2; lonMax = lonMid; } }
-            else { const latMid = (latMin + latMax) / 2; if (lat >= latMid) { idx = idx * 2 + 1; latMin = latMid; } else { idx = idx * 2; latMax = latMid; } }
-            evenBit = !evenBit; if (++bit == 5) { hash += base32.charAt(idx); bit = 0; idx = 0; }
+            if (evenBit) {
+              const lonMid = (lonMin + lonMax) / 2;
+              if (lon >= lonMid) {
+                idx = idx * 2 + 1;
+                lonMin = lonMid;
+              } else {
+                idx *= 2;
+                lonMax = lonMid;
+              }
+            } else {
+              const latMid = (latMin + latMax) / 2;
+              if (lat >= latMid) {
+                idx = idx * 2 + 1;
+                latMin = latMid;
+              } else {
+                idx *= 2;
+                latMax = latMid;
+              }
+            }
+
+            evenBit = !evenBit;
+            bit += 1;
+            if (bit === 5) {
+              hash += base32.charAt(idx);
+              bit = 0;
+              idx = 0;
+            }
           }
+
           return hash;
         }
+
         function adjacent(hash, dir) {
-          const neighbour = { n:["p0r21436x8zb9dcf5h7kjnmqesgutwvy","bc01fg45238967deuvhjyznpkmstqrwx"], s:["14365h7k9dcfesgujnmqp0r2twvyx8zb","238967debc01fg45kmstqrwxuvhjyznp"], e:["bc01fg45238967deuvhjyznpkmstqrwx","p0r21436x8zb9dcf5h7kjnmqesgutwvy"], w:["238967debc01fg45kmstqrwxuvhjyznp","14365h7k9dcfesgujnmqp0r2twvyx8zb"] };
-          const border = { n:["prxz","bcfguvyz"], s:["028b","0145hjnp"], e:["bcfguvyz","prxz"], w:["0145hjnp","028b"] };
-          hash = hash.toLowerCase(); const lastCh = hash.slice(-1); let parent = hash.slice(0, -1); const type = hash.length % 2;
-          if (border[dir][type].indexOf(lastCh) != -1 && parent != "") parent = adjacent(parent, dir);
+          const neighbour = {
+            n: ["p0r21436x8zb9dcf5h7kjnmqesgutwvy", "bc01fg45238967deuvhjyznpkmstqrwx"],
+            s: ["14365h7k9dcfesgujnmqp0r2twvyx8zb", "238967debc01fg45kmstqrwxuvhjyznp"],
+            e: ["bc01fg45238967deuvhjyznpkmstqrwx", "p0r21436x8zb9dcf5h7kjnmqesgutwvy"],
+            w: ["238967debc01fg45kmstqrwxuvhjyznp", "14365h7k9dcfesgujnmqp0r2twvyx8zb"]
+          };
+          const border = {
+            n: ["prxz", "bcfguvyz"],
+            s: ["028b", "0145hjnp"],
+            e: ["bcfguvyz", "prxz"],
+            w: ["0145hjnp", "028b"]
+          };
+
+          const normalized = hash.toLowerCase();
+          const lastCh = normalized.slice(-1);
+          let parent = normalized.slice(0, -1);
+          const type = normalized.length % 2;
+
+          if (border[dir][type].indexOf(lastCh) !== -1 && parent !== "") {
+            parent = adjacent(parent, dir);
+          }
+
           return parent + base32.charAt(neighbour[dir][type].indexOf(lastCh));
         }
+
         window.__geohash = { bounds, encode, adjacent };
       })();
 
-      const map = L.map("map", { zoomControl: true, minZoom: 2, maxZoom: 21 }).setView([0, 0], 3);
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", { maxZoom: 21, attribution: "&copy; OpenStreetMap &copy; Carto", opacity: 1.0 }).addTo(map);
+      const svgNS = "http://www.w3.org/2000/svg";
+      const viewport = document.getElementById("viewport");
+      const surface = document.getElementById("surface");
+      const hud = document.getElementById("hud");
 
-      let selectedGeohash = "";
-      let gridLayer = L.layerGroup().addTo(map);
-      let pinnedPrecision = null;
-      let outlineColor = "#00C851";
+      const state = {
+        centerLat: 0,
+        centerLon: 0,
+        zoom: 3,
+        selectedGeohash: "",
+        pinnedPrecision: null,
+        viewWidth: 0,
+        viewHeight: 0,
+        dragging: false,
+        pointerId: null,
+        dragStartX: 0,
+        dragStartY: 0,
+        dragCenterX: 0,
+        dragCenterY: 0,
+        rafPending: false
+      };
 
-      function getNeighbors(hash) {
-        const neighbors = [];
-        // N, S, E, W
-        neighbors.push(window.__geohash.adjacent(hash, 'n'));
-        neighbors.push(window.__geohash.adjacent(hash, 's'));
-        neighbors.push(window.__geohash.adjacent(hash, 'e'));
-        neighbors.push(window.__geohash.adjacent(hash, 'w'));
-        // Diagonals
-        neighbors.push(window.__geohash.adjacent(window.__geohash.adjacent(hash, 'n'), 'e'));
-        neighbors.push(window.__geohash.adjacent(window.__geohash.adjacent(hash, 'n'), 'w'));
-        neighbors.push(window.__geohash.adjacent(window.__geohash.adjacent(hash, 's'), 'e'));
-        neighbors.push(window.__geohash.adjacent(window.__geohash.adjacent(hash, 's'), 'w'));
-        return neighbors;
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function clampLat(lat) {
+        return clamp(lat, -85.05112878, 85.05112878);
+      }
+
+      function wrapLon(lon) {
+        let normalized = lon;
+        while (normalized < -180) normalized += 360;
+        while (normalized >= 180) normalized -= 360;
+        return normalized;
+      }
+
+      function worldSize() {
+        return 256 * Math.pow(2, state.zoom);
+      }
+
+      function project(lat, lon) {
+        const size = worldSize();
+        const normalizedLon = wrapLon(lon);
+        const clampedLat = clampLat(lat);
+        const siny = clamp(Math.sin((clampedLat * Math.PI) / 180), -0.9999, 0.9999);
+        return {
+          x: ((normalizedLon + 180) / 360) * size,
+          y: (0.5 - Math.log((1 + siny) / (1 - siny)) / (4 * Math.PI)) * size
+        };
+      }
+
+      function unproject(x, y) {
+        const size = worldSize();
+        const lon = (x / size) * 360 - 180;
+        const lat = (180 / Math.PI) * Math.atan(Math.sinh(Math.PI - (2 * Math.PI * y) / size));
+        return {
+          lat: clampLat(lat),
+          lon: wrapLon(lon)
+        };
+      }
+
+      function screenPoint(lat, lon) {
+        const center = project(state.centerLat, state.centerLon);
+        const point = project(lat, lon);
+        const size = worldSize();
+        let dx = point.x - center.x;
+        if (dx > size / 2) dx -= size;
+        if (dx < -size / 2) dx += size;
+        const dy = point.y - center.y;
+
+        return {
+          x: state.viewWidth / 2 + dx,
+          y: state.viewHeight / 2 + dy
+        };
+      }
+
+      function createSvgElement(name, attrs) {
+        const node = document.createElementNS(svgNS, name);
+        Object.keys(attrs).forEach(function (key) {
+          node.setAttribute(key, String(attrs[key]));
+        });
+        return node;
+      }
+
+      function cellRect(hash) {
+        const b = window.__geohash.bounds(hash);
+        const nw = screenPoint(b.ne.lat, b.sw.lng);
+        const se = screenPoint(b.sw.lat, b.ne.lng);
+        const width = Math.abs(se.x - nw.x);
+        const height = Math.abs(se.y - nw.y);
+        if (!Number.isFinite(width) || !Number.isFinite(height)) return null;
+        if (width > state.viewWidth * 1.5 || height > state.viewHeight * 1.5) return null;
+        return {
+          x: Math.min(nw.x, se.x),
+          y: Math.min(nw.y, se.y),
+          width: width,
+          height: height,
+          centerX: (nw.x + se.x) / 2,
+          centerY: (nw.y + se.y) / 2
+        };
       }
 
       function pickPrecisionForViewport() {
-        const c = map.getCenter();
-        const minPx = 80;
-        const maxPx = 240;
-        let chosen = 1;
-        let lastAboveMin = 1;
-        for (let p = 1; p <= 12; p++) {
-          const gh = window.__geohash.encode(c.lat, c.lng, p);
-          const b = window.__geohash.bounds(gh);
-          const pSw = map.latLngToLayerPoint([b.sw.lat, b.sw.lng]);
-          const pNe = map.latLngToLayerPoint([b.ne.lat, b.ne.lng]);
-          const cellPx = Math.min(Math.abs(pNe.x - pSw.x), Math.abs(pSw.y - pNe.y));
-          if (cellPx >= minPx && cellPx <= maxPx) { chosen = p; break; }
-          if (cellPx >= minPx) { lastAboveMin = p; }
-          if (cellPx < minPx) { chosen = lastAboveMin; break; }
-          if (p === 12) { chosen = 12; }
+        const minPx = 90;
+        const maxPx = 220;
+        let fallback = 1;
+
+        for (let precision = 1; precision <= 12; precision += 1) {
+          const hash = window.__geohash.encode(state.centerLat, state.centerLon, precision);
+          const rect = cellRect(hash);
+          if (!rect) continue;
+          const cellPx = Math.min(rect.width, rect.height);
+          if (cellPx >= minPx) fallback = precision;
+          if (cellPx >= minPx && cellPx <= maxPx) return precision;
+          if (cellPx < minPx) return fallback;
         }
-        return chosen;
+
+        return 12;
       }
 
-      function notifySelection() {
-        if (window.Android && window.Android.onGeohashChanged && selectedGeohash) {
-          window.Android.onGeohashChanged(selectedGeohash);
-        }
-      }
-
-      function zoomForPrecision(p) {
-        if (p <= 1) return 1; if (p === 2) return 2; if (p === 3) return 3; if (p === 4) return 4;
-        if (p === 5) return 5; if (p === 6) return 7; if (p === 7) return 9; if (p === 8) return 11;
-        if (p === 9) return 13; if (p === 10) return 15; if (p === 11) return 17;
+      function zoomForPrecision(precision) {
+        if (precision <= 1) return 1;
+        if (precision === 2) return 2;
+        if (precision === 3) return 3;
+        if (precision === 4) return 4;
+        if (precision === 5) return 5;
+        if (precision === 6) return 7;
+        if (precision === 7) return 9;
+        if (precision === 8) return 11;
+        if (precision === 9) return 13;
+        if (precision === 10) return 15;
+        if (precision === 11) return 17;
         return 18;
       }
 
-      function updateOverlay() {
-        gridLayer.clearLayers();
-        const c = map.getCenter();
-        const usePinned = pinnedPrecision !== null;
-        const p = usePinned ? pinnedPrecision : pickPrecisionForViewport();
-        selectedGeohash = window.__geohash.encode(c.lat, c.lng, p);
+      function notifySelection() {
+        if (window.Android && window.Android.onGeohashChanged && state.selectedGeohash) {
+          window.Android.onGeohashChanged(state.selectedGeohash);
+        }
+      }
+
+      function getNeighborHashes(hash) {
+        const north = window.__geohash.adjacent(hash, "n");
+        const south = window.__geohash.adjacent(hash, "s");
+        const east = window.__geohash.adjacent(hash, "e");
+        const west = window.__geohash.adjacent(hash, "w");
+        return [
+          hash,
+          north,
+          south,
+          east,
+          west,
+          window.__geohash.adjacent(north, "e"),
+          window.__geohash.adjacent(north, "w"),
+          window.__geohash.adjacent(south, "e"),
+          window.__geohash.adjacent(south, "w")
+        ].filter(function (value, index, array) {
+          return value && array.indexOf(value) === index;
+        });
+      }
+
+      function renderBackground(root) {
+        root.appendChild(
+          createSvgElement("rect", {
+            x: 0,
+            y: 0,
+            width: state.viewWidth,
+            height: state.viewHeight,
+            fill: "url(#skyGradient)"
+          })
+        );
+
+        const grid = createSvgElement("g", {});
+        const step = state.zoom < 3 ? 60 : state.zoom < 5 ? 30 : state.zoom < 8 ? 10 : 5;
+
+        for (let lon = -180; lon <= 180; lon += step) {
+          const x = screenPoint(0, lon).x;
+          grid.appendChild(
+            createSvgElement("line", {
+              x1: x,
+              y1: 0,
+              x2: x,
+              y2: state.viewHeight,
+              stroke: lon % (step * 2) === 0 ? "var(--grid-strong)" : "var(--grid)",
+              "stroke-width": lon % (step * 2) === 0 ? 1.2 : 0.8
+            })
+          );
+        }
+
+        for (let lat = -80; lat <= 80; lat += step) {
+          const y = screenPoint(lat, state.centerLon).y;
+          grid.appendChild(
+            createSvgElement("line", {
+              x1: 0,
+              y1: y,
+              x2: state.viewWidth,
+              y2: y,
+              stroke: lat % (step * 2) === 0 ? "var(--grid-strong)" : "var(--grid)",
+              "stroke-width": lat % (step * 2) === 0 ? 1.2 : 0.8
+            })
+          );
+        }
+
+        root.appendChild(grid);
+      }
+
+      function renderCells(root) {
+        const precision = state.pinnedPrecision !== null ? state.pinnedPrecision : pickPrecisionForViewport();
+        state.selectedGeohash = window.__geohash.encode(state.centerLat, state.centerLon, precision);
         notifySelection();
 
-        const centerBounds = window.__geohash.bounds(selectedGeohash);
-        const centerLon = (centerBounds.sw.lng + centerBounds.ne.lng) / 2;
-        const centerLat = (centerBounds.sw.lat + centerBounds.ne.lat) / 2;
+        const cells = createSvgElement("g", {});
+        getNeighborHashes(state.selectedGeohash).forEach(function (hash) {
+          const rect = cellRect(hash);
+          if (!rect) return;
 
-        const allHashes = [selectedGeohash, ...getNeighbors(selectedGeohash)];
+          const isSelected = hash === state.selectedGeohash;
+          cells.appendChild(
+            createSvgElement("rect", {
+              x: rect.x,
+              y: rect.y,
+              width: rect.width,
+              height: rect.height,
+              rx: 8,
+              ry: 8,
+              fill: isSelected ? "var(--cell-selected)" : "var(--cell)",
+              stroke: isSelected ? "var(--outline)" : "var(--outline-soft)",
+              "stroke-width": isSelected ? 2.4 : 1.1
+            })
+          );
 
-        const filteredHashes = allHashes.filter(gh => {
-            if (!gh) return false;
-            try {
-                const b = window.__geohash.bounds(gh);
-                const lon = (b.sw.lng + b.ne.lng) / 2;
-                const lat = (b.sw.lat + b.ne.lat) / 2;
-                if (Math.abs(lon - centerLon) > 180) return false; // anti-meridian wrap
-                if (Math.abs(lat - centerLat) > 90) return false; // pole wrap
-                return true;
-            } catch (e) { return false; }
+          if (rect.width > 28 && rect.height > 18) {
+            const label = createSvgElement("text", {
+              x: rect.centerX,
+              y: rect.centerY + 4,
+              "text-anchor": "middle",
+              class: isSelected ? "label selected" : "label"
+            });
+            label.textContent = hash;
+            cells.appendChild(label);
+          }
         });
 
-        filteredHashes.forEach(gh => {
-            const b = window.__geohash.bounds(gh);
-            const sw = [b.sw.lat, b.sw.lng];
-            const ne = [b.ne.lat, b.ne.lng];
-            const isSelected = (gh === selectedGeohash);
+        root.appendChild(cells);
+      }
 
-            const rect = L.rectangle([sw, ne], {
-                color: isSelected ? outlineColor : '#cccccc',
-                weight: isSelected ? 3 : 1,
-                fillOpacity: 0.0,
-                opacity: 0.9,
-                interactive: false
-            });
-            gridLayer.addLayer(rect);
+      function renderCrosshair(root) {
+        const centerX = state.viewWidth / 2;
+        const centerY = state.viewHeight / 2;
+        root.appendChild(
+          createSvgElement("circle", {
+            cx: centerX,
+            cy: centerY,
+            r: 18,
+            fill: "none",
+            stroke: "var(--outline-soft)",
+            "stroke-width": 1.2
+          })
+        );
+        root.appendChild(
+          createSvgElement("line", {
+            x1: centerX - 28,
+            y1: centerY,
+            x2: centerX + 28,
+            y2: centerY,
+            stroke: "var(--outline)",
+            "stroke-width": 1.5
+          })
+        );
+        root.appendChild(
+          createSvgElement("line", {
+            x1: centerX,
+            y1: centerY - 28,
+            x2: centerX,
+            y2: centerY + 28,
+            stroke: "var(--outline)",
+            "stroke-width": 1.5
+          })
+        );
+      }
 
-            const center = [(b.sw.lat + b.ne.lat) / 2, (b.sw.lng + b.ne.lng) / 2];
-            const labelClass = isSelected ? 'gh-text gh-text-selected' : 'gh-text';
-            const label = L.marker(center, {
-                icon: L.divIcon({
-                    className: 'gh-label',
-                    html: `<span class="${labelClass}">${gh}</span>`
-                }),
-                interactive: false
-            });
-            gridLayer.addLayer(label);
+      function renderHud() {
+        hud.textContent =
+          state.selectedGeohash +
+          " | lat " +
+          state.centerLat.toFixed(4) +
+          " | lon " +
+          state.centerLon.toFixed(4) +
+          " | zoom " +
+          state.zoom.toFixed(1);
+      }
+
+      function render() {
+        state.rafPending = false;
+        state.viewWidth = viewport.clientWidth;
+        state.viewHeight = viewport.clientHeight;
+        surface.setAttribute("viewBox", "0 0 " + state.viewWidth + " " + state.viewHeight);
+
+        while (surface.firstChild) {
+          surface.removeChild(surface.firstChild);
+        }
+
+        const defs = createSvgElement("defs", {});
+        const gradient = createSvgElement("linearGradient", {
+          id: "skyGradient",
+          x1: "0%",
+          y1: "0%",
+          x2: "0%",
+          y2: "100%"
         });
+        gradient.appendChild(createSvgElement("stop", { offset: "0%", "stop-color": "var(--bg-top)" }));
+        gradient.appendChild(createSvgElement("stop", { offset: "100%", "stop-color": "var(--bg-bottom)" }));
+        defs.appendChild(gradient);
+        surface.appendChild(defs);
+
+        const root = createSvgElement("g", {});
+        renderBackground(root);
+        renderCells(root);
+        renderCrosshair(root);
+        surface.appendChild(root);
+        renderHud();
       }
 
-      map.on("movestart", () => { pinnedPrecision = null; });
-      map.on("zoomstart", () => { pinnedPrecision = null; });
-      map.on("moveend", updateOverlay);
-      map.on("zoomend", updateOverlay);
+      function requestRender() {
+        if (state.rafPending) return;
+        state.rafPending = true;
+        window.requestAnimationFrame(render);
+      }
 
-      function setCenter(lat, lng) { map.setView([lat, lng], map.getZoom()); }
-      function setPrecision(p) {
-        const clamped = Math.max(1, Math.min(12, p|0));
-        const targetZoom = zoomForPrecision(clamped);
-        map.setZoom(targetZoom);
+      function setCenter(lat, lon) {
+        state.centerLat = clampLat(Number(lat) || 0);
+        state.centerLon = wrapLon(Number(lon) || 0);
+        requestRender();
       }
-      function focusGeohash(gh) {
-        if (!gh || typeof gh !== 'string') return;
-        const g = gh.toLowerCase();
-        const b = window.__geohash.bounds(g);
-        pinnedPrecision = g.length;
-        map.fitBounds([[b.sw.lat, b.sw.lng],[b.ne.lat, b.ne.lng]], { animate: false, padding: [8,8] });
-        selectedGeohash = g;
+
+      function setPrecision(precision) {
+        const clamped = clamp(Number(precision) || 1, 1, 12);
+        state.pinnedPrecision = clamped;
+        state.zoom = zoomForPrecision(clamped);
+        requestRender();
       }
-      function getGeohash() { return selectedGeohash; }
-      
-      // Android side will call this with 'dark' or 'light'
+
+      function focusGeohash(hash) {
+        if (!hash || typeof hash !== "string") return;
+        const normalized = hash.toLowerCase();
+        const b = window.__geohash.bounds(normalized);
+        state.centerLat = (b.sw.lat + b.ne.lat) / 2;
+        state.centerLon = (b.sw.lng + b.ne.lng) / 2;
+        state.pinnedPrecision = normalized.length;
+        state.zoom = zoomForPrecision(normalized.length);
+        state.selectedGeohash = normalized;
+        requestRender();
+      }
+
+      function getGeohash() {
+        return state.selectedGeohash;
+      }
+
       function setMapTheme(theme) {
-        document.body.className = theme;
+        document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+        requestRender();
       }
+
+      function onPointerDown(event) {
+        state.dragging = true;
+        state.pointerId = event.pointerId;
+        state.pinnedPrecision = null;
+        state.dragStartX = event.clientX;
+        state.dragStartY = event.clientY;
+        const center = project(state.centerLat, state.centerLon);
+        state.dragCenterX = center.x;
+        state.dragCenterY = center.y;
+        viewport.setPointerCapture(event.pointerId);
+      }
+
+      function onPointerMove(event) {
+        if (!state.dragging || event.pointerId !== state.pointerId) return;
+        const dx = event.clientX - state.dragStartX;
+        const dy = event.clientY - state.dragStartY;
+        const nextCenter = unproject(state.dragCenterX - dx, state.dragCenterY - dy);
+        state.centerLat = nextCenter.lat;
+        state.centerLon = nextCenter.lon;
+        requestRender();
+      }
+
+      function stopDragging(event) {
+        if (event && state.pointerId !== null && event.pointerId !== state.pointerId) return;
+        state.dragging = false;
+        state.pointerId = null;
+      }
+
+      function onWheel(event) {
+        event.preventDefault();
+        state.pinnedPrecision = null;
+        state.zoom = clamp(state.zoom + (event.deltaY < 0 ? 0.35 : -0.35), 1, 18);
+        requestRender();
+      }
+
+      function cleanup() {
+        viewport.removeEventListener("pointerdown", onPointerDown);
+        viewport.removeEventListener("pointermove", onPointerMove);
+        viewport.removeEventListener("pointerup", stopDragging);
+        viewport.removeEventListener("pointercancel", stopDragging);
+        viewport.removeEventListener("wheel", onWheel);
+        window.removeEventListener("resize", requestRender);
+      }
+
+      viewport.addEventListener("pointerdown", onPointerDown);
+      viewport.addEventListener("pointermove", onPointerMove);
+      viewport.addEventListener("pointerup", stopDragging);
+      viewport.addEventListener("pointercancel", stopDragging);
+      viewport.addEventListener("wheel", onWheel, { passive: false });
+      window.addEventListener("resize", requestRender);
 
       window.setCenter = setCenter;
       window.setPrecision = setPrecision;
       window.focusGeohash = focusGeohash;
       window.getGeohash = getGeohash;
       window.setMapTheme = setMapTheme;
-
-      function cleanup() {
-        try { map.off(); } catch (_) {}
-        try { gridLayer.clearLayers(); } catch (_) {}
-        try { map.remove(); } catch (_) {}
-      }
       window.cleanup = cleanup;
 
-      map.whenReady(updateOverlay);
+      requestRender();
     </script>
   </body>
 </html>
