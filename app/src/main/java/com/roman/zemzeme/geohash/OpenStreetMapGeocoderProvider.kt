@@ -12,13 +12,17 @@ import kotlinx.coroutines.withContext
 class OpenStreetMapGeocoderProvider : GeocoderProvider {
     private val TAG = "OSMGeocoderProvider"
     private val gson = Gson()
-    private val userAgent = "Zemzeme-Android/1.0"
+    private val userAgent = "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.0.0 Mobile Safari/537.36"
+
+    private fun truncateCoord(value: Double): Double =
+        Math.round(value * 100.0) / 100.0
 
     override suspend fun getFromLocation(latitude: Double, longitude: Double, maxResults: Int): List<Address> {
         return withContext(Dispatchers.IO) {
             val lang = Locale.getDefault().toLanguageTag()
-            // Using format=jsonv2 for structured address breakdown
-            val url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$latitude&lon=$longitude&zoom=18&addressdetails=1&accept-language=$lang"
+            val truncLat = truncateCoord(latitude)
+            val truncLon = truncateCoord(longitude)
+            val url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$truncLat&lon=$truncLon&zoom=10&addressdetails=1&accept-language=$lang"
 
             try {
                 val request = Request.Builder()
