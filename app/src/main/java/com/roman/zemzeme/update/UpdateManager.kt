@@ -242,7 +242,7 @@ class UpdateManager private constructor(private val context: Context) {
         val request = Request.Builder()
             .url(AppConstants.Update.GITHUB_API_URL)
             .header("Accept", "application/vnd.github.v3+json")
-            .header("User-Agent", "Zemzeme-Android/${getCurrentVersionName()}")
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.0.0 Mobile Safari/537.36")
             .build()
 
         try {
@@ -341,7 +341,7 @@ class UpdateManager private constructor(private val context: Context) {
 
         val requestBuilder = Request.Builder()
             .url(url)
-            .header("User-Agent", "Zemzeme-Android/${getCurrentVersionName()}")
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.0.0 Mobile Safari/537.36")
         if (existingBytes > 0) requestBuilder.header("Range", "bytes=$existingBytes-")
 
         httpClient.newCall(requestBuilder.build()).execute().use { response ->
@@ -377,7 +377,7 @@ class UpdateManager private constructor(private val context: Context) {
     }
 
     private suspend fun downloadApkFresh(url: String, apkFile: File, onProgress: (Float) -> Unit): File = withContext(Dispatchers.IO) {
-        val request = Request.Builder().url(url).header("User-Agent", "Zemzeme-Android/${getCurrentVersionName()}").build()
+        val request = Request.Builder().url(url).header("User-Agent", "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.0.0 Mobile Safari/537.36").build()
         httpClient.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Download failed: HTTP ${response.code}")
             val body = response.body ?: throw IOException("Empty response body")
