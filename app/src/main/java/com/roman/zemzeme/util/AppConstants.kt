@@ -39,6 +39,7 @@ object AppConstants {
     object Fragmentation {
         const val FRAGMENT_SIZE_THRESHOLD: Int = 512
         const val MAX_FRAGMENT_SIZE: Int = 469
+        const val MAX_REASSEMBLED_PACKET_BYTES: Int = (50 * 1024 * 1024) + (64 * 1024)
         const val FRAGMENT_TIMEOUT_MS: Long = 30_000L
         const val CLEANUP_INTERVAL_MS: Long = 10_000L
     }
@@ -64,6 +65,10 @@ object AppConstants {
 
     object Protocol {
         const val COMPRESSION_THRESHOLD_BYTES: Int = 100
+        const val MAX_STANDARD_PAYLOAD_BYTES: Int = 1 * 1024 * 1024
+        const val MAX_LARGE_PAYLOAD_BYTES: Int = (50 * 1024 * 1024) + (64 * 1024)
+        const val MAX_COMPRESSED_PAYLOAD_BYTES: Int = 256 * 1024
+        const val MAX_DECOMPRESSED_PAYLOAD_BYTES: Int = 1 * 1024 * 1024
     }
 
     object StoreForward {

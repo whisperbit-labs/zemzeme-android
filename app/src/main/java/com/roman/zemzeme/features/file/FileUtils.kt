@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.roman.zemzeme.util.AppConstants
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -195,6 +196,13 @@ object FileUtils {
         context: Context,
         file: com.roman.zemzeme.model.ZemzemeFilePacket
     ): String {
+        if (file.fileSize < 0 || file.fileSize > AppConstants.Media.MAX_FILE_SIZE_BYTES) {
+            throw IllegalArgumentException("Incoming file exceeds size limit: ${file.fileSize}")
+        }
+        if (file.content.size.toLong() != file.fileSize || file.content.size.toLong() > AppConstants.Media.MAX_FILE_SIZE_BYTES) {
+            throw IllegalArgumentException("Incoming file content size is invalid: ${file.content.size}")
+        }
+
         val lowerMime = file.mimeType.lowercase()
         val isImage = lowerMime.startsWith("image/")
         // FIX: Use cacheDir instead of filesDir to prevent storage exhaustion attacks (Issue #592)

@@ -1,10 +1,11 @@
 package com.roman.zemzeme.protocol
 
 import android.os.Parcelable
+import android.util.Log
+import com.roman.zemzeme.util.AppConstants
 import kotlinx.parcelize.Parcelize
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import android.util.Log
 
 /**
  * Message types - exact same as iOS version with Noise Protocol support
@@ -183,6 +184,9 @@ object BinaryProtocol {
     private const val SENDER_ID_SIZE = 8
     private const val RECIPIENT_ID_SIZE = 8
     private const val SIGNATURE_SIZE = 64
+    private const val MAX_STANDARD_PAYLOAD_BYTES = AppConstants.Protocol.MAX_STANDARD_PAYLOAD_BYTES
+    private const val MAX_LARGE_PAYLOAD_BYTES = AppConstants.Protocol.MAX_LARGE_PAYLOAD_BYTES
+    private const val MAX_COMPRESSED_PAYLOAD_BYTES = AppConstants.Protocol.MAX_COMPRESSED_PAYLOAD_BYTES
 
     object Flags {
         const val HAS_RECIPIENT: UByte = 0x01u
@@ -197,6 +201,32 @@ object BinaryProtocol {
             else -> HEADER_SIZE_V2  // v2+ will use 4-byte payload length
         }
     }
+
+    private fun supportsLargePayload(type: UByte): Boolean {
+        return type == MessageType.FILE_TRANSFER.value || type == MessageType.NOISE_ENCRYPTED.value
+    }
+
+    private fun supportsCompression(type: UByte): Boolean {
+        return when (type) {
+            MessageType.ANNOUNCE.value,
+            MessageType.MESSAGE.value,
+            MessageType.LEAVE.value,
+            MessageType.REQUEST_SYNC.value -> true
+            else -> false
+        }
+    }
+
+    private fun maxUncompressedPayloadBytes(type: UByte): Int {
+        return if (supportsLargePayload(type)) MAX_LARGE_PAYLOAD_BYTES else MAX_STANDARD_PAYLOAD_BYTES
+    }
+
+    private fun maxEncodedPayloadBytes(type: UByte, isCompressed: Boolean): Int {
+        return if (isCompressed) {
+            MAX_COMPRESSED_PAYLOAD_BYTES
+        } else {
+            maxUncompressedPayloadBytes(type)
+        }
+    }
     
     fun encode(packet: ZemzemePacket): ByteArray? {
         try {
@@ -204,13 +234,22 @@ object BinaryProtocol {
             var payload = packet.payload
             var originalPayloadSize: Int? = null
             var isCompressed = false
-            
-            if (CompressionUtil.shouldCompress(payload)) {
+
+            if (payload.size > maxUncompressedPayloadBytes(packet.type)) {
+                Log.w("BinaryProtocol", "Rejecting oversized payload for type ${packet.type}: ${payload.size} bytes")
+                return null
+            }
+
+            if (supportsCompression(packet.type) && CompressionUtil.shouldCompress(payload)) {
                 CompressionUtil.compress(payload)?.let { compressedPayload ->
                     originalPayloadSize = payload.size
                     payload = compressedPayload
                     isCompressed = true
                 }
+            }
+            if (packet.version < 2u.toUByte() && isCompressed && (originalPayloadSize ?: 0) > UShort.MAX_VALUE.toInt()) {
+                Log.w("BinaryProtocol", "Rejecting v1 compressed packet with original size ${originalPayloadSize ?: 0}")
+                return null
             }
             
             // Compute a safe capacity for the unpadded frame
@@ -252,9 +291,17 @@ object BinaryProtocol {
             
             // Payload length (2 or 4 bytes, big-endian) - includes original size if compressed
             val payloadDataSize = payload.size + sizeFieldBytes
+            if (payloadDataSize > maxEncodedPayloadBytes(packet.type, isCompressed)) {
+                Log.w("BinaryProtocol", "Rejecting oversized encoded payload for type ${packet.type}: $payloadDataSize bytes")
+                return null
+            }
             if (packet.version >= 2u.toUByte()) {
                 buffer.putInt(payloadDataSize)  // 4 bytes for v2+
             } else {
+                if (payloadDataSize > UShort.MAX_VALUE.toInt()) {
+                    Log.w("BinaryProtocol", "Rejecting v1 packet with payload length $payloadDataSize")
+                    return null
+                }
                 buffer.putShort(payloadDataSize.toShort())  // 2 bytes for v1
             }
             
@@ -360,14 +407,22 @@ object BinaryProtocol {
 
             // Payload length - version-dependent (2 or 4 bytes)
             val payloadLength = if (version >= 2u.toUByte()) {
-                buffer.getInt().toUInt()  // 4 bytes for v2+
+                buffer.getInt().toUInt().toLong()  // 4 bytes for v2+
             } else {
-                buffer.getShort().toUShort().toUInt()  // 2 bytes for v1, convert to UInt
+                buffer.getShort().toUShort().toLong()  // 2 bytes for v1
+            }
+            if (payloadLength > maxEncodedPayloadBytes(type, isCompressed).toLong()) {
+                Log.w("BinaryProtocol", "Rejecting oversized payload length $payloadLength for type $type")
+                return null
+            }
+            if (isCompressed && !supportsCompression(type)) {
+                Log.w("BinaryProtocol", "Rejecting compressed packet for unsupported type $type")
+                return null
             }
 
             // Calculate expected total size
-            var expectedSize = headerSize + SENDER_ID_SIZE + payloadLength.toInt()
-            if (hasRecipient) expectedSize += RECIPIENT_ID_SIZE
+            var expectedSize = headerSize.toLong() + SENDER_ID_SIZE + payloadLength
+            if (hasRecipient) expectedSize += RECIPIENT_ID_SIZE.toLong()
             var routeCount = 0
             if (hasRoute) {
                 // Peek count (1 byte) without consuming buffer for now
@@ -381,12 +436,14 @@ object BinaryProtocol {
 
                 if (raw.size >= routeOffset + 1) {
                     routeCount = raw[routeOffset].toUByte().toInt()
+                } else {
+                    return null
                 }
-                expectedSize += 1 + (routeCount * SENDER_ID_SIZE)
+                expectedSize += 1L + (routeCount.toLong() * SENDER_ID_SIZE)
             }
-            if (hasSignature) expectedSize += SIGNATURE_SIZE
+            if (hasSignature) expectedSize += SIGNATURE_SIZE.toLong()
 
-            if (raw.size < expectedSize) return null
+            if (raw.size.toLong() < expectedSize) return null
             
             // SenderID
             val senderID = ByteArray(SENDER_ID_SIZE)
@@ -418,16 +475,24 @@ object BinaryProtocol {
             // Payload
             val payload = if (isCompressed) {
                 val lengthFieldBytes = if (version >= 2u.toUByte()) 4 else 2
-                if (payloadLength.toInt() < lengthFieldBytes) return null
+                if (payloadLength < lengthFieldBytes.toLong()) return null
                 
                 val originalSize = if (version >= 2u.toUByte()) {
                     buffer.getInt()
                 } else {
                     buffer.getShort().toUShort().toInt()
                 }
+                if (originalSize <= 0 || originalSize > maxUncompressedPayloadBytes(type)) {
+                    Log.w("BinaryProtocol", "Rejecting invalid decompressed payload size $originalSize for type $type")
+                    return null
+                }
                 
                 // Compressed payload
-                val compressedSize = payloadLength.toInt() - lengthFieldBytes
+                val compressedSize = (payloadLength - lengthFieldBytes).toInt()
+                if (compressedSize <= 0 || compressedSize > MAX_COMPRESSED_PAYLOAD_BYTES) {
+                    Log.w("BinaryProtocol", "Rejecting invalid compressed payload size $compressedSize")
+                    return null
+                }
                 val compressedPayload = ByteArray(compressedSize)
                 buffer.get(compressedPayload)
 
@@ -443,6 +508,10 @@ object BinaryProtocol {
                 // Decompress
                 CompressionUtil.decompress(compressedPayload, originalSize) ?: return null
             } else {
+                if (payloadLength > maxUncompressedPayloadBytes(type).toLong()) {
+                    Log.w("BinaryProtocol", "Rejecting oversized uncompressed payload $payloadLength for type $type")
+                    return null
+                }
                 val payloadBytes = ByteArray(payloadLength.toInt())
                 buffer.get(payloadBytes)
                 payloadBytes

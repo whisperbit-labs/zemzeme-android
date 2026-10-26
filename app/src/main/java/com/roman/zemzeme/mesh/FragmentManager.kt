@@ -6,6 +6,7 @@ import com.roman.zemzeme.protocol.MessageType
 import com.roman.zemzeme.protocol.MessagePadding
 import com.roman.zemzeme.model.FragmentPayload
 import kotlinx.coroutines.*
+import java.io.ByteArrayOutputStream
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -24,6 +25,7 @@ class FragmentManager {
         // iOS values: 512 MTU threshold, 469 max fragment size (512 MTU - headers)
         private const val FRAGMENT_SIZE_THRESHOLD = com.roman.zemzeme.util.AppConstants.Fragmentation.FRAGMENT_SIZE_THRESHOLD // Matches iOS: if data.count > 512
         private const val MAX_FRAGMENT_SIZE = com.roman.zemzeme.util.AppConstants.Fragmentation.MAX_FRAGMENT_SIZE        // Matches iOS: maxFragmentSize = 469 
+        private const val MAX_REASSEMBLED_PACKET_BYTES = com.roman.zemzeme.util.AppConstants.Fragmentation.MAX_REASSEMBLED_PACKET_BYTES
         private const val FRAGMENT_TIMEOUT = com.roman.zemzeme.util.AppConstants.Fragmentation.FRAGMENT_TIMEOUT_MS     // Matches iOS: 30 seconds cleanup
         private const val CLEANUP_INTERVAL = com.roman.zemzeme.util.AppConstants.Fragmentation.CLEANUP_INTERVAL_MS     // 10 seconds cleanup check
     }
@@ -185,6 +187,13 @@ class FragmentManager {
             
             // iOS: incomingFragments[fragmentID]?[index] = Data(fragmentData)
             incomingFragments[fragmentIDString]?.put(fragmentPayload.index, fragmentPayload.data)
+            val totalBytes = incomingFragments[fragmentIDString]?.values?.sumOf { it.size } ?: 0
+            if (totalBytes > MAX_REASSEMBLED_PACKET_BYTES) {
+                incomingFragments.remove(fragmentIDString)
+                fragmentMetadata.remove(fragmentIDString)
+                Log.w(TAG, "Dropping fragment set $fragmentIDString after exceeding $MAX_REASSEMBLED_PACKET_BYTES bytes")
+                return null
+            }
             
             // iOS: if let fragments = incomingFragments[fragmentID], fragments.count == total
             val fragmentMap = incomingFragments[fragmentIDString]
@@ -192,15 +201,16 @@ class FragmentManager {
                 Log.d(TAG, "All fragments received for $fragmentIDString, reassembling...")
                 
                 // iOS reassembly logic: for i in 0..<total { if let fragment = fragments[i] { reassembled.append(fragment) } }
-                val reassembledData = mutableListOf<Byte>()
+                val reassembledData = ByteArrayOutputStream(totalBytes)
                 for (i in 0 until fragmentPayload.total) {
                     fragmentMap[i]?.let { data ->
-                        reassembledData.addAll(data.asIterable())
+                        reassembledData.write(data)
                     }
                 }
                 
                 // Decode the original packet bytes we reassembled, so flags/compression are preserved - iOS fix
-                val originalPacket = ZemzemePacket.fromBinaryData(reassembledData.toByteArray())
+                val reassembledBytes = reassembledData.toByteArray()
+                val originalPacket = ZemzemePacket.fromBinaryData(reassembledBytes)
                 if (originalPacket != null) {
                     // iOS cleanup: incomingFragments.removeValue(forKey: fragmentID)
                     incomingFragments.remove(fragmentIDString)
@@ -210,7 +220,7 @@ class FragmentManager {
                     // We already relayed the incoming fragments; setting TTL=0 ensures
                     // PacketRelayManager will skip relaying this reconstructed packet.
                     val suppressedTtlPacket = originalPacket.copy(ttl = 0u.toUByte())
-                    Log.d(TAG, "Successfully reassembled original (${reassembledData.size} bytes); set TTL=0 to suppress relay")
+                    Log.d(TAG, "Successfully reassembled original (${reassembledBytes.size} bytes); set TTL=0 to suppress relay")
                     return suppressedTtlPacket
                 } else {
                     val metadata = fragmentMetadata[fragmentIDString]
