@@ -79,7 +79,7 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
                     // Decode TLV private message exactly like iOS
                     val privateMessage = com.roman.zemzeme.model.PrivateMessagePacket.decode(noisePayload.data)
                     if (privateMessage != null) {
-                        Log.i(TAG, "🔓 Decrypted TLV PM from $peerID: ${privateMessage.content.take(30)}...")
+                        Log.i(TAG, "🔓 Decrypted TLV PM from $peerID (content scrubbed for security)")
 
                         // Handle favorite/unfavorite notifications embedded as PMs
                         val pmContent = privateMessage.content
@@ -101,7 +101,7 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
                             isPrivate = true,
                             recipientNickname = delegate?.getMyNickname(),
                             senderPeerID = peerID,
-                            mentions = null // TODO: Parse mentions if needed
+                            mentions = privateMessage.mentions
                         )
                         
                         // Notify delegate

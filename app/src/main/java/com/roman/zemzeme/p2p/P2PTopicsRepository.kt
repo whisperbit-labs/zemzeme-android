@@ -427,7 +427,7 @@ class P2PTopicsRepository private constructor(
             )
             addMessageToTopic(topicName, msg)
             
-            Log.d(TAG, "Published to $topicName: ${content.take(50)}...")
+            Log.d(TAG, "Published to $topicName (content scrubbed for security)")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to publish to $topicName: ${e.message}")
